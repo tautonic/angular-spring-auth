@@ -1,0 +1,42 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/img/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/lib/**" security="none"/>
+    <http pattern="/partials/**" security="none"/>
+    <http pattern="/login" security="none"/>
+
+    <http auto-config='true' entry-point-ref="authenticationEntryPoint">
+        <intercept-url pattern="/api/**" access="ROLE_USER"/>
+        <intercept-url pattern="/**" access="ROLE_ANONYMOUS"/>
+        <form-login authentication-success-handler-ref="ajaxAuthenticationSuccessHandler"
+                    authentication-failure-handler-ref="ajaxAuthenticationFailureHandler"/>
+        <logout success-handler-ref="ajaxLogoutSuccessHandler" />
+    </http>
+
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="fred" password="secret" authorities="ROLE_USER, ROLE_ADMIN"/>
+                <user name="barney" password="secret" authorities="ROLE_USER"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+    <beans:bean id="authenticationEntryPoint"
+                class="com.pykl.spring.security.Http401DeniedEntryPoint"/>
+    <beans:bean id="ajaxAuthenticationSuccessHandler"
+                class="com.pykl.spring.security.AjaxAuthenticationSuccessHandler"/>
+    <beans:bean id="ajaxAuthenticationFailureHandler"
+                class="com.pykl.spring.security.AjaxAuthenticationFailureHandler"/>
+    <beans:bean id="ajaxLogoutSuccessHandler"
+                class="com.pykl.spring.security.AjaxLogoutSuccessHandler"/>
+
+</beans:beans>

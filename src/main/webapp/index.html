@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="utf-8">
+	<meta name="fragment" content="!"/>
+	<title>My AngularJS App</title>
+	<link rel="stylesheet" href="css/app.css"/>
+</head>
+<body>
+<ul class="menu">
+	<li><a href="#/view1">view1</a></li>
+	<li><a href="#/view2">view2</a></li>
+</ul>
+
+<div ng-controller="LoginCtrl">
+	<p ng-show="authenticated">
+		Welcome {{username}}
+		<button ng-click="signout()">Sign out</button>
+	</p>
+	<p ng-hide="authenticated">
+		<button ng-click="signin()">Sign in</button>
+	</p>
+
+	<form name="login" ng-show="form.visible" ng-submit="submit()">
+		<p>
+			<label for="username">Username:</label>
+			<input id="username" type="text" ng-model="username" required/>
+		</p>
+		<p>
+			<label for="password">Password:</label>
+			<input id="password" type="password" ng-model="password" required/>
+		</p>
+		<p><input type="submit" value="Submit"/></p>
+	</form>
+</div>
+
+
+<div class="ng-view"></div>
+
+<div>Angular seed app: v<span app-version></span></div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="lib/angular/angular.js"></script>
+<script src="js/app.js"></script>
+<script src="js/services.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/filters.js"></script>
+<script src="js/directives.js"></script>
+</body>
+</html>
