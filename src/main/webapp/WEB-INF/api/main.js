@@ -59,10 +59,34 @@ app.get( '/ping', function ( req ) {
 
 	return json( {
 		url: '/ping',
-		user: servletRequest.isUserInRole('ROLE_USER'),
-		admin: servletRequest.isUserInRole('ROLE_ADMIN'),
-		anonymous: servletRequest.isUserInRole('ROLE_ANONYMOUS')
+		user: servletRequest.isUserInRole( 'ROLE_USER' ),
+		admin: servletRequest.isUserInRole( 'ROLE_ADMIN' ),
+		anonymous: servletRequest.isUserInRole( 'ROLE_ANONYMOUS' )
 	} );
+} );
+
+
+/**
+ * Returns the authentication credentials for the current user using the Spring Security
+ * classes.
+ */
+app.get( '/auth', function ( req ) {
+	var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
+	var auth = SecurityContextHolder.context.authentication;
+
+	var result = {
+		principal: String( auth.principal ),
+//		isAuthenticated: auth.isAuthenticated(),
+		roles: []
+	};
+
+	var authorities = auth.authorities.iterator();
+	while ( authorities.hasNext() ) {
+		var authority = authorities.next();
+		result.roles.push( authority.authority );
+	}
+
+	return json( result );
 } );
 
 
