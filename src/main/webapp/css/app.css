@@ -32,3 +32,20 @@
 div.ng-view {
     border: 1px solid green;
 }
+
+/** TIC TAC TOE BOARD **/
+#board {
+    list-style-type: none;
+    width: 300px;
+    height: 300px;
+}
+
+#board li {
+    outline: 1px solid black;
+    height: 100px;
+    width: 100px;
+    float: left;
+    font-size: 50px;
+    text-align: center;
+    line-height: 100px;
+}
