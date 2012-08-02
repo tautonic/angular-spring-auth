@@ -1,0 +1,19 @@
+<p ng-show="authenticated">
+	Welcome {{username}}
+	<button ng-click="signout()">Sign out</button>
+</p>
+<p ng-hide="authenticated">
+	<button ng-click="signin()">Sign in</button>
+</p>
+
+<form name="login" ng-show="form.visible" ng-submit="submit()">
+	<p>
+		<label for="username">Username:</label>
+		<input id="username" type="text" ng-model="username" required/>
+	</p>
+	<p>
+		<label for="password">Password:</label>
+		<input id="password" type="password" ng-model="password" required/>
+	</p>
+	<p><input type="submit" value="Submit"/></p>
+</form>
