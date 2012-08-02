@@ -1,10 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+<h1>I'm going to win, {{playername}}</h1>
 
-</body>
-</html>
+<ul id="board">
+    <li ng-repeat="cell in cells" ng-click="selectCell(cell)">{{cell.text}}</li>
+</ul>
+
+<h3>It is Player {{playerTurn}}'s turn.</h3>
+<h3>Total moves: {{moves}}</h3>
+
+<button ng-click="reset()">Reset Game</button>
+        <h1>test content</h1>
