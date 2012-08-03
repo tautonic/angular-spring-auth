@@ -8,10 +8,10 @@
 			templateUrl: 'partials/partial1.html',
 			controller: MyCtrl1
 		} );
-		$routeProvider.when( '/view2', {
-			templateUrl: 'partials/partial2.html',
-			controller: MyCtrl2
-		} );
+		$routeProvider.when( '/article/:articleId', {
+            templateUrl: 'lib/pyklresource/index.html',
+            controller: ResourceCtrl
+        } );
 		$routeProvider.otherwise( {redirectTo: '/view1'} );
 	}
 

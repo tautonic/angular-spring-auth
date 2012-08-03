@@ -6,6 +6,7 @@ var {trimpath, trimpathResponse, registerHelper} = require( 'trimpath' );
 var {json} = require( 'ringo/jsgi/response' );
 
 var {Application} = require( 'stick' );
+var {getArticle} = require('articles');
 
 var app = exports.app = Application();
 app.configure( 'notfound', 'params', 'mount', 'route' );
@@ -54,21 +55,19 @@ app.get( '/index.html', function ( req ) {
 	return homepage( req );
 } );
 
-app.get('/secure/article', function(req) {
-    return json({
-        title: "SECURE ARTICLE TITLE",
-        content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco" +
-            "laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
-            "sunt in culpa qui officia deserunt mollit anim id est laborum."
-    });
+app.get('/article/:id', function(req, id) {
+    var article = getArticle(id-1);
+
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {
+        delete article.content;
+        log.info("USER IS NOT AN ADMIN, REMOVING ARTICLE CONTENT");
+    }
+
+    return json(article);
 });
 
-app.get('/article', function(req) {
-    return json({
-        title: "ARTICLE TITLE",
-        content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. FOR MORE ARTICLE LOGIN"
-    });
-});
 
 app.get( '/ping', function ( req ) {
 	var servletRequest = req.env.servletRequest;
