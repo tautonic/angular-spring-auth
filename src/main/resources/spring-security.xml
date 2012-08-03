@@ -15,7 +15,7 @@
     <http create-session="always" auto-config='true' use-expressions="true"
           entry-point-ref="authenticationEntryPoint">
         <intercept-url pattern="/api/auth" access="permitAll"/>
-        <intercept-url pattern="/api/**" access="hasAnyRole('ROLE_USER')"/>
+        <intercept-url pattern="/api/**" access="permitAll"/>
         <intercept-url pattern="/**" access="permitAll"/>
         <form-login authentication-success-handler-ref="ajaxAuthenticationSuccessHandler"
                     authentication-failure-handler-ref="ajaxAuthenticationFailureHandler"/>
