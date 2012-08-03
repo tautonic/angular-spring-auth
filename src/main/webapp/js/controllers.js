@@ -9,14 +9,15 @@ MyCtrl1.$inject = [];
 
 
 function MyCtrl2( $rootScope, $scope, $http, $log ) {
+	$scope.protected = 'Not loaded';
+
 	function ping() {
-		$http.get( 'api/ping' ).success( function () {
+		$http.get( 'api/ping' ).success( function (data) {
 			$log.info( 'Successfully retrieved protected resource.' );
-//			$scope.$broadcast( 'event:loginConfirmed' );
+			$scope.protected = data;
 		} );
 	}
 
-	$log.info( 'Initializing the MyCtrl2 controller.' );
 	ping();
 }
 MyCtrl2.$inject = ['$rootScope', '$scope', '$http', '$log'];
