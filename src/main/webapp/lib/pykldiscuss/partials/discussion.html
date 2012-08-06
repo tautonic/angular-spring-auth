@@ -1,0 +1,20 @@
+<h1>{{discussion.title}}</h1>
+<div class="post" ng-repeat="post in discussion.posts">
+    <div class="user">
+        <p>{{post.owner.username}}</p>
+        <img ng-src="{{post.owner.picture}}">
+    </div>
+    <p class="content" ng-bind-html="post.content"></p>
+    <div class="buttons clear"><button ng-click="replyTo(post.content)">Quote</button></div>
+</div>
+<button ng-click="replyTo()">Reply</button>
+<div class="reply" ng-show="reply.show">
+    <form name="replyForm" ng-submit="submitReply()">
+        <p>Enter reply here:</p>
+        <textarea rows="15" cols="60" ng-model="reply.content" required>
+        </textarea>
+        <br>
+        <input type="submit" value="Reply">
+        <button ng-click="cancel()">Cancel</button>
+    </form>
+</div>

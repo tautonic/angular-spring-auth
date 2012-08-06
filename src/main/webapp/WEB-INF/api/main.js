@@ -7,6 +7,7 @@ var {json} = require( 'ringo/jsgi/response' );
 
 var {Application} = require( 'stick' );
 var {getArticle} = require('articles');
+var {getDiscussion} = require('discussions');
 
 var app = exports.app = Application();
 app.configure( 'notfound', 'params', 'mount', 'route' );
@@ -56,12 +57,12 @@ app.get( '/index.html', function ( req ) {
 } );
 
 app.get('/article/:id', function(req, id) {
-    var article = getArticle(id-1);
+    var article = getArticle(id);
 
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
     {
-        //delete article.content;
+        delete article.content;
         log.info("USER IS NOT AN ADMIN, REMOVING ARTICLE CONTENT");
     } else {
         //todo: make this replacement actually replace things properly. this solution is not feasible for long term
@@ -74,6 +75,21 @@ app.get('/article/:id', function(req, id) {
     return json(article);
 });
 
+app.get('/discussion/:id', function(req, id) {
+    return json(getDiscussion(id));
+});
+
+app.post('/discussion/:id', function(req, id) {
+    var postContent = req.params;
+    log.info("here's the content of the post: "+JSON.stringify(postContent));
+    return json({
+        owner: {
+            username: "fred102",
+            picture: "http://localhost:8080/gc/images/40x40.gif"
+        },
+        content: postContent.reply
+    });
+});
 
 app.get( '/ping', function ( req ) {
 	var servletRequest = req.env.servletRequest;
