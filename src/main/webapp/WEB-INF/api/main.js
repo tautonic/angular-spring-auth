@@ -61,8 +61,14 @@ app.get('/article/:id', function(req, id) {
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
     {
-        delete article.content;
+        //delete article.content;
         log.info("USER IS NOT AN ADMIN, REMOVING ARTICLE CONTENT");
+    } else {
+        //todo: make this replacement actually replace things properly. this solution is not feasible for long term
+        var newUrl = "http://localhost:8080" + ctx("/#/article/");
+
+        article.content = article.content.replace(new RegExp("http://example.com/blog/article-title-"), newUrl.toString());
+        log.info("RETURNING FULL ARTICLE CONTENT: " + article.content);
     }
 
     return json(article);
@@ -101,7 +107,7 @@ app.get( '/auth', function ( req ) {
 		var authority = authorities.next();
 		result.roles.push( authority.authority.toLowerCase() );
 	}
-
+    log.info("logging in user");
 	return json( result );
 } );
 
