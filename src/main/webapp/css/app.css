@@ -33,6 +33,36 @@ div.ng-view {
     border: 1px solid green;
 }
 
+.clear {
+    clear: both;
+}
+
+/** Discussion posts **/
+.post {
+    margin: 0 20px;
+    border: 1px solid red;
+}
+
+.post .user {
+    float: left;
+    padding-left: 5px;
+}
+
+.post .user p {
+    font-weight: bold;
+    padding: 5px;
+    margin: 0;
+}
+
+.post .content {
+    padding-left: 70px;
+    padding-right: 10px;
+}
+
+.reply {
+    margin: 10px 30px;
+}
+
 /** TIC TAC TOE BOARD **/
 #board {
     list-style-type: none;

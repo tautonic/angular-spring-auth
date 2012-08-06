@@ -6,15 +6,14 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
 
     function loadContent() {
         $http.get( url ).success( function (data, status) {
-            $scope.data = data;
+            $scope.article = data;
         }).error(function(data, status) {
                 $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
             });
     }
 
-    function abstractVisible() {
-        $log.info("content: "+$scope.data.content);
-        return (typeof($scope.data.content) != "undefined")
+    $scope.abstractVisible = function () {
+        return (typeof($scope.article.content) == "undefined");
     }
 
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
