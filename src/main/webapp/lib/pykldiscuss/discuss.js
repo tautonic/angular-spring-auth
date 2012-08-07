@@ -9,6 +9,14 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         show: false,
         content: ''
     };
+    //todo: the new discussion might need to be handled in a completely different manner, IE: refresh the page afterwards
+    if(id=="new")
+    {
+        $scope.reply.title = '';
+        $scope.new = true;
+    } else {
+        $scope.new = false;
+    }
 
     function loadContent() {
         $http.get( url ).success( function (data, status) {
@@ -34,6 +42,10 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
             $scope.reply.content = '';
             $http.post(url, { reply: reply }).success(function(data) {
                 $scope.discussion.posts.push(data);
+                if($scope.new == true) {
+                    $scope.discussion.title = $scope.reply.title;
+                    $scope.new = false;
+                }
             });
         } else {
             alert("enter a reply");

@@ -7,7 +7,7 @@ var {json} = require( 'ringo/jsgi/response' );
 
 var {Application} = require( 'stick' );
 var {getArticle} = require('articles');
-var {getDiscussion} = require('discussions');
+var {getDiscussion, addReply} = require('discussions');
 
 var app = exports.app = Application();
 app.configure( 'notfound', 'params', 'mount', 'route' );
@@ -79,14 +79,16 @@ app.get('/discussion/:id', function(req, id) {
 
 app.post('/discussion/:id', function(req, id) {
     var postContent = req.params;
-
-    return json({
+    var reply = {
         owner: {
             username: "fred102",
             picture: "http://localhost:8080/gc/images/40x40.gif"
         },
         content: postContent.reply
-    });
+    };
+
+    addReply(id, reply);
+    return json(reply);
 });
 
 app.get( '/ping', function ( req ) {
