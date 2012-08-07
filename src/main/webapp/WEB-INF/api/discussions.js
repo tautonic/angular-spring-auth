@@ -30,6 +30,14 @@ var discussions = [{
 }];
 
 var getDiscussion = function(id) {
+    if(id == "new")
+    {
+        return {
+            id: 0,
+            title: "NEW DISCUSSION",
+            posts: []
+        }
+    }
     return discussions[id-1];
 }
 

@@ -1,7 +1,10 @@
 'use strict';
 
 function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
-    var url = 'api/discussion/'+$routeParams.discussionId;
+    //this check is needed to handle things like discussions connected with articles
+    var id = $routeParams.discussionId || $routeParams.articleId || "new";
+
+    var url = 'api/discussion/'+id;
     $scope.reply = {
         show: false,
         content: ''
