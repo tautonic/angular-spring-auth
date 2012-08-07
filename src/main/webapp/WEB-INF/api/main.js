@@ -63,13 +63,11 @@ app.get('/article/:id', function(req, id) {
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
     {
         delete article.content;
-        log.info("USER IS NOT AN ADMIN, REMOVING ARTICLE CONTENT");
     } else {
         //todo: make this replacement actually replace things properly. this solution is not feasible for long term
         var newUrl = "http://localhost:8080" + ctx("/#/article/");
 
         article.content = article.content.replace(new RegExp("http://example.com/blog/article-title-"), newUrl.toString());
-        log.info("RETURNING FULL ARTICLE CONTENT: " + article.content);
     }
 
     return json(article);
@@ -81,7 +79,7 @@ app.get('/discussion/:id', function(req, id) {
 
 app.post('/discussion/:id', function(req, id) {
     var postContent = req.params;
-    log.info("here's the content of the post: "+JSON.stringify(postContent));
+
     return json({
         owner: {
             username: "fred102",

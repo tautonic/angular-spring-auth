@@ -16,8 +16,11 @@
             templateUrl: 'lib/pykldiscuss/index.html',
             controller: DiscussionCtrl
         } );
-        $routeProvider.when( '/both/:Id', {
-            templateUrl: 'partials/index.html'
+        $routeProvider.when( '/both/:articleId/:discussionId', {
+            templateUrl: 'partials/partial2.html'
+        } );
+        $routeProvider.when( '/both/:articleId', {
+            templateUrl: 'partials/partial2.html'
         } );
 		$routeProvider.otherwise( {redirectTo: '/view1'} );
 	}
