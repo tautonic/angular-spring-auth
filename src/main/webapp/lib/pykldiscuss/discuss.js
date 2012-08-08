@@ -1,6 +1,6 @@
 'use strict';
 
-function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
+function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $location ) {
     //this check is needed to handle things like discussions connected with articles
     var id = $routeParams.discussionId || $routeParams.articleId || "new";
 
@@ -9,7 +9,6 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         show: false,
         content: ''
     };
-    //todo: the new discussion might need to be handled in a completely different manner, IE: refresh the page afterwards
     if(id=="new")
     {
         $scope.reply.title = '';
@@ -35,6 +34,21 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         }
     }
 
+    $scope.createDiscussion = function() {
+        $scope.discussion.posts.push({
+            owner: {
+                username: "fred102",
+                picture: "http://localhost:8080/gc/images/40x40.gif"
+            },
+            content: $scope.reply.content
+        });
+        $scope.discussion.title = $scope.reply.title;
+        $http.post('api/discussion/new', $scope.discussion).success(function(data) {
+            $location.path('/discussion/'+data.newId);
+        });
+
+    }
+
     $scope.submitReply = function() {
         if($scope.reply.content != '') {
             var reply = $scope.reply.content;
@@ -42,10 +56,6 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
             $scope.reply.content = '';
             $http.post(url, { reply: reply }).success(function(data) {
                 $scope.discussion.posts.push(data);
-                if($scope.new == true) {
-                    $scope.discussion.title = $scope.reply.title;
-                    $scope.new = false;
-                }
             });
         } else {
             alert("enter a reply");
@@ -62,4 +72,4 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
     loadContent();
 }
 
-ResourceCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log'];
+ResourceCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$location'];

@@ -13,6 +13,10 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
     }
 
     $scope.abstractVisible = function () {
+        if(typeof($scope.article) == "undefined")
+        {
+            return false;
+        }
         return (typeof($scope.article.content) == "undefined");
     }
 

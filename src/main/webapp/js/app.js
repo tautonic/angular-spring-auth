@@ -9,12 +9,10 @@
 			controller: MyCtrl1
 		} );
 		$routeProvider.when( '/article/:articleId', {
-            templateUrl: 'lib/pyklresource/index.html',
-            controller: ResourceCtrl
+            templateUrl: 'lib/pyklresource/index.html'
         } );
         $routeProvider.when( '/discussion/:discussionId', {
-            templateUrl: 'lib/pykldiscuss/index.html',
-            controller: DiscussionCtrl
+            templateUrl: 'lib/pykldiscuss/index.html'
         } );
         $routeProvider.when( '/both/:articleId/:discussionId', {
             templateUrl: 'partials/partial2.html'
