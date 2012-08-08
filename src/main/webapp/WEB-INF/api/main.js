@@ -7,7 +7,7 @@ var {json} = require( 'ringo/jsgi/response' );
 
 var {Application} = require( 'stick' );
 var {getArticle} = require('articles');
-var {getDiscussion, addReply} = require('discussions');
+var {getDiscussion, addReply, createDiscussion} = require('discussions');
 
 var app = exports.app = Application();
 app.configure( 'notfound', 'params', 'mount', 'route' );
@@ -62,12 +62,14 @@ app.get('/article/:id', function(req, id) {
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
     {
+        log.info("User does not have access to full article content.");
         delete article.content;
     } else {
+        log.info("Full article content should be returned");
         //todo: make this replacement actually replace things properly. this solution is not feasible for long term
-        var newUrl = "http://localhost:8080" + ctx("/#/article/");
+        /*var newUrl = "http://localhost:8080" + ctx("/#/article/");
 
-        article.content = article.content.replace(new RegExp("http://example.com/blog/article-title-"), newUrl.toString());
+        article.content = article.content.replace(new RegExp("http://example.com/blog/article-title-"), newUrl.toString());*/
     }
 
     return json(article);
@@ -76,6 +78,12 @@ app.get('/article/:id', function(req, id) {
 app.get('/discussion/:id', function(req, id) {
     return json(getDiscussion(id));
 });
+
+app.post('/discussion/new', function(req) {
+    var discussion = req.params;
+
+    return json({ "newId" : createDiscussion(discussion) });
+})
 
 app.post('/discussion/:id', function(req, id) {
     var postContent = req.params;

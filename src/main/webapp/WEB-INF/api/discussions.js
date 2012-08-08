@@ -55,4 +55,9 @@ var addReply = function(id, reply) {
     discussionList[id-1].posts.push(reply);
 }
 
-export('getDiscussion', 'addReply');
+var createDiscussion = function(firstPost) {
+    discussionList.push(firstPost);
+    return discussionList.length;
+}
+
+export('getDiscussion', 'addReply', 'createDiscussion');
