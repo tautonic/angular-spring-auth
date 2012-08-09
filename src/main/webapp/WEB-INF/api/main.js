@@ -116,6 +116,7 @@ app.get( '/ping', function ( req ) {
  * classes.
  */
 app.get( '/auth', function ( req ) {
+    java.lang.Thread.sleep(1000);
 	var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
 	var auth = SecurityContextHolder.context.authentication;
 
