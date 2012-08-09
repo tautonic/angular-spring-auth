@@ -25,7 +25,7 @@
 
 
 	// Declare app level module which depends on filters, and services
-	angular.module( 'myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'pykl.security', 'ngSanitize'] )
+	angular.module( 'myApp', ['pykl.security', 'ngSanitize'] )
 			.config( ['$routeProvider', routeProvider] );
 })();
 

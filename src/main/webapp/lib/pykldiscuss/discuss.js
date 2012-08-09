@@ -1,13 +1,18 @@
 'use strict';
 
-function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $location ) {
+function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $location, $auth ) {
     //this check is needed to handle things like discussions connected with articles
     var id = $routeParams.discussionId || $routeParams.articleId || "new";
 
     var url = 'api/discussion/'+id;
     $scope.reply = {
         show: false,
-        content: ''
+        content: '',
+        isLoggedIn: $auth.isAuthenticated(),
+        username: $scope.$apply($auth.getPrincipal().then(function(data) {
+            $log.info("SETTING USERNAME TO: "+data.principal);
+            $scope.username = data.principal;
+        }))
     };
     if(id=="new")
     {
@@ -37,7 +42,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     $scope.createDiscussion = function() {
         $scope.discussion.posts.push({
             owner: {
-                username: "fred102",
+                username: $auth.getPrincipal(),
                 picture: "http://localhost:8080/gc/images/40x40.gif"
             },
             content: $scope.reply.content
@@ -72,4 +77,4 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     loadContent();
 }
 
-ResourceCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$location'];
+ResourceCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$location', '$auth'];
