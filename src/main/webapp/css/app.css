@@ -63,6 +63,17 @@ div.ng-view {
     margin: 10px 30px;
 }
 
+.discussion-thread {
+    margin: 5px 10px;
+    padding-left: 10%;
+    border-top: 1px solid black;
+}
+
+.discussion-thread .started-by {
+    float: right;
+    margin-right: 20%;
+}
+
 /** TIC TAC TOE BOARD **/
 #board {
     list-style-type: none;

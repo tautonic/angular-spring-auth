@@ -25,7 +25,14 @@
 
 
 	// Declare app level module which depends on filters, and services
-	angular.module( 'myApp', ['pykl.security', 'ngSanitize'] )
+	var app = angular.module( 'myApp', ['pykl.security', 'ngSanitize', 'ui'] )
 			.config( ['$routeProvider', routeProvider] );
+
+    app.value('ui.config', {
+        tinymce: {
+            theme: 'simple',
+            mode: 'textareas'
+        }
+    });
 })();
 

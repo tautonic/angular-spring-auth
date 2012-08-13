@@ -75,21 +75,42 @@ app.get('/article/:id', function(req, id) {
     return json(article);
 });
 
+app.get('/discussion/all', function(req, id) {
+    return json(getDiscussionList());
+});
+
 app.get('/discussion/:id', function(req, id) {
     return json(getDiscussion(id));
+});
+
+app.put('/discussion/:id/:post', function(req, id, post) {
+    var editedPost = req.params;
+
+    editDiscussionPost(id, post, editedPost);
+
+    return json(true);
 });
 
 app.post('/discussion/new', function(req) {
     var discussion = req.params;
 
     return json({ "newId" : createDiscussion(discussion) });
-})
+});
 
 app.post('/discussion/:id', function(req, id) {
+    var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
+    var auth = SecurityContextHolder.context.authentication;
+
+    var servletRequest = req.env.servletRequest;
+    if(servletRequest.isUserInRole('ROLE_ANONYMOUS'))
+    {
+        return json(false);
+    }
+
     var postContent = req.params;
     var reply = {
         owner: {
-            username: "fred102",
+            username: auth.principal,
             picture: "http://localhost:8080/gc/images/40x40.gif"
         },
         content: postContent.reply

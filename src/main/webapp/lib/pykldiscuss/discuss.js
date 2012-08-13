@@ -1,33 +1,46 @@
 'use strict';
 
-function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $location, $auth ) {
+function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $location ) {
+    var url = 'api/discussion/';
     //this check is needed to handle things like discussions connected with articles
     var id = $routeParams.discussionId || $routeParams.articleId || "new";
 
-    var url = 'api/discussion/'+id;
     $scope.reply = {
         show: false,
-        content: '',
-        isLoggedIn: $auth.isAuthenticated(),
-        username: $scope.$apply($auth.getPrincipal().then(function(data) {
-            $log.info("SETTING USERNAME TO: "+data.principal);
-            $scope.username = data.principal;
-        }))
+        content: ''
     };
-    if(id=="new")
+
+    if(("new"===id) && (!$rootScope.auth.isAuthenticated()))
     {
-        $scope.reply.title = '';
-        $scope.new = true;
-    } else {
-        $scope.new = false;
+        $location.path('/discussion/all');
+    }
+
+    //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
+
+    switch(id)
+    {
+        case "new":
+            $scope.reply.title = '';
+            $scope.new = true;
+            url = url + "new";
+            break;
+        case "all":
+            $scope.allThreads = true;
+            url = url + "all";
+            break;
+        default:
+            $scope.singleThread = true;
+            url = url + id;
     }
 
     function loadContent() {
         $http.get( url ).success( function (data, status) {
-            $scope.discussion = data;
+            var discussion = data;
+
+            $scope.discussion = discussion;
         }).error(function(data, status) {
                 $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
-            });
+        });
     }
 
     $scope.replyTo = function(original) {
@@ -38,11 +51,11 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
             $scope.reply.content = '';
         }
     }
-
+    //$auth.getPrincipal();
     $scope.createDiscussion = function() {
         $scope.discussion.posts.push({
             owner: {
-                username: $auth.getPrincipal(),
+                username: $auth.username,
                 picture: "http://localhost:8080/gc/images/40x40.gif"
             },
             content: $scope.reply.content
@@ -71,10 +84,40 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         $scope.reply.show = false;
     }
 
-    $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
-    $rootScope.$on('event:logoutConfirmed', function() { loadContent(); });
+    $scope.canEdit = function(post) {
+        return (post.owner.username == $rootScope.auth.getUsername());
+    }
 
-    loadContent();
+    $scope.edit = function(post) {
+        post.edited = post.content;
+        post.edit = true;
+    }
+
+    $scope.cancelEdit = function(post) {
+        post.edit = false;
+        delete post.edited;
+    }
+
+    $scope.editPost = function(post) {
+        post.content = post.edited;
+        delete post.edited;
+        post.edit = false;
+        $http.put(url + "/" + post.id, post).success(function(data) {
+            console.log("edit saved successfully to server");
+        });
+    }
+    /*
+    $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
+    */
+    if(!$scope.new) {
+        loadContent();
+    }
+
+    $rootScope.$on('event:logoutConfirmed', function() {
+        if($scope.new) {
+            $location.path('/discussion/all');
+        }
+    });
 }
 
 ResourceCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$location', '$auth'];
