@@ -5,6 +5,7 @@
 	<meta name="fragment" content="!"/>
 	<title>My AngularJS App</title>
 	<link rel="stylesheet" href="css/app.css"/>
+	<link rel="stylesheet" href="lib/angularui/angular-ui.css"/>
 </head>
 <body>
 <ul class="menu">
@@ -12,7 +13,8 @@
 	<li><a href="#/article/1">article</a></li>
 	<li><a href="#/discussion/1">discussion</a></li>
 	<li><a href="#/both/2">article discussion</a></li>
-	<li><a href="#/discussion/new">new discussion</a></li>
+	<li ng-show="auth.isAuthenticated()"><a href="#/discussion/new">new discussion</a></li>
+	<li><a href="#/discussion/all">ALL discussions</a></li>
 </ul>
 
 <pykl-login ng-controller="LoginCtrl">
@@ -31,5 +33,7 @@
 <script src="lib/pyklsecurity/main.js"></script>
 <script src="lib/pyklresource/resource.js"></script>
 <script src="lib/pykldiscuss/discuss.js"></script>
+<script src="lib/tiny_mce/tiny_mce.js"></script>
+<script src="lib/angularui/angular-ui.js"></script>
 </body>
 </html>
