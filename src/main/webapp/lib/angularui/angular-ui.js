@@ -968,7 +968,7 @@ angular.module('ui.directives').directive('uiTinymce', ['ui.config', function(ui
 				expression = {};
 			}
 			angular.extend(options, uiConfig.tinymce, expression);
-			setTimeout(function(){ console.log("element is: ",elm.tinymce);
+			setTimeout(function(){ console.log("element is: ",elm[0],elm[0].tinymce);
 				elm.tinymce(options);
 			});
 		}
