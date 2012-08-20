@@ -104,10 +104,10 @@
     </div>
 
     <div class="profile-right">
-        <h6>{{id}}</h6>
-        <h2>{{profile.firstName}} {{profile.lastName}}</h2>
-        <h6>Email</h6> {{profile.email}} <br>
-        <h6>{{profile.jobTitle}} at</h6> {{profile.employer}} <br>
+        <h6>{{_id}}</h6>
+        <h2>{{profile.username}}</h2>
+        <h6>Email</h6> {{profile.accountEmail.address}} <br>
+        <h6>{{profile.status}} at</h6> {{profile.employer}} <br>
         <h6>Lives in</h6> {{profile.currentCity}}, {{profile.currentState}} <br>
         <h6>Hometown</h6> {{profile.homeTown}}, {{profile.homeState}}
     </div>
@@ -134,7 +134,6 @@
                 <div class="controls">
                     <input type="text"
                            ng-model="profile.email"
-                           pykl-email-validator
                            class="input-xlarge"
                            id="email"
                            name="email"

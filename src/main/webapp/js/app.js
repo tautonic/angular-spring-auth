@@ -10,7 +10,7 @@
 		$routeProvider.when( '/view', {
 			templateUrl: 'partials/partial1.html'
 		} );
-        $routeProvider.when( '/profile', {
+        $routeProvider.when( '/profile/:profileId', {
             templateUrl: 'lib/profile/profile.html'
         } );
 		$routeProvider.when( '/article/:articleId', {

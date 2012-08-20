@@ -1,6 +1,9 @@
 /**
  * @fileOverview Entry point for all web calls
  */
+var httpclient = require('ringo/httpclient');
+var {Headers} = require('ringo/utils/http');
+
 var log = require( 'ringo/logging' ).getLogger( module.id );
 var {trimpath, trimpathResponse, registerHelper} = require( 'trimpath' );
 var {json} = require( 'ringo/jsgi/response' );
@@ -156,6 +159,167 @@ app.get( '/auth', function ( req ) {
     log.info("logging in user");
 	return json( result );
 } );
+
+app.post('/profiles/', function(req){
+    //Transform logic
+    var data = {
+        accountEmail:   req.postParams.email
+    };
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/',
+        method: 'POST',
+        data: data,
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    return json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+});
+
+app.get('/profiles/:id', function(req, id){
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    return json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+});
+
+app.get('/profiles', function(req){
+    return json( profiles );
+});
+
+app.put('/profiles/:id', function(req, id){
+    var member = req.params;
+
+    profiles[id] = member;
+
+    return json(member);
+});
+
+app.del('/profiles/:id', function(req, id){
+    delete profiles[id];
+
+    return json(profiles[1]);
+});
+
+app.get('/profiles/asyncEmail/:email', function(req, email){
+    //java.lang.Thread.sleep(5000);
+    var valid = true;
+
+    for(var key in profiles){
+        if(email === profiles[key].email){
+            valid = false;
+            break;
+        }
+    }
+
+    return json(valid);
+});
+
+/**
+ * @function
+ * @name POST /images/upload
+ * @description Uploads images to S3 via RoundTable
+ * @param {JsgiRequest} request
+ * @returns {JsgiResponse} An HTML <div> containing a JSON string with upload results
+ */
+app.post('/profiles/pics/:id', function (req, id) {
+
+    var profile = profiles[id];
+
+    if (!profile) return {
+        status:404,
+        headers:{"Content-Type":'application/json'},
+        body:[]
+    };
+
+    var contentType = req.env.servletRequest.getContentType();
+    if ((req.method === "POST" || req.method === "PUT") && fileUpload.isFileUpload(contentType)) {
+        log.info('File pre-upload: ' + JSON.stringify(req.params, null, 4));
+
+        var encoding = req.env.servletRequest.getCharacterEncoding();
+
+        var params = {};
+
+        fileUpload.parseFileUpload(req, params, encoding, fileUpload.TempFileFactory);
+        log.info('File uploaded: ' + JSON.stringify(params, null, 4));
+        profile.imageUrl = params.file.tempfile;
+
+        return {
+            status: 201,
+            headers: {
+                "Content-Type": "text/plain"
+            },
+            body: [req.env.servletRequest.getRequestURL().toString()]
+        };
+
+    }
+    return {
+        status:400,
+        headers:{"Content-Type":'text/html'},
+        body:[]
+    };
+});
+
+
+app.get('/profiles/pics/:id', function(req, id){
+    var profile = profiles[id];
+
+    if (!profile) return {
+        status:404,
+        headers:{"Content-Type":'application/json'},
+        body:[]
+    };
+
+    if (profile.imageUrl) {
+
+
+        var input = new java.io.FileInputStream(new java.io.File(profile.imageUrl));
+        var out = req.env.servletResponse.outputStream;
+
+        var buffer = new ByteArray(1024);
+        var len = input.read(buffer);
+        while (len != -1) {
+            out.write(buffer, 0, len);
+            len = input.read(buffer);
+        }
+        out.close();
+        input.close();
+
+        return {
+            status: 200,
+            headers: {
+                'Content-Type': 'image/jpeg',
+                'X-JSGI-Skip-Response': 'true'
+            },
+            body: []
+        };
+    }
+
+    return {
+        status:404,
+        headers:{"Content-Type":'application/json'},
+        body:[]
+    }
+});
 
 
 /************************
