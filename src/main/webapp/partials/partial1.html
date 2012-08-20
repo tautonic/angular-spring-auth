@@ -1,1 +1,13 @@
 <p>This is the partial for view 1.</p>
+<h2>Root Scope</h2>
+<p>Is Authenticated: {{ auth.isAuthenticated }}</p>
+<p>Principal: {{ auth.principal }}</p>
+<p>Admin?: {{ auth.isUserInRole('role_admin') }}</p>
+<p>User?: {{ auth.isUserInRole('role_user') }}</p>
+<h2>Service calls</h2>
+<button ng-click="reloadAuth()">Reload</button>
+<p>Is Authenticated: {{ scopeIsAuthenticated }}</p>
+<p>Principal: {{ scopePrincipal }}</p>
+<p>Admin?: {{ scopeIsAdmin }}</p>
+<p>User?: {{ scopeIsUser }}</p>
+
