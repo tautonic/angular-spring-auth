@@ -74,16 +74,17 @@ app.get( '/auth', function ( req ) {
 	var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
 	var auth = SecurityContextHolder.context.authentication;
 
+	// principal can be a simple string or a spring security user object
+	var principal = typeof auth.principal === 'string' ? auth.principal : auth.principal.username;
 	var result = {
-		principal: String( auth.principal ),
-//		isAuthenticated: auth.isAuthenticated(),
+		principal: String( principal ),
 		roles: []
 	};
 
 	var authorities = auth.authorities.iterator();
 	while ( authorities.hasNext() ) {
 		var authority = authorities.next();
-		result.roles.push( authority.authority );
+		result.roles.push( authority.authority.toLowerCase() );
 	}
 
 	return json( result );

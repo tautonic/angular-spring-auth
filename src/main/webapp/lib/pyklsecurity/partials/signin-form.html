@@ -1,8 +1,8 @@
-<p ng-show="authenticated">
+<p ng-show="auth.isAuthenticated">
 	Welcome {{username}}
 	<button ng-click="signout()">Sign out</button>
 </p>
-<p ng-hide="authenticated">
+<p ng-hide="auth.isAuthenticated">
 	<button ng-click="signin()">Sign in</button>
 </p>
 
