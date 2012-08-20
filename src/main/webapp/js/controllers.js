@@ -3,7 +3,7 @@
 /* Controllers */
 
 
-var MyCtrl1 = ['$scope', 'auth', function($scope, auth ) {
+var MyCtrl1 = ['$scope', '$auth', function($scope, auth ) {
 	console.log( 'pyklAuth', auth );
 	console.log( '$scope.isAuthenticated', auth.isAuthenticated );
 

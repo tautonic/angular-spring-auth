@@ -133,7 +133,7 @@
 	     </doc:scenario>
 	   </doc:example>
 	*/
-	angular.module( 'pykl', [] )
+    var pyklSecurity = angular.module( 'pykl', [] )
 			.factory( '$auth', ['$rootScope', '$http', '$log', function ( $rootScope, $http, $log ) {
 		var roles = [];
 
@@ -204,7 +204,7 @@
 	 * @param {function} directiveFactory An injectable directive factroy function. See {@link guide/directive} for more
 	 *                info.
 	 */
-	pyklSecurity.directive( 'pyklLogin', ['auth', function (auth) {
+    pyklSecurity.directive( 'pyklLogin', ['$auth', function (auth) {
 		return {
 			restrict: 'ACME',
 			template: ' \
@@ -231,10 +231,11 @@
 		}
 	}] );
 
-	pyklSecurity.controller( 'LoginCtrl', ['$rootScope', '$scope', '$log',
+    pyklSecurity.controller( 'LoginCtrl', ['$rootScope', '$scope', '$log',
 		function ( $rootScope, $scope, $log ) {
 			$scope.username = 'fred';
 			$scope.password = 'secret';
+            $scope.loginNeeded = true;
 			$scope.form = {
 				visible: false
 			};
@@ -269,7 +270,7 @@
 		}]
 	);
 
-	pyklSecurity.config( ['$httpProvider',
+    pyklSecurity.config( ['$httpProvider',
 		function ( $httpProvider, $rootScope, $q, $log ) {
 			var authInterceptor = ['$rootScope', '$q', '$log',
 				function ( $rootScope, $q, $log ) {
@@ -306,13 +307,13 @@
 		}]
 	);
 
-	pyklSecurity.config( ['$locationProvider',
+    pyklSecurity.config( ['$locationProvider',
 		function ( $locationProvider ) {
 	//		$locationProvider.html5Mode( true );
 		}]
 	);
 
-	pyklSecurity.run( ['$rootScope', '$http', '$log',
+    pyklSecurity.run( ['$rootScope', '$http', '$log',
 		function run( $rootScope, $http, $log ) {
 			// Holds any all requests that fail because of an authentication error.
 			$rootScope.requests401 = [];
