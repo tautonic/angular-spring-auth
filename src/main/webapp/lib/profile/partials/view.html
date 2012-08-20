@@ -1,0 +1,28 @@
+<div class="profile clearfix thumbnail" ng-show="isViewMode">
+    <div class="profile-left">
+        <img src="http://placehold.it/260x180" alt="">
+
+        <div class="caption">
+            <p>{{profile.bio}}</p>
+            <p>
+                <button class="btn" ng-click="edit(member)"><i class="icon-edit"></i> Edit</button>
+                <button class="btn btn-success" ng-click="create()"><i class="icon-plus icon-white"></i> Create</button>
+                <button class="btn btn-danger" ng-click="delete()"><i class="icon-trash icon-white"></i> Delete</button>
+            </p>
+        </div>
+
+        <div class="alert alert-success" ng-show="profileDeleted=='true'">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            <h4 class="alert-heading">Success!</h4> You have successfully deleted the profile of {{profile.firstName}} {{profile.lastName}}
+        </div>
+    </div>
+
+    <div class="profile-right">
+        <h6>{{profile.id}}</h6>
+        <h2>{{profile.firstName}} {{profile.lastName}}</h2>
+        <h6>Email</h6> {{profile.email}} <br>
+        <h6>{{profile.jobTitle}} at</h6> {{profile.employer}} <br>
+        <h6>Lives in</h6> {{profile.currentCity}}, {{profile.currentState}} <br>
+        <h6>Hometown</h6> {{profile.homeTown}}, {{profile.homeState}}
+    </div>
+</div>

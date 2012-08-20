@@ -1,0 +1,96 @@
+<div class="profile clearfix thumbnail">
+    <form name="editrofile" class="form-horizontal" novalidate>
+        <fieldset>
+            <legend><h2>{{member.firstName}} {{member.lastName}}</h2></legend>
+            <div class="control-group">
+                <label class="control-label" for="first-name">First Name</label>
+                <div class="controls">
+                    <input type="text" ng-model="member.firstName"
+                           class="input-xlarge" name="firstName" id="first-name"
+                           ng-minlength="3" ng-maxlength="10" required>
+                </div>
+                <br>
+                <label class="control-label" for="last-name">Last Name</label>
+                <div class="controls">
+                    <input type="text" ng-model="member.lastName" class="input-xlarge" id="last-name" required>
+                </div>
+                <br>
+                <label class="control-label" for="email">Email</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="member.email"
+                           email-validator
+                           class="input-xlarge"
+                           id="email"
+                           name="email"
+                           required>
+                </div>
+                <br>
+                <label class="control-label" for="job-title">Job Title</label>
+                <div class="controls">
+                    <input type="text" ng-model="member.jobTitle" class="input-xlarge" id="job-title">
+                </div>
+                <br>
+                <label class="control-label" for="employer">Employer</label>
+                <div class="controls">
+                    <input type="text" ng-model="member.employer" class="input-xlarge" id="employer">
+                </div>
+                <br>
+                <label class="control-label" for="current-city">Current City</label>
+                <div class="controls">
+                    <input type="text" ng-model="member.currentCity" class="input-xlarge" id="current-city" required>
+                </div>
+                <br>
+                <label class="control-label" for="current-state">Current State</label>
+                <div class="controls">
+                    <input type="text" ng-model="member.currentState" class="input-xlarge" id="current-state" required>
+                </div>
+                <br>
+                <label class="control-label" for="home-town">Home Town</label>
+                <div class="controls">
+                    <input type="text" ng-model="member.homeTown" class="input-xlarge" id="home-town">
+                </div>
+                <br>
+                <label class="control-label" for="home-state">Home State</label>
+                <div class="controls">
+                    <input type="text" ng-model="member.homeState" class="input-xlarge" id="home-state">
+                </div>
+                <br>
+                <label class="control-label" for="member-bio">Bio</label>
+                <div class="controls">
+                    <textarea class="input-xlarge" ng-model="member.bio" name="bio" id="member-bio" rows="3" required></textarea>
+                </div>
+            </div>
+        </fieldset>
+
+        <button class="btn btn-success" ng-click="save()" ng-disabled="profile.$invalid">
+            <i class="icon-folder-open icon-white"></i> Save</button>
+        <button class="btn btn-warning" ng-click="cancel()"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+    </form>
+    <hr>
+
+    <!--<div file-upload="{dropTarget:'drop-target'}">
+        <img src="http://placehold.it/300x300" id="drop-target" />
+    </div>-->
+
+    <file-upload droptarget="drop-target">
+        <img src="http://placehold.it/300x300" id="drop-target" />
+    </file-upload>
+
+    <div id="container">
+        <div id="filelist"></div>
+        <!--<br />
+        <button class="btn btn-primary" id="pickfiles"><i class="icon-plus icon-white"></i> Add files</button>
+        <button class="btn btn-success" id="uploadfiles"><i class="icon-upload icon-white"></i> Upload files</button>-->
+        <h3>Drag and Drop a file to upload</h3>
+    </div>
+
+    <hr>
+
+    <pre>form = {{member | json}}</pre>
+    <tt>profile.firstName.$valid = {{profile.firstName.$valid}}</tt><br>
+    <tt>profile.firstName.$error = {{profile.firstName.$error}}</tt><br>
+    <tt>profile.email.$valid = {{profile.email.$valid}}</tt><br>
+    <tt>profile.email.$error = {{profile.email.$error}}</tt><br>
+    <tt>profile.$valid = {{profile.$valid}}</tt><br>
+</div>

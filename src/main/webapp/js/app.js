@@ -11,7 +11,7 @@
 			templateUrl: 'partials/partial1.html'
 		} );
         $routeProvider.when( '/profile', {
-            templateUrl: 'partials/profile.html'
+            templateUrl: 'lib/profile/profile.html'
         } );
 		$routeProvider.when( '/article/:articleId', {
             templateUrl: 'lib/pyklresource/index.html'
@@ -30,7 +30,7 @@
 
 
 	// Declare app level module which depends on filters, and services
-	var app = angular.module( 'myApp', ['pykl', 'ngSanitize', 'ui'] )
+	var app = angular.module( 'myApp', ['pykl', 'bgc-profile.directives', 'ngSanitize', 'ui'] )
 			.config( ['$routeProvider', routeProvider] );
 })();
 
