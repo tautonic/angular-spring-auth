@@ -39,3 +39,31 @@
     float: right;
     margin-right: 20%;
 }
+
+.profile{
+    margin: 2em 0 4em 2em;
+    width: 600px;
+}
+
+.profile-left{
+    float: left;
+    width: 50%
+}
+
+.profile-right{
+    float: right;
+    width: 50%;
+}
+
+.profile-right h6{
+    display: inline-block;
+}
+
+input.ng-invalid{
+    background-color: #ffcccc;
+}
+
+#drop-target{
+    width: 300px;
+    height: 300px;
+}
