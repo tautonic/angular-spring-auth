@@ -12,12 +12,11 @@
 <body>
 <pykl-login ng-controller="LoginCtrl" ng-show="loginNeeded">
 </pykl-login>
-<div class="ng-view"></div>
 <div class="header">
     <div class="container">
         <div class="row">
             <div class="span12 home">
-                <a href="/gc"><img src="images/GCEE_images_header_logo.png"></a>
+                <a ng-href="#/home"><img src="images/GCEE_images_header_logo.png"></a>
                 <div class="search">
                     <span class="gradiant"><img src="images/GCEE_images_header_searchIcon.png"></span><input type="text" name="search">
                 </div>
@@ -26,8 +25,8 @@
         </div>
         <div class="row">
             <ul class="gradiant menu">
-                <li><a href="#">MSCE</a></li>
-                <li><a href="#">Faculty Fellows</a></li>
+                <li><a ng-href="#/view">MSCE</a></li>
+                <li><a ng-href="#/profile">Faculty Fellows</a></li>
                 <li><a href="#">Curriculum Content</a></li>
                 <li><a href="#">Network</a></li>
             </ul>
@@ -76,66 +75,9 @@
     </div>
 </div>
 
-<div class="container content">
-    <div class="row">
-        <div class="span12 quote">
-            <div class="symbol gradiant"><img src="images/GCEE_images_quotation.png"></div>
-            <img class="arrow" src="images/GCEE_images_quotation_arrow.png">
-            <p>HERE IS A QUOTE WITH WORDS IN IT bob thorton eqs.</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="span8">
-            <h2>Global Consortium News</h2>
-            <hr>
-            <div class="articles">
-                <div class="article">
-                    <h3>Article headline</h3>
-                    <div class="byline">by author, 09/09/9009</div>
-                    <div class="picture-frame">
-                        <img src="images/190x140.gif">
-                    </div>
-                    <div class="content">
-                        <p>Portland quinoa biodiesel, next level cosby sweater selvage pork belly. PBR marfa art party, fixie put a bird on it typewriter irony umami. Trust fund mlkshk retro, occupy food truck brooklyn pour-over biodiesel raw denim DIY flexitarian banh mi.
-                            American apparel cray williamsburg gastropub sustainable banh mi, PBR fixie brooklyn ennui iphone before they sold out scenester tumblr Austin. Flexitarian mixtape messenger bag brooklyn small batch, butcher photo booth pinterest whatever.</p>
-                        <div class="social">Tweet | Like</div><div class="more"><a href="#">Read More</a></div>
-                    </div>
-                    <hr>
-                </div>
-
-                <div class="article">
-                    <h3>Article headline</h3>
-                    <div class="byline">by author, 09/09/9009</div>
-                    <div class="picture-frame">
-                        <img src="images/190x140.gif">
-                    </div>
-                    <div class="content">
-                        <p>Portland quinoa biodiesel, next level cosby sweater selvage pork belly. PBR marfa art party, fixie put a bird on it typewriter irony umami. Trust fund mlkshk retro, occupy food truck brooklyn pour-over biodiesel raw denim DIY flexitarian banh mi.
-                            American apparel cray williamsburg gastropub sustainable banh mi, PBR fixie brooklyn ennui iphone before they sold out scenester tumblr Austin. Flexitarian mixtape messenger bag brooklyn small batch, butcher photo booth pinterest whatever.</p>
-                        <div class="social">Tweet | Like</div><div class="more"><a href="#">Read More</a></div>
-                    </div>
-                    <hr>
-                </div>
-            </div>
-            <ul class="article-pagination">
-                <li><a href="#" class="left-arrow">&nbsp;</a></li>
-                <li><a href="#" class="gradiant">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#" class="right-arrow">&nbsp;</a></li>
-            </ul>
-        </div>
-
-
-        <div class="span4">
-            <h2>About GCEE</h2>
-            <hr>
-            <img src="images/190x140.gif">
-            <p>Portland quinoa biodiesel, next level cosby sweater selvage pork belly. PBR marfa art party, fixie put a bird on it typewriter irony umami.</p>
-        </div>
-    </div>
+<div class="container content ng-view">
+</div>
+<div class="container">
     <div class="footer">
         <div class="row">
             <div class="span2">
@@ -191,12 +133,13 @@
     </div>
 </div>
 
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="lib/angular/angular.js"></script>
 <script src="http://code.angularjs.org/1.0.1/angular-sanitize-1.0.1.js "></script>
 <script src="js/app.js"></script>
 <script src="js/controllers.js"></script>
-<script src="lib/pyklsecurity/main.js"></script>
+<script src="lib/pyklsecurity/auth.js"></script>
 <script src="lib/pyklresource/resource.js"></script>
 <script src="lib/pykldiscuss/discuss.js"></script>
 
