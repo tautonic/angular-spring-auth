@@ -9,15 +9,10 @@ function ProfileCtrl($scope, $http, $routeParams, $location) {
     $scope.isEditMode = false;
     $scope.isCreateMode = false;
 
-    /*$http.get('api/profiles/' + $routeParams.profileId).success(function(data){
-        $scope.id = data.id;
-        $scope.profile = data;
-    });*/
-
-    $scope.profile = {
-        firstName:   'James',
-        email:  'jhines@pykl.com'
-    }
+    $http.get('api/profiles/' + $routeParams.profileId).success(function(data){
+        $scope.id = data.content._id;
+        $scope.profile = data.content;
+    });
 
     $scope.edit = function(member){
         $scope.master = angular.copy(member);
