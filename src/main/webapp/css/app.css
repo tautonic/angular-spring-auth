@@ -57,6 +57,7 @@
 
 .profile-right h6{
     display: inline-block;
+    text-transform: none;
 }
 
 input.ng-invalid{

@@ -2,16 +2,15 @@
 
 /* Controllers */
 
-function ProfileCtrl($scope, $http, $routeParams, $location) {
+function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.master = {};
 
     $scope.isViewMode = true;
     $scope.isEditMode = false;
     $scope.isCreateMode = false;
 
-    $http.get('api/profiles/' + $routeParams.profileId).success(function(data){
-        $scope.id = data.content._id;
-        $scope.profile = data.content;
+    var profiles = Profile.query(function(){
+        $scope.profile = profiles.content[0];
     });
 
     $scope.edit = function(member){
@@ -23,20 +22,14 @@ function ProfileCtrl($scope, $http, $routeParams, $location) {
     }
 
     $scope.update = function(){
-        $http.put('api/profiles/' + $scope.profile.id, $scope.profile).success(function(data){
-            $scope.id = data.id;
-            $scope.profile;
-
+        Profile.update({profileId: $scope.profile._id}, $scope.profile, function(data){
             $scope.isViewMode = true;
             $scope.isEditMode = false;
             $scope.isCreateMode = false;
         });
-        $scope.profile = Profile.update({profileId: $routeParams.profileId}, $scope.profile, function(data){
-            $scope.isViewMode = true;
-            $scope.isEditMode = false;
-            $scope.isCreateMode = false;
 
-            $scope.id = data.id;
+        var profiles = Profile.query(function(){
+            $scope.profile = profiles.content[0];
         });
     }
 
@@ -60,14 +53,12 @@ function ProfileCtrl($scope, $http, $routeParams, $location) {
     }
 
     $scope.save = function(){
-        $http.post('api/profiles/', $scope.profile).success(function(data){
-            $scope.id = data.id;
-            $scope.profile;
+        var newProfile = new Profile($scope.profile);
+        newProfile.$save();
 
-            $scope.isViewMode = true;
-            $scope.isEditMode = false;
-            $scope.isCreateMode = false;
-        });
+        $scope.isViewMode = true;
+        $scope.isEditMode = false;
+        $scope.isCreateMode = false;
     }
 
     $scope.delete = function(){

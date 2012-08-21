@@ -161,16 +161,13 @@ app.get( '/auth', function ( req ) {
 } );
 
 app.post('/profiles/', function(req){
-    //Transform logic
-    var data = {
-        accountEmail:   req.postParams.email
-    };
+    log.info('POST PARAMS', JSON.stringify(req.postParams, null, 4));
 
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/',
         method: 'POST',
-        data: data,
-        headers: Headers({ 'x-rt-index': 'gc' }),
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
     };
 
@@ -202,16 +199,41 @@ app.get('/profiles/:id', function(req, id){
     });
 });
 
-app.get('/profiles', function(req){
-    return json( profiles );
+app.get('/profiles/', function(req){
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/',
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    return json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
 });
 
 app.put('/profiles/:id', function(req, id){
-    var member = req.params;
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        method: 'PUT',
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
 
-    profiles[id] = member;
+    var exchange = httpclient.request(opts);
 
-    return json(member);
+    return json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
 });
 
 app.del('/profiles/:id', function(req, id){
