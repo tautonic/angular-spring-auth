@@ -30,7 +30,7 @@
 
 
 	// Declare app level module which depends on filters, and services
-	var app = angular.module( 'myApp', ['pykl', 'bgc-profile.directives', 'ngSanitize', 'ui'] )
+	var app = angular.module( 'myApp', ['pykl', 'bgc.directives', 'bgc.services', 'ngSanitize', 'ui'] )
 			.config( ['$routeProvider', routeProvider] );
 })();
 

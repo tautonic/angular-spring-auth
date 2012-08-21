@@ -1,67 +1,37 @@
 <div class="profile clearfix thumbnail" ng-show="isEditMode">
     <form name="editProfile" class="form-horizontal" novalidate>
         <fieldset>
-            <legend><h2>{{profile.firstName}} {{profile.lastName}}</h2></legend>
+            <legend><h2>{{profile.username}}</h2> <h6>{{profile._id}}</h6></legend>
             <div class="control-group">
-                <label class="control-label" for="first-name">First Name</label>
+                <label class="control-label" for="username">Username</label>
                 <div class="controls">
                     <input type="text"
-                           ng-model="profile.firstName"
+                           ng-model="profile.username"
                            class="input-xlarge"
-                           id="first-name"
-                           name="firstName"
-                           value="{{profile.firstName}}" required>
+                           id="username"
+                           name="username"
+                           value="{{profile.username}}" required>
                 </div>
                 <br>
-                <label class="control-label" for="last-name">Last Name</label>
+                <label class="control-label" for="password">Password</label>
                 <div class="controls">
-                    <input type="text" ng-model="profile.lastName" class="input-xlarge" id="last-name" name="lastName" value="{{profile.lastName}}" required>
+                    <input type="text"
+                           ng-model="profile.password"
+                           class="input-xlarge"
+                           id="password"
+                           name="password"
+                           value="{{profile.password}}" required>
                 </div>
                 <br>
                 <label class="control-label" for="email">Email</label>
                 <div class="controls">
                     <input type="email"
-                           ng-model="profile.email"
+                           ng-model="profile.accountEmail.address"
                            ng-change="emailChanged()"
                            class="input-xlarge"
                            id="email"
-                           name="email"
-                           value="{{profile.email}}" required>
-                </div>
-                <br>
-                <label class="control-label" for="job-title">Job Title</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.jobTitle" class="input-xlarge" id="job-title" value="{{profile.jobTitle}}">
-                </div>
-                <br>
-                <label class="control-label" for="employer">Employer</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.employer" class="input-xlarge" id="employer" value="{{profile.employer}}">
-                </div>
-                <br>
-                <label class="control-label" for="current-city">Current City</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.currentCity" class="input-xlarge" id="current-city" value="{{profile.currentCity}}" required>
-                </div>
-                <br>
-                <label class="control-label" for="current-state">Current State</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.currentState" class="input-xlarge" id="current-state" value="{{profile.currentState}}" required>
-                </div>
-                <br>
-                <label class="control-label" for="home-town">Home Town</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.homeTown" class="input-xlarge" id="home-town" value="{{profile.homeTown}}">
-                </div>
-                <br>
-                <label class="control-label" for="home-state">Home State</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.homeState" class="input-xlarge" id="home-state" value="{{profile.homeState}}">
-                </div>
-                <br>
-                <label class="control-label" for="profile-bio">Bio</label>
-                <div class="controls">
-                    <textarea class="input-xlarge" ng-model="profile.bio" id="profile-bio" rows="3">{{profile.bio}}</textarea>
+                           name="address"
+                           value="{{profile.accountEmail.address}}" required>
                 </div>
             </div>
         </fieldset>
@@ -71,7 +41,7 @@
         <button class="btn btn-warning" ng-click="cancel()"><i class="icon-ban-circle icon-white"></i> Cancel</button>
     </form>
 
-    <pre>form = {{profile | json}}</pre>
+    <!--<pre>form = {{profile | json}}</pre>
     <pre>master = {{master | json}}</pre>
     <hr>
     <tt>editProfile.firstName.$valid = {{editProfile.firstName.$valid}}</tt><br>
@@ -81,7 +51,7 @@
     <tt>editProfile.$valid = {{editProfile.$valid}}</tt><br>
     <tt>editProfile.$error.required = {{!!editProfile.$error.required}}</tt><br>
     <tt>editProfile.$error.minlength = {{!!editProfile.$error.minlength}}</tt><br>
-    <tt>editProfile.$error.maxlength = {{!!editProfile.$error.maxlength}}</tt><br>
+    <tt>editProfile.$error.maxlength = {{!!editProfile.$error.maxlength}}</tt><br>-->
 </div>
 
 <div class="profile clearfix thumbnail" ng-show="isViewMode">
@@ -89,7 +59,7 @@
         <img src="http://placehold.it/260x180" alt="">
 
         <div class="caption">
-            <p>{{profile.bio}}</p>
+            <!--<p>{{profile.bio}}</p>-->
             <p>
                 <button class="btn" ng-click="edit(profile)"><i class="icon-edit"></i> Edit</button>
                 <button class="btn btn-success" ng-click="create()"><i class="icon-plus icon-white"></i> Create</button>
@@ -104,75 +74,68 @@
     </div>
 
     <div class="profile-right">
-        <h6>{{_id}}</h6>
+        <h6>{{profile._id}}</h6>
         <h2>{{profile.username}}</h2>
         <h6>Email</h6> {{profile.accountEmail.address}} <br>
-        <h6>{{profile.status}} at</h6> {{profile.employer}} <br>
+        <!--<h6>{{profile.status}} at</h6> {{profile.employer}} <br>
         <h6>Lives in</h6> {{profile.currentCity}}, {{profile.currentState}} <br>
-        <h6>Hometown</h6> {{profile.homeTown}}, {{profile.homeState}}
+        <h6>Hometown</h6> {{profile.homeTown}}, {{profile.homeState}}-->
     </div>
 </div>
 
 <div class="profile clearfix thumbnail" ng-show="isCreateMode">
     <form name="createProfile" class="form-horizontal" novalidate>
         <fieldset>
-            <legend><h2>{{profile.firstName}} {{profile.lastName}}</h2></legend>
+            <legend><h2>{{profile.username}}</h2></legend>
             <div class="control-group">
-                <label class="control-label" for="first-name">First Name</label>
+                <label class="control-label" for="source">Source</label>
                 <div class="controls">
-                    <input type="text" ng-model="profile.firstName"
-                           class="input-xlarge" name="firstName" id="first-name"
-                           ng-minlength="3" ng-maxlength="10" required>
+                    <input type="text"
+                           ng-model="profile.source"
+                           class="input-xlarge"
+                           id="source"
+                           name="source"
+                           value="test" required>
                 </div>
                 <br>
-                <label class="control-label" for="last-name">Last Name</label>
+                <label class="control-label" for="username">Username</label>
                 <div class="controls">
-                    <input type="text" ng-model="profile.lastName" class="input-xlarge" id="last-name" required>
+                    <input type="text"
+                           ng-model="profile.username"
+                           class="input-xlarge"
+                           id="username"
+                           name="username"
+                           value="" required>
+                </div>
+                <br>
+                <label class="control-label" for="password">Password</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.password"
+                           class="input-xlarge"
+                           id="password"
+                           name="password"
+                           value="" required>
+                </div>
+                <br>
+                <label class="control-label" for="status">Status</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.accountEmail.status"
+                           class="input-xlarge"
+                           id="status"
+                           name="status"
+                           value="unverified" required>
                 </div>
                 <br>
                 <label class="control-label" for="email">Email</label>
                 <div class="controls">
-                    <input type="text"
-                           ng-model="profile.email"
+                    <input type="email"
+                           ng-model="profile.accountEmail.address"
                            class="input-xlarge"
                            id="email"
                            name="email"
-                           required>
-                </div>
-                <br>
-                <label class="control-label" for="job-title">Job Title</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.jobTitle" class="input-xlarge" id="job-title">
-                </div>
-                <br>
-                <label class="control-label" for="employer">Employer</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.employer" class="input-xlarge" id="employer">
-                </div>
-                <br>
-                <label class="control-label" for="current-city">Current City</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.currentCity" class="input-xlarge" id="current-city" required>
-                </div>
-                <br>
-                <label class="control-label" for="current-state">Current State</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.currentState" class="input-xlarge" id="current-state" required>
-                </div>
-                <br>
-                <label class="control-label" for="home-town">Home Town</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.homeTown" class="input-xlarge" id="home-town">
-                </div>
-                <br>
-                <label class="control-label" for="home-state">Home State</label>
-                <div class="controls">
-                    <input type="text" ng-model="profile.homeState" class="input-xlarge" id="home-state">
-                </div>
-                <br>
-                <label class="control-label" for="profile-bio">Bio</label>
-                <div class="controls">
-                    <textarea class="input-xlarge" ng-model="profile.bio" name="bio" id="profile-bio" rows="3" required></textarea>
+                           value="" required>
                 </div>
             </div>
         </fieldset>
@@ -201,10 +164,10 @@
 
     <hr>
 
-    <pre>form = {{createProfile | json}}</pre>
+    <!--<pre>form = {{createProfile | json}}</pre>
     <tt>createProfile.firstName.$valid = {{createProfile.firstName.$valid}}</tt><br>
     <tt>createProfile.firstName.$error = {{createProfile.firstName.$error}}</tt><br>
     <tt>createProfile.email.$valid = {{createProfile.email.$valid}}</tt><br>
     <tt>createProfile.email.$error = {{createProfile.email.$error}}</tt><br>
-    <tt>createProfile.$valid = {{createProfile.$valid}}</tt><br>
+    <tt>createProfile.$valid = {{createProfile.$valid}}</tt><br>-->
 </div>
