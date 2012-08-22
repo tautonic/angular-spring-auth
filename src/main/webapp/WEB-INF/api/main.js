@@ -161,12 +161,16 @@ app.get( '/auth', function ( req ) {
 } );
 
 app.post('/profiles/', function(req){
+    var data = req.postParams;
+    data.source = 'test';
+    data.accountEmail.status = 'unverified';
+
     log.info('POST PARAMS', JSON.stringify(req.postParams, null, 4));
 
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/',
         method: 'POST',
-        data: JSON.stringify(req.postParams),
+        data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
     };
