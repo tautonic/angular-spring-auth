@@ -9,8 +9,19 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.isEditMode = false;
     $scope.isCreateMode = false;
 
-    var profiles = Profile.query(function(){
+    /*Profile.query(function(profiles){
         $scope.profile = profiles.content[0];
+    });*/
+
+    //12d0b4eafca44976bcfed39cc1b9da41
+    /*Profile.get({ profileId: '12d0b4eafca44976bcfed39cc1b9da41' }, function(profile){
+        $scope.profile = profile.content;
+    });*/
+
+    //$scope.profile = Profile.get({ profileId: '12d0b4eafca44976bcfed39cc1b9da41' });
+
+    Profile.email({ email: 'j@pykl.com' }, function(profile){
+        $scope.profile = profile.content;
     });
 
     $scope.edit = function(member){
@@ -22,14 +33,10 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     }
 
     $scope.update = function(){
-        Profile.update({profileId: $scope.profile._id}, $scope.profile, function(data){
+        Profile.update({profileId: $scope.profile._id}, $scope.profile, function(profile){
             $scope.isViewMode = true;
             $scope.isEditMode = false;
             $scope.isCreateMode = false;
-        });
-
-        var profiles = Profile.query(function(){
-            $scope.profile = profiles.content[0];
         });
     }
 
@@ -54,7 +61,9 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
     $scope.save = function(){
         var newProfile = new Profile($scope.profile);
-        newProfile.$save();
+        newProfile.$save(function(response){
+            $scope.profile._id = response.content._id;
+        });
 
         $scope.isViewMode = true;
         $scope.isEditMode = false;
@@ -62,16 +71,19 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     }
 
     $scope.delete = function(){
-        $http.delete('api/profiles/' + $scope.profile.id).success(function(data){
-            $scope.wasProfileDeleted = true;
-
-            $scope.id = data.id;
-            $scope.profile = data;
-
+        var profile = Profile.delete({profileId: $scope.profile._id}, function(profile){
             $scope.isViewMode = true;
             $scope.isEditMode = false;
             $scope.isCreateMode = false;
         });
+
+        $scope.profile = {};
+
+        window.setTimeout(function(){
+            profile.$query(function(profiles){
+                $scope.profile = profiles.content[0];
+            });
+        }, 2000)
     }
 
     $scope.isUnchanged = function(member){
@@ -85,6 +97,4 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
             console.log(status);
         });
     }
-
-
 }

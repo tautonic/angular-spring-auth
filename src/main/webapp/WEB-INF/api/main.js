@@ -12,6 +12,8 @@ var {Application} = require( 'stick' );
 var {getArticle} = require('articles');
 var {getDiscussion, addReply, createDiscussion} = require('discussions');
 
+var {encode} = require('ringo/base64');
+
 var app = exports.app = Application();
 app.configure( 'notfound', 'params', 'mount', 'route' );
 
@@ -195,17 +197,21 @@ app.get('/profiles/:id', function(req, id){
 
     var exchange = httpclient.request(opts);
 
+    log.info('EXCHANGE.STATUS: ', exchange.status);
+
     return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
+
+    //return json(JSON.parse(exchange.content));
 });
 
-app.get('/profiles/', function(req){
-    var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/',
+app.get('/profiles/email/:email', function(req, email){
+    /*var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/' + email,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -218,15 +224,42 @@ app.get('/profiles/', function(req){
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
+    });*/
+});
+
+app.get('/profiles/', function(req){
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/',
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    log.info('EXCHANGE.STATUS: ', exchange.status);
+
+    return json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
     });
 });
 
 app.put('/profiles/:id', function(req, id){
+    log.info('PUT PARAMS', JSON.stringify(req.postParams));
+    var data = req.postParams;
+
+    data.source = 'test';
+    data.accountEmail.status = 'unverified';
+
+    var authToken = _generateBasicAuthorization('backdoor', 'Backd00r');
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
         method: 'PUT',
-        data: JSON.stringify(req.postParams),
-        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        data: JSON.stringify(data),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': authToken }),
         async: false
     };
 
@@ -241,9 +274,23 @@ app.put('/profiles/:id', function(req, id){
 });
 
 app.del('/profiles/:id', function(req, id){
-    delete profiles[id];
+    var authToken = _generateBasicAuthorization('backdoor', 'Backd00r');
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        method: 'DELETE',
+        //data: JSON.stringify(data),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': authToken }),
+        async: false
+    };
 
-    return json(profiles[1]);
+    var exchange = httpclient.request(opts);
+
+    return json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
 });
 
 app.get('/profiles/asyncEmail/:email', function(req, email){
@@ -356,6 +403,16 @@ app.get('/profiles/pics/:id', function(req, id){
 
 function homepage( req ) {
 	return json( {homepage: true} );
+}
+
+/*
+Utitliy functions
+*/
+
+function _generateBasicAuthorization(username, password) {
+	var header = username + ":" + password;
+	var base64 = encode(header);
+	return 'Basic ' + base64;
 }
 
 
