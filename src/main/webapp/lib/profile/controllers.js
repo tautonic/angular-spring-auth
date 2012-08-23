@@ -16,13 +16,23 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     //12d0b4eafca44976bcfed39cc1b9da41
     /*Profile.get({ profileId: '12d0b4eafca44976bcfed39cc1b9da41' }, function(profile){
         $scope.profile = profile.content;
+    }, function(response){
+        console.log('GET ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });*/
 
     //$scope.profile = Profile.get({ profileId: '12d0b4eafca44976bcfed39cc1b9da41' });
 
-    Profile.email({ email: 'j@pykl.com' }, function(profile){
+    Profile.email({ email: 'jhines@pykl.com' }, function(profile){
         $scope.profile = profile.content;
+    }, function(response){
+        console.log('GET PROFILE BY EMAIL ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
+
+    /*Profile.username({ username: 'jhines' }, function(profile){
+        $scope.profile = profile.content;
+    }, function(response){
+        console.log('GET PROFILE BY USERNAME ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+    });*/
 
     $scope.edit = function(member){
         $scope.master = angular.copy(member);
@@ -33,10 +43,20 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     }
 
     $scope.update = function(){
-        Profile.update({profileId: $scope.profile._id}, $scope.profile, function(profile){
+        var data = {
+            "username"      : $scope.profile.username,
+            "password"      : $scope.profile.password,
+            "accountEmail"  : {
+                "address"  : $scope.profile.accountEmail.address
+            }
+        }
+
+        Profile.update({profileId: $scope.profile._id}, data, function(profile){
             $scope.isViewMode = true;
             $scope.isEditMode = false;
             $scope.isCreateMode = false;
+        }, function(response){
+            console.log('DELETE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
     }
 
@@ -63,11 +83,13 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         var newProfile = new Profile($scope.profile);
         newProfile.$save(function(response){
             $scope.profile._id = response.content._id;
-        });
 
-        $scope.isViewMode = true;
-        $scope.isEditMode = false;
-        $scope.isCreateMode = false;
+            $scope.isViewMode = true;
+            $scope.isEditMode = false;
+            $scope.isCreateMode = false;
+        }, function(response){
+            console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
     }
 
     $scope.delete = function(){
@@ -75,6 +97,8 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
             $scope.isViewMode = true;
             $scope.isEditMode = false;
             $scope.isCreateMode = false;
+        }, function(response){
+            console.log('DELETE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
 
         $scope.profile = {};
@@ -82,6 +106,8 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         window.setTimeout(function(){
             profile.$query(function(profiles){
                 $scope.profile = profiles.content[0];
+            }, function(response){
+                console.log('QUERY ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
             });
         }, 2000)
     }

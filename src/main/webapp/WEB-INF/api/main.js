@@ -203,14 +203,27 @@ app.get('/profiles/:id', function(req, id){
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
+
     result.status = exchange.status;
 
     return result;
 });
 
 app.get('/profiles/', function(req){
+    log.info('REQUEST PARAMS: ', JSON.stringify(req.params, null, 4));
+
+    var url;
+
+    if(req.params.email){
+        url = 'http://localhost:9300/myapp/api/profiles/byprimaryemail/' + req.params.email;
+    }else if(req.params.username){
+        url = 'http://localhost:9300/myapp/api/profiles/byusername/' + req.params.username;
+    }else{
+        url = 'http://localhost:9300/myapp/api/profiles/';
+    }
+
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/',
+        url: url,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -218,22 +231,25 @@ app.get('/profiles/', function(req){
 
     var exchange = httpclient.request(opts);
 
-    return json({
+    var result = json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
+
+    result.status = exchange.status;
+
+    return result;
 });
 
 app.put('/profiles/:id', function(req, id){
-    var authHeader = _generateBasicAuthorization('backdoor', 'Backd00r');
-
+    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
         method: 'PUT',
         data: JSON.stringify(req.postParams),
-        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' , Authorization: authHeader}),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
         async: false
     };
 
@@ -252,9 +268,27 @@ app.put('/profiles/:id', function(req, id){
 });
 
 app.del('/profiles/:id', function(req, id){
-    delete profiles[id];
+    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        method: 'DELETE',
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
+        async: false
+    };
 
-    return json(profiles[1]);
+    var exchange = httpclient.request(opts);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
 });
 
 app.get('/profiles/asyncEmail/:email', function(req, email){
@@ -377,6 +411,10 @@ function _generateBasicAuthorization(username, password) {
 	var header = username + ":" + password;
 	var base64 = encode(header);
 	return 'Basic ' + base64;
+}
+
+function getUserByEmail(email){
+
 }
 
 

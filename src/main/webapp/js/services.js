@@ -11,9 +11,10 @@ angular.module( 'bgc.services', ['ngResource'] )
         return $resource('/gc/api/profiles/:profileId',
             {},
             {
-                update: { method: 'PUT', isArray: false },
-                query:  { method: 'GET', isArray: false },
-                email:  { method: 'GET', isArray: false }
+                update:     { method: 'PUT', isArray: false },
+                query:     { method: 'GET', isArray: false },
+                email:     { method: 'GET', isArray: false },
+                username:   { method: 'GET', isArray: false }
             }
         );
     });
