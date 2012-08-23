@@ -197,12 +197,15 @@ app.get('/profiles/:id', function(req, id){
 
     var exchange = httpclient.request(opts);
 
-    return json({
+    var result = json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
+    result.status = exchange.status;
+
+    return result;
 });
 
 app.get('/profiles/', function(req){
@@ -224,22 +227,28 @@ app.get('/profiles/', function(req){
 });
 
 app.put('/profiles/:id', function(req, id){
+    var authHeader = _generateBasicAuthorization('backdoor', 'Backd00r');
+
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
         method: 'PUT',
         data: JSON.stringify(req.postParams),
-        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' , Authorization: authHeader}),
         async: false
     };
 
     var exchange = httpclient.request(opts);
 
-    return json({
+    var result = json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
+
+    result.status = exchange.status;
+
+    return result;
 });
 
 app.del('/profiles/:id', function(req, id){
