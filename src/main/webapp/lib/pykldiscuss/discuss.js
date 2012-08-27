@@ -10,7 +10,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         content: ''
     };
 
-    if(("new"===id) && (!$rootScope.auth.isAuthenticated()))
+    if(("new"===id) && (!$rootScope.auth.isAuthenticated))
     {
         $location.path('/discussion/all');
     }
@@ -36,8 +36,8 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     function loadContent() {
         $http.get( url ).success( function (data, status) {
             var discussion = data;
-
             $scope.discussion = discussion;
+            console.log("DSICUSSION: "+$scope.discussion.message);
         }).error(function(data, status) {
                 $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
@@ -53,14 +53,21 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     }
     //$auth.getPrincipal();
     $scope.createDiscussion = function() {
-        $scope.discussion.posts.push({
-            owner: {
-                username: $auth.username,
-                picture: "http://localhost:8080/gc/images/40x40.gif"
-            },
-            content: $scope.reply.content
+        if(typeof($scope.discussion) === "undefined")
+        {
+            $scope.discussion = [];
+        }
+        $scope.discussion.push(
+        {
+            title: $scope.reply.title,
+            posts: [{
+                owner: {
+                    username: 'bob',//$rootScope.auth.getUsername(),
+                    picture: "http://localhost:8080/gc/images/40x40.gif"
+                },
+                content: $scope.reply.content
+            }]
         });
-        $scope.discussion.title = $scope.reply.title;
         $http.post('api/discussion/new', $scope.discussion).success(function(data) {
             $location.path('/discussion/'+data.newId);
         });

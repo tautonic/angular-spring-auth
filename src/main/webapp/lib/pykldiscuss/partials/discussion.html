@@ -1,8 +1,11 @@
 
 <div ng-show="allThreads">
+    <div>
+        <a ng-href="#/discussion/new">Start new discussion</a>
+    </div>
     <div class="discussion-thread" ng-repeat="thread in discussion">
-        <a ng-href="#/discussion/{{thread.id}}">{{thread.title}}</a>
-        <div class="started-by">Started by: {{thread.posts[0].owner.username}}</div>
+        <a ng-href="#/discussion/{{thread.parentId}}">{{thread.title}}</a>
+        <div class="started-by">Started by: <a ng-href="#/profile/{{thread.creator._id}}">{{thread.creator.username}}</a></div>
     </div>
 </div>
 
@@ -11,7 +14,7 @@
         <form name="newDiscussionForm" ng-submit="createDiscussion()">
             Discussion Title: <input type="text" ng-model="reply.title">
             <p>Words go here:</p>
-            <textarea rows="15" cols="60" ng-model="reply.content" required>
+            <textarea rows="60" cols="20" ng-model="reply.content" required>
             </textarea>
             <br>
             <input type="submit" value="Start New Discussion">
@@ -22,7 +25,8 @@
 
 <div ng-show="singleThread">
     <h1>{{discussion.title}}</h1>
-    <div class="post" ng-repeat="post in discussion.posts">
+    <p class="content">{{discussion.message}}</p>
+    <!--<div class="post" ng-repeat="post in discussion.posts">
         <div class="user">
             <p>{{post.owner.username}}</p>
             <img ng-src="{{post.owner.picture}}">
@@ -37,7 +41,7 @@
         </div>
         <div class="buttons clear"><button ng-click="replyTo(post.content)">Quote</button><button ng-click="edit(post)" ng-show="canEdit(post)">Edit</button></div>
 
-    </div>
+    </div> -->
     <button ng-click="replyTo()">Reply</button>
     <div class="reply" ng-show="reply.show">
         <form name="replyForm" ng-submit="submitReply()">

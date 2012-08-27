@@ -60,6 +60,10 @@ var discussionList = module.singleton("discussionList", function() {
     }];
 });
 
+var httpclient = require('ringo/httpclient');
+var {Headers} = require('ringo/utils/http');
+var {encode} = require('ringo/base64');
+
 var getDiscussion = function(id) {
     if(id == "new")
     {
@@ -69,20 +73,100 @@ var getDiscussion = function(id) {
             posts: []
         }
     }
-    return discussionList[id-1];
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/posts/' + id,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+    log.info("GET: exchange results: "+exchange.content);
+    return {
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    };
+
+    //return discussionList[id-1];
 }
 
 var getDiscussionList = function() {
-    return discussionList;
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/posts/',
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    return {
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    };
 }
 
 var addReply = function(id, reply) {
     discussionList[id-1].posts.push(reply);
 }
 
-var createDiscussion = function(firstPost) {
-    discussionList.push(firstPost);
-    return discussionList.length;
+var log = require( 'ringo/logging' ).getLogger( module.id );
+
+var createDiscussion = function(firstPost, username, password) {
+
+    var data = {
+        "dataType": "posts",
+        "dateCreated": "",
+        "parentId": null,
+        "type": "discussion",
+        "creator":{
+            "_id": 1,
+            "username": username,
+            "profilePicture": { 'filepath': "/img/bob.com" }
+        },
+        "title": firstPost.title,
+        "message": firstPost.posts[0].content,
+        "ip": "10.16.151.115",
+        "spam": 0,
+        "likedBy": [],
+        "likes": 0,
+        "views":0,
+        "active": true
+    };
+
+    var headers = Headers({"Authorization": generateBasicAuthorization(username, password), "x-rt-index" : 'gc', "Content-Type": "application/json"});
+
+    /*(function() {
+        var auth = getAuthentication();
+        return auth ? getAuthorizationHeader(auth) : '';
+    })();*/
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/posts/',
+        method: 'POST',
+        data: JSON.stringify(data),
+        headers: headers,
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    log.info("exchange content: "+exchange.content);
+
+    return JSON.parse(exchange.content).parentId;
+}
+
+
+function generateBasicAuthorization(username, password) {
+    log.debug("Hash Pass?: " + password)
+    var header = username + ":" + password;
+    var base64 = encode(header);
+    return 'Basic ' + base64;
 }
 
 var editDiscussionPost = function(id, postId, postContent) {
