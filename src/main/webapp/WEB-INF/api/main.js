@@ -7,10 +7,11 @@ var {Headers} = require('ringo/utils/http');
 var log = require( 'ringo/logging' ).getLogger( module.id );
 var {trimpath, trimpathResponse, registerHelper} = require( 'trimpath' );
 var {json} = require( 'ringo/jsgi/response' );
+var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
 var {getArticle} = require('articles');
-var {getDiscussion, addReply, createDiscussion} = require('discussions');
+var {getDiscussion, getDiscussionList, addReply, createDiscussion} = require('discussions');
 
 var {encode} = require('ringo/base64');
 
@@ -64,28 +65,39 @@ app.get( '/index.html', function ( req ) {
 app.get('/article/:id', function(req, id) {
     var article = getArticle(id);
 
-    var servletRequest = req.env.servletRequest;
-    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
-    {
-        log.info("User does not have access to full article content.");
-        delete article.content;
-    } else {
-        log.info("Full article content should be returned");
-        //todo: make this replacement actually replace things properly. this solution is not feasible for long term
-        /*var newUrl = "http://localhost:8080" + ctx("/#/article/");
+    if(article.success) {
+        var servletRequest = req.env.servletRequest;
+        if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+        {
+            log.info("User does not have access to full article content.");
+            delete article.content.content;
+        } else {
+            log.info("Full article content should be returned");
+            //todo: make this replacement actually replace things properly. this solution is not feasible for long term
+            /*var newUrl = "http://localhost:8080" + ctx("/#/article/");
 
-        article.content = article.content.replace(new RegExp("http://example.com/blog/article-title-"), newUrl.toString());*/
+             article.content = article.content.replace(new RegExp("http://example.com/blog/article-title-"), newUrl.toString());*/
+        }
+
+        return json(article.content);
+    } else {
+        return json(false);
     }
 
-    return json(article);
 });
 
 app.get('/discussion/all', function(req, id) {
-    return json(getDiscussionList());
+    return json(getDiscussionList().content);
 });
 
 app.get('/discussion/:id', function(req, id) {
-    return json(getDiscussion(id));
+    var result = getDiscussion(id);
+    log.info("RESULT INFO THINGY: "+JSON.stringify(result));
+    if(result.status !== 200) {
+        return json(false);
+    }
+
+    return json(result.content);
 });
 
 app.put('/discussion/:id/:post', function(req, id, post) {
@@ -98,8 +110,12 @@ app.put('/discussion/:id/:post', function(req, id, post) {
 
 app.post('/discussion/new', function(req) {
     var discussion = req.params;
+    //var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
+    //var auth = SecurityContextHolder.context.authentication;
+    var username = "fred";
+    var password = digest("secret").toLowerCase();
 
-    return json({ "newId" : createDiscussion(discussion) });
+    return json({ "newId" : createDiscussion(discussion["0"], username, password) });
 });
 
 app.post('/discussion/:id', function(req, id) {

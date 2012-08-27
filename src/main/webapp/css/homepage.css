@@ -275,6 +275,6 @@ ul.article-pagination li a {
 .footer {
     background-color: #7f8082;
     padding: 10px 20px;
-    margin: 100px -10px 0;
+    margin: 0 -10px;
     color: white;
 }
