@@ -9,9 +9,9 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.isEditMode = false;
     $scope.isCreateMode = false;
 
-    /*Profile.query(function(profiles){
+    Profile.query(function(profiles){
         $scope.profile = profiles.content[0];
-    });*/
+    });
 
     //12d0b4eafca44976bcfed39cc1b9da41
     /*Profile.get({ profileId: '12d0b4eafca44976bcfed39cc1b9da41' }, function(profile){
@@ -22,11 +22,11 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
     //$scope.profile = Profile.get({ profileId: '12d0b4eafca44976bcfed39cc1b9da41' });
 
-    Profile.email({ email: 'jhines@pykl.com' }, function(profile){
+    /*Profile.email({ email: 'jhines@pykl.com' }, function(profile){
         $scope.profile = profile.content;
     }, function(response){
         console.log('GET PROFILE BY EMAIL ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-    });
+    });*/
 
     /*Profile.username({ username: 'jhines' }, function(profile){
         $scope.profile = profile.content;
@@ -34,27 +34,29 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         console.log('GET PROFILE BY USERNAME ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });*/
 
-    $scope.edit = function(member){
-        $scope.master = angular.copy(member);
+    $scope.edit = function(profile){
+        $scope.master = angular.copy(profile);
 
         $scope.isViewMode = false;
         $scope.isEditMode = true;
         $scope.isCreateMode = false;
     }
 
-    $scope.update = function(){
+    $scope.update = function(profile){
         var data = {
-            "username"      : $scope.profile.username,
-            "password"      : $scope.profile.password,
+            "username"      : profile.username,
+            "password"      : profile.password,
             "accountEmail"  : {
-                "address"  : $scope.profile.accountEmail.address
+                "address"  : profile.accountEmail.address
             }
         }
 
-        Profile.update({profileId: $scope.profile._id}, data, function(profile){
+        Profile.update({profileId: profile._id}, data, function(response){
             $scope.isViewMode = true;
             $scope.isEditMode = false;
             $scope.isCreateMode = false;
+
+            $scope.responseContent = response.content;
         }, function(response){
             console.log('DELETE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
@@ -69,8 +71,8 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         $scope.isCreateMode = false;
     }
 
-    $scope.create = function(){
-        $scope.master = angular.copy($scope.profile);
+    $scope.create = function(profile){
+        $scope.master = angular.copy(profile);
 
         $scope.profile = {};
 
@@ -79,14 +81,16 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         $scope.isCreateMode = true;
     }
 
-    $scope.save = function(){
-        var newProfile = new Profile($scope.profile);
-        newProfile.$save(function(response){
+    $scope.save = function(profile){
+        $scope.newProfile = new Profile(profile);
+        $scope.newProfile.$save(function(response){
             $scope.profile._id = response.content._id;
 
             $scope.isViewMode = true;
             $scope.isEditMode = false;
             $scope.isCreateMode = false;
+
+            $scope.responseContent = response.content;
         }, function(response){
             console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });

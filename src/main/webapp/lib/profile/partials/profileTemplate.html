@@ -62,7 +62,7 @@
             <!--<p>{{profile.bio}}</p>-->
             <p>
                 <button class="btn" ng-click="edit(profile)"><i class="icon-edit"></i> Edit</button>
-                <button class="btn btn-success" ng-click="create()"><i class="icon-plus icon-white"></i> Create</button>
+                <button class="btn btn-success" ng-click="create(profile)"><i class="icon-plus icon-white"></i> Create</button>
                 <button class="btn btn-danger" ng-click="delete()"><i class="icon-trash icon-white"></i> Delete</button>
             </p>
         </div>
@@ -120,7 +120,7 @@
             </div>
         </fieldset>
 
-        <button class="btn btn-success" ng-click="save()" ng-disabled="createProfile.$invalid">
+        <button class="btn btn-success" ng-click="save(profile)" ng-disabled="createProfile.$invalid">
             <i class="icon-folder-open icon-white"></i> Save</button>
         <button class="btn btn-warning" ng-click="cancel()"><i class="icon-ban-circle icon-white"></i> Cancel</button>
     </form>
