@@ -47,6 +47,14 @@ describe('Babson GC Controllers', function(){
                             address: "kevin@pykl.com",
                             status: "unverified"
                         }
+                    },
+                    {
+                        username: "eric",
+                        password: "password",
+                        accountEmail: {
+                            address: "kevin@pykl.com",
+                            status: "unverified"
+                        }
                     }
                 ]
             });
@@ -89,6 +97,8 @@ describe('Babson GC Controllers', function(){
             });
 
             expect(scope.isViewMode).toBeTruthy();
+            expect(scope.isEditMode).toBeFalsy();
+            expect(scope.isCreateMode).toBeFalsy();
         });
 
         it('should be in edit mode ', function(){
@@ -103,7 +113,7 @@ describe('Babson GC Controllers', function(){
             $httpBackend.flush();
         });
 
-        it('should update an existing profile ', function(){
+        it('should successfully update an existing profile ', function(){
             profile.username = "eric";
             profile.accountEmail.address = "eric@pykl.com";
 
@@ -136,6 +146,38 @@ describe('Babson GC Controllers', function(){
 
             expect(scope.isViewMode).toBeTruthy();
             expect(scope.isEditMode).toBeFalsy();
+            expect(scope.isCreateMode).toBeFalsy();
+        });
+
+        it('should return an error on an unsuccessful update ', function(){
+            profile.username = "eric";
+            profile.accountEmail.address = "eric@pykl.com";
+
+            delete profile.accountEmail.status;
+
+            $httpBackend.expectPUT('/gc/api/profiles/', profile).respond(400, {
+                content: {
+                    _id     : 123,
+                    username: "eric",
+                    password: "password",
+                    accountEmail: {
+                        address: "eric@pykl.com"
+                    }
+                }
+            });
+
+            scope.update(profile);
+
+            expect(scope.isViewMode).toBeFalsy();
+            expect(scope.isEditMode).toBeTruthy();
+            expect(scope.isCreateMode).toBeFalsy();
+
+            $httpBackend.flush();
+
+            expect(scope.responseContent).toEqual('UPDATE FAILED WITH AN ERROR OF: 400');
+
+            expect(scope.isViewMode).toBeFalsy();
+            expect(scope.isEditMode).toBeTruthy();
             expect(scope.isCreateMode).toBeFalsy();
         });
 

@@ -43,6 +43,10 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     }
 
     $scope.update = function(profile){
+        $scope.isViewMode = false;
+        $scope.isEditMode = true;
+        $scope.isCreateMode = false;
+
         var data = {
             "username"      : profile.username,
             "password"      : profile.password,
@@ -58,7 +62,8 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
             $scope.responseContent = response.content;
         }, function(response){
-            console.log('DELETE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
+            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
     }
 
