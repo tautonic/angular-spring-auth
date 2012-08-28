@@ -92,7 +92,7 @@ app.get('/discussion/all', function(req, id) {
 
 app.get('/discussion/:id', function(req, id) {
     var result = getDiscussion(id);
-    log.info("RESULT INFO THINGY: "+JSON.stringify(result));
+
     if(result.status !== 200) {
         return json(false);
     }
@@ -112,10 +112,8 @@ app.post('/discussion/new', function(req) {
     var discussion = req.params;
     //var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
     //var auth = SecurityContextHolder.context.authentication;
-    var username = "fred";
-    var password = digest("secret").toLowerCase();
 
-    return json({ "newId" : createDiscussion(discussion["0"], username, password) });
+    return json({ "newId" : createDiscussion(discussion["0"], getUsernamePassword()) });
 });
 
 app.post('/discussion/:id', function(req, id) {
@@ -128,17 +126,7 @@ app.post('/discussion/:id', function(req, id) {
         return json(false);
     }
 
-    var postContent = req.params;
-    var reply = {
-        owner: {
-            username: auth.principal,
-            picture: "http://localhost:8080/gc/images/40x40.gif"
-        },
-        content: postContent.reply
-    };
-
-    addReply(id, reply);
-    return json(reply);
+    return json(addReply(id, req.params.reply, getUsernamePassword()));
 });
 
 app.get( '/ping', function ( req ) {
@@ -431,6 +419,10 @@ function _generateBasicAuthorization(username, password) {
 
 function getUserByEmail(email){
 
+}
+
+function getUsernamePassword() {
+    return { "username": "fred", "password": digest("secret").toLowerCase() };
 }
 
 

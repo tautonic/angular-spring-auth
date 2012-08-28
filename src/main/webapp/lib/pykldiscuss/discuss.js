@@ -7,7 +7,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
 
     $scope.reply = {
         show: false,
-        content: ''
+        message: ''
     };
 
     if(("new"===id) && (!$rootScope.auth.isAuthenticated))
@@ -34,10 +34,13 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     }
 
     function loadContent() {
-        $http.get( url ).success( function (data, status) {
-            var discussion = data;
-            $scope.discussion = discussion;
-            console.log("DSICUSSION: "+$scope.discussion.message);
+        $http.get( url ).success( function (data) {
+            if(id != "all")
+            {
+                $scope.discussion = data[0];
+            } else {
+                $scope.discussion = data;
+            }
         }).error(function(data, status) {
                 $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
@@ -46,9 +49,9 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     $scope.replyTo = function(original) {
         $scope.reply.show = true;
         if(original != null) {
-            $scope.reply.content = "[quote]" + original + "[/quote]";
+            $scope.reply.message = "[quote]" + original + "[/quote]";
         } else {
-            $scope.reply.content = '';
+            $scope.reply.message = '';
         }
     }
     //$auth.getPrincipal();
@@ -65,22 +68,27 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                     username: 'bob',//$rootScope.auth.getUsername(),
                     picture: "http://localhost:8080/gc/images/40x40.gif"
                 },
-                content: $scope.reply.content
+                message: $scope.reply.message
             }]
         });
         $http.post('api/discussion/new', $scope.discussion).success(function(data) {
-            $location.path('/discussion/'+data.newId);
+            if(data.newId !== false)
+            {
+                $location.path('/discussion/'+data.newId);
+            } else {
+                alert("There was an error.");
+            }
         });
 
     }
 
     $scope.submitReply = function() {
-        if($scope.reply.content != '') {
-            var reply = $scope.reply.content;
+        if($scope.reply.message != '') {
+            var reply = $scope.reply.message;
             $scope.reply.show = false;
-            $scope.reply.content = '';
+            $scope.reply.message = '';
             $http.post(url, { reply: reply }).success(function(data) {
-                $scope.discussion.posts.push(data);
+                $scope.discussion.children.unshift(data);
             });
         } else {
             alert("enter a reply");
@@ -92,11 +100,15 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     }
 
     $scope.canEdit = function(post) {
-        return (post.owner.username == $rootScope.auth.getUsername());
+        if(post === undefined)
+        {
+            return false;
+        }
+        return (post.creator.username == $rootScope.auth.principal);
     }
 
     $scope.edit = function(post) {
-        post.edited = post.content;
+        post.edited = post.message;
         post.edit = true;
     }
 
@@ -106,7 +118,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     }
 
     $scope.editPost = function(post) {
-        post.content = post.edited;
+        post.message = post.edited;
         delete post.edited;
         post.edit = false;
         $http.put(url + "/" + post.id, post).success(function(data) {
