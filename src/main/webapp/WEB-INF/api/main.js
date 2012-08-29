@@ -11,7 +11,7 @@ var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
 var {getArticle} = require('articles');
-var {getDiscussion, getDiscussionList, addReply, createDiscussion} = require('discussions');
+var {getDiscussion, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
 
 var {encode} = require('ringo/base64');
 
@@ -86,10 +86,18 @@ app.get('/article/:id', function(req, id) {
 
 });
 
+/********** Discussion posts *********/
+
+/**
+ * Returns a list of discussion topics
+ */
 app.get('/discussion/all', function(req, id) {
     return json(getDiscussionList().content);
 });
 
+/**
+ * Returns a single discussion, in threaded format
+ */
 app.get('/discussion/:id', function(req, id) {
     var result = getDiscussion(id);
 
@@ -100,22 +108,27 @@ app.get('/discussion/:id', function(req, id) {
     return json(result.content);
 });
 
+/**
+ * Edits a discussion post
+ */
 app.put('/discussion/:id/:post', function(req, id, post) {
     var editedPost = req.params;
 
-    editDiscussionPost(id, post, editedPost);
-
-    return json(true);
+    return json(editDiscussionPost(id, post, editedPost, getUsernamePassword()));
 });
 
+/**
+ * Creates a new discussion topic
+ */
 app.post('/discussion/new', function(req) {
     var discussion = req.params;
-    //var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
-    //var auth = SecurityContextHolder.context.authentication;
 
     return json({ "newId" : createDiscussion(discussion["0"], getUsernamePassword()) });
 });
 
+/**
+ * Reply to a discussion
+ */
 app.post('/discussion/:id', function(req, id) {
     var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
     var auth = SecurityContextHolder.context.authentication;
@@ -128,6 +141,7 @@ app.post('/discussion/:id', function(req, id) {
 
     return json(addReply(id, req.params.reply, getUsernamePassword()));
 });
+/****** End discussion posts ********/
 
 app.get( '/ping', function ( req ) {
 	var servletRequest = req.env.servletRequest;

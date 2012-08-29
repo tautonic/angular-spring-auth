@@ -121,8 +121,8 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         post.message = post.edited;
         delete post.edited;
         post.edit = false;
-        $http.put(url + "/" + post.id, post).success(function(data) {
-            console.log("edit saved successfully to server");
+        $http.put(url + "/" + post._id, post).success(function(data) {
+            console.log("edit saved successfully to server, url: "+url+"/"+post._id);
         });
     }
     /*

@@ -75,11 +75,6 @@ var addReply = function(id, reply, user) {
 
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
-    /*(function() {
-     var auth = getAuthentication();
-     return auth ? getAuthorizationHeader(auth) : '';
-     })();*/
-
     var opts = {
         url: 'http://localhost:9300/myapp/api/posts/'+id,
         method: 'POST',
@@ -92,7 +87,6 @@ var addReply = function(id, reply, user) {
 
     //log.info("REPLY exchange: "+JSON.stringify(exchange.content));
     return JSON.parse(exchange.content);
-    //discussionList[id].posts.push(reply);
 }
 
 var log = require( 'ringo/logging' ).getLogger( module.id );
@@ -121,11 +115,6 @@ var createDiscussion = function(firstPost, user) {
 
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
-    /*(function() {
-        var auth = getAuthentication();
-        return auth ? getAuthorizationHeader(auth) : '';
-    })();*/
-
     var opts = {
         url: 'http://localhost:9300/myapp/api/posts/',
         method: 'POST',
@@ -144,7 +133,44 @@ var createDiscussion = function(firstPost, user) {
     }
 
     return false;
+}
 
+var editDiscussionPost = function(id, postId, postContent, user) {
+
+    var data = {
+        "dataType": "posts",
+        "dateCreated": postContent.dateCreated,
+        "parentId": postContent.parentId,
+        "type": "discussion",
+        "creator": postContent.creator,
+        "title": postContent.title,
+        "message": postContent.message,
+        "ip": postContent.ip,
+        "spam": postContent.spam,
+        "likedBy": postContent.likedBy,
+        "likes": postContent.likes,
+        "views":postContent.views,
+        "active": postContent.active
+    };
+
+    var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/posts/'+postId,
+        method: 'PUT',
+        data: JSON.stringify(data),
+        headers: headers,
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    if(Math.floor(exchange.status/100) === 2)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -154,9 +180,4 @@ function generateBasicAuthorization(user) {
     var base64 = encode(header);
     return 'Basic ' + base64;
 }
-
-var editDiscussionPost = function(id, postId, postContent) {
-    discussionList[id-1].posts[postId] = postContent;
-}
-
 export('getDiscussion', 'getDiscussionList', 'addReply', 'createDiscussion', 'editDiscussionPost');
