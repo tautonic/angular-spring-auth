@@ -275,7 +275,7 @@
 			var authInterceptor = ['$rootScope', '$q', '$log',
 				function ( $rootScope, $q, $log ) {
 					function success( response ) {
-						$log.info( 'Successful response: ' + JSON.stringify( response ) );
+						//$log.info( 'Successful response: ' + JSON.stringify( response ) );
 						return response;
 					}
 

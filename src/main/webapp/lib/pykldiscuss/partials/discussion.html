@@ -14,7 +14,7 @@
         <form name="newDiscussionForm" ng-submit="createDiscussion()">
             Discussion Title: <input type="text" ng-model="reply.title">
             <p>Words go here:</p>
-            <textarea rows="10" cols="100" ng-model="reply.message" required>
+            <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
             </textarea>
             <br>
             <input type="submit" value="Start New Discussion">
@@ -24,7 +24,6 @@
 </div>
 
 <div ng-show="singleThread">
-
     <h1>{{discussion.title}}</h1>
     <div class="post">
         <div class="user">
@@ -34,7 +33,7 @@
         <p class="content" ng-bind-html="discussion.message" ng-show="!discussion.edit">{{discussion.message}}</p>
         <div class="content" ng-show="discussion.edit">
             <form ng-submit="editPost(discussion)">
-                <textarea style="width: 100%; height: 50px;" ng-model="discussion.edited"></textarea>
+                <textarea style="width: 100%; height: 50px;" ng-model="discussion.edited" ui-tinymce></textarea>
                 <input type="submit" value="Save">
                 <input type="button" ng-click="cancelEdit(discussion)" value="Cancel">
             </form>
@@ -50,7 +49,7 @@
         <p class="content" ng-bind-html="post.message" ng-show="!post.edit">{{post.message}}</p>
         <div class="content" ng-show="post.edit">
             <form ng-submit="editPost(post)">
-                <textarea style="width: 100%; height: 50px;" ng-model="post.edited"></textarea>
+                <textarea style="width: 100%; height: 50px;" ng-model="post.edited" ui-tinymce></textarea>
                 <input type="submit" value="Save">
                 <input type="button" ng-click="cancelEdit(post)" value="Cancel">
             </form>
@@ -62,7 +61,7 @@
     <div class="reply" ng-show="reply.show">
         <form name="replyForm" ng-submit="submitReply()">
             <p>Enter reply here:</p>
-            <textarea rows="10" cols="100" ng-model="reply.message" required>
+            <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
             </textarea>
             <br>
             <input type="submit" value="Reply">
