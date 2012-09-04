@@ -1,41 +1,52 @@
 'use strict';
-
+/*
+reconfigure to be more testable:
+default controller to load all discussions
+use one single $scope variable to control which view is displayed
+stick as much code into functions as possible
+ */
 function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $location ) {
-    var url = 'api/discussion/';
+    var url = 'api/discussions/';
     //this check is needed to handle things like discussions connected with articles
-    var id = $routeParams.discussionId || $routeParams.articleId || "new";
 
-    $scope.reply = {
-        show: false,
-        message: ''
-    };
+    setupScope();
 
-    if(("new"===id) && (!$rootScope.auth.isAuthenticated))
-    {
-        $location.path('/discussion/all');
-    }
+    function setupScope() {
+        $scope.reply = {
+            show: false,
+            message: ''
+        };
 
-    //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
+        if($routeParams) {
+            $scope.pageType = $routeParams.discussionId || $routeParams.articleId || "all";
 
-    switch(id)
-    {
-        case "new":
-            $scope.reply.title = '';
-            $scope.new = true;
-            url = url + "new";
-            break;
-        case "all":
-            $scope.allThreads = true;
+            if($scope.pageType != "all") {
+                if($scope.pageType != "new") {
+                    url = url + $scope.pageType;
+                    $scope.pageType = "single";
+                } else {
+                    $scope.reply.title = '';
+                    url = url + "new";
+                }
+            } else {
+                url = url + "all";
+            }
+        } else {
+            $scope.pageType = "all";
             url = url + "all";
-            break;
-        default:
-            $scope.singleThread = true;
-            url = url + id;
+        }
+
+        if(("new"===$scope.pageType) && (!$rootScope.auth.isAuthenticated))
+        {
+            $location.path('/discussion/all');
+        }
+
+        //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
     }
 
     function loadContent() {
         $http.get( url ).success( function (data) {
-            if(id != "all")
+            if($scope.pageType != "all")
             {
                 $scope.discussion = data[0];
             } else {
@@ -54,14 +65,9 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
             $scope.reply.message = '';
         }
     }
-    //$auth.getPrincipal();
+
     $scope.createDiscussion = function() {
-        if(typeof($scope.discussion) === "undefined")
-        {
-            $scope.discussion = [];
-        }
-        $scope.discussion.push(
-        {
+        var newPost = {
             title: $scope.reply.title,
             posts: [{
                 owner: {
@@ -70,8 +76,8 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 },
                 message: $scope.reply.message
             }]
-        });
-        $http.post('api/discussion/new', $scope.discussion).success(function(data) {
+        };
+        $http.post('api/discussions/new', newPost).success(function(data) {
             if(data.newId !== false)
             {
                 $location.path('/discussion/'+data.newId);
@@ -79,7 +85,6 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 alert("There was an error.");
             }
         });
-
     }
 
     $scope.submitReply = function() {
@@ -104,6 +109,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         {
             return false;
         }
+
         return (post.creator.username == $rootScope.auth.principal);
     }
 
@@ -128,15 +134,13 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     /*
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
     */
-    if(!$scope.new) {
+    if($scope.pageType != "new") {
         loadContent();
     }
 
     $rootScope.$on('event:logoutConfirmed', function() {
-        if($scope.new) {
+        if($scope.$scope.pageType == "new") {
             $location.path('/discussion/all');
         }
     });
 }
-
-ResourceCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$location', '$auth'];
