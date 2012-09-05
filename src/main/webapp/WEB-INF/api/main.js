@@ -91,14 +91,14 @@ app.get('/article/:id', function(req, id) {
 /**
  * Returns a list of discussion topics
  */
-app.get('/discussion/all', function(req, id) {
+app.get('/discussions/all', function(req, id) {
     return json(getDiscussionList().content);
 });
 
 /**
  * Returns a single discussion, in threaded format
  */
-app.get('/discussion/:id', function(req, id) {
+app.get('/discussions/:id', function(req, id) {
     var result = getDiscussion(id);
 
     if(result.status !== 200) {
@@ -111,7 +111,7 @@ app.get('/discussion/:id', function(req, id) {
 /**
  * Edits a discussion post
  */
-app.put('/discussion/:id/:post', function(req, id, post) {
+app.put('/discussions/:id/:post', function(req, id, post) {
     var editedPost = req.params;
 
     return json(editDiscussionPost(id, post, editedPost, getUsernamePassword()));
@@ -120,7 +120,7 @@ app.put('/discussion/:id/:post', function(req, id, post) {
 /**
  * Creates a new discussion topic
  */
-app.post('/discussion/new', function(req) {
+app.post('/discussions/new', function(req) {
     var discussion = req.params;
 
     return json({ "newId" : createDiscussion(discussion["0"], getUsernamePassword()) });
@@ -129,7 +129,7 @@ app.post('/discussion/new', function(req) {
 /**
  * Reply to a discussion
  */
-app.post('/discussion/:id', function(req, id) {
+app.post('/discussions/:id', function(req, id) {
     var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
     var auth = SecurityContextHolder.context.authentication;
 

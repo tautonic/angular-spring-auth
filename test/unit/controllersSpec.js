@@ -13,6 +13,317 @@ describe('Babson GC Controllers', function(){
 
     beforeEach(module('bgc.services'));
 
+    /*************************
+     * Discussion controller *
+     *************************/
+    describe('DiscussionCtrlTest', function() {
+        var scope, $httpBackend, $controller, defaultParams;
+
+        var discussion = {
+            "dataType": "posts",
+            "dateCreated": "",
+            "parentId": null,
+            "type": "discussion",
+            "creator":{
+                "_id": 1,
+                "username": "fred",
+                "profilePicture": { 'filepath': "/img/bob.com" }
+            },
+            "title": "This is a discussion title",
+            "message": "This is a discussion message",
+            "ip": "10.16.151.115",
+            "spam": 0,
+            "likedBy": [],
+            "likes": 0,
+            "views":0,
+            "active": true
+        };
+
+        beforeEach(inject(function($rootScope, _$httpBackend_, _$controller_){
+            scope = $rootScope.$new();
+            $httpBackend = _$httpBackend_;
+
+            $httpBackend.when('GET', 'api/discussions/all').respond(
+                {
+                    content: [
+                        {
+                            "dataType": "posts",
+                            "dateCreated": "",
+                            "parentId": null,
+                            "type": "discussion",
+                            "creator":{
+                                "_id": 1,
+                                "username": "fred",
+                                "profilePicture": { 'filepath': "/img/bob.com" }
+                            },
+                            "title": "This is a discussion title 1",
+                            "message": "This is a discussion message",
+                            "ip": "10.16.151.115",
+                            "spam": 0,
+                            "likedBy": [],
+                            "likes": 0,
+                            "views":0,
+                            "active": true
+                        },
+                        {
+                            "dataType": "posts",
+                            "dateCreated": "",
+                            "parentId": null,
+                            "type": "discussion",
+                            "creator":{
+                                "_id": 1,
+                                "username": "fred",
+                                "profilePicture": { 'filepath': "/img/bob.com" }
+                            },
+                            "title": "This is a discussion title 2",
+                            "message": "This is a discussion message",
+                            "ip": "10.16.151.115",
+                            "spam": 0,
+                            "likedBy": [],
+                            "likes": 0,
+                            "views":0,
+                            "active": true
+                        }
+                    ]
+                });
+
+            $httpBackend.when('GET', 'api/discussions/1').respond(
+                    [
+                        {
+                            "dataType": "posts",
+                            "dateCreated": "",
+                            "parentId": 1,
+                            "type": "discussion",
+                            "creator":{
+                                "_id": 1,
+                                "username": "fred",
+                                "profilePicture": { 'filepath': "/img/bob.com" }
+                            },
+                            "title": "This is a discussion title 1",
+                            "message": "This is a discussion message",
+                            "ip": "10.16.151.115",
+                            "spam": 0,
+                            "likedBy": [],
+                            "likes": 0,
+                            "views":0,
+                            "active": true,
+                            "children": []
+                        }
+                    ]
+                );
+
+            $httpBackend.when('POST', 'api/discussions/new').respond(
+                { "newId": 1 }
+            );
+
+            $httpBackend.when('POST', 'api/discussions/1').respond(
+                {
+                    "dataType": "posts",
+                    "dateCreated": "",
+                    "parentId": 1,
+                    "type": "discussion",
+                    "creator":{
+                        "_id": 1,
+                        "username": "fred",
+                        "profilePicture": { 'filepath': "/img/bob.com" }
+                    },
+                    "title": "",
+                    "message": "[quote]Example Quoted[/quote]",
+                    "ip": "10.16.151.115",
+                    "spam": 0,
+                    "likedBy": [],
+                    "likes": 0,
+                    "views":0,
+                    "active": true
+                }
+            );
+
+            $controller = _$controller_;
+
+            var rootScope = $rootScope;
+            rootScope.auth = {
+                isAuthenticated: true,
+                principal: "fred"
+            };
+
+            defaultParams = { $rootScope: rootScope, $scope: scope };
+        }));
+
+        afterEach(function() {
+            $httpBackend.verifyNoOutstandingExpectation();
+            $httpBackend.verifyNoOutstandingRequest();
+        });
+
+        it('should return a list of discussions ', function() {
+            $controller(DiscussionCtrl, defaultParams);
+            expect(scope.discussion).toBeUndefined();
+            $httpBackend.flush();
+
+            expect(scope.discussion).toEqualData(
+                {
+                    "content":[
+                        {
+                            "dataType": "posts",
+                            "dateCreated": "",
+                            "parentId": null,
+                            "type": "discussion",
+                            "creator":{
+                                "_id": 1,
+                                "username": "fred",
+                                "profilePicture": { 'filepath': "/img/bob.com" }
+                            },
+                            "title": "This is a discussion title 1",
+                            "message": "This is a discussion message",
+                            "ip": "10.16.151.115",
+                            "spam": 0,
+                            "likedBy": [],
+                            "likes": 0,
+                            "views":0,
+                            "active": true
+                        },
+                        {
+                            "dataType": "posts",
+                            "dateCreated": "",
+                            "parentId": null,
+                            "type": "discussion",
+                            "creator":{
+                                "_id": 1,
+                                "username": "fred",
+                                "profilePicture": { 'filepath': "/img/bob.com" }
+                            },
+                            "title": "This is a discussion title 2",
+                            "message": "This is a discussion message",
+                            "ip": "10.16.151.115",
+                            "spam": 0,
+                            "likedBy": [],
+                            "likes": 0,
+                            "views":0,
+                            "active": true
+                        }
+                    ]
+                });
+
+            expect(scope.pageType).toEqual("all");
+        });
+
+        it('should return a single threaded discussion ', function() {
+            defaultParams.$routeParams = { "discussionId": "1" };
+            $controller(DiscussionCtrl, defaultParams);
+
+            expect(scope.discussion).toBeUndefined();
+            $httpBackend.flush();
+
+            expect(scope.discussion).toEqualData(
+                {
+                    "dataType": "posts",
+                    "dateCreated": "",
+                    "parentId": 1,
+                    "type": "discussion",
+                    "creator":{
+                        "_id": 1,
+                        "username": "fred",
+                        "profilePicture": { 'filepath': "/img/bob.com" }
+                    },
+                    "title": "This is a discussion title 1",
+                    "message": "This is a discussion message",
+                    "ip": "10.16.151.115",
+                    "spam": 0,
+                    "likedBy": [],
+                    "likes": 0,
+                    "views":0,
+                    "active": true,
+                    "children": []
+                }
+            );
+
+            expect(scope.pageType).toEqual("single");
+        });
+
+        it('should post a reply to a single threaded discussion ', function() {
+            defaultParams.$routeParams = { "discussionId": "1" };
+            $controller(DiscussionCtrl, defaultParams);
+
+            expect(scope.discussion).toBeUndefined();
+            $httpBackend.flush();
+
+            scope.replyTo("Example Quoted");
+
+            expect(scope.reply).toEqualData({
+                show: true,
+                message: '[quote]Example Quoted[/quote]'
+            });
+
+            scope.submitReply();
+            $httpBackend.flush();
+
+            expect(scope.discussion).toEqualData(
+                {
+                    "dataType": "posts",
+                    "dateCreated": "",
+                    "parentId": 1,
+                    "type": "discussion",
+                    "creator":{
+                        "_id": 1,
+                        "username": "fred",
+                        "profilePicture": { 'filepath': "/img/bob.com" }
+                    },
+                    "title": "This is a discussion title 1",
+                    "message": "This is a discussion message",
+                    "ip": "10.16.151.115",
+                    "spam": 0,
+                    "likedBy": [],
+                    "likes": 0,
+                    "views":0,
+                    "active": true,
+                    "children": [{
+                        "dataType": "posts",
+                        "dateCreated": "",
+                        "parentId": 1,
+                        "type": "discussion",
+                        "creator":{
+                            "_id": 1,
+                            "username": "fred",
+                            "profilePicture": { 'filepath': "/img/bob.com" }
+                        },
+                        "title": "",
+                        "message": "[quote]Example Quoted[/quote]",
+                        "ip": "10.16.151.115",
+                        "spam": 0,
+                        "likedBy": [],
+                        "likes": 0,
+                        "views":0,
+                        "active": true
+                    }]
+                }
+            );
+        });
+
+        it('should be on a new post page and then create the post ', function() {
+            defaultParams.$routeParams = { "discussionId": "new" };
+            $controller(DiscussionCtrl, defaultParams);
+
+            expect(scope.pageType).toEqual("new");
+            expect(scope.reply).toEqualData({
+                show: false,
+                title: '',
+                message: ''
+            });
+
+            scope.reply = {
+                show: false,
+                title: 'Fake Title',
+                message: 'Fake Message'
+            };
+
+            scope.createDiscussion();
+            $httpBackend.flush();
+        });
+    });
+
+    /**********************
+     * Profile controller *
+     **********************/
+
     describe('ProfileCtrl', function(){
         var scope, $httpBackend, $controller;
 

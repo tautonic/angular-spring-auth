@@ -123,7 +123,7 @@
     </dependencies>
 
     <build>
-        <finalName>bmxlivetv</finalName>
+        <finalName>babson-gc</finalName>
 
         <plugins>
             <plugin>
@@ -148,5 +148,25 @@
             </plugin>
         </plugins>
 
+        <!-- Allow property substitution filtering on all files in src/main/resources -->
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- The URL to access web services from zocia platform. -->
+                <zociaUrl>http://localhost:9300/myapp/api</zociaUrl>
+            </properties>
+        </profile>
+    </profiles>
 </project>
