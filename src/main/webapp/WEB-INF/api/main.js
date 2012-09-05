@@ -165,16 +165,27 @@ app.get( '/auth', function ( req ) {
 	var auth = SecurityContextHolder.context.authentication;
 
 	// principal can be a simple string or a spring security user object
-	var principal = typeof auth.principal === 'string' ? auth.principal : auth.principal.username;
+
+    //todo setup so that auth.principal doesn't fail if it ever happens to be a string (test to see if it's ever a string)
+	var principal = typeof auth.principal === 'string' ? auth.principal : auth.principal;
 	var result = {
-		principal: String( principal ),
+		principal: {
+            id: principal.id,
+            username: principal.username,
+            name: principal.name,
+            email: principal.email,
+            country: principal.country,
+            profileType: principal.profileType,
+            accountType: principal.accountType
+        },
+        username: principal.username,
 		roles: []
 	};
 
 	var authorities = auth.authorities.iterator();
 	while ( authorities.hasNext() ) {
 		var authority = authorities.next();
-		result.roles.push( authority.authority.toLowerCase() );
+		result.roles.push( authority.toString().toLowerCase() );
 	}
     log.info("logging in user");
 	return json( result );

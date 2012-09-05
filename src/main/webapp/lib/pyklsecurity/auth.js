@@ -150,7 +150,7 @@
 					.success( function ( data, status, headers, config ) {
 						$rootScope.auth.principal = data.principal;
 						$rootScope.auth.isAuthenticated =
-								data && data.principal != null && data.principal != 'anonymousUser';
+								(data && (data.username != null) && (data.username != 'anonymousUser'));
 						roles = data.roles;
 						$log.info('Received successful auth response:', data);
 					} )
@@ -184,7 +184,7 @@
 		});
 		Object.defineProperty(result, 'principal', {
 			get: function() {
-				return $rootScope.auth.principal;
+				return $rootScope.auth.username;
 			}
 		});
 		return result;
