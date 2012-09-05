@@ -32,6 +32,10 @@
                 class="com.pykl.spring.security.AjaxLogoutSuccessHandler"/>
 
     <authentication-manager>
+        <authentication-provider user-service-ref="restUserDetailsService">
+            <password-encoder hash="md5"/>
+        </authentication-provider>
+
         <authentication-provider>
             <user-service>
                 <user name="fred" password="secret" authorities="ROLE_USER, ROLE_ADMIN"/>
@@ -39,5 +43,12 @@
             </user-service>
         </authentication-provider>
     </authentication-manager>
+
+
+    <beans:bean id="restUserDetailsService" class="com.zocia.spring.security.RESTUserDetailsService">
+        <beans:property name="userUrl" value="${zociaUrl}/profiles/search" />
+        <beans:property name="index" value="gc" />
+    </beans:bean>
+
 
 </beans:beans>
