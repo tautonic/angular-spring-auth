@@ -33,6 +33,11 @@
                            name="address"
                            value="{{profile.accountEmail.address}}" required>
                 </div>
+                <br>
+                <label class="control-label" for="university">University</label>
+                <div class="controls">
+                    <input type="hidden" ui-select2="{ ajax: getUniversityData() }" ng-model="select2" id="university" data-placeholder="Select a University">
+                </div>
             </div>
         </fieldset>
 

@@ -132,4 +132,19 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
             console.log(status);
         });
     }
+
+    $scope.getUniversityData = function () {
+        return { // instead of writing the function to execute the request we use Select2's convenient helper
+            url: "http://localhost:8080/gc/api/data/",
+            dataType: 'jsonp',
+            data: function() {
+                return {};
+            },
+            results: function (data) { // parse the results into the format expected by Select2.
+                console.log("HELLO? ",data);
+                return {results: data};
+            }
+        };
+    }
 }
+

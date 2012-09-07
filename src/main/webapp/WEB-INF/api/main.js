@@ -191,6 +191,7 @@ app.get( '/auth', function ( req ) {
 	return json( result );
 } );
 
+/********** Profile pages *********/
 app.post('/profiles/', function(req){
     var data = req.postParams;
     data.source = 'test';
@@ -421,6 +422,15 @@ app.get('/profiles/pics/:id', function(req, id){
     }
 });
 
+
+app.get('/data', function(req) {
+    return json([
+        { "id": "babson", "text": "Babson" },
+        { "id": "osu", "text": "OSU" },
+        { "id": "bgsu", "text": "BGSU" },
+        { "id": "toledo", "text": "TOLEDO" }
+    ]);
+});
 
 /************************
  *
