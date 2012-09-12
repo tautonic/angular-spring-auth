@@ -11,7 +11,7 @@ var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
 var {getArticle} = require('articles');
-var {getDiscussion, getDiscussionList, addReply, createDiscussion} = require('discussions');
+var {getDiscussion, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
 
 var {encode} = require('ringo/base64');
 
@@ -86,13 +86,21 @@ app.get('/article/:id', function(req, id) {
 
 });
 
-app.get('/discussion/all', function(req, id) {
+/********** Discussion posts *********/
+
+/**
+ * Returns a list of discussion topics
+ */
+app.get('/discussions/all', function(req, id) {
     return json(getDiscussionList().content);
 });
 
-app.get('/discussion/:id', function(req, id) {
+/**
+ * Returns a single discussion, in threaded format
+ */
+app.get('/discussions/:id', function(req, id) {
     var result = getDiscussion(id);
-    log.info("RESULT INFO THINGY: "+JSON.stringify(result));
+
     if(result.status !== 200) {
         return json(false);
     }
@@ -100,25 +108,28 @@ app.get('/discussion/:id', function(req, id) {
     return json(result.content);
 });
 
-app.put('/discussion/:id/:post', function(req, id, post) {
+/**
+ * Edits a discussion post
+ */
+app.put('/discussions/:id/:post', function(req, id, post) {
     var editedPost = req.params;
 
-    editDiscussionPost(id, post, editedPost);
-
-    return json(true);
+    return json(editDiscussionPost(id, post, editedPost, getUsernamePassword()));
 });
 
-app.post('/discussion/new', function(req) {
+/**
+ * Creates a new discussion topic
+ */
+app.post('/discussions/new', function(req) {
     var discussion = req.params;
-    //var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
-    //var auth = SecurityContextHolder.context.authentication;
-    var username = "fred";
-    var password = digest("secret").toLowerCase();
 
-    return json({ "newId" : createDiscussion(discussion["0"], username, password) });
+    return json({ "newId" : createDiscussion(discussion["0"], getUsernamePassword()) });
 });
 
-app.post('/discussion/:id', function(req, id) {
+/**
+ * Reply to a discussion
+ */
+app.post('/discussions/:id', function(req, id) {
     var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
     var auth = SecurityContextHolder.context.authentication;
 
@@ -128,18 +139,9 @@ app.post('/discussion/:id', function(req, id) {
         return json(false);
     }
 
-    var postContent = req.params;
-    var reply = {
-        owner: {
-            username: auth.principal,
-            picture: "http://localhost:8080/gc/images/40x40.gif"
-        },
-        content: postContent.reply
-    };
-
-    addReply(id, reply);
-    return json(reply);
+    return json(addReply(id, req.params.reply, getUsernamePassword()));
 });
+/****** End discussion posts ********/
 
 app.get( '/ping', function ( req ) {
 	var servletRequest = req.env.servletRequest;
@@ -163,21 +165,33 @@ app.get( '/auth', function ( req ) {
 	var auth = SecurityContextHolder.context.authentication;
 
 	// principal can be a simple string or a spring security user object
-	var principal = typeof auth.principal === 'string' ? auth.principal : auth.principal.username;
+
+    //todo setup so that auth.principal doesn't fail if it ever happens to be a string (test to see if it's ever a string)
+	var principal = typeof auth.principal === 'string' ? auth.principal : auth.principal;
 	var result = {
-		principal: String( principal ),
+		principal: {
+            id: principal.id,
+            username: principal.username,
+            name: principal.name,
+            email: principal.email,
+            country: principal.country,
+            profileType: principal.profileType,
+            accountType: principal.accountType
+        },
+        username: principal.username,
 		roles: []
 	};
 
 	var authorities = auth.authorities.iterator();
 	while ( authorities.hasNext() ) {
 		var authority = authorities.next();
-		result.roles.push( authority.authority.toLowerCase() );
+		result.roles.push( authority.toString().toLowerCase() );
 	}
     log.info("logging in user");
 	return json( result );
 } );
 
+/********** Profile pages *********/
 app.post('/profiles/', function(req){
     var data = req.postParams;
     data.source = 'test';
@@ -409,6 +423,15 @@ app.get('/profiles/pics/:id', function(req, id){
 });
 
 
+app.get('/data', function(req) {
+    return json([
+        { "id": "babson", "text": "Babson" },
+        { "id": "osu", "text": "OSU" },
+        { "id": "bgsu", "text": "BGSU" },
+        { "id": "toledo", "text": "TOLEDO" }
+    ]);
+});
+
 /************************
  *
  * Page functions
@@ -431,6 +454,10 @@ function _generateBasicAuthorization(username, password) {
 
 function getUserByEmail(email){
 
+}
+
+function getUsernamePassword() {
+    return { "username": "fred", "password": digest("secret").toLowerCase() };
 }
 
 

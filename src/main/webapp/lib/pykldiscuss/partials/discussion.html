@@ -1,56 +1,73 @@
+<div ng-switch on="pageType">
+    <div ng-switch-when="single">
+        <h1>{{discussion.title}}</h1>
+        <div class="post">
+            <div class="user">
+                <p>{{discussion.creator.username}}</p>
+                <img ng-src="{{discussion.creator.thumbnail}}">
+            </div>
+            <p class="content" ng-bind-html="discussion.message" ng-show="!discussion.edit">{{discussion.message}}</p>
+            <div class="content" ng-show="discussion.edit">
+                <form ng-submit="editPost(discussion)">
+                    <textarea style="width: 100%; height: 50px;" ng-model="discussion.edited" ui-tinymce></textarea>
+                    <input type="submit" value="Save">
+                    <input type="button" ng-click="cancelEdit(discussion)" value="Cancel">
+                </form>
+            </div>
+            <div class="buttons clear"><button ng-click="replyTo(discussion.message)">Quote</button><button ng-click="edit(discussion)" ng-show="canEdit(discussion)">Edit</button></div>
 
-<div ng-show="allThreads">
-    <div>
-        <a ng-href="#/discussion/new">Start new discussion</a>
-    </div>
-    <div class="discussion-thread" ng-repeat="thread in discussion">
-        <a ng-href="#/discussion/{{thread.parentId}}">{{thread.title}}</a>
-        <div class="started-by">Started by: <a ng-href="#/profile/{{thread.creator._id}}">{{thread.creator.username}}</a></div>
-    </div>
-</div>
-
-<div ng-show="new">
-    <div class="reply">
-        <form name="newDiscussionForm" ng-submit="createDiscussion()">
-            Discussion Title: <input type="text" ng-model="reply.title">
-            <p>Words go here:</p>
-            <textarea rows="60" cols="20" ng-model="reply.content" required>
-            </textarea>
-            <br>
-            <input type="submit" value="Start New Discussion">
-            <input type="button" ng-click="cancel()" value="Cancel">
-        </form>
-    </div>
-</div>
-
-<div ng-show="singleThread">
-    <h1>{{discussion.title}}</h1>
-    <p class="content">{{discussion.message}}</p>
-    <!--<div class="post" ng-repeat="post in discussion.posts">
-        <div class="user">
-            <p>{{post.owner.username}}</p>
-            <img ng-src="{{post.owner.picture}}">
         </div>
-        <p class="content" ng-bind-html="post.content" ng-show="!post.edit"></p>
-        <div class="content" ng-show="post.edit">
-            <form ng-submit="editPost(post)">
-                <textarea style="width: 100%; height: 50px;" ng-model="post.edited"></textarea>
-                <input type="submit" value="Save">
-                <input type="button" ng-click="cancelEdit(post)" value="Cancel">
+        <div class="post" ng-repeat="post in discussion.children">
+            <div class="user">
+                <p>{{post.creator.username}}</p>
+                <img ng-src="{{post.creator.thumbnail}}">
+            </div>
+            <p class="content" ng-bind-html="post.message" ng-show="!post.edit">{{post.message}}</p>
+            <div class="content" ng-show="post.edit">
+                <form ng-submit="editPost(post)">
+                    <textarea style="width: 100%; height: 50px;" ng-model="post.edited" ui-tinymce></textarea>
+                    <input type="submit" value="Save">
+                    <input type="button" ng-click="cancelEdit(post)" value="Cancel">
+                </form>
+            </div>
+            <div class="buttons clear"><button ng-click="replyTo(post.message)">Quote</button><button ng-click="edit(post)" ng-show="canEdit(post)">Edit</button></div>
+
+        </div>
+        <button ng-click="replyTo()">Reply</button>
+        <div class="reply" ng-show="reply.show">
+            <form name="replyForm" ng-submit="submitReply()">
+                <p>Enter reply here:</p>
+                <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
+                </textarea>
+                <br>
+                <input type="submit" value="Reply">
+                <input type="button" ng-click="cancel()" value="Cancel">
             </form>
         </div>
-        <div class="buttons clear"><button ng-click="replyTo(post.content)">Quote</button><button ng-click="edit(post)" ng-show="canEdit(post)">Edit</button></div>
-
-    </div> -->
-    <button ng-click="replyTo()">Reply</button>
-    <div class="reply" ng-show="reply.show">
-        <form name="replyForm" ng-submit="submitReply()">
-            <p>Enter reply here:</p>
-            <textarea rows="15" cols="60" ng-model="reply.content" required>
-            </textarea>
-            <br>
-            <input type="submit" value="Reply">
-            <input type="button" ng-click="cancel()" value="Cancel">
-        </form>
     </div>
+
+    <div ng-switch-when="new">
+        <div class="reply">
+            <form name="newDiscussionForm" ng-submit="createDiscussion()">
+                Discussion Title: <input type="text" ng-model="reply.title">
+                <p>Words go here:</p>
+                <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
+                </textarea>
+                <br>
+                <input type="submit" value="Start New Discussion">
+                <input type="button" ng-click="cancel()" value="Cancel">
+            </form>
+        </div>
+    </div>
+
+    <div ng-switch-default>
+        <div>
+            <a ng-href="#/discussion/new">Start new discussion</a>
+        </div>
+        <div class="discussion-thread" ng-repeat="thread in discussion">
+            <a ng-href="#/discussion/{{thread.parentId}}">{{thread.title}}</a>
+            <div class="started-by">Started by: <a ng-href="#/profile/{{thread.creator._id}}">{{thread.creator.username}}</a></div>
+        </div>
+    </div>
+
 </div>

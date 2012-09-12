@@ -10,8 +10,12 @@ load:
   - src/main/webapp/lib/angular/angular-sanitize.js
   - src/main/webapp/js/*.js
   - src/main/webapp/lib/profile/controllers.js
+<<<<<<< HEAD
+  - test/unit/*.js
+=======
   - src/main/webapp/lib/pykldiscuss/discuss.js
   - test/unit/controllersSpec.js
+>>>>>>> origin/develop
 
 exclude:
   - test/unit/filtersSpec.js
