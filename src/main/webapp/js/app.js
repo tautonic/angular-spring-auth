@@ -7,23 +7,36 @@
         $routeProvider.when( '/home', {
             templateUrl: 'partials/homepage.html'
         } );
-		$routeProvider.when( '/view', {
-			templateUrl: 'partials/partial1.html'
+
+        //babson college pages
+        $routeProvider.when( '/msce', {
+			templateUrl: 'partials/msce.html'
 		} );
+        $routeProvider.when( '/faculty', {
+			templateUrl: 'partials/faculty.html'
+		} );
+        $routeProvider.when( '/content', {
+			templateUrl: 'lib/pyklresource/index.html'
+		} );
+        $routeProvider.when( '/content/:articleId', {
+            templateUrl: 'lib/pyklresource/index.html'
+        } );
+        $routeProvider.when( '/network/:discussionId', {
+            templateUrl: 'lib/pykldiscuss/index.html'
+        } );
+
+        //individual controller pages, some of these might be removed
         $routeProvider.when( '/profile/:profileId', {
             templateUrl: 'lib/profile/profile.html'
         } );
-		$routeProvider.when( '/article/:articleId', {
-            templateUrl: 'lib/pyklresource/index.html'
-        } );
-        $routeProvider.when( '/discussion/:discussionId', {
-            templateUrl: 'lib/pykldiscuss/index.html'
+        $routeProvider.when( '/both/:articleId', {
+            templateUrl: 'partials/partial2.html'
         } );
         $routeProvider.when( '/both/:articleId/:discussionId', {
             templateUrl: 'partials/partial2.html'
         } );
-        $routeProvider.when( '/both/:articleId', {
-            templateUrl: 'partials/partial2.html'
+        $routeProvider.when( '/view', {
+            templateUrl: 'partials/partial1.html'
         } );
 		$routeProvider.otherwise( {redirectTo: '/view'} );
 	}

@@ -1,3 +1,28 @@
-<h1>{{article.title}}</h1>
-<p ng-bind-html="article.description" ng-show="abstractVisible()"></p>
-<p ng-bind-html="article.content"></p>
+<div ng-switch on="pageType">
+    <div ng-switch-when="single">
+        <h1>{{article.title}}</h1>
+        <p ng-bind-html="article.description" ng-show="abstractVisible()"></p>
+        <p ng-bind-html="article.content"></p>
+    </div>
+
+    <div ng-switch-default>
+        <div class="category-sort">
+            Video<br>
+            Article<br>
+            Picture
+            <hr>
+            Jobs<br>
+            Lorem<br>
+            Ipsum<br>
+            Dolar<br>
+            Simar<br>
+            Est
+        </div>
+        <div id="article-list">
+            <div class="article" ng-repeat="article in articles">
+                <a ng-href="#/discussion/{{article.id}}">{{article.title}}</a>
+                <p class="summary">{{article.content}}</p>
+            </div>
+        </div>
+    </div>
+</div>

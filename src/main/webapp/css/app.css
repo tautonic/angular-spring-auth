@@ -2,6 +2,73 @@
     width: 270px;
 }
 
+/** MSCE Page Styles **/
+#course-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#course-list li {
+    float: left;
+    width: 50%;
+}
+
+#course-list li p, #course-list li h3 {
+    padding: 5px 10px;
+}
+
+/** Faculty Page Styles **/
+#faculty {
+    list-style-type: none;
+    margin: 10px 0;
+    padding: 0;
+}
+
+#faculty li .picture {
+    float: left;
+}
+
+#faculty li .picture img {
+    margin-bottom: 10px;
+}
+
+#faculty li .bio {
+    margin-left: 200px;
+}
+
+#faculty li .bio p {
+    margin: 10px 0;
+}
+
+/** Article(s) Page Styles **/
+#article-list {
+    margin-right: 100px;
+}
+
+#article-list .article {
+    width: 220px;
+    float: left;
+    background-color: #a9a9a9;
+    margin: 5px;
+    clear: none;
+}
+
+.category-sort {
+    float: right;
+    width: 200px;
+}
+
+.category-sort hr {
+    clear: none;
+}
+
+/**** Clearfix ****/
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+
 /* app css stylesheet */
 .clear {
     clear: both;

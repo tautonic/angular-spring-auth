@@ -37,10 +37,17 @@
         </div>
         <div class="row">
             <ul class="gradiant menu">
+<<<<<<< HEAD
+                <li><a ng-href="#/view">MSCE</a></li>
+                <li><a ng-href="#/profile/">Faculty Fellows</a></li>
+                <li><a href="#/article/3cf2129a9e374760a4e760a4e0ed2770">Curriculum Content</a></li>
+                <li><a href="#/discussion/all">Network</a></li>
+=======
                 <li><a ng-href="#/msce">MSCE</a></li>
                 <li><a ng-href="#/faculty">Faculty Fellows</a></li>
                 <li><a href="#/content">Curriculum Content</a></li>
                 <li><a href="#/network/">Network</a></li>
+>>>>>>> origin/develop
             </ul>
         </div>
         <div class="row header-info gradiant">
@@ -87,8 +94,12 @@
     </div>
 </div>
 
+<<<<<<< HEAD
+<div class="container content ng-view"></div>
+=======
 <div class="container content ng-view">
 </div>
+>>>>>>> origin/develop
 
 <div class="container">
     <div class="footer">
