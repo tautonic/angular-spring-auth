@@ -62,6 +62,40 @@ app.get( '/index.html', function ( req ) {
 	return homepage( req );
 } );
 
+/********** Articles and resources *********/
+
+app.get('/article/all', function(req) {
+    //java.lang.Thread.sleep(1000);
+    return json([{
+        title: 'lorem ipsum',
+        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkldf khdf jdlf aghg gjfkdljgfldhldf'
+    },{
+        title: 'lorem ipsum 2',
+        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg uyh yglkdjlgfjgdg gkldhkldf khdf jdlf aghg gjfkdljgfldhldf'
+    },{
+        title: 'lorem ipsum 3: revenge of the lipsum',
+        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkldf khdf jdlf aghg gjfkdljgfldhldf'
+    },{
+        title: 'lorem ipsum 3: revenge of the lipsum',
+        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkllj atirei i g df jh df khdf jdlf aghg gjfkdljgfldhldf'
+    },{
+        title: 'lorem ipsum 3: revenge of the lipsum',
+        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkldf khdf jdlf aghg '
+    },{
+        title: 'lorem ipsum 3: revenge of the lipsum',
+        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkldf khdf jdlf aghg gjfkdljgfldhldf'
+    },{
+        title: 'lorem ipsum 3: revenge of the lipsum',
+        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj kgjlkg jdlklkf  khdf jdlf  gjfkdljgfldhldf'
+    },{
+        title: 'lorem ipsum 3: revenge of the lipsum',
+        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdf l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkldf khdf jdlf aghg gjfkdljgfldhldf'
+    },{
+        title: 'lorem ipsum 3: revenge of the lipsum',
+        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkl hdjfgalkhdf  g afgagha lhdlgah lhdflg ldsgld lfgh hfh fgh hgjshsgjmndhkldf khdf jdlf aghg gjfkdljgfldhldf'
+    }]);
+});
+
 app.get('/article/:id', function(req, id) {
     var article = getArticle(id);
 
@@ -83,7 +117,6 @@ app.get('/article/:id', function(req, id) {
     } else {
         return json(false);
     }
-
 });
 
 /********** Discussion posts *********/

@@ -1,13 +1,41 @@
 'use strict';
 
 function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
+    var url = 'api/article/';
 
-    var url = 'api/article/'+$routeParams.articleId;
+    setup();
+
+    function setup() {
+        if(($routeParams) && ($routeParams.articleId)) {
+            url += $routeParams.articleId;
+            $scope.pageType = "single";
+        } else {
+            url += 'all';
+            $scope.pageType = "all";
+        }
+    }
 
     function loadContent() {
         $http.get( url ).success( function (data) {
+            console.log("ARTICLE RESPONSE WAS: ",data);
+
             if(data !== "false") {
-                $scope.article = data;
+                if($scope.pageType === "single")
+                {
+                    $scope.article = data;
+                } else if ($scope.pageType === "all")
+                {
+                    $scope.articles = data;
+                    $scope.container = $('#article-list');
+                     /*$scope.container.masonry({
+                        // options
+                        itemSelector : '.article',
+                        columnWidth : 230
+                    });
+                     */
+                    //$scope.container.masonry('reload');
+                    console.log("LOADED MASONRY?");
+                }
             } else {
                 $log.info("ERROR getting article, or resource.");
             }
