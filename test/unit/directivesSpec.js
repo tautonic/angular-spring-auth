@@ -3,17 +3,28 @@
 /* jasmine specs for directives go here */
 
 describe('directives', function() {
-  beforeEach(module('myApp.directives'));
+    beforeEach(module('bgc.directives'));
 
-  describe('app-version', function() {
-    it('should print current version', function() {
-      module(function($provide) {
-        $provide.value('version', 'TEST_VER');
-      });
-      inject(function($compile, $rootScope) {
-        var element = $compile('<span app-version></span>')($rootScope);
-        expect(element.text()).toEqual('TEST_VER');
-      });
+    describe('doc-viewer directive', function () {
+        var $scope, $compile;
+
+        beforeEach(inject(function (_$rootScope_, _$compile_) {
+            $scope = _$rootScope_.$new();
+            $compile = _$compile_;
+        }));
+
+        it('should create an iframe element', function () {
+            var element = $compile('<doc-viewer></doc-viewer>')($scope);
+
+            expect(element[0].firstChild.tagName).toEqual('IFRAME');
+        });
+
+        it('should create an iframe element with a src value identical to its url attribute', function(){
+            var url = "http://pykl.rowboatweb.com/Git-branching-model.pdf";
+
+            var element = $compile('<doc-viewer url=' + url + ' google-doc=false></doc-viewer>')($scope);
+
+            expect(element[0].firstChild.src).toEqual('http://docs.google.com/viewer?url=' + url + '&embedded=true');
+        });
     });
-  });
 });
