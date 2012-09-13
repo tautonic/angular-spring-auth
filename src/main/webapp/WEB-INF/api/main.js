@@ -10,7 +10,7 @@ var {json} = require( 'ringo/jsgi/response' );
 var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
-var {getAllArticles, getArticlesByCategory, getArticle} = require('articles');
+var {getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle} = require('articles');
 var {getDiscussion, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
 
 var {encode} = require('ringo/base64');
@@ -74,7 +74,6 @@ app.get('/article/all', function(req) {
 });
 
 function articles(req, type) {
-    log.info("TYPE IS: "+type);
     var articles = getAllArticles(type);
 
     if(articles.success) {
@@ -152,7 +151,20 @@ app.put('/discussions/:id/:post', function(req, id, post) {
 app.post('/discussions/new', function(req) {
     var discussion = req.params;
 
-    return json({ "newId" : createDiscussion(discussion["0"], getUsernamePassword()) });
+    if(typeof discussion == "array")
+    {
+        discussion = discussion["0"];
+    }
+    log.info("DISCUSSISON: "+JSON.stringify(discussion));
+
+    var discussionId = createDiscussion(discussion, getUsernamePassword());
+
+    if(discussion.parentId === null) {
+        return json({ "newId" : discussionId });
+    } else {
+        return json({ "success": linkDiscussionToArticle(discussionId, discussion.parentId, getUsernamePassword()) });
+    }
+
 });
 
 /**

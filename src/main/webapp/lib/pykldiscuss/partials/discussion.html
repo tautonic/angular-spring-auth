@@ -15,8 +15,8 @@
                 </form>
             </div>
             <div class="buttons clear"><button ng-click="replyTo(discussion.message)">Quote</button><button ng-click="edit(discussion)" ng-show="canEdit(discussion)">Edit</button></div>
-
         </div>
+
         <div class="post" ng-repeat="post in discussion.children">
             <div class="user">
                 <p>{{post.creator.username}}</p>
@@ -25,7 +25,7 @@
             <p class="content" ng-bind-html="post.message" ng-show="!post.edit">{{post.message}}</p>
             <div class="content" ng-show="post.edit">
                 <form ng-submit="editPost(post)">
-                    <textarea style="width: 100%; height: 50px;" ng-model="post.edited" ui-tinymce></textarea>
+                    <textarea rows="10" ng-model="post.edited" ui-tinymce></textarea>
                     <input type="submit" value="Save">
                     <input type="button" ng-click="cancelEdit(post)" value="Cancel">
                 </form>
@@ -34,9 +34,10 @@
 
         </div>
         <button ng-click="replyTo()">Reply</button>
+
         <div class="reply" ng-show="reply.show">
             <form name="replyForm" ng-submit="submitReply()">
-                <p>Enter reply here:</p>
+                <p>{{enterReply}}:</p>
                 <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
                 </textarea>
                 <br>
@@ -49,13 +50,17 @@
     <div ng-switch-when="new">
         <div class="reply">
             <form name="newDiscussionForm" ng-submit="createDiscussion()">
-                Discussion Title: <input type="text" ng-model="reply.title">
-                <p>Words go here:</p>
+                <div ng-show="hasContent">
+                    Discussion Title: <input type="text" ng-model="reply.title">
+                    <p>Words go here:</p>
+                </div>
                 <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
                 </textarea>
                 <br>
                 <input type="submit" value="Start New Discussion">
-                <input type="button" ng-click="cancel()" value="Cancel">
+                <div ng-show="hasContent">
+                    <input type="button" ng-click="cancel()" value="Cancel">
+                </div>
             </form>
         </div>
     </div>
@@ -64,10 +69,10 @@
 
     <div ng-switch-default>
         <div>
-            <a ng-href="#/discussion/new">Start new discussion</a>
+            <a ng-href="#/network/new">Start new discussion</a>
         </div>
         <div class="discussion-thread" ng-repeat="thread in discussion">
-            <a ng-href="#/discussion/{{thread.parentId}}">{{thread.title}}</a>
+            <a ng-href="#/network/{{thread.parentId}}">{{thread.title}}</a>
             <div class="started-by">Started by: <a ng-href="#/profile/{{thread.creator._id}}">{{thread.creator.username}}</a></div>
         </div>
     </div>

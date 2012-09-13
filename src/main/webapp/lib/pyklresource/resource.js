@@ -23,6 +23,8 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
                 if($scope.pageType === "single")
                 {
                     $scope.article = data;
+                    $rootScope.title = $scope.article.title;
+                    $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': '819bf5783a87406fb035afa52dc06144'/*$scope.article.linkedPosts*/ })
                 } else if ($scope.pageType === "all")
                 {
                     $scope.articles = data;

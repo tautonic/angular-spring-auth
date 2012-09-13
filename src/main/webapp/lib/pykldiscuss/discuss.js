@@ -12,6 +12,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     setupScope();
 
     function setupScope() {
+        $scope.enterReply = "Reply to discussion";
         $scope.reply = {
             show: false,
             message: ''
@@ -27,6 +28,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 case "new":
                     $scope.reply.title = '';
                     url = url + "new";
+                    $scope.hasContent = true;
                     break;
                 case "all":
                     url = url + "all";
@@ -43,7 +45,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
 
         if(("new"===$scope.pageType) && (!$rootScope.auth.isAuthenticated))
         {
-            $location.path('/discussion/all');
+            $location.path('/network/all');
         }
 
         //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
@@ -51,7 +53,6 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
 
     function loadContent() {
         $http.get( url ).success( function (data) {
-            console.log("DISCUSSION IS? ", data);
             if(data !== "false")
             {
                 if($scope.pageType != "all")
@@ -60,9 +61,11 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 } else {
                     $scope.discussion = data;
                 }
+                $scope.hasContent = true;
             } else {
-                $scope.reply.title = '';
-                $scope.reply.show = true;
+                $scope.pageType = "new";
+                $scope.hasContent = false;
+                $scope.reply.title = $rootScope.title;
             }
         }).error(function(data, status) {
                 $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
@@ -80,7 +83,8 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
 
     $scope.createDiscussion = function() {
         var newPost = {
-            title: $scope.reply.title,
+            title: ($scope.reply.title || $rootScope.title),
+            parentId: ($routeParams.articleId || null),
             posts: [{
                 owner: {
                     username: 'bob',//$rootScope.auth.getUsername(),
@@ -89,7 +93,11 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 message: $scope.reply.message
             }]
         };
+
         $http.post('api/discussions/new', newPost).success(function(data) {
+            if(data.success) {
+                alert("discussion successful");
+            }
             if(data.newId !== false)
             {
                 $location.path('/discussion/'+data.newId);
@@ -155,4 +163,11 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
             $location.path('/discussion/all');
         }
     });
+
+    $rootScope.$on('event:loadDiscussion', function($event, $args) {
+        $routeParams.articleId = $args.discussionId;
+        url = 'api/discussions/';
+        setupScope();
+        loadContent();
+    })
 }
