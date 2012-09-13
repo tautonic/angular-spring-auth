@@ -1,9 +1,9 @@
 var httpclient = require('ringo/httpclient');
 var {Headers} = require('ringo/utils/http');
 
-var getArticle = function(id) {
+function ajax(url) {
     var opts = {
-        url: 'http://localhost:9300/myapp/api/resources/' + id,
+        url: url,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'nep' }), //todo: current seed tool seeds article/resources into the nep index
         async: false
@@ -19,4 +19,16 @@ var getArticle = function(id) {
     };
 }
 
-export('getArticle');
+var getAllArticles = function(type) {
+    return ajax('http://localhost:9300/myapp/api/resources/' + type);
+}
+
+var getArticlesByCategory = function(category) {
+    return ajax('http://localhost:9300/myapp/api/resources/bycategory/' + category);
+}
+
+var getArticle = function(id) {
+    return ajax('http://localhost:9300/myapp/api/resources/' + id);
+}
+
+export('getAllArticles', 'getArticlesByCategory', 'getArticle');

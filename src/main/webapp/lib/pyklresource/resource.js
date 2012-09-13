@@ -17,8 +17,7 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
 
     function loadContent() {
         $http.get( url ).success( function (data) {
-            console.log("ARTICLE RESPONSE WAS: ",data);
-
+            console.log("ARTICLE RETURNED: ",data);
             if(data !== "false") {
                 if($scope.pageType === "single")
                 {
@@ -26,15 +25,9 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
                 } else if ($scope.pageType === "all")
                 {
                     $scope.articles = data;
-                    $scope.container = $('#article-list');
-                     /*$scope.container.masonry({
-                        // options
-                        itemSelector : '.article',
-                        columnWidth : 230
-                    });
-                     */
-                    //$scope.container.masonry('reload');
-                    console.log("LOADED MASONRY?");
+                    if($scope.articles.length == 0) {
+                        $log.info("No articles found.");
+                    }
                 }
             } else {
                 $log.info("ERROR getting article, or resource.");
@@ -50,6 +43,16 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
             return false;
         }
         return (typeof($scope.article.content) === "undefined");
+    }
+
+    $scope.byType = function(type) {
+        url = 'api/article/all/' + type;
+        loadContent();
+    }
+
+    $scope.byCategory = function(category) {
+        url = 'api/article/all/bycategory/' + category;
+        loadContent();
     }
 
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });

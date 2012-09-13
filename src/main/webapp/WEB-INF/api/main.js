@@ -10,7 +10,7 @@ var {json} = require( 'ringo/jsgi/response' );
 var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
-var {getArticle} = require('articles');
+var {getAllArticles, getArticlesByCategory, getArticle} = require('articles');
 var {getDiscussion, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
 
 var {encode} = require('ringo/base64');
@@ -64,37 +64,33 @@ app.get( '/index.html', function ( req ) {
 
 /********** Articles and resources *********/
 
-app.get('/article/all', function(req) {
-    //java.lang.Thread.sleep(1000);
-    return json([{
-        title: 'lorem ipsum',
-        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkldf khdf jdlf aghg gjfkdljgfldhldf'
-    },{
-        title: 'lorem ipsum 2',
-        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg uyh yglkdjlgfjgdg gkldhkldf khdf jdlf aghg gjfkdljgfldhldf'
-    },{
-        title: 'lorem ipsum 3: revenge of the lipsum',
-        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkldf khdf jdlf aghg gjfkdljgfldhldf'
-    },{
-        title: 'lorem ipsum 3: revenge of the lipsum',
-        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkllj atirei i g df jh df khdf jdlf aghg gjfkdljgfldhldf'
-    },{
-        title: 'lorem ipsum 3: revenge of the lipsum',
-        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkldf khdf jdlf aghg '
-    },{
-        title: 'lorem ipsum 3: revenge of the lipsum',
-        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkldf khdf jdlf aghg gjfkdljgfldhldf'
-    },{
-        title: 'lorem ipsum 3: revenge of the lipsum',
-        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj kgjlkg jdlklkf  khdf jdlf  gjfkdljgfldhldf'
-    },{
-        title: 'lorem ipsum 3: revenge of the lipsum',
-        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdf l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkldhkldf khdf jdlf aghg gjfkdljgfldhldf'
-    },{
-        title: 'lorem ipsum 3: revenge of the lipsum',
-        content: 'lipsonidf jgilhgldhgjlhdjlgh jhgsjh gdfhsg dflg lfshg ldhgllgl glkfhgl lg l l fdg ghsg jklfhj klhjshghjd kgjlkg jdlklkf gkl hdjfgalkhdf  g afgagha lhdlgah lhdflg ldsgld lfgh hfh fgh hgjshsgjmndhkldf khdf jdlf aghg gjfkdljgfldhldf'
-    }]);
+/* Attempt to allow for sorting by type. didn't quite work */
+app.get('/article/all/:type', function(req, type) {
+    return articles(req, type);
 });
+
+app.get('/article/all', function(req) {
+    return articles(req, 'articles');
+});
+
+function articles(req, type) {
+    log.info("TYPE IS: "+type);
+    var articles = getAllArticles(type);
+
+    if(articles.success) {
+        return json(articles.content);
+    }
+    return json(false);
+}
+
+app.get('/article/all/bycategory/:category', function(req, category) {
+    var articles = getArticlesByCategory(category);
+
+    if(articles.success) {
+        return json(articles.content);
+    }
+    return json(false);
+})
 
 app.get('/article/:id', function(req, id) {
     var article = getArticle(id);
