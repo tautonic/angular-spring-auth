@@ -20,16 +20,21 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         if($routeParams) {
             $scope.pageType = $routeParams.discussionId || $routeParams.articleId || "all";
 
-            if($scope.pageType != "all") {
-                if($scope.pageType != "new") {
-                    url = url + $scope.pageType;
-                    $scope.pageType = "single";
-                } else {
+            switch($scope.pageType)
+            {
+                case "none":
+                    break;
+                case "new":
                     $scope.reply.title = '';
                     url = url + "new";
-                }
-            } else {
-                url = url + "all";
+                    break;
+                case "all":
+                    url = url + "all";
+                    break;
+                default:
+                    url = url + $scope.pageType;
+                    $scope.pageType = "single";
+                    break;
             }
         } else {
             $scope.pageType = "all";
@@ -46,11 +51,18 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
 
     function loadContent() {
         $http.get( url ).success( function (data) {
-            if($scope.pageType != "all")
+            console.log("DISCUSSION IS? ", data);
+            if(data !== "false")
             {
-                $scope.discussion = data[0];
+                if($scope.pageType != "all")
+                {
+                    $scope.discussion = data[0];
+                } else {
+                    $scope.discussion = data;
+                }
             } else {
-                $scope.discussion = data;
+                $scope.reply.title = '';
+                $scope.reply.show = true;
             }
         }).error(function(data, status) {
                 $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
@@ -134,7 +146,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     /*
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
     */
-    if($scope.pageType != "new") {
+    if(($scope.pageType != "new") && ($scope.pageType != "none")) {
         loadContent();
     }
 

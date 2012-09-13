@@ -12,6 +12,7 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         } else {
             url += 'all';
             $scope.pageType = "all";
+            $routeParams.articleId = "none";
         }
     }
 
