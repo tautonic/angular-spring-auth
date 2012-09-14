@@ -1,7 +1,7 @@
 <div class="profile clearfix thumbnail" ng-show="isEditMode">
     <form name="editProfile" class="form-horizontal" novalidate>
         <fieldset>
-            <legend><h2>{{profile.username}}</h2> <h6>{{profile._id}}</h6></legend>
+            <legend><h2>{{profile.name.given}} {{profile.name.surname}}</h2> <h6>{{profile._id}}</h6></legend>
             <div class="control-group">
                 <label class="control-label" for="username">Username</label>
                 <div class="controls">
@@ -13,14 +13,42 @@
                            value="{{profile.username}}" required>
                 </div>
                 <br>
-                <label class="control-label" for="password">Password</label>
+                <label class="control-label" for="given-name">First Name</label>
                 <div class="controls">
                     <input type="text"
-                           ng-model="profile.password"
+                           ng-model="profile.name.given"
                            class="input-xlarge"
-                           id="password"
-                           name="password"
-                           value="{{profile.password}}" required>
+                           id="given-name"
+                           name="given-name"
+                           value="{{profile.name.given}}" required>
+                </div>
+                <br>
+                <label class="control-label" for="surname">Last Name</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.name.surname"
+                           class="input-xlarge"
+                           id="surname"
+                           name="surname"
+                           value="{{profile.name.surname}}" required>
+                </div>
+                <br>
+                <label class="control-label" for="password">Enter New Password</label>
+                <div class="controls">
+                    <input type="password"
+                           class="input-xlarge"
+                           id="new-password"
+                           name="new-password"
+                           value="">
+                </div>
+                <br>
+                <label class="control-label" for="password">Repeat New Password</label>
+                <div class="controls">
+                    <input type="password"
+                           class="input-xlarge"
+                           id="repeat-password"
+                           name="repeat-password"
+                           value="">
                 </div>
                 <br>
                 <label class="control-label" for="email">Email</label>
@@ -37,7 +65,7 @@
                 <label class="control-label" for="university">University</label>
                 <div class="controls">
                     <!--<input ui-select2="{ ajax: getUniversityData() }" ng-model="select2" id="university" data-placeholder="Select a University">-->
-                    <input type="hidden" ui-select2="selectConfig" ng-model="select2" id="university">
+                    <input type="hidden" ui-select2 ng-model="select2" id="university" >
                 </div>
             </div>
         </fieldset>

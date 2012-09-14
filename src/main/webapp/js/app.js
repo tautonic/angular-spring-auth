@@ -50,7 +50,26 @@
         tinymce: {
             theme: 'simple',
             width: '50%'
+        },
+        select2: {
+            //placeholder: "Choose a University",
+            allowClear: true,
+            minimumInputLength: 3,
+            ajax: {
+                url: "http://localhost:8080/gc/api/data/",
+                dataType: 'json',
+                data: function(term, page) {
+                    return {
+                        q: term,
+                        page_limit: 5
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    return {results: data.universities};
+                }
+            }
         }
+
     });
 })();
 

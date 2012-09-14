@@ -151,7 +151,6 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     }
 
     $scope.selectConfig = {
-        placeholder: 'Choose your university',
         allowClear: true,
         minimumInputLength: 3,
         ajax: {

@@ -479,11 +479,12 @@ app.get('/data', function(req) {
         { "id": "bgsu", "text": "BGSU" },
         { "id": "toledo", "text": "TOLEDO" },
         { "id": "wisconsin", "text": "Wisconsin" },
-        { "id": "michigan", "text": "Michigan" },
+        { "id": "michigan", "text": "University of Michigan" },
         { "id": "michiganstate", "text": "Michigan State" },
         { "id": "indiana", "text": "Indiana" },
         { "id": "iowa", "text": "Iowa" },
-        { "id": "iowastate", "text": "Iowa State" }
+        { "id": "iowastate", "text": "Iowa State" },
+        { "id": "illinois", "text": "University of Illinois" }
     ];
 
     universities.forEach(function(university){
