@@ -48,7 +48,8 @@
 
     app.value('ui.config', {
         tinymce: {
-            theme: 'simple'
+            theme: 'simple',
+            width: '50%'
         }
     });
 })();

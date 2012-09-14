@@ -7,21 +7,21 @@
 
     <div ng-switch-default>
         <div class="category-sort">
-            Video<br>
-            Article<br>
-            Picture
+            <a ng-click="byType('video')">Video</a><br>
+            <a ng-click="byType('articles')">Article</a><br>
+            <a ng-click="byType('picture')">Picture</a>
             <hr>
-            Jobs<br>
-            Lorem<br>
-            Ipsum<br>
-            Dolar<br>
-            Simar<br>
-            Est
+            <a ng-click="byCategory('job')">Jobs</a><br>
+            <a ng-click="byCategory('job')">Lorem</a><br>
+            <a ng-click="byCategory('job')">Ipsum</a><br>
+            <a ng-click="byCategory('job')">Dolar</a><br>
+            <a ng-click="byCategory('job')">Simar</a><br>
+            <a ng-click="byCategory('job')">Est</a>
         </div>
         <div id="article-list">
             <div class="article" ng-repeat="article in articles">
-                <a ng-href="#/discussion/{{article.id}}">{{article.title}}</a>
-                <p class="summary">{{article.content}}</p>
+                <a ng-href="#/content/{{article._id}}">{{article.title}}</a>
+                <p class="summary" ng-bind-html="article.description"></p>
             </div>
         </div>
     </div>

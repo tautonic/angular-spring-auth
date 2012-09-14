@@ -12,29 +12,25 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         } else {
             url += 'all';
             $scope.pageType = "all";
+            $routeParams.articleId = "none";
         }
     }
 
     function loadContent() {
         $http.get( url ).success( function (data) {
-            console.log("ARTICLE RESPONSE WAS: ",data);
-
+            console.log("ARTICLE RETURNED: ",data);
             if(data !== "false") {
                 if($scope.pageType === "single")
                 {
                     $scope.article = data;
+                    $rootScope.title = $scope.article.title;
+                    $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': '819bf5783a87406fb035afa52dc06144'/*$scope.article.linkedPosts*/ })
                 } else if ($scope.pageType === "all")
                 {
                     $scope.articles = data;
-                    $scope.container = $('#article-list');
-                     /*$scope.container.masonry({
-                        // options
-                        itemSelector : '.article',
-                        columnWidth : 230
-                    });
-                     */
-                    //$scope.container.masonry('reload');
-                    console.log("LOADED MASONRY?");
+                    if($scope.articles.length == 0) {
+                        $log.info("No articles found.");
+                    }
                 }
             } else {
                 $log.info("ERROR getting article, or resource.");
@@ -50,6 +46,16 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
             return false;
         }
         return (typeof($scope.article.content) === "undefined");
+    }
+
+    $scope.byType = function(type) {
+        url = 'api/article/all/' + type;
+        loadContent();
+    }
+
+    $scope.byCategory = function(category) {
+        url = 'api/article/all/bycategory/' + category;
+        loadContent();
     }
 
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });

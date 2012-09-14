@@ -180,4 +180,5 @@ function generateBasicAuthorization(user) {
     var base64 = encode(header);
     return 'Basic ' + base64;
 }
+
 export('getDiscussion', 'getDiscussionList', 'addReply', 'createDiscussion', 'editDiscussionPost');
