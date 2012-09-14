@@ -137,14 +137,36 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         return { // instead of writing the function to execute the request we use Select2's convenient helper
             url: "http://localhost:8080/gc/api/data/",
             dataType: 'jsonp',
-            data: function() {
-                return {};
+            data: function(term, page) {
+                return {
+                    q:term,
+                    page_limit: 5
+                };
             },
-            results: function (data) { // parse the results into the format expected by Select2.
+            results: function (data, page) { // parse the results into the format expected by Select2.
                 console.log("HELLO? ",data);
-                return {results: data};
+                return {results: data.universities};
             }
         };
+    }
+
+    $scope.selectConfig = {
+        placeholder: 'Choose your university',
+        allowClear: true,
+        minimumInputLength: 3,
+        ajax: {
+            url: "http://localhost:8080/gc/api/data/",
+            dataType: 'json',
+            data: function(term, page) {
+                return {
+                    q: term,
+                    page_limit: 5
+                };
+            },
+            results: function (data, page) { // parse the results into the format expected by Select2.
+                return {results: data.universities};
+            }
+        }
     }
 }
 

@@ -457,12 +457,34 @@ app.get('/profiles/pics/:id', function(req, id){
 
 
 app.get('/data', function(req) {
-    return json([
+    var filteredUniversities = new Array();
+
+    log.info(req.params.q);
+
+    var query = req.params.q;
+
+    var universities = [
         { "id": "babson", "text": "Babson" },
-        { "id": "osu", "text": "OSU" },
+        { "id": "osu", "text": "Ohio State University" },
+        { "id": "osu", "text": "Ohio University" },
+        { "id": "osu", "text": "Ohio Wesleyan University" },
         { "id": "bgsu", "text": "BGSU" },
-        { "id": "toledo", "text": "TOLEDO" }
-    ]);
+        { "id": "toledo", "text": "TOLEDO" },
+        { "id": "wisconsin", "text": "Wisconsin" },
+        { "id": "michigan", "text": "Michigan" },
+        { "id": "michiganstate", "text": "Michigan State" },
+        { "id": "indiana", "text": "Indiana" },
+        { "id": "iowa", "text": "Iowa" },
+        { "id": "iowastate", "text": "Iowa State" }
+    ];
+
+    universities.forEach(function(university){
+        if(university.text.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) !== -1){
+            filteredUniversities.push(university);
+        }
+    });
+
+    return json({"universities": filteredUniversities});
 });
 
 /************************
@@ -476,17 +498,13 @@ function homepage( req ) {
 }
 
 /*
-Utitliy functions
+Utility functions
 */
 
 function _generateBasicAuthorization(username, password) {
 	var header = username + ":" + password;
 	var base64 = encode(header);
 	return 'Basic ' + base64;
-}
-
-function getUserByEmail(email){
-
 }
 
 function getUsernamePassword() {

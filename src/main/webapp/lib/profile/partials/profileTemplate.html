@@ -36,7 +36,8 @@
                 <br>
                 <label class="control-label" for="university">University</label>
                 <div class="controls">
-                    <input type="hidden" ui-select2="{ ajax: getUniversityData() }" ng-model="select2" id="university" data-placeholder="Select a University">
+                    <!--<input ui-select2="{ ajax: getUniversityData() }" ng-model="select2" id="university" data-placeholder="Select a University">-->
+                    <input type="hidden" ui-select2="selectConfig" ng-model="select2" id="university">
                 </div>
             </div>
         </fieldset>
