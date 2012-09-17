@@ -11,7 +11,7 @@ var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
 var {getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle} = require('articles');
-var {getDiscussion, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
+var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
 
 var {encode} = require('ringo/base64');
 
@@ -129,7 +129,17 @@ app.get('/discussions/all', function(req, id) {
 app.get('/discussions/:id', function(req, id) {
     var result = getDiscussion(id);
 
-    if(result.status !== 200) {
+    if(!result.success) {
+        return json(false);
+    }
+
+    return json(result.content);
+});
+
+app.get('/discussions/byParent/:id', function(req, id) {
+    var result = getDiscussionByParent(id);
+
+    if(!result.success) {
         return json(false);
     }
 
@@ -157,14 +167,17 @@ app.post('/discussions/new', function(req) {
     }
     log.info("DISCUSSISON: "+JSON.stringify(discussion));
 
-    var discussionId = createDiscussion(discussion, getUsernamePassword());
+    var result = createDiscussion(discussion, getUsernamePassword());
 
-    if(discussion.parentId === null) {
-        return json({ "newId" : discussionId });
-    } else {
-        return json({ "success": linkDiscussionToArticle(discussionId, discussion.parentId, getUsernamePassword()) });
+    if(result != false) {
+        if(result.parentId === null) {
+            return json({ "newId" : result.threadId });
+        } else {
+            return json({ "success": true });
+        }
     }
 
+    return json(false);
 });
 
 /**

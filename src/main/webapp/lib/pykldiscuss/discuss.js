@@ -19,7 +19,11 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         };
 
         if($routeParams) {
-            $scope.pageType = $routeParams.discussionId || $routeParams.articleId || "all";
+            $scope.pageType = $routeParams.discussionId || "all";
+
+            if($routeParams.articleId) {
+                $scope.pageType = "byParent/" + $routeParams.articleId;
+            }
 
             switch($scope.pageType)
             {
@@ -95,14 +99,18 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         };
 
         $http.post('api/discussions/new', newPost).success(function(data) {
-            if(data.success) {
-                alert("discussion successful");
-            }
-            if(data.newId !== false)
-            {
-                $location.path('/discussion/'+data.newId);
+            console.log("DATA RESULTS: ",data);
+            if(data.success === true) {
+                url = 'api/discussions/byParent' + $routeParams.articleId;
+                $scope.pageType = "single";
+                loadContent();
             } else {
-                alert("There was an error.");
+                if(data.newId !== false)
+                {
+                    $location.path('/discussion/'+data.newId);
+                } else {
+                    alert("There was an error.");
+                }
             }
         });
     }

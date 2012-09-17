@@ -8,31 +8,12 @@ function ajax(url) {
     var opts = {
         url: url,
         method: 'GET',
-        headers: Headers({ 'x-rt-index': 'nep' }), //todo: current seed tool seeds article/resources into the nep index
+        headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
     };
 
     var exchange = httpclient.request(opts);
 
-    return {
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    };
-}
-
-var linkDiscussionToArticle = function(articleId, discussionId, user) {
-    var opts = {
-        url: 'http://localhost:9300/myapp/api/resources/link/' + articleId + '/' + discussionId,
-        method: 'PUT',
-        headers: Headers({"Authorization": generateBasicAuthorization(user), 'x-rt-index': 'nep' }), //todo: current seed tool seeds article/resources into the nep index
-        async: false
-    };
-
-    var exchange = httpclient.request(opts);
-
-    log.info(exchange.content);
     return {
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
