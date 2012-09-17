@@ -147,3 +147,7 @@ form[name="editProfile"] legend{
 form[name="editProfile"] legend + .control-group{
     margin-top: 0;
 }
+
+.edu-history .remove{
+    float: right;
+}

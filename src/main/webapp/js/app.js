@@ -50,9 +50,9 @@
         tinymce: {
             theme: 'simple',
             width: '50%'
-        },
+        }/*,
         select2: {
-            //placeholder: "Choose a University",
+            placeholder: "Choose a University",
             id: 'id',
             allowClear: true,
             minimumInputLength: 3,
@@ -69,8 +69,7 @@
                     return {results: data.universities};
                 }
             }
-        }
-
+        }*/
     });
 })();
 

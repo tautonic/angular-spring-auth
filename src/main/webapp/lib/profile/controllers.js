@@ -13,29 +13,11 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         $scope.profile = profiles.content[0];
     });
 
-    //12d0b4eafca44976bcfed39cc1b9da41
-    /*Profile.get({ profileId: '12d0b4eafca44976bcfed39cc1b9da41' }, function(profile){
-        $scope.profile = profile.content;
-    }, function(response){
-        console.log('GET ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-    });*/
-
-    //$scope.profile = Profile.get({ profileId: '12d0b4eafca44976bcfed39cc1b9da41' });
-
-    /*Profile.email({ email: 'jhines@pykl.com' }, function(profile){
-        $scope.profile = profile.content;
-    }, function(response){
-        console.log('GET PROFILE BY EMAIL ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-    });*/
-
-    /*Profile.username({ username: 'jhines' }, function(profile){
-        $scope.profile = profile.content;
-    }, function(response){
-        console.log('GET PROFILE BY USERNAME ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-    });*/
-
     $scope.edit = function(profile){
         $scope.master = angular.copy(profile);
+
+        $scope.profile.newPass = '';
+        $scope.profile.newPassRepeat = '';
 
         $scope.isViewMode = false;
         $scope.isEditMode = true;
@@ -47,15 +29,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         $scope.isEditMode = true;
         $scope.isCreateMode = false;
 
-        var data = {
-            "username"      : profile.username,
-            "password"      : profile.password,
-            "accountEmail"  : {
-                "address"  : profile.accountEmail.address
-            }
-        }
-
-        Profile.update({profileId: profile._id}, data, function(response){
+        Profile.update({profileId: profile._id}, profile, function(response){
             $scope.isViewMode = true;
             $scope.isEditMode = false;
             $scope.isCreateMode = false;
@@ -133,6 +107,19 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         });
     }
 
+    $scope.addEdRow = function(){
+        $scope.profile.educationHistory.push({
+            "schoolName" : '',
+            "degree" : '',
+            "fieldOfStudy" : ''
+        });
+    }
+
+    $scope.removeEdRow = function(index){
+        console.log(index);
+        $scope.profile.educationHistory.splice(index, 1);
+    }
+
     $scope.getUniversityData = function () {
         return { // instead of writing the function to execute the request we use Select2's convenient helper
             url: "http://localhost:8080/gc/api/data/",
@@ -164,6 +151,13 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
             },
             results: function (data, page) { // parse the results into the format expected by Select2.
                 return {results: data.universities};
+            },
+            initSelection: function(element, callback){
+                $http({method: 'GET', url:'http://localhost:8080/gc/api/profiles/' + $scope.profile.id}).
+                    success(function(data, status, headers, config){
+                       console.log(data);
+                    });
+                callback('Stuff Here');
             }
         }
     }

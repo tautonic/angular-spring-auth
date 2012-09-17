@@ -37,19 +37,22 @@
                 <label class="control-label" for="password">Enter New Password</label>
                 <div class="controls">
                     <input type="password"
+                           ng-model="profile.newPass"
                            class="input-xlarge"
                            id="new-password"
                            name="new-password"
-                           value="" required>
+                           value="">
                 </div>
                 <br>
                 <label class="control-label" for="repeat-password">Repeat New Password</label>
                 <div class="controls">
                     <input type="password"
+                           ng-model="profile.newPassRepeat"
                            class="input-xlarge"
                            id="repeat-password"
                            name="repeat-password"
-                           value="" required>
+                           password-validator="new-password"
+                           value="">
                 </div>
                 <br>
 
@@ -88,7 +91,7 @@
                     </div>
                 </div>
 
-                <h2>Current Institution</h2>
+                <h2>Institution</h2>
 
                 <label class="control-label" for="title">Title</label>
                 <div class="controls">
@@ -115,10 +118,10 @@
                 <label class="control-label" for="institution">Institution Name</label>
                 <div class="controls">
                     <input type="hidden"
-                           ui-select2
+                           ui-select2="selectConfig"
                            id="institution"
                            name="institution"
-                           data-placeholder="Choose a University">
+                           data-placeholder="Select a university">
                 </div>
                 <br>
 
@@ -140,12 +143,16 @@
                            class="input-xlarge"
                            id="year-finished"
                            name="year-finished"
-                           value="{{profile.workHistory[0].yearFinished.gregorian}}" required>
+                           value="{{profile.workHistory[0].yearFinished.gregorian}}">
                 </div>
 
-                <h2>Education</h2>
+                <h2>
+                    Education
+                    <button class="btn btn-success" ng-click="addEdRow()">
+                        <i class="icon-plus icon-white"></i> Add</button>
+                </h2>
 
-                <div class="well" ng-repeat="school in profile.educationHistory">
+                <div class="well edu-history clearfix" ng-repeat="school in profile.educationHistory">
                     <label class="control-label" for="vitae-institution-name">Institution Name</label>
                     <div class="controls">
                         <input type="text"
@@ -177,6 +184,8 @@
                                name="field-of-study"
                                value="{{school.fieldOfStudy}}" required>
                     </div>
+                    <button class="btn btn-danger remove" ng-click="removeEdRow($index)">
+                        <i class="icon-remove icon-white"></i> Remove</button>
                 </div>
             </div>
         </fieldset>

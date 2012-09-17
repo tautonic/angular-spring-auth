@@ -316,10 +316,34 @@ app.get('/profiles/', function(req){
 
 app.put('/profiles/:id', function(req, id){
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+
+    var data = {
+        "username" : req.postParams.username,
+        "name" : {
+            "given": req.postParams.name.given,
+            "pre": req.postParams.name.pre,
+            "surname": req.postParams.name.surname
+        },
+        "accountEmail" : {
+            "address"  : req.postParams.accountEmail.address
+        },
+        "educationHistory" : req.postParams.educationHistory,
+        "websites" : req.postParams.websites,
+        "workHistory" : req.postParams.workHistory
+    };
+
+    if(req.postParams.newPass !== ''){
+        data.password = req.postParams.newPass;
+    }
+
+    delete data.newPass;
+    delete data.newPassRepeat;
+
+    log.info('PROFILE UPDATE PARAMS ' + JSON.stringify(req.postParams, null, 4));
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
         method: 'PUT',
-        data: JSON.stringify(req.postParams),
+        data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
         async: false
     };
