@@ -473,9 +473,9 @@ app.get('/data', function(req) {
 
     var universities = [
         { "id": "babson", "text": "Babson" },
-        { "id": "osu", "text": "Ohio State University" },
-        { "id": "osu", "text": "Ohio University" },
-        { "id": "osu", "text": "Ohio Wesleyan University" },
+        { "id": "osu", "text": "The Ohio State University" },
+        { "id": "ou", "text": "Ohio University" },
+        { "id": "owu", "text": "Ohio Wesleyan University" },
         { "id": "bgsu", "text": "BGSU" },
         { "id": "toledo", "text": "TOLEDO" },
         { "id": "wisconsin", "text": "Wisconsin" },

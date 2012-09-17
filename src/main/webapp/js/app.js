@@ -53,6 +53,7 @@
         },
         select2: {
             //placeholder: "Choose a University",
+            id: 'id',
             allowClear: true,
             minimumInputLength: 3,
             ajax: {

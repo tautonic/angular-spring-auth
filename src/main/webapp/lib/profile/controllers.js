@@ -167,5 +167,9 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
             }
         }
     }
+
+    $scope.editDateConfig_1 = {
+        //changeYear: true
+    }
 }
 

@@ -139,3 +139,11 @@ input.ng-invalid{
     width: 300px;
     height: 300px;
 }
+
+form[name="editProfile"] legend{
+    margin-bottom: 0;
+}
+
+form[name="editProfile"] legend + .control-group{
+    margin-top: 0;
+}

@@ -3,6 +3,7 @@
         <fieldset>
             <legend><h2>{{profile.name.given}} {{profile.name.surname}}</h2> <h6>{{profile._id}}</h6></legend>
             <div class="control-group">
+                <h2>Basic</h2>
                 <label class="control-label" for="username">Username</label>
                 <div class="controls">
                     <input type="text"
@@ -39,18 +40,20 @@
                            class="input-xlarge"
                            id="new-password"
                            name="new-password"
-                           value="">
+                           value="" required>
                 </div>
                 <br>
-                <label class="control-label" for="password">Repeat New Password</label>
+                <label class="control-label" for="repeat-password">Repeat New Password</label>
                 <div class="controls">
                     <input type="password"
                            class="input-xlarge"
                            id="repeat-password"
                            name="repeat-password"
-                           value="">
+                           value="" required>
                 </div>
                 <br>
+
+                <h2>Contact</h2>
                 <label class="control-label" for="email">Email</label>
                 <div class="controls">
                     <input type="email"
@@ -62,10 +65,118 @@
                            value="{{profile.accountEmail.address}}" required>
                 </div>
                 <br>
-                <label class="control-label" for="university">University</label>
+
+                <div class="well" ng-repeat="website in profile.websites">
+                    <label class="control-label" for="website-title">Website Title</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="website.title"
+                               class="input-xlarge"
+                               id="website-title"
+                               name="website-title"
+                               value="{{website.title}}">
+                    </div>
+                    <br>
+                    <label class="control-label" for="website-url">URL</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="website.url"
+                               class="input-xlarge"
+                               id="website-url"
+                               name="website-url"
+                               value="{{website.url}}">
+                    </div>
+                </div>
+
+                <h2>Current Institution</h2>
+
+                <label class="control-label" for="title">Title</label>
                 <div class="controls">
-                    <!--<input ui-select2="{ ajax: getUniversityData() }" ng-model="select2" id="university" data-placeholder="Select a University">-->
-                    <input type="hidden" ui-select2 ng-model="select2" id="university" >
+                    <input type="text"
+                           ng-model="profile.workHistory[0].title"
+                           class="input-xlarge"
+                           id="title"
+                           name="title"
+                           value="{{profile.workHistory[0].title}}" required>
+                </div>
+                <br>
+
+                <label class="control-label" for="location">Location</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.workHistory[0].location"
+                           class="input-xlarge"
+                           id="location"
+                           name="location"
+                           value="{{profile.workHistory[0].location}}" required>
+                </div>
+                <br>
+
+                <label class="control-label" for="institution">Institution Name</label>
+                <div class="controls">
+                    <input type="hidden"
+                           ui-select2
+                           id="institution"
+                           name="institution"
+                           data-placeholder="Choose a University">
+                </div>
+                <br>
+
+                <label class="control-label" for="year-started">Year Started</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.workHistory[0].yearStarted.gregorian"
+                           class="input-xlarge"
+                           id="year-started"
+                           name="year-finished"
+                           value="{{profile.workHistory[0].yearStarted.gregorian}}" required>
+                </div>
+                <br>
+
+                <label class="control-label" for="year-finished">Year Finished</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.workHistory[0].yearFinished.gregorian"
+                           class="input-xlarge"
+                           id="year-finished"
+                           name="year-finished"
+                           value="{{profile.workHistory[0].yearFinished.gregorian}}" required>
+                </div>
+
+                <h2>Education</h2>
+
+                <div class="well" ng-repeat="school in profile.educationHistory">
+                    <label class="control-label" for="vitae-institution-name">Institution Name</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="school.schoolName"
+                               class="input-xlarge"
+                               id="vitae-institution-name"
+                               name="vitae-institution-name"
+                               value="{{school.schoolName}}" required>
+                    </div>
+                    <br>
+
+                    <label class="control-label" for="degree">Degree</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="school.degree"
+                               class="input-xlarge"
+                               id="degree"
+                               name="degree"
+                               value="{{school.degree}}" required>
+                    </div>
+                    <br>
+
+                    <label class="control-label" for="field-of-study">Field Of Study</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="school.fieldOfStudy"
+                               class="input-xlarge"
+                               id="field-of-study"
+                               name="field-of-study"
+                               value="{{school.fieldOfStudy}}" required>
+                    </div>
                 </div>
             </div>
         </fieldset>
