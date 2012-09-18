@@ -1,6 +1,6 @@
 <div ng-switch on="pageType">
     <div ng-switch-when="single">
-        <h1>{{discussion.title}}</h1>
+        <h1 ng-show="hasContent">{{discussion.title}}</h1>
         <div class="post">
             <div class="user">
                 <p>{{discussion.creator.username}}</p>
@@ -54,7 +54,7 @@
                     Discussion Title: <input type="text" ng-model="reply.title">
                     <p>Words go here:</p>
                 </div>
-                <textarea rows="10" cols="100" ng-model="reply.message" required >
+                <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
                 </textarea>
                 <br>
                 <input type="submit" value="Start New Discussion">

@@ -31,10 +31,8 @@ var getDiscussion = function(id) {
 
 var getDiscussionByParent = function(parentId) {
     var query = {
-        "query":
-        {
-            "bool":
-            {
+        "query": {
+            "bool": {
                 "must":[
                     { "field": { "parentId": parentId } }
                 ]
@@ -76,6 +74,7 @@ var getDiscussionList = function() {
 
     var exchange = httpclient.request(opts);
 
+    //filters out threads with empty titles and threads that are tied to an article
     var threads = JSON.parse(exchange.content).filter(function(element) {
         return !(element.title === "");
     });
@@ -148,10 +147,14 @@ var createDiscussion = function(firstPost, user) {
         "active": true
     };
 
+    var url = 'http://localhost:9300/myapp/api/posts/';
+    if(firstPost.parentId !== null) {
+        url =+ firstPost.parentId;
+    }
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/posts/' + firstPost.parentId,
+        url: url,
         method: 'POST',
         data: JSON.stringify(data),
         headers: headers,

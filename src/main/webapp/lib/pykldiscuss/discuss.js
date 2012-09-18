@@ -7,7 +7,6 @@ stick as much code into functions as possible
  */
 function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $location ) {
     var url = 'api/discussions/';
-    //this check is needed to handle things like discussions connected with articles
 
     setupScope();
 
@@ -21,8 +20,13 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         if($routeParams) {
             $scope.pageType = $routeParams.discussionId || "all";
 
+            //this check is needed to handle things like discussions connected with articles
             if($routeParams.articleId) {
                 $scope.pageType = "byParent/" + $routeParams.articleId;
+                $scope.hasContent = false;
+                $scope.reply.title = '';
+            } else {
+                $scope.hasContent = true;
             }
 
             switch($scope.pageType)
@@ -32,7 +36,6 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 case "new":
                     $scope.reply.title = '';
                     url = url + "new";
-                    $scope.hasContent = true;
                     break;
                 case "all":
                     url = url + "all";
@@ -51,11 +54,14 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         {
             $location.path('/network/all');
         }
-
         //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
     }
 
     function loadContent() {
+        if($routeParams.articleId === "none") {
+            $scope.pageType = "none";
+            return;
+        }
         $http.get( url ).success( function (data) {
             if(data !== "false")
             {
@@ -65,10 +71,8 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 } else {
                     $scope.discussion = data;
                 }
-                $scope.hasContent = true;
             } else {
                 $scope.pageType = "new";
-                $scope.hasContent = false;
                 $scope.reply.title = $rootScope.title;
             }
         }).error(function(data, status) {
@@ -87,7 +91,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
 
     $scope.createDiscussion = function() {
         var newPost = {
-            title: ($scope.reply.title || $rootScope.title),
+            title: $scope.reply.title,
             parentId: ($routeParams.articleId || null),
             posts: [{
                 owner: {
@@ -99,9 +103,9 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         };
 
         $http.post('api/discussions/new', newPost).success(function(data) {
-            console.log("DATA RESULTS: ",data);
+
             if(data.success === true) {
-                url = 'api/discussions/byParent' + $routeParams.articleId;
+                url = 'api/discussions/byParent/' + $routeParams.articleId;
                 $scope.pageType = "single";
                 loadContent();
             } else {
