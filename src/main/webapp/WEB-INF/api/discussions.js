@@ -13,7 +13,7 @@ var getDiscussion = function(id) {
     }
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/posts/' + id + "/threads",
+        url: "http://localhost:9300/myapp/api/posts/" + id + "/threads",
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -21,13 +21,49 @@ var getDiscussion = function(id) {
 
     var exchange = httpclient.request(opts);
 
-
     return {
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     };
+}
+
+var getDiscussionByParent = function(parentId) {
+    var query = {
+        "query":
+        {
+            "bool":
+            {
+                "must":[
+                    { "field": { "parentId": parentId } }
+                ]
+            }
+        },
+        "sort": [ { "dateCreated": "desc" } ]
+    };
+
+    var opts = {
+        url: "http://localhost:9300/myapp/api/posts/search",
+        method: 'POST',
+        data: JSON.stringify(query),
+        headers: Headers({ "x-rt-index": "gc", "Content-Type": "application/json" }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    var result = JSON.parse(exchange.content);
+    var threadId;
+
+    if(result.length > 0) {
+        result = result[0];
+        threadId = result.threadId;
+    } else {
+        threadId = "new";
+    }
+
+    return getDiscussion(threadId);
 }
 
 var getDiscussionList = function() {
@@ -56,7 +92,7 @@ var addReply = function(id, reply, user) {
     var data = {
         "dataType": "posts",
         "dateCreated": "",
-        "parentId": id,
+        "threadId": id,
         "type": "discussion",
         "creator":{
             "_id": 1,
@@ -85,7 +121,6 @@ var addReply = function(id, reply, user) {
 
     var exchange = httpclient.request(opts);
 
-    //log.info("REPLY exchange: "+JSON.stringify(exchange.content));
     return JSON.parse(exchange.content);
 }
 
@@ -96,7 +131,7 @@ var createDiscussion = function(firstPost, user) {
     var data = {
         "dataType": "posts",
         "dateCreated": "",
-        "parentId": null,
+        "parentId": firstPost.parentId,
         "type": "discussion",
         "creator":{
             "_id": 1,
@@ -116,7 +151,7 @@ var createDiscussion = function(firstPost, user) {
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/posts/',
+        url: 'http://localhost:9300/myapp/api/posts/' + firstPost.parentId,
         method: 'POST',
         data: JSON.stringify(data),
         headers: headers,
@@ -129,7 +164,7 @@ var createDiscussion = function(firstPost, user) {
     {
         log.info("exchange content: "+exchange.content);
 
-        return JSON.parse(exchange.content).parentId;
+        return JSON.parse(exchange.content);
     }
 
     return false;
@@ -181,4 +216,4 @@ function generateBasicAuthorization(user) {
     return 'Basic ' + base64;
 }
 
-export('getDiscussion', 'getDiscussionList', 'addReply', 'createDiscussion', 'editDiscussionPost');
+export('getDiscussion', 'getDiscussionByParent', 'getDiscussionList', 'addReply', 'createDiscussion', 'editDiscussionPost');
