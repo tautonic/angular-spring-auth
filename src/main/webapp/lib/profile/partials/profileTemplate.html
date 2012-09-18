@@ -239,7 +239,7 @@
 
 <div class="profile clearfix thumbnail" ng-show="isCreateMode">
     <form name="createProfile" class="form-horizontal" novalidate>
-        <fieldset>
+        <!--<fieldset>
             <legend><h2>{{profile.username}}</h2></legend>
             <div class="control-group">
                 <label class="control-label" for="username">Username</label>
@@ -272,6 +272,202 @@
                            value="" required>
                 </div>
             </div>
+        </fieldset>-->
+
+        <fieldset>
+            <legend><h2>{{profile.name.given}} {{profile.name.surname}}</h2> <h6>{{profile._id}}</h6></legend>
+            <div class="control-group">
+                <h2>Basic</h2>
+                <label class="control-label" for="username">Username</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.username"
+                           class="input-xlarge"
+                           id="username"
+                           name="username"
+                           value="{{profile.username}}" required>
+                </div>
+                <br>
+                <label class="control-label" for="given-name">First Name</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.name.given"
+                           class="input-xlarge"
+                           id="given-name"
+                           name="given-name"
+                           value="{{profile.name.given}}" required>
+                </div>
+                <br>
+                <label class="control-label" for="surname">Last Name</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.name.surname"
+                           class="input-xlarge"
+                           id="surname"
+                           name="surname"
+                           value="{{profile.name.surname}}" required>
+                </div>
+                <br>
+                <label class="control-label" for="password">Enter Password</label>
+                <div class="controls">
+                    <input type="password"
+                           ng-model="profile.password"
+                           class="input-xlarge"
+                           id="password"
+                           name="password"
+                           value="">
+                </div>
+                <br>
+                <label class="control-label" for="repeat-password">Repeat Password</label>
+                <div class="controls">
+                    <input type="password"
+                           ng-model="profile.newPassRepeat"
+                           class="input-xlarge"
+                           id="repeat-password"
+                           name="repeat-password"
+                           password-validator="password"
+                           value="">
+                </div>
+                <br>
+
+                <h2>
+                    Contact
+                    <button class="btn btn-success" ng-click="addContactRow()">
+                        <i class="icon-plus icon-white"></i> Add</button>
+                </h2>
+                <label class="control-label" for="email">Email</label>
+                <div class="controls">
+                    <input type="email"
+                           ng-model="profile.accountEmail.address"
+                           ng-change="emailChanged()"
+                           class="input-xlarge"
+                           id="email"
+                           name="address"
+                           value="{{profile.accountEmail.address}}" required>
+                </div>
+                <br>
+
+                <div class="well websites clearfix" ng-repeat="website in profile.websites">
+                    <label class="control-label" for="website-title">Website Title</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="website.title"
+                               class="input-xlarge"
+                               id="website-title"
+                               name="website-title"
+                               value="{{website.title}}">
+                    </div>
+                    <br>
+                    <label class="control-label" for="website-url">URL</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="website.url"
+                               class="input-xlarge"
+                               id="website-url"
+                               name="website-url"
+                               value="{{website.url}}">
+                    </div>
+                    <button class="btn btn-danger remove" ng-hide=$first ng-click="removeContactRow($index)">
+                        <i class="icon-remove icon-white"></i> Remove</button>
+                </div>
+
+                <h2>Institution</h2>
+
+                <label class="control-label" for="title">Title</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.workHistory[0].title"
+                           class="input-xlarge"
+                           id="title"
+                           name="title"
+                           value="{{profile.workHistory[0].title}}" required>
+                </div>
+                <br>
+
+                <label class="control-label" for="location">Location</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.workHistory[0].location"
+                           class="input-xlarge"
+                           id="location"
+                           name="location"
+                           value="{{profile.workHistory[0].location}}" required>
+                </div>
+                <br>
+
+                <label class="control-label" for="institution">Institution Name</label>
+                <div class="controls">
+                    <input type="hidden"
+                           ui-select2="selectConfig"
+                           id="institution"
+                           name="institution"
+                           data-placeholder="Select a university">
+                </div>
+                <br>
+
+                <label class="control-label" for="year-started">Year Started</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.workHistory[0].yearStarted.gregorian"
+                           class="input-xlarge"
+                           id="year-started"
+                           name="year-finished"
+                           value="{{profile.workHistory[0].yearStarted.gregorian}}" required>
+                </div>
+                <br>
+
+                <label class="control-label" for="year-finished">Year Finished</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="profile.workHistory[0].yearFinished.gregorian"
+                           class="input-xlarge"
+                           id="year-finished"
+                           name="year-finished"
+                           value="{{profile.workHistory[0].yearFinished.gregorian}}">
+                </div>
+
+                <h2>
+                    Education
+                    <button class="btn btn-success" ng-click="addEdRow()">
+                        <i class="icon-plus icon-white"></i> Add</button>
+                </h2>
+
+                <div class="well edu-history clearfix" ng-repeat="school in profile.educationHistory">
+                    <label class="control-label" for="vitae-institution-name">Institution Name</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="school.schoolName"
+                               class="input-xlarge"
+                               id="vitae-institution-name"
+                               name="vitae-institution-name"
+                               value="{{school.schoolName}}" required>
+                    </div>
+                    <br>
+
+                    <label class="control-label" for="degree">Degree</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="school.degree"
+                               class="input-xlarge"
+                               id="degree"
+                               name="degree"
+                               value="{{school.degree}}" required>
+                    </div>
+                    <br>
+
+                    <label class="control-label" for="field-of-study">Field Of Study</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="school.fieldOfStudy"
+                               class="input-xlarge"
+                               id="field-of-study"
+                               name="field-of-study"
+                               value="{{school.fieldOfStudy}}" required>
+                    </div>
+                    <button class="btn btn-danger remove" ng-hide=$first ng-click="removeEdRow($index)">
+                        <i class="icon-remove icon-white"></i> Remove</button>
+                </div>
+            </div>
         </fieldset>
 
         <button class="btn btn-success" ng-click="save(profile)" ng-disabled="createProfile.$invalid">
@@ -290,8 +486,8 @@
 
     <div id="container">
         <div id="filelist"></div>
-        <!--<br />
-        <button class="btn btn-primary" id="pickfiles"><i class="icon-plus icon-white"></i> Add files</button>
+        <br />
+        <!--<button class="btn btn-primary" id="pickfiles"><i class="icon-plus icon-white"></i> Add files</button>
         <button class="btn btn-success" id="uploadfiles"><i class="icon-upload icon-white"></i> Upload files</button>-->
         <h3>Drag and Drop a file to upload</h3>
     </div>

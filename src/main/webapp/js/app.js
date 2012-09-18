@@ -43,14 +43,15 @@
 
 
 	// Declare app level module which depends on filters, and services
-	var app = angular.module( 'myApp', ['pykl', 'bgc.directives', 'bgc.services', 'ngSanitize', 'ui'] )
+	var app = angular.module( 'myApp', ['bgc.directives', 'bgc.services', 'ngSanitize', 'ui', 'pykl'] )
 			.config( ['$routeProvider', routeProvider] );
 
     app.value('ui.config', {
         tinymce: {
             theme: 'simple',
             width: '50%'
-        }/*,
+        }
+        /*,
         select2: {
             placeholder: "Choose a University",
             id: 'id',

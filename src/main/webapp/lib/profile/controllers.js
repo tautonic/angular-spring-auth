@@ -55,6 +55,21 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
         $scope.profile = {};
 
+        $scope.profile.educationHistory = [
+            {
+                "schoolName" : '',
+                "degree" : '',
+                "fieldOfStudy" : ''
+            }
+        ];
+
+        $scope.profile.websites = [
+            {
+                "title" : '',
+                "url" : ''
+            }
+        ];
+
         $scope.isViewMode = false;
         $scope.isEditMode = false;
         $scope.isCreateMode = true;
@@ -116,8 +131,20 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     }
 
     $scope.removeEdRow = function(index){
-        console.log(index);
         $scope.profile.educationHistory.splice(index, 1);
+    }
+
+    $scope.addContactRow = function(){
+        $scope.profile.websites.push(
+            {
+                "title" : '',
+                "url" : ''
+            }
+        );
+    }
+
+    $scope.removeContactRow = function(index){
+        $scope.profile.websites.splice(index, 1);
     }
 
     $scope.getUniversityData = function () {
