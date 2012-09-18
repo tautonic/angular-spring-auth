@@ -50,13 +50,9 @@
         tinymce: {
             theme: 'simple',
             width: '50%'
-        }
-        /*,
+        },
         select2: {
-            placeholder: "Choose a University",
             id: 'id',
-            allowClear: true,
-            minimumInputLength: 3,
             ajax: {
                 url: "http://localhost:8080/gc/api/data/",
                 dataType: 'json',
@@ -70,7 +66,14 @@
                     return {results: data.universities};
                 }
             }
-        }*/
+        }
+    });
+
+    app.value('pykl.config', {
+        upload: {
+            runtimes: 'html5',
+            browse_button: 'choosefiles'
+        }
     });
 })();
 

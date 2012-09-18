@@ -167,30 +167,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.selectConfig = {
         allowClear: true,
         minimumInputLength: 3,
-        ajax: {
-            url: "http://localhost:8080/gc/api/data/",
-            dataType: 'json',
-            data: function(term, page) {
-                return {
-                    q: term,
-                    page_limit: 5
-                };
-            },
-            results: function (data, page) { // parse the results into the format expected by Select2.
-                return {results: data.universities};
-            },
-            initSelection: function(element, callback){
-                $http({method: 'GET', url:'http://localhost:8080/gc/api/profiles/' + $scope.profile.id}).
-                    success(function(data, status, headers, config){
-                       console.log(data);
-                    });
-                callback('Stuff Here');
-            }
-        }
-    }
-
-    $scope.editDateConfig_1 = {
-        //changeYear: true
+        placeholder: 'Select an institution'
     }
 }
 

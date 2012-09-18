@@ -49,8 +49,8 @@ angular.module( 'bgc.directives', [] )
                 });
             }
         };
-    })
-    .directive('pyklUpload', [function(){
+    });
+    /*.directive('pyklUpload', [function(){
         'use strict';
         alert('Upload Directive!');
 
@@ -113,4 +113,4 @@ angular.module( 'bgc.directives', [] )
                 uploader.init();
             }
         }
-}]);
+}]);*/
