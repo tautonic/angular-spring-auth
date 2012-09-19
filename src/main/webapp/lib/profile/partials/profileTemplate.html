@@ -238,41 +238,6 @@
 
 <div class="profile clearfix thumbnail" ng-show="isCreateMode">
     <form name="createProfile" class="form-horizontal" novalidate>
-        <!--<fieldset>
-            <legend><h2>{{profile.username}}</h2></legend>
-            <div class="control-group">
-                <label class="control-label" for="username">Username</label>
-                <div class="controls">
-                    <input type="text"
-                           ng-model="profile.username"
-                           class="input-xlarge"
-                           id="username"
-                           name="username"
-                           value="" required>
-                </div>
-                <br>
-                <label class="control-label" for="password">Password</label>
-                <div class="controls">
-                    <input type="text"
-                           ng-model="profile.password"
-                           class="input-xlarge"
-                           id="password"
-                           name="password"
-                           value="" required>
-                </div>
-                <br>
-                <label class="control-label" for="email">Email</label>
-                <div class="controls">
-                    <input type="email"
-                           ng-model="profile.accountEmail.address"
-                           class="input-xlarge"
-                           id="email"
-                           name="email"
-                           value="" required>
-                </div>
-            </div>
-        </fieldset>-->
-
         <fieldset>
             <legend><h2>{{profile.name.given}} {{profile.name.surname}}</h2> <h6>{{profile._id}}</h6></legend>
             <div class="control-group">
@@ -486,8 +451,8 @@
     <div id="container">
         <div id="filelist"></div>
         <br />
-        <!--<button class="btn btn-primary" id="pickfiles"><i class="icon-plus icon-white"></i> Add files</button>
-        <button class="btn btn-success" id="uploadfiles"><i class="icon-upload icon-white"></i> Upload files</button>-->
+        <button class="btn btn-primary" id="choose-files"><i class="icon-plus icon-white"></i> Add files</button>
+        <button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>
         <h3>Drag and Drop a file to upload</h3>
     </div>
 

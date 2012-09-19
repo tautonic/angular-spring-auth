@@ -49,10 +49,10 @@ angular.module( 'bgc.directives', [] )
                 });
             }
         };
-    });
-    /*.directive('pyklUpload', [function(){
+    })
+    .directive('pyklUpload', function(){
         'use strict';
-        alert('Upload Directive!');
+        //alert('Upload Directive!');
 
         //pyklConfig.upload = pyklConfig.upload || {};
 
@@ -60,18 +60,19 @@ angular.module( 'bgc.directives', [] )
             restrict: 'A',
             link:function (scope, elm, attrs) {
                 var options = {};
+                var uploadBtn = angular.element('#upload-files');
 
                 var config = {
                     runtimes: 'html5',
-                    browse_button: 'pickfiles',
+                    browse_button: 'choose-files',
                     container:'container',
+                    url: '/gc/api/profiles/pics/75ef24d9e88c40028591f694d42a9f64',
                     max_file_size:'10mb',
-                    url:'/gc/api/profiles/pics/75ef24d9e88c40028591f694d42a9f64',
                     resize:{width:320, height:240, quality:90},
                     flash_swf_url:'../js/plupload.flash.swf',
                     silverlight_xap_url:'../js/plupload.silverlight.xap',
                     filters:[
-                        {title:"Image files", extensions:"jpg,gif,png"},
+                        {title:"Image files", extensions:"jpg,gif,png,jpeg"},
                         {title:"Zip files", extensions:"zip"}
                     ]
                 };
@@ -91,14 +92,20 @@ angular.module( 'bgc.directives', [] )
 
                 var uploader = new plupload.Uploader(config);
 
+                uploadBtn.bind('click', function(){
+                    uploader.start();
+                });
+
                 uploader.bind('FilesAdded', function (up, files) {
                     for (var i in files) {
                         $('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
                     }
 
-                    setTimeout(function () {
+                    scope.uploadDisabled = false;
+
+                    /*setTimeout(function () {
                         uploader.start();
-                    }, 500);
+                    }, 500);*/
                 });
 
                 uploader.bind('UploadProgress', function (up, file) {
@@ -113,4 +120,4 @@ angular.module( 'bgc.directives', [] )
                 uploader.init();
             }
         }
-}]);*/
+    });
