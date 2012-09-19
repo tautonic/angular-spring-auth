@@ -94,7 +94,7 @@ var addReply = function(id, reply, user) {
         "threadId": id,
         "type": "discussion",
         "creator":{
-            "_id": 1,
+            "_id": user.principal.id,
             "username": user.username,
             "profilePicture": { 'filepath': "/img/bob.com" }
         },
@@ -133,7 +133,7 @@ var createDiscussion = function(firstPost, user) {
         "parentId": firstPost.parentId,
         "type": "discussion",
         "creator":{
-            "_id": 1,
+            "_id": user.principal.id,
             "username": user.username,
             "profilePicture": { 'filepath': "/img/bob.com" }
         },

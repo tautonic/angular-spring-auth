@@ -98,10 +98,6 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
             title: $scope.reply.title,
             parentId: ($routeParams.articleId || null),
             posts: [{
-                owner: {
-                    username: 'bob',//$rootScope.auth.getUsername(),
-                    picture: "http://localhost:8080/gc/images/40x40.gif"
-                },
                 message: $scope.reply.message
             }]
         };
