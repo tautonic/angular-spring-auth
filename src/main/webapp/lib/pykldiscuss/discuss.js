@@ -16,6 +16,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
             show: false,
             message: ''
         };
+        $scope.isLoaded = false;
 
         if($routeParams) {
             $scope.pageType = $routeParams.discussionId || "all";
@@ -34,6 +35,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 case "none":
                     break;
                 case "new":
+                    $scope.isLoaded = true;
                     $scope.reply.title = '';
                     url = url + "new";
                     break;
@@ -60,6 +62,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     function loadContent() {
         if($routeParams.articleId === "none") {
             $scope.pageType = "none";
+            $scope.isLoaded = true;
             return;
         }
         $http.get( url ).success( function (data) {
@@ -71,6 +74,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 } else {
                     $scope.discussion = data;
                 }
+                $scope.isLoaded = true;
             } else {
                 $scope.pageType = "new";
                 $scope.reply.title = $rootScope.title;
@@ -111,7 +115,7 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
             } else {
                 if(data.newId !== false)
                 {
-                    $location.path('/discussion/'+data.newId);
+                    $location.path('/network/'+data.newId);
                 } else {
                     alert("There was an error.");
                 }
@@ -122,9 +126,10 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     $scope.submitReply = function() {
         if($scope.reply.message != '') {
             var reply = $scope.reply.message;
-            $scope.reply.show = false;
-            $scope.reply.message = '';
-            $http.post(url, { reply: reply }).success(function(data) {
+            var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
+            $http.post(replyUrl, { reply: reply }).success(function(data) {
+                $scope.reply.show = false;
+                $scope.reply.message = '';
                 $scope.discussion.children.unshift(data);
             });
         } else {
@@ -162,6 +167,10 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         $http.put(url + "/" + post._id, post).success(function(data) {
             console.log("edit saved successfully to server, url: "+url+"/"+post._id);
         });
+    }
+
+    $scope.noDiscussions = function() {
+        return (($scope.discussion) && ($scope.discussion.length === 0));
     }
     /*
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });

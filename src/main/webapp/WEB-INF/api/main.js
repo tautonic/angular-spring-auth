@@ -165,12 +165,11 @@ app.post('/discussions/new', function(req) {
     {
         discussion = discussion["0"];
     }
-    log.info("DISCUSSISON: "+JSON.stringify(discussion));
 
     var result = createDiscussion(discussion, getUsernamePassword());
 
     if(result != false) {
-        if(result.parentId === null) {
+        if(result.title !== "") {
             return json({ "newId" : result.threadId });
         } else {
             return json({ "success": true });
@@ -221,7 +220,7 @@ app.get( '/auth', function ( req ) {
 	// principal can be a simple string or a spring security user object
 
     //todo setup so that auth.principal doesn't fail if it ever happens to be a string (test to see if it's ever a string)
-	var principal = typeof auth.principal === 'string' ? auth.principal : auth.principal;
+	var principal = (typeof auth.principal === 'string') ? auth.principal : auth.principal;
 	var result = {
 		principal: {
             id: principal.id,

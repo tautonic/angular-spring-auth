@@ -119,7 +119,7 @@ var addReply = function(id, reply, user) {
     };
 
     var exchange = httpclient.request(opts);
-
+    log.info("reply to discussion: exchange.content: "+exchange.content);
     return JSON.parse(exchange.content);
 }
 
@@ -137,7 +137,7 @@ var createDiscussion = function(firstPost, user) {
             "username": user.username,
             "profilePicture": { 'filepath': "/img/bob.com" }
         },
-        "title": firstPost.title,
+        "title": (firstPost.title || ''),
         "message": firstPost.posts[0].message,
         "ip": "10.16.151.115",
         "spam": 0,
@@ -149,7 +149,7 @@ var createDiscussion = function(firstPost, user) {
 
     var url = 'http://localhost:9300/myapp/api/posts/';
     if(firstPost.parentId !== null) {
-        url =+ firstPost.parentId;
+        url += firstPost.parentId.toString();
     }
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
@@ -163,10 +163,9 @@ var createDiscussion = function(firstPost, user) {
 
     var exchange = httpclient.request(opts);
 
+    log.info("creating new discussion: exchange content: "+exchange.content);
     if(Math.floor(exchange.status/100) === 2)
     {
-        log.info("exchange content: "+exchange.content);
-
         return JSON.parse(exchange.content);
     }
 

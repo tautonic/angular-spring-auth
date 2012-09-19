@@ -1,4 +1,4 @@
-<div ng-switch on="pageType">
+<div ng-switch on="pageType" ng-show="isLoaded">
     <div ng-switch-when="single">
         <h1 ng-show="hasContent">{{discussion.title}}</h1>
         <div class="post">
@@ -14,7 +14,7 @@
                     <input type="button" ng-click="cancelEdit(discussion)" value="Cancel">
                 </form>
             </div>
-            <div class="buttons clear"><button ng-click="replyTo(discussion.message)">Quote</button><button ng-click="edit(discussion)" ng-show="canEdit(discussion)">Edit</button></div>
+            <div class="buttons clear" ng-show="auth.isAuthenticated"><button ng-click="replyTo(discussion.message)">Quote</button><button ng-click="edit(discussion)" ng-show="canEdit(discussion)">Edit</button></div>
         </div>
 
         <div class="post" ng-repeat="post in discussion.children">
@@ -30,10 +30,10 @@
                     <input type="button" ng-click="cancelEdit(post)" value="Cancel">
                 </form>
             </div>
-            <div class="buttons clear"><button ng-click="replyTo(post.message)">Quote</button><button ng-click="edit(post)" ng-show="canEdit(post)">Edit</button></div>
+            <div class="buttons clear" ng-show="auth.isAuthenticated"><button ng-click="replyTo(post.message)">Quote</button><button ng-click="edit(post)" ng-show="canEdit(post)">Edit</button></div>
 
         </div>
-        <button ng-click="replyTo()">Reply</button>
+        <button ng-click="replyTo()" ng-show="auth.isAuthenticated">Reply</button>
 
         <div class="reply" ng-show="reply.show">
             <form name="replyForm" ng-submit="submitReply()">
@@ -48,7 +48,7 @@
     </div>
 
     <div ng-switch-when="new">
-        <div class="reply">
+        <div class="reply" ng-show="auth.isAuthenticated">
             <form name="newDiscussionForm" ng-submit="createDiscussion()">
                 <div ng-show="hasContent">
                     Discussion Title: <input type="text" ng-model="reply.title">
@@ -63,18 +63,26 @@
                 </div>
             </form>
         </div>
+        <div ng-show="!auth.isAuthenticated">
+            Login or <a ng-href="#/profile">register</a> to start a discussion.
+        </div>
     </div>
 
     <div ng-switch-when="none"></div>
 
     <div ng-switch-default>
-        <div>
+        <div ng-show="auth.isAuthenticated">
             <a ng-href="#/network/new">Start new discussion</a>
         </div>
         <div class="discussion-thread" ng-repeat="thread in discussion">
             <a ng-href="#/network/{{thread.threadId}}">{{thread.title}}</a>
             <div class="started-by">Started by: <a ng-href="#/profile/{{thread.creator._id}}">{{thread.creator.username}}</a></div>
         </div>
+        <div ng-show="noDiscussions()">
+            No discussions started.
+        </div>
     </div>
 
 </div>
+
+<div ng-show="!isLoaded">Loading discussion....</div>
