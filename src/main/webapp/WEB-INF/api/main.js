@@ -447,6 +447,7 @@ app.post('/profiles/pics/:id', function (req, id) {
     };
 
     var contentType = req.env.servletRequest.getContentType();
+
     if ((req.method === "POST" || req.method === "PUT") && fileUpload.isFileUpload(contentType)) {
         log.info('File pre-upload: ' + JSON.stringify(req.params, null, 4));
 
@@ -460,13 +461,11 @@ app.post('/profiles/pics/:id', function (req, id) {
         var exchange;
 
         if(params.file){
-            var data = {
-                thumbnail: params.file.tempfile
-            };
-
             var opts = {
                 "url": 'http://localhost:9300/myapp/api/files/upload/',
                 "headers": {
+                    'x-rt-index': 'gc',
+                    'Authorization': auth,
                     'x-rt-upload-name': params.file.filename,
                     'x-rt-upload-content-type': params.file.contentType
                     //'x-rt-upload-size': String(params.file.value.length)
@@ -476,17 +475,40 @@ app.post('/profiles/pics/:id', function (req, id) {
                 "method": 'PUT'
             }
 
+            java.lang.Thread.sleep(1000);
+
             exchange = httpclient.request(opts);
 
-            log.info('EXCHANGE STATUS', exchange.status);
+            var content = JSON.parse(exchange.content);
+
+            log.info('UPLOAD EXCHANGE URI', JSON.stringify(content.uri, null, 4));
 
             if(exchange.status === 200 ){
+                var data = {
+                    thumbnail: content.uri
+                };
+
+                var opts = {
+                    url: 'http://localhost:9300/myapp/api/profiles/' + id,
+                    method: 'PUT',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'x-rt-index': 'gc',
+                        'Content-Type': 'application/json',
+                        'Authorization': auth
+                    },
+                    async: false
+                };
+
+                exchange = httpclient.request(opts);
+
                 return {
                     status: 200,
                     headers: {
-                        "Content-Type": "text/plain"
+                        "Content-Type": "text/html"
                     },
-                    body: [req.env.servletRequest.getRequestURL().toString()]
+                    //body: [req.env.servletRequest.getRequestURL().toString()]
+                    body: [content.uri]
                 }
             }else if(exchange.status === 401){
                 return {
