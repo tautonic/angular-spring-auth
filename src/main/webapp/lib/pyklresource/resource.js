@@ -26,7 +26,6 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
                 if($scope.pageType === "single")
                 {
                     $scope.article = data;
-                    $rootScope.title = $scope.article.title;
                     $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
                 } else if ($scope.pageType === "all")
                 {
