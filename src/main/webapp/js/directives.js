@@ -49,10 +49,10 @@ angular.module( 'bgc.directives', [] )
                 });
             }
         };
-    });
-    /*.directive('pyklUpload', [function(){
+    })
+    .directive('pyklUpload', ['$auth', function($auth){
         'use strict';
-        alert('Upload Directive!');
+        //alert('Upload Directive!');
 
         //pyklConfig.upload = pyklConfig.upload || {};
 
@@ -60,18 +60,19 @@ angular.module( 'bgc.directives', [] )
             restrict: 'A',
             link:function (scope, elm, attrs) {
                 var options = {};
+                var uploadBtn = angular.element('#upload-files');
 
                 var config = {
                     runtimes: 'html5',
-                    browse_button: 'pickfiles',
+                    browse_button: 'choose-files',
                     container:'container',
+                    url: '/gc/api/profiles/pics/5d7816b3a88c4cb78a2edafcd58d8a53',
                     max_file_size:'10mb',
-                    url:'/gc/api/profiles/pics/75ef24d9e88c40028591f694d42a9f64',
                     resize:{width:320, height:240, quality:90},
                     flash_swf_url:'../js/plupload.flash.swf',
                     silverlight_xap_url:'../js/plupload.silverlight.xap',
                     filters:[
-                        {title:"Image files", extensions:"jpg,gif,png"},
+                        {title:"Image files", extensions:"jpg,gif,png,jpeg"},
                         {title:"Zip files", extensions:"zip"}
                     ]
                 };
@@ -90,6 +91,10 @@ angular.module( 'bgc.directives', [] )
                 }
 
                 var uploader = new plupload.Uploader(config);
+
+                uploadBtn.bind('click', function(){
+                    uploader.start();
+                });
 
                 uploader.bind('FilesAdded', function (up, files) {
                     for (var i in files) {
@@ -113,4 +118,4 @@ angular.module( 'bgc.directives', [] )
                 uploader.init();
             }
         }
-}]);*/
+    }]);

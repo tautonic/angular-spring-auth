@@ -9,8 +9,10 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.isEditMode = false;
     $scope.isCreateMode = false;
 
+    $scope.uploadDisabled = false;
+
     Profile.query(function(profiles){
-        $scope.profile = profiles.content[0];
+        $scope.profile = profiles.content[2];
     });
 
     $scope.edit = function(profile){

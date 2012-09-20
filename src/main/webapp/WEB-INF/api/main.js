@@ -2,7 +2,10 @@
  * @fileOverview Entry point for all web calls
  */
 var httpclient = require('ringo/httpclient');
-var {Headers} = require('ringo/utils/http');
+
+var fileUpload = require('ringo/utils/http');
+
+var {Headers} = fileUpload;
 
 var log = require( 'ringo/logging' ).getLogger( module.id );
 var {trimpath, trimpathResponse, registerHelper} = require( 'trimpath' );
@@ -397,8 +400,18 @@ app.get('/profiles/asyncEmail/:email', function(req, email){
  * @returns {JsgiResponse} An HTML <div> containing a JSON string with upload results
  */
 app.post('/profiles/pics/:id', function (req, id) {
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
 
-    var profile = profiles[id];
+    var exchange = httpclient.request(opts);
+
+    var profile = JSON.parse(exchange.content);
+
+    log.info('EXCHANGE CONTENT ', JSON.stringify(profile, null, 4));
 
     if (!profile) return {
         status:404,
@@ -407,6 +420,7 @@ app.post('/profiles/pics/:id', function (req, id) {
     };
 
     var contentType = req.env.servletRequest.getContentType();
+
     if ((req.method === "POST" || req.method === "PUT") && fileUpload.isFileUpload(contentType)) {
         log.info('File pre-upload: ' + JSON.stringify(req.params, null, 4));
 
@@ -414,19 +428,80 @@ app.post('/profiles/pics/:id', function (req, id) {
 
         var params = {};
 
-        fileUpload.parseFileUpload(req, params, encoding, fileUpload.TempFileFactory);
+        fileUpload.parseFileUpload(req, params, encoding, fileUpload.BufferFactory);
+
         log.info('File uploaded: ' + JSON.stringify(params, null, 4));
-        profile.imageUrl = params.file.tempfile;
 
-        return {
-            status: 201,
-            headers: {
-                "Content-Type": "text/plain"
-            },
-            body: [req.env.servletRequest.getRequestURL().toString()]
-        };
+        var exchange;
 
+        if(params.file){
+            var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+            var opts = {
+                "url": 'http://localhost:9300/myapp/api/files/upload/',
+                "headers": {
+                    'x-rt-index': 'gc',
+                    'Authorization': auth,
+                    'x-rt-upload-name': params.file.filename,
+                    'x-rt-upload-content-type': params.file.contentType
+                    //'x-rt-upload-size': String(fileSize)
+                    //'x-rt-upload-title': ''	// This param was never set in "old" NEP
+                },
+                "data": params.file.value,
+                "method": 'PUT'
+            }
+
+            java.lang.Thread.sleep(1000);
+
+            exchange = httpclient.request(opts);
+
+            var content = JSON.parse(exchange.content);
+
+            log.info('UPLOAD EXCHANGE URI', JSON.stringify(content.uri, null, 4));
+
+            if(exchange.status === 200 ){
+                var data = {
+                    thumbnail: content.uri
+                };
+
+                var opts = {
+                    url: 'http://localhost:9300/myapp/api/profiles/' + id,
+                    method: 'PUT',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'x-rt-index': 'gc',
+                        'Content-Type': 'application/json',
+                        'Authorization': auth
+                    },
+                    async: false
+                };
+
+                exchange = httpclient.request(opts);
+
+                return {
+                    status: 200,
+                    headers: {
+                        "Content-Type": "text/html"
+                    },
+                    body: [content.uri]
+                }
+            }else if(exchange.status === 401){
+                return {
+                    status: 401,
+                    headers: {"Content-Type": 'text/html'},
+                    body: []
+                };
+            }
+        } else {
+            log.info("Error uploading image to S3: " + exchange.content);
+
+            return {
+                status: 500,
+                headers: {"Content-Type": 'text/html'},
+                body: []
+            };
+        }
     }
+
     return {
         status:400,
         headers:{"Content-Type":'text/html'},
@@ -436,7 +511,23 @@ app.post('/profiles/pics/:id', function (req, id) {
 
 
 app.get('/profiles/pics/:id', function(req, id){
-    var profile = profiles[id];
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    /*var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });*/
+
+    var profile = JSON.parse(exchange.content);
 
     if (!profile) return {
         status:404,
@@ -444,10 +535,8 @@ app.get('/profiles/pics/:id', function(req, id){
         body:[]
     };
 
-    if (profile.imageUrl) {
-
-
-        var input = new java.io.FileInputStream(new java.io.File(profile.imageUrl));
+    if (profile.thumbnail) {
+        var input = new java.io.FileInputStream(new java.io.File(profile.thumbnail));
         var out = req.env.servletResponse.outputStream;
 
         var buffer = new ByteArray(1024);
@@ -475,7 +564,6 @@ app.get('/profiles/pics/:id', function(req, id){
         body:[]
     }
 });
-
 
 app.get('/data', function(req) {
     var filteredUniversities = new Array();
