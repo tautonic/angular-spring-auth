@@ -101,9 +101,9 @@ angular.module( 'bgc.directives', [] )
                         $('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
                     }
 
-                    /*setTimeout(function () {
+                    setTimeout(function () {
                         uploader.start();
-                    }, 500);*/
+                    }, 500);
                 });
 
                 uploader.bind('UploadProgress', function (up, file) {
@@ -112,7 +112,7 @@ angular.module( 'bgc.directives', [] )
 
                 uploader.bind('FileUploaded', function (uploader, file, response) {
                     console.log(uploader, file, response);
-                    $(config.drop_element).src = '//' + response.response;
+                    $(config.drop_element).src = response.response;
                 });
 
                 uploader.init();

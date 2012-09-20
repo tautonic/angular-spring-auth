@@ -506,7 +506,6 @@ app.post('/profiles/pics/:id', function (req, id) {
                     headers: {
                         "Content-Type": "text/html"
                     },
-                    //body: [req.env.servletRequest.getRequestURL().toString()]
                     body: [content.uri]
                 }
             }else if(exchange.status === 401){
