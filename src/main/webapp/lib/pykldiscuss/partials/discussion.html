@@ -3,7 +3,7 @@
         <h1 ng-show="hasContent">{{discussion.title}}</h1>
         <div class="post">
             <div class="user">
-                <p>{{discussion.creator.username}}</p>
+                <p><a ng-href="#/profile/{{discussion.creator._id}}">{{discussion.creator.username}}</a></p>
                 <img ng-src="{{discussion.creator.thumbnail}}">
             </div>
             <p class="content" ng-bind-html="discussion.message" ng-show="!discussion.edit">{{discussion.message}}</p>
@@ -17,9 +17,9 @@
             <div class="buttons clear" ng-show="auth.isAuthenticated"><button ng-click="replyTo(discussion.message)">Quote</button><button ng-click="edit(discussion)" ng-show="canEdit(discussion)">Edit</button></div>
         </div>
 
-        <div class="post" ng-repeat="post in discussion.children">
+        <div class="post threaded" ng-repeat="post in discussion.children">
             <div class="user">
-                <p>{{post.creator.username}}</p>
+                <p><a ng-href="#/profile/{{post.creator._id}}">{{post.creator.username}}</a></p>
                 <img ng-src="{{post.creator.thumbnail}}">
             </div>
             <p class="content" ng-bind-html="post.message" ng-show="!post.edit">{{post.message}}</p>

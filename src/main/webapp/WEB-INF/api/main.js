@@ -155,7 +155,7 @@ app.get('/discussions/byParent/:id', function(req, id) {
 app.put('/discussions/:id/:post', function(req, id, post) {
     var editedPost = req.params;
 
-    return json(editDiscussionPost(id, post, editedPost, getUsernamePassword()));
+    return json(editDiscussionPost(id, post, editedPost, getUserDetails()));
 });
 
 /**
@@ -169,7 +169,7 @@ app.post('/discussions/new', function(req) {
         discussion = discussion["0"];
     }
 
-    var result = createDiscussion(discussion, getUsernamePassword());
+    var result = createDiscussion(discussion, getUserDetails());
 
     if(result != false) {
         if(result.title !== "") {
@@ -195,7 +195,7 @@ app.post('/discussions/:id', function(req, id) {
         return json(false);
     }
 
-    return json(addReply(id, req.params.reply, getUsernamePassword()));
+    return json(addReply(id, req.params.reply, getUserDetails()));
 });
 /****** End discussion posts ********/
 
@@ -217,32 +217,9 @@ app.get( '/ping', function ( req ) {
  */
 app.get( '/auth', function ( req ) {
     java.lang.Thread.sleep(1000);
-	var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
-	var auth = SecurityContextHolder.context.authentication;
 
-	// principal can be a simple string or a spring security user object
+	var result = getUserDetails();
 
-    //todo setup so that auth.principal doesn't fail if it ever happens to be a string (test to see if it's ever a string)
-	var principal = (typeof auth.principal === 'string') ? auth.principal : auth.principal;
-	var result = {
-		principal: {
-            id: principal.id,
-            username: principal.username,
-            name: principal.name,
-            email: principal.email,
-            country: principal.country,
-            profileType: principal.profileType,
-            accountType: principal.accountType
-        },
-        username: principal.username,
-		roles: []
-	};
-
-	var authorities = auth.authorities.iterator();
-	while ( authorities.hasNext() ) {
-		var authority = authorities.next();
-		result.roles.push( authority.toString().toLowerCase() );
-	}
     log.info("logging in user");
 	return json( result );
 } );
@@ -641,8 +618,35 @@ function _generateBasicAuthorization(username, password) {
 	return 'Basic ' + base64;
 }
 
-function getUsernamePassword() {
-    return { "username": "fred", "password": digest("secret").toLowerCase() };
+function getUserDetails() {
+    var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
+    var auth = SecurityContextHolder.context.authentication;
+
+    // principal can be a simple string or a spring security user object
+    //todo setup so that auth.principal doesn't fail if it ever happens to be a string (test to see if it's ever a string)
+    var principal = (typeof auth.principal === 'string') ? auth.principal : auth.principal;
+    var result = {
+        principal: {
+            id: principal.id,
+            username: principal.username,
+            name: principal.name,
+            email: principal.email,
+            country: principal.country,
+            profileType: principal.profileType,
+            accountType: principal.accountType
+        },
+        username: principal.username,
+        "password": digest("secret").toLowerCase(),
+        roles: []
+    };
+
+    var authorities = auth.authorities.iterator();
+    while ( authorities.hasNext() ) {
+        var authority = authorities.next();
+        result.roles.push( authority.toString().toLowerCase() );
+    }
+
+    return result;
 }
 
 
