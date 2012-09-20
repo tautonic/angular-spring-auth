@@ -76,8 +76,13 @@
 
 /** Discussion posts **/
 .post {
-    margin: 0 20px;
-    border: 1px solid red;
+    margin: 10px 20px;
+    border-left: 1px solid black;
+    clear: both;
+}
+
+.post.threaded {
+    margin-left: 40px;
 }
 
 .post .user {

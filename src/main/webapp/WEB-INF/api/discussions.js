@@ -31,10 +31,8 @@ var getDiscussion = function(id) {
 
 var getDiscussionByParent = function(parentId) {
     var query = {
-        "query":
-        {
-            "bool":
-            {
+        "query": {
+            "bool": {
                 "must":[
                     { "field": { "parentId": parentId } }
                 ]
@@ -76,6 +74,7 @@ var getDiscussionList = function() {
 
     var exchange = httpclient.request(opts);
 
+    //filters out threads with empty titles and threads that are tied to an article
     var threads = JSON.parse(exchange.content).filter(function(element) {
         return !(element.title === "");
     });
@@ -95,7 +94,7 @@ var addReply = function(id, reply, user) {
         "threadId": id,
         "type": "discussion",
         "creator":{
-            "_id": 1,
+            "_id": user.principal.id,
             "username": user.username,
             "profilePicture": { 'filepath': "/img/bob.com" }
         },
@@ -120,7 +119,7 @@ var addReply = function(id, reply, user) {
     };
 
     var exchange = httpclient.request(opts);
-
+    log.info("reply to discussion: exchange.content: "+exchange.content);
     return JSON.parse(exchange.content);
 }
 
@@ -134,11 +133,11 @@ var createDiscussion = function(firstPost, user) {
         "parentId": firstPost.parentId,
         "type": "discussion",
         "creator":{
-            "_id": 1,
+            "_id": user.principal.id,
             "username": user.username,
             "profilePicture": { 'filepath': "/img/bob.com" }
         },
-        "title": firstPost.title,
+        "title": (firstPost.title || ''),
         "message": firstPost.posts[0].message,
         "ip": "10.16.151.115",
         "spam": 0,
@@ -148,10 +147,14 @@ var createDiscussion = function(firstPost, user) {
         "active": true
     };
 
+    var url = 'http://localhost:9300/myapp/api/posts/';
+    if(firstPost.parentId !== null) {
+        url += firstPost.parentId.toString();
+    }
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/posts/' + firstPost.parentId,
+        url: url,
         method: 'POST',
         data: JSON.stringify(data),
         headers: headers,
@@ -160,10 +163,9 @@ var createDiscussion = function(firstPost, user) {
 
     var exchange = httpclient.request(opts);
 
+    log.info("creating new discussion: exchange content: "+exchange.content);
     if(Math.floor(exchange.status/100) === 2)
     {
-        log.info("exchange content: "+exchange.content);
-
         return JSON.parse(exchange.content);
     }
 

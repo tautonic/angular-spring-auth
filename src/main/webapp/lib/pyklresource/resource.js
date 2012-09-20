@@ -20,13 +20,9 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         $http.get( url ).success( function (data) {
             console.log("ARTICLE RETURNED: ",data);
             if(data !== "false") {
-                if(typeof(data.linkedPosts) === "undefined") {
-                    console.log("LINKED POSTS PROPERTY NOT FOUND");
-                }
                 if($scope.pageType === "single")
                 {
                     $scope.article = data;
-                    $rootScope.title = $scope.article.title;
                     $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
                 } else if ($scope.pageType === "all")
                 {

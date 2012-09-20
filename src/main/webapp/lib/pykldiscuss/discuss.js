@@ -7,7 +7,6 @@ stick as much code into functions as possible
  */
 function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $location ) {
     var url = 'api/discussions/';
-    //this check is needed to handle things like discussions connected with articles
 
     setupScope();
 
@@ -17,12 +16,18 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
             show: false,
             message: ''
         };
+        $scope.isLoaded = false;
 
         if($routeParams) {
             $scope.pageType = $routeParams.discussionId || "all";
 
+            //this check is needed to handle things like discussions connected with articles
             if($routeParams.articleId) {
                 $scope.pageType = "byParent/" + $routeParams.articleId;
+                $scope.hasContent = false;
+                $scope.reply.title = '';
+            } else {
+                $scope.hasContent = true;
             }
 
             switch($scope.pageType)
@@ -30,9 +35,9 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 case "none":
                     break;
                 case "new":
+                    $scope.isLoaded = true;
                     $scope.reply.title = '';
                     url = url + "new";
-                    $scope.hasContent = true;
                     break;
                 case "all":
                     url = url + "all";
@@ -51,11 +56,15 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         {
             $location.path('/network/all');
         }
-
         //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
     }
 
     function loadContent() {
+        if($routeParams.articleId === "none") {
+            $scope.pageType = "none";
+            $scope.isLoaded = true;
+            return;
+        }
         $http.get( url ).success( function (data) {
             if(data !== "false")
             {
@@ -65,10 +74,9 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
                 } else {
                     $scope.discussion = data;
                 }
-                $scope.hasContent = true;
+                $scope.isLoaded = true;
             } else {
                 $scope.pageType = "new";
-                $scope.hasContent = false;
                 $scope.reply.title = $rootScope.title;
             }
         }).error(function(data, status) {
@@ -87,27 +95,23 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
 
     $scope.createDiscussion = function() {
         var newPost = {
-            title: ($scope.reply.title || $rootScope.title),
+            title: $scope.reply.title,
             parentId: ($routeParams.articleId || null),
             posts: [{
-                owner: {
-                    username: 'bob',//$rootScope.auth.getUsername(),
-                    picture: "http://localhost:8080/gc/images/40x40.gif"
-                },
                 message: $scope.reply.message
             }]
         };
 
         $http.post('api/discussions/new', newPost).success(function(data) {
-            console.log("DATA RESULTS: ",data);
+
             if(data.success === true) {
-                url = 'api/discussions/byParent' + $routeParams.articleId;
+                url = 'api/discussions/byParent/' + $routeParams.articleId;
                 $scope.pageType = "single";
                 loadContent();
             } else {
                 if(data.newId !== false)
                 {
-                    $location.path('/discussion/'+data.newId);
+                    $location.path('/network/'+data.newId);
                 } else {
                     alert("There was an error.");
                 }
@@ -118,9 +122,10 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
     $scope.submitReply = function() {
         if($scope.reply.message != '') {
             var reply = $scope.reply.message;
-            $scope.reply.show = false;
-            $scope.reply.message = '';
-            $http.post(url, { reply: reply }).success(function(data) {
+            var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
+            $http.post(replyUrl, { reply: reply }).success(function(data) {
+                $scope.reply.show = false;
+                $scope.reply.message = '';
                 $scope.discussion.children.unshift(data);
             });
         } else {
@@ -158,6 +163,10 @@ function DiscussionCtrl( $rootScope, $scope, $routeParams, $http, $log, $locatio
         $http.put(url + "/" + post._id, post).success(function(data) {
             console.log("edit saved successfully to server, url: "+url+"/"+post._id);
         });
+    }
+
+    $scope.noDiscussions = function() {
+        return (($scope.discussion) && ($scope.discussion.length === 0));
     }
     /*
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
