@@ -50,7 +50,7 @@ angular.module( 'bgc.directives', [] )
             }
         };
     })
-    .directive('pyklUpload', function(){
+    .directive('pyklUpload', ['$auth', function($auth){
         'use strict';
         //alert('Upload Directive!');
 
@@ -66,7 +66,7 @@ angular.module( 'bgc.directives', [] )
                     runtimes: 'html5',
                     browse_button: 'choose-files',
                     container:'container',
-                    url: '/gc/api/profiles/pics/75ef24d9e88c40028591f694d42a9f64',
+                    url: '/gc/api/profiles/pics/5d7816b3a88c4cb78a2edafcd58d8a53',
                     max_file_size:'10mb',
                     resize:{width:320, height:240, quality:90},
                     flash_swf_url:'../js/plupload.flash.swf',
@@ -118,4 +118,4 @@ angular.module( 'bgc.directives', [] )
                 uploader.init();
             }
         }
-    });
+    }]);

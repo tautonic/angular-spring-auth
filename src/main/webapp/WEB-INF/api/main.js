@@ -400,9 +400,6 @@ app.get('/profiles/asyncEmail/:email', function(req, email){
  * @returns {JsgiResponse} An HTML <div> containing a JSON string with upload results
  */
 app.post('/profiles/pics/:id', function (req, id) {
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
-
-    log.info('PROFILE ID ', id);
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
         method: 'GET',
@@ -431,12 +428,14 @@ app.post('/profiles/pics/:id', function (req, id) {
 
         var params = {};
 
-        fileUpload.parseFileUpload(req, params, encoding, fileUpload.TempFileFactory);
+        fileUpload.parseFileUpload(req, params, encoding, fileUpload.BufferFactory);
+
         log.info('File uploaded: ' + JSON.stringify(params, null, 4));
 
         var exchange;
 
         if(params.file){
+            var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
             var opts = {
                 "url": 'http://localhost:9300/myapp/api/files/upload/',
                 "headers": {
@@ -444,7 +443,7 @@ app.post('/profiles/pics/:id', function (req, id) {
                     'Authorization': auth,
                     'x-rt-upload-name': params.file.filename,
                     'x-rt-upload-content-type': params.file.contentType
-                    //'x-rt-upload-size': String(params.file.value.length)
+                    //'x-rt-upload-size': String(fileSize)
                     //'x-rt-upload-title': ''	// This param was never set in "old" NEP
                 },
                 "data": params.file.value,
