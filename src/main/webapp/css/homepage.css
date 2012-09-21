@@ -49,7 +49,7 @@ a {
 
 a.right-arrow, a.left-arrow {
     background-repeat: no-repeat;
-    background-position: 5px 8px;
+    background-position: 5px 9px;
     height: 100%;
 }
 
@@ -61,21 +61,28 @@ a.left-arrow {
     background-image: url('../images/GCEE_images_arrowLeft.png');
 }
 
-/***** Header *****/
+/***** Header and menu *****/
 .header {
-    background-image: url('../images/GCEE_images_header_bg.png');
+    background-color: #0a4d6c;
+    /*background-image: url('../images/GCEE_images_header_bg.png');
     background-repeat: no-repeat;
     background-position: 54% 0%;
-    background-attachment: fixed;
+    background-attachment: fixed;*/
 }
 
 .header .home {
     margin-bottom: 20px;
+    position: relative;
+}
+
+.header .logo {
+    float: left;
 }
 
 .search {
-    float: right;
-    margin-top: 20px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
 
 .search span {
@@ -83,7 +90,6 @@ a.left-arrow {
     height: 37px;
     width: 37px;
     font-size: 20px;
-    color: white;
     border: 1px solid #0c5d42;
     border-radius: 2px;
 }
@@ -96,24 +102,27 @@ a.left-arrow {
     height: 36px;
     margin:  0 0;
     padding: 0;
-    background-color: transparent;
+    width: 150px;
+    /*background-color: transparent;
     border: 1px solid #a4a4a4;
     border-left: none;
     -webkit-box-shadow: inset 0 0 15px 3px rgba(164, 164, 164, 0.75);
     -moz-box-shadow: inset 0 0 15px 3px rgba(164, 164, 164, 0.75);
-    box-shadow: inset 0 0 15px 3px rgba(164, 164, 164, 0.75);
+    box-shadow: inset 0 0 15px 3px rgba(164, 164, 164, 0.75);*/
 }
 
 ul.menu {
+    float: left;
     list-style-type: none;
     margin: 0 -11px 0 9px;
     height: 45px;
     border: 1px solid black;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 ul.menu li {
     float: left;
-    width: 25%;
     background-image: url('../images/GCEE_images_divider.png');
     background-position: 100% 0;
     background-repeat: repeat-y;
@@ -131,10 +140,21 @@ ul.menu li a {
     display: inline-block;
 }
 
+ul.menu li:last-child a {
+    margin: 10px;
+    background: none;
+}
+
 /***** Second Header *****/
 .header-info {
     margin: 0 -10px;
     color: white;
+}
+
+.header-info h2 {
+    color: #fff;
+    margin-top: 0;
+    text-transform: uppercase;
 }
 
 .header-info .span3 {
@@ -149,10 +169,6 @@ ul.menu li a {
     background: none;
 }
 
-.header-info a.right-arrow {
-    background-position: 10px 9px;
-    width: 100%;
-}
 
 .header-info .picture-frame {
     margin: 10px 5px 20px;
@@ -167,21 +183,64 @@ ul.menu li a {
     width: 100%;
 }
 
-.header-info .more {
-    float: right;
-    height: 25px;
-    width: 25px;
-    margin-right: 5px;
-    margin-bottom: 15px;
-    border: 1px solid black;
-    border-radius: 2px;
+.picture-frame {
+    position: relative;
 }
 
-.header-info .more a {
+.picture-frame .more {
+    position: absolute;
+    width: 100px;
+    top: 170px;
+    left: 0;
+    padding: 5px 0 5px 5px;
+    border: 1px solid black;
+    border-left: none;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    z-index: 100;
+}
+
+.picture-frame .more a {
     color: white;
     padding-left: 8px;
     text-decoration: none;
     display: inline-block;
+}
+
+.picture-frame .more a.right-arrow {
+    background-position: 85px 6px;
+    width: 100%;
+}
+
+#header-separator {
+    height: 30px;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#cecece), to(#b5b5b5));
+    background-image: -webkit-linear-gradient(top, #cecece, #b5b5b5);
+    background-image: -moz-linear-gradient(top, #cecece, #b5b5b5);
+    background-image: -o-linear-gradient(top, #cecece, #b5b5b5);
+    background-image: linear-gradient(to bottom, #cecece, #b5b5b5);
+    border-bottom: 1px solid black;
+}
+
+/***** About section *****/
+.row.gradiant {
+    border-bottom: 2px solid #ecae28;
+}
+
+.about {
+    margin-top: 10px;
+    color: #fff;
+}
+
+.about .details {
+    margin-left: 210px;
+    margin-right: 10px;
+}
+
+.about .details h2 {
+    color: #fff;
+    margin-top: 0;
+    text-transform: uppercase;
 }
 
 /***** Quote *****/
@@ -220,17 +279,22 @@ ul.menu li a {
 }
 
 .article .byline {
-    color: #939393;
+    color: #0a4d6c;
 }
 
 .article .picture-frame {
     float: left;
+    background-color: #fff;
     border: 1px solid #e7ebea;
     padding: 5px;
     border-radius: 2px;
     -webkit-box-shadow: 0 10px 25px -16px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0 10px 25px -16px rgba(0, 0, 0, 0.75);
     /*box-shadow: 0 10px 25px -16px rgba(0, 0, 0, 0.75);*/
+}
+
+.article .picture-frame .more {
+   top: 110px;
 }
 
 .article .content {
@@ -241,40 +305,87 @@ ul.menu li a {
 .article .content p {
 }
 
-.article .social {
-    float: right;
-}
-
 .article hr {
     padding-top: 10px;
+}
+
+.sign-up {
+    margin-top: 20px;
+    background-color: #f3f3f3;
+    box-shadow: 5px 5px 5px #e4e4e4;
+}
+
+.sign-up .details {
+    margin: 0 5px 0 20px;
+    padding: 10px 5px 15px 5px;
+    border-left: 2px solid #e3e8eb;
+}
+
+.sign-up input {
+    width: 70%;
+    margin-bottom: 0;
+}
+
+.sign-up h3, .sign-up h4 {
+    color: #117450;
+    text-transform: uppercase;
+}
+
+.sign-up h3 {
+    border-bottom: 2px solid #e3e8eb;
+    margin: 0 -10px 0 -25px;
+    padding-left: 25px;
+
+}
+
+.sign-up h3 a {
+    text-decoration: none;
+}
+
+.sign-up .details a.gradiant {
+    height: 24px;
+    width: 20px;
+    display: inline-block;
+    padding: 0 0 0 10px;
+    border: 1px solid black;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 /****** Article Pagination *****/
 ul.article-pagination {
     margin-top: 20px;
-    float: right;
     list-style: none;
+    height: 26px;
+    width: 132px;
+    border: 1px solid black;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 ul.article-pagination li {
     float: left;
-    margin-left: 5px;
+    background-image: url('../images/GCEE_images_divider.png');
+    background-position: 100% 0;
+    background-repeat: repeat-y;
+    text-transform: uppercase;
+}
+
+ul.article-pagination li:last-child {
+    background: none;
 }
 
 ul.article-pagination li a {
-    background-color: #b8b8b8;
     color: white;
-    padding: 3px 5px;
+    padding: 3px 10px 3px 5px;
     text-decoration: none;
     display: inline-block;
-    border: 1px solid #989898;
-    border-radius: 3px;
 }
 
 /****** Footer ******/
 .footer {
-    background-color: #7f8082;
+    background-color: #c4c4c4;
     padding: 10px 20px;
     margin: 0 -10px;
-    color: white;
+    color: #111;
 }

@@ -39,116 +39,70 @@
     <div class="container">
         <div class="row">
             <div class="span12 home">
-                <a ng-href="#/home"><img src="images/GCEE_images_header_logo.png"></a>
+                <a class="logo" ng-href="#/home"><img src="images/190x140.gif" height="80px"></a>
+                <ul class="gradiant menu">
+                    <li><a ng-href="#/faculty/">Faculty Fellows</a></li>
+                    <li><a ng-href="#/content/">Curriculum Content</a></li>
+                    <li><a ng-href="#/network/">Network</a></li>
+                    <li><a ng-href="#/profile/">Sign In</a></li>
+                    <li><a href="#"><img src="images/GCEE_images_header_searchIcon.png"></a></li>
+                </ul>
                 <div class="search">
-                    <span class="gradiant"><img src="images/GCEE_images_header_searchIcon.png"></span><input type="text" name="search">
+                    <input type="text" name="search">
                 </div>
             </div>
 
         </div>
-        <div class="row">
-            <ul class="gradiant menu">
-                <li><a ng-href="#/msce">MSCE</a></li>
-                <li><a ng-href="#/faculty">Faculty Fellows</a></li>
-                <li><a href="#/content">Curriculum Content</a></li>
-                <li><a href="#/network/">Network</a></li>
-            </ul>
-        </div>
-        <div class="row header-info gradiant">
-            <div class="span3">
+        <div class="row header-info">
+            <div class="span4">
                 <div class="picture-frame">
+                    <div class="gradiant more">
+                        <a href="#/faculty/" class="right-arrow">Read More </a>
+                    </div>
                     <img src="images/190x140.gif">
                 </div>
-                <p>Portland quinoa biodiesel, next level cosby sweater selvage pork belly. PBR marfa art party, fixie put a bird on it typewriter irony umami. Trust fund mlkshk retro, occupy food truck brooklyn pour-over biodiesel raw denim DIY flexitarian banh mi.</p>
-                <div class="gradiant more">
-                    <a href="#" class="right-arrow">&nbsp;</a>
-                </div>
+                <h2>Faculty Fellows</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula.</p>
             </div>
 
-            <div class="span3">
+            <div class="span4">
                 <div class="picture-frame">
+                    <div class="gradiant more">
+                        <a href="#/content/" class="right-arrow">Read More </a>
+                    </div>
                     <img src="images/190x140.gif">
                 </div>
-                <p>Portland quinoa biodiesel, next level cosby sweater selvage pork belly. PBR marfa art party, fixie put a bird on it typewriter irony umami. Trust fund mlkshk retro, occupy food truck brooklyn pour-over biodiesel raw denim DIY flexitarian banh mi.</p>
-                <div class="gradiant more">
-                    <a href="#" class="right-arrow">&nbsp;</a>
-                </div>
+                <h2>Curriculum Content</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula.</p>
             </div>
 
-            <div class="span3">
+            <div class="span4">
                 <div class="picture-frame">
+                    <div class="gradiant more">
+                        <a href="#/network/" class="right-arrow">Read More </a>
+                    </div>
                     <img src="images/190x140.gif">
                 </div>
-                <p>Portland quinoa biodiesel, next level cosby sweater selvage pork belly. PBR marfa art party, fixie put a bird on it typewriter irony umami. Trust fund mlkshk retro, occupy food truck brooklyn pour-over biodiesel raw denim DIY flexitarian banh mi.</p>
-                <div class="gradiant more">
-                    <a href="#" class="right-arrow">&nbsp;</a>
-                </div>
-            </div>
-
-            <div class="span3">
-                <div class="picture-frame">
-                    <img src="images/190x140.gif">
-                </div>
-                <p>Portland quinoa biodiesel, next level cosby sweater selvage pork belly. PBR marfa art party, fixie put a bird on it typewriter irony umami. Trust fund mlkshk retro, occupy food truck brooklyn pour-over biodiesel raw denim DIY flexitarian banh mi.</p>
-                <div class="gradiant more">
-                    <a href="#" class="right-arrow">&nbsp;</a>
-                </div>
+                <h2>Network</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula.</p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="container content ng-view">
+<div id="header-separator"></div>
+
+<div class="ng-view">
 </div>
 
 <div class="container">
     <div class="footer">
         <div class="row">
             <div class="span2">
-                <img src="images/190x140.gif">
+                <img src="images/GCEE_images_header_logo.png">
             </div>
-            <div class="span2">
-                Campus Information<br>
-                Academic Calendar<br>
-                Babson Bookstore<br>
-                Babson Magazine<br>
-                Contact Babson<br>
-                Directions<br>
-                Emergency Preparedness<br>
-                Privacy Policy<br>
-                Summer Camps<br>
-                Website Feedback (email)<br>
-                Website Terms of Use
-            </div>
-            <div class="span2">
-                Centers & Institutes<br>
-                Arthur M. Blank Center for Entrepreneurship<br>
-                Babson Faculty Research Fund                   <br>
-                Center for Information Management Studies          <br>
-                Center for Women's Entrepreneurial Leadership          <br>
-                Retail Supply Chain Institute                              <br>
-                Stephen D. Cutler Center for Investment & Finance              <br>
-                The Lewis Institute <br><br>
-            </div>
-            <div class="span2">
-                Offices and Services<br>
-                Academic Services       <br>
-                Business & Financial Services<br>
-                Curriculum & Innovation Technology Group<br>
-                Facilities Management & Planning<br>
-                Faith and Service                   <br>
-                Glavin Office of International Programs<br>
-                Health Services
-            </div>
-            <div class="span2">
-                <br>Human Resources<br>
-                IT Service Center  <br>
-                OneCard Office         <br>
-                Public Safety<br>
-                Registrar        <br>
-                Sorenson Center for the Arts<br>
-                Student Affairs                 <br>
-                Student Financial Services
+            <div class="span8">
+                <img src="images/shareicons.png">
             </div>
             <div class="span10 offset2">
                 Babson Park, Massachusetts 02457-0310 | 781-235-1200 | &copy; 2012 Babson College. All Rights Reserved

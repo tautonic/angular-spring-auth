@@ -20,37 +20,48 @@
 
 /** Faculty Page Styles **/
 #faculty {
-    list-style-type: none;
+    list-style: none;
     margin: 10px 0;
     padding: 0;
 }
 
-#faculty li .picture {
+#faculty li {
+    width: 50%;
     float: left;
 }
 
-#faculty li .picture img {
-    margin-bottom: 10px;
+#faculty .picture {
+    float: left;
 }
 
-#faculty li .bio {
+#faculty .content {
     margin-left: 200px;
+    padding: 0 10px;
 }
 
-#faculty li .bio p {
+#faculty p {
     margin: 10px 0;
 }
 
 /** Article(s) Page Styles **/
-#article-list {
-    margin-right: 100px;
+#top-content, #latest-content {
+    margin-right: 210px;
 }
 
-#article-list .article {
-    width: 220px;
-    float: left;
-    background-color: #a9a9a9;
-    margin: 5px;
+#top-content hr, #latest-content hr {
+    clear: none;
+    margin-right: 20px;
+}
+
+#top-content {
+    border: 3px solid #eee;
+}
+
+.article-list {
+    list-style: none;
+}
+
+.article-list .article {
     clear: none;
 }
 
@@ -105,10 +116,19 @@
     margin: 10px 30px;
 }
 
+ul.discussions {
+    list-style: none;
+    margin: 10px;
+}
+
 .discussion-thread {
-    margin: 5px 10px;
+    margin: 5px 5px;
     padding-left: 10%;
-    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+li.discussion-thread:last-child {
+    border-bottom: none;
 }
 
 .discussion-thread .started-by {
