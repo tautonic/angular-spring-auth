@@ -71,13 +71,40 @@
     <div ng-switch-when="none"></div>
 
     <div ng-switch-default>
+        <div class="category-sort">
+            <h2>Categories</h2>
+            <hr>
+            <a ng-click="byType('video')">Video</a><br>
+            <a ng-click="byType('articles')">Article</a><br>
+            <a ng-click="byType('picture')">Picture</a>
+            <hr>
+            <a ng-click="byCategory('job')">Jobs</a><br>
+            <a ng-click="byCategory('job')">Lorem</a><br>
+            <a ng-click="byCategory('job')">Ipsum</a><br>
+            <a ng-click="byCategory('job')">Dolar</a><br>
+            <a ng-click="byCategory('job')">Simar</a><br>
+            <a ng-click="byCategory('job')">Est</a>
+        </div>
+        <div id="top-content">
+            <h2>Top Content</h2>
+            <hr>
+            <ul class="article-list">
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.</li>
+                <li>Nunc auctor lectus laoreet ipsum fringilla sit amet vehicula mauris posuere. Phasellus eu velit eu leo fringilla ullamcorper.</li>
+            </ul>
+        </div>
+        <div id="latest-content">
+            <h2>Latest Content</h2>
+            <hr>
         <div ng-show="auth.isAuthenticated">
             <a ng-href="#/network/new">Start new discussion</a>
         </div>
-        <div class="discussion-thread" ng-repeat="thread in discussion">
-            <a ng-href="#/network/{{thread.threadId}}">{{thread.title}}</a>
-            <div class="started-by">Started by: <a ng-href="#/profile/{{thread.creator._id}}">{{thread.creator.username}}</a></div>
-        </div>
+        <ul class="discussions">
+            <li class="discussion-thread" ng-repeat="thread in discussion">
+                <a ng-href="#/network/{{thread.threadId}}">{{thread.title}}</a>
+                <div class="started-by">Started by: <a ng-href="#/profile/{{thread.creator._id}}">{{thread.creator.username}}</a></div>
+            </li>
+        </ul>
         <div ng-show="noDiscussions()">
             No discussions started.
         </div>
