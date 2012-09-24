@@ -1,4 +1,4 @@
-<div class="row gradiant">
+<div class="row gradient">
     <div class="container">
         <div class="span12 article about">
             <div class="picture-frame">
@@ -20,7 +20,7 @@
 <div class="content container">
     <div class="row">
         <div class="span12 quote">
-            <div class="symbol gradiant"><img src="images/GCEE_images_quotation.png"></div>
+            <div class="symbol gradient"><img src="images/GCEE_images_quotation.png"></div>
             <img class="arrow" src="images/GCEE_images_quotation_arrow.png">
             <p>All our dreams can come true, if we have the courage to pursue them - Walt Disney</p>
         </div>
@@ -33,7 +33,7 @@
                 <div class="article">
                     <div class="picture-frame">
                         <img src="images/190x140.gif">
-                        <div class="gradiant more">
+                        <div class="gradient more">
                             <a href="#/content/" class="right-arrow">Read More </a>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                 <div class="article">
                     <div class="picture-frame">
                         <img src="images/190x140.gif">
-                        <div class="gradiant more">
+                        <div class="gradient more">
                             <a href="#/content/" class="right-arrow">Read More </a>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                     <hr>
                 </div>
             </div>
-            <ul class="article-pagination gradiant">
+            <ul class="article-pagination gradient">
                 <!--<li><a href="#" class="left-arrow">&nbsp;</a></li>-->
                 <li><a href="#">1</a></li>
                 <li><a href="#">2</a></li>
@@ -76,13 +76,46 @@
             </ul>
         </div>
 
-
+        <div class="span3">
+            <div class="activity-stream">
+                <div class="picture-frame">
+                    <img src="images/190x140.gif" width="50">
+                </div>
+                <div class="personal-details">
+                    <h5>Logged In As:</h5>
+                    <a href="#/profile">{{auth.principal.username}}</a>
+                </div>
+                <ul id="stream">
+                    <li>
+                        <div class="picture-frame">
+                            <img src="images/190x140.gif" width="40">
+                        </div>
+                        <div class="update">
+                            Posted a new discussion
+                            <a href="#/profile">Bob Dole</a> - 2 hours ago.
+                        </div>
+                    </li>
+                    <li class="you">
+                        <div class="picture-frame">
+                            <img src="images/190x140.gif" width="40">
+                        </div>
+                        <div class="update">
+                            Posted a new discussion
+                            <a href="#/profile">You</a> - 2 hours ago.
+                        </div>
+                    </li>
+                </ul>
+                <div class="load-more gradient">
+                    <a ng-href="#">Earlier today...</a>
+                </div>
+            </div>
+        </div>
         <div class="span3 sign-up">
             <div class="details">
                 <h3><a href="#/profile/">Sign up today</a></h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.</p>
                 <h4>Your Email</h4>
-                <input type="email"><a href="#/profile/" class="gradiant"><img src="images/GCEE_images_arrowRight.png"></a>
+                <input type="email"><a href="#/profile/" class="gradient"><img src="images/GCEE_images_arrowRight.png"></a>
             </div>
         </div>
     </div>

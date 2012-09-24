@@ -14,12 +14,20 @@ body {
     border-bottom: 1px solid black;
 }
 
-.gradiant {
+.gradient {
     background-image: -webkit-gradient(linear, left top, left bottom, from(#51a463), to(#127551));
     background-image: -webkit-linear-gradient(top, #51a463, #127551);
     background-image: -moz-linear-gradient(top, #51a463, #127551);
     background-image: -o-linear-gradient(top, #51a463, #127551);
     background-image: linear-gradient(to bottom, #51a463, #127551);
+}
+
+.picture-frame {
+    padding: 5px;
+    background-color: white;
+    -webkit-box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);
+    /*box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);*/
 }
 
 h1, h2, h3, a, .quote {
@@ -172,11 +180,6 @@ ul.menu li:last-child a {
 
 .header-info .picture-frame {
     margin: 10px 5px 20px;
-    padding: 5px;
-    background-color: white;
-    -webkit-box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);
-    /*box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);*/
 }
 
 .header-info .picture-frame img {
@@ -214,6 +217,7 @@ ul.menu li:last-child a {
 
 #header-separator {
     height: 30px;
+    background-color: #cecece;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#cecece), to(#b5b5b5));
     background-image: -webkit-linear-gradient(top, #cecece, #b5b5b5);
     background-image: -moz-linear-gradient(top, #cecece, #b5b5b5);
@@ -284,13 +288,8 @@ ul.menu li:last-child a {
 
 .article .picture-frame {
     float: left;
-    background-color: #fff;
     border: 1px solid #e7ebea;
-    padding: 5px;
     border-radius: 2px;
-    -webkit-box-shadow: 0 10px 25px -16px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0 10px 25px -16px rgba(0, 0, 0, 0.75);
-    /*box-shadow: 0 10px 25px -16px rgba(0, 0, 0, 0.75);*/
 }
 
 .article .picture-frame .more {
@@ -309,6 +308,7 @@ ul.menu li:last-child a {
     padding-top: 10px;
 }
 
+/********* Sign Up Sidebar ********/
 .sign-up {
     margin-top: 20px;
     background-color: #f3f3f3;
@@ -342,7 +342,7 @@ ul.menu li:last-child a {
     text-decoration: none;
 }
 
-.sign-up .details a.gradiant {
+.sign-up .details a.gradient {
     height: 24px;
     width: 20px;
     display: inline-block;
@@ -350,6 +350,82 @@ ul.menu li:last-child a {
     border: 1px solid black;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
+}
+
+/****** Activity Stream Sidebar *****/
+.activity-stream {
+    background-color: #f3f3f3;
+    margin-top: 20px;
+}
+
+.activity-stream .personal-details a {
+    padding-left: 10px;
+}
+
+.activity-stream h5 {
+    padding: 5px;
+    padding-left: 65px;
+    font-size: 16px;
+    font-weight: normal;
+    color: #fff;
+    text-transform: uppercase;
+    background-color: #cecece;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#cecece), to(#b5b5b5));
+    background-image: -webkit-linear-gradient(top, #cecece, #b5b5b5);
+    background-image: -moz-linear-gradient(top, #cecece, #b5b5b5);
+    background-image: -o-linear-gradient(top, #cecece, #b5b5b5);
+    background-image: linear-gradient(to bottom, #cecece, #b5b5b5);
+}
+
+.activity-stream .picture-frame {
+    float: left;
+    padding: 2px;
+    border: 1px solid #cecece;
+    -webkit-box-shadow: 0 2px 5px -2px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);
+    /*box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);*/
+}
+
+.activity-stream a {
+    color: #0a4d6c;
+}
+
+.activity-stream ul#stream {
+    list-style: none;
+    margin: 0;
+}
+
+.activity-stream ul#stream li {
+    clear: both;
+    padding: 10px 5px;
+    border: 2px solid #ececec;
+    border-bottom: none;
+    font-size: 11px;
+}
+
+.activity-stream ul#stream li.you {
+    background-color: #ffffff;
+}
+
+.activity-stream ul#stream .picture-frame {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    /*box-shadow: none;*/
+}
+
+.activity-stream ul#stream .update {
+    padding-left: 65px;
+}
+
+.activity-stream .load-more {
+    text-align: center;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.activity-stream .load-more a {
+    color: #fff;
+    display: inline-block;
 }
 
 /****** Article Pagination *****/
