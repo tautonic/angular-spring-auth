@@ -226,11 +226,25 @@ app.get( '/auth', function ( req ) {
 
 /********** Profile pages *********/
 app.post('/profiles/', function(req){
-    var data = req.postParams;
+    var data = {
+        "username" : req.postParams.username,
+        "name" : {
+            "given": req.postParams.name.given,
+            "pre": req.postParams.name.pre,
+            "surname": req.postParams.name.surname
+        },
+        "password" : req.postParams.password,
+        "accountEmail" : {
+            "address"  : req.postParams.accountEmail.address
+        },
+        "websites" : req.postParams.websites,
+        "workHistory" : req.postParams.workHistory,
+        "educationHistory" : req.postParams.educationHistory,
+        "thumbnail": req.postParams.thumbnail
+    };
+
     data.source = 'test';
     data.accountEmail.status = 'unverified';
-
-    log.info('POST PARAMS', JSON.stringify(req.postParams, null, 4));
 
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/',
@@ -241,6 +255,8 @@ app.post('/profiles/', function(req){
     };
 
     var exchange = httpclient.request(opts);
+
+    log.info('NEW PROFILE CREATION: ', exchange.status);
 
     return json({
         'status': exchange.status,
@@ -322,7 +338,7 @@ app.put('/profiles/:id', function(req, id){
         "educationHistory" : req.postParams.educationHistory,
         "websites" : req.postParams.websites,
         "workHistory" : req.postParams.workHistory,
-        "thumbnail": req.postParams.thumbnail,
+        "thumbnail": req.postParams.thumbnail
     };
 
     if(req.postParams.newPass !== ''){

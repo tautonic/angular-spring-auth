@@ -13,7 +13,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.thumbnailURI = '';
 
     Profile.query(function(profiles){
-        $scope.profile = profiles.content[2];
+        $scope.profile = profiles.content[3];
     });
 
     $scope.edit = function(profile){
@@ -59,11 +59,42 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
         $scope.profile = {};
 
+        $scope.profile.workHistory = [
+            {
+                "title": "",
+                "businessName": "",
+                "yearStarted": {
+                    "hijri": "",
+                    "gregorian": "",
+                    "preference": "gregorian"
+                },
+                "yearFinished": {
+                    "hijri": "",
+                    "gregorian": "",
+                    "preference": "gregorian"
+                },
+                workNotes: "",
+                location: ""
+            }
+        ];
+
         $scope.profile.educationHistory = [
             {
                 "schoolName" : '',
                 "degree" : '',
-                "fieldOfStudy" : ''
+                "fieldOfStudy" : '',
+                "country" : "",
+                "yearFrom": {
+                    "hijri": "",
+                    "gregorian": "",
+                    "preference": "gregorian"
+                },
+                "yearTo": {
+                    "hijri": "",
+                    "gregorian": "",
+                    "preference": "gregorian"
+                },
+                "edNotes": ""
             }
         ];
 
@@ -85,6 +116,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
         $scope.newProfile.$save(function(response){
             $scope.profile._id = response.content._id;
+            $scope.profile.thumbnail = response.content.thumbnail;
 
             $scope.isViewMode = true;
             $scope.isEditMode = false;
@@ -132,7 +164,19 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         $scope.profile.educationHistory.push({
             "schoolName" : '',
             "degree" : '',
-            "fieldOfStudy" : ''
+            "fieldOfStudy" : '',
+            "country" : "",
+            "yearFrom": {
+                "hijri": "",
+                "gregorian": "",
+                "preference": "gregorian"
+            },
+            "yearTo": {
+                "hijri": "",
+                "gregorian": "",
+                "preference": "gregorian"
+            },
+            "edNotes": ""
         });
     }
 
@@ -151,6 +195,31 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
     $scope.removeContactRow = function(index){
         $scope.profile.websites.splice(index, 1);
+    }
+
+    $scope.addWorkRow = function(){
+        $scope.profile.workHistory.push(
+            {
+                "title": "",
+                "businessName": "",
+                "yearStarted": {
+                    "hijri": "",
+                    "gregorian": "",
+                    "preference": "gregorian"
+                },
+                "yearFinished": {
+                    "hijri": "",
+                    "gregorian": "",
+                    "preference": "gregorian"
+                },
+                workNotes: "",
+                location: ""
+            }
+        );
+    }
+
+    $scope.removeWorkRow = function(index){
+        $scope.profile.workHistory.splice(index, 1);
     }
 
     $scope.getUniversityData = function () {

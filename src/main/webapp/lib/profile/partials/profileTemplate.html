@@ -288,7 +288,7 @@
                            class="input-xlarge"
                            id="username"
                            name="username"
-                           value="{{profile.username}}">
+                           value="">
                 </div>
                 <br>
                 <label class="control-label" for="given-name">First Name</label>
@@ -298,7 +298,7 @@
                            class="input-xlarge"
                            id="given-name"
                            name="given-name"
-                           value="{{profile.name.given}}">
+                           value="">
                 </div>
                 <br>
                 <label class="control-label" for="surname">Last Name</label>
@@ -308,7 +308,7 @@
                            class="input-xlarge"
                            id="surname"
                            name="surname"
-                           value="{{profile.name.surname}}">
+                           value="">
                 </div>
                 <br>
                 <label class="control-label" for="password">Enter Password</label>
@@ -374,59 +374,67 @@
                         <i class="icon-remove icon-white"></i> Remove</button>
                 </div>
 
-                <h2>Institution</h2>
+                <h2>Institution
+                    <button class="btn btn-success" ng-click="addWorkRow()">
+                        <i class="icon-plus icon-white"></i> Add</button>
+                </h2>
 
-                <label class="control-label" for="title">Title</label>
-                <div class="controls">
-                    <input type="text"
-                           ng-model="profile.workHistory[0].title"
-                           class="input-xlarge"
-                           id="title"
-                           name="title"
-                           value="{{profile.workHistory[0].title}}">
-                </div>
-                <br>
+                <div class="well websites clearfix" ng-repeat="workHistory in profile.workHistory">
+                    <label class="control-label" for="title">Title</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="workHistory.title"
+                               class="input-xlarge"
+                               id="title"
+                               name="title"
+                               value="">
+                    </div>
+                    <br>
 
-                <label class="control-label" for="location">Location</label>
-                <div class="controls">
-                    <input type="text"
-                           ng-model="profile.workHistory[0].location"
-                           class="input-xlarge"
-                           id="location"
-                           name="location"
-                           value="{{profile.workHistory[0].location}}">
-                </div>
-                <br>
+                    <label class="control-label" for="location">Location</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="workHistory.location"
+                               class="input-xlarge"
+                               id="location"
+                               name="location"
+                               value="">
+                    </div>
+                    <br>
 
-                <label class="control-label" for="institution">Institution Name</label>
-                <div class="controls">
-                    <input type="hidden"
-                           ui-select2="selectConfig"
-                           id="institution"
-                           name="institution"
-                           data-placeholder="Select a university">
-                </div>
-                <br>
+                    <label class="control-label" for="institution">Institution Name</label>
+                    <div class="controls">
+                        <input type="hidden"
+                               ui-select2="selectConfig"
+                               id="institution"
+                               name="institution"
+                               data-placeholder="Select a university">
+                    </div>
+                    <br>
 
-                <label class="control-label" for="year-started">Year Started</label>
-                <div class="controls">
-                    <input type="text"
-                           ng-model="profile.workHistory[0].yearStarted.gregorian"
-                           class="input-xlarge"
-                           id="year-started"
-                           name="year-finished"
-                           value="{{profile.workHistory[0].yearStarted.gregorian}}">
-                </div>
-                <br>
+                    <label class="control-label" for="year-started">Year Started</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="workHistory.yearStarted.gregorian"
+                               class="input-xlarge"
+                               id="year-started"
+                               name="year-finished"
+                               value="">
+                    </div>
+                    <br>
 
-                <label class="control-label" for="year-finished">Year Finished</label>
-                <div class="controls">
-                    <input type="text"
-                           ng-model="profile.workHistory[0].yearFinished.gregorian"
-                           class="input-xlarge"
-                           id="year-finished"
-                           name="year-finished"
-                           value="{{profile.workHistory[0].yearFinished.gregorian}}">
+                    <label class="control-label" for="year-finished">Year Finished</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="workHistory.yearFinished.gregorian"
+                               class="input-xlarge"
+                               id="year-finished"
+                               name="year-finished"
+                               value="{{profile.workHistory[0].yearFinished.gregorian}}">
+                    </div>
+
+                    <button class="btn btn-danger remove" ng-hide=$first ng-click="removeWorkRow($index)">
+                        <i class="icon-remove icon-white"></i> Remove</button>
                 </div>
 
                 <h2>
@@ -443,7 +451,7 @@
                                class="input-xlarge"
                                id="vitae-institution-name"
                                name="vitae-institution-name"
-                               value="{{school.schoolName}}">
+                               value="">
                     </div>
                     <br>
 
@@ -454,7 +462,7 @@
                                class="input-xlarge"
                                id="degree"
                                name="degree"
-                               value="{{school.degree}}">
+                               value="">
                     </div>
                     <br>
 
@@ -465,7 +473,51 @@
                                class="input-xlarge"
                                id="field-of-study"
                                name="field-of-study"
-                               value="{{school.fieldOfStudy}}">
+                               value="">
+                    </div>
+                    <br>
+
+                    <label class="control-label" for="edu-country">Country</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="school.country"
+                               class="input-xlarge"
+                               id="edu-country"
+                               name="edu-country"
+                               value="">
+                    </div>
+                    <br>
+
+                    <label class="control-label" for="edu-year-from">Year From</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="school.yearFrom.gregorian"
+                               class="input-xlarge"
+                               id="edu-year-from"
+                               name="edu-year-from"
+                               value="">
+                    </div>
+                    <br>
+
+                    <label class="control-label" for="edu-year-to">Year To</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="school.yearTo.gregorian"
+                               class="input-xlarge"
+                               id="edu-year-to"
+                               name="edu-year-to"
+                               value="">
+                    </div>
+                    <br>
+
+                    <label class="control-label" for="edu-notes">Notes</label>
+                    <div class="controls">
+                        <textarea
+                               ng-model="school.edNotes"
+                               class="input-xlarge"
+                               id="edu-notes"
+                               name="edu-notes"
+                               value=""></textarea>
                     </div>
                     <button class="btn btn-danger remove" ng-hide=$first ng-click="removeEdRow($index)">
                         <i class="icon-remove icon-white"></i> Remove</button>
