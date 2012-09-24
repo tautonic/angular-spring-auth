@@ -209,7 +209,7 @@
 
 <div class="profile clearfix thumbnail" ng-show="isViewMode">
     <div class="profile-left">
-        <img src="//{{profile.thumbnail}}" alt="">
+        <img src="{{profile.thumbnail}}" alt="">
 
         <div class="caption">
             <!--<p>{{profile.bio}}</p>-->
@@ -249,7 +249,7 @@
                            class="input-xlarge"
                            id="username"
                            name="username"
-                           value="{{profile.username}}" required>
+                           value="{{profile.username}}">
                 </div>
                 <br>
                 <label class="control-label" for="given-name">First Name</label>
@@ -259,7 +259,7 @@
                            class="input-xlarge"
                            id="given-name"
                            name="given-name"
-                           value="{{profile.name.given}}" required>
+                           value="{{profile.name.given}}">
                 </div>
                 <br>
                 <label class="control-label" for="surname">Last Name</label>
@@ -269,7 +269,7 @@
                            class="input-xlarge"
                            id="surname"
                            name="surname"
-                           value="{{profile.name.surname}}" required>
+                           value="{{profile.name.surname}}">
                 </div>
                 <br>
                 <label class="control-label" for="password">Enter Password</label>
@@ -307,7 +307,7 @@
                            class="input-xlarge"
                            id="email"
                            name="address"
-                           value="{{profile.accountEmail.address}}" required>
+                           value="{{profile.accountEmail.address}}">
                 </div>
                 <br>
 
@@ -344,7 +344,7 @@
                            class="input-xlarge"
                            id="title"
                            name="title"
-                           value="{{profile.workHistory[0].title}}" required>
+                           value="{{profile.workHistory[0].title}}">
                 </div>
                 <br>
 
@@ -355,7 +355,7 @@
                            class="input-xlarge"
                            id="location"
                            name="location"
-                           value="{{profile.workHistory[0].location}}" required>
+                           value="{{profile.workHistory[0].location}}">
                 </div>
                 <br>
 
@@ -376,7 +376,7 @@
                            class="input-xlarge"
                            id="year-started"
                            name="year-finished"
-                           value="{{profile.workHistory[0].yearStarted.gregorian}}" required>
+                           value="{{profile.workHistory[0].yearStarted.gregorian}}">
                 </div>
                 <br>
 
@@ -404,7 +404,7 @@
                                class="input-xlarge"
                                id="vitae-institution-name"
                                name="vitae-institution-name"
-                               value="{{school.schoolName}}" required>
+                               value="{{school.schoolName}}">
                     </div>
                     <br>
 
@@ -415,7 +415,7 @@
                                class="input-xlarge"
                                id="degree"
                                name="degree"
-                               value="{{school.degree}}" required>
+                               value="{{school.degree}}">
                     </div>
                     <br>
 
@@ -426,7 +426,7 @@
                                class="input-xlarge"
                                id="field-of-study"
                                name="field-of-study"
-                               value="{{school.fieldOfStudy}}" required>
+                               value="{{school.fieldOfStudy}}">
                     </div>
                     <button class="btn btn-danger remove" ng-hide=$first ng-click="removeEdRow($index)">
                         <i class="icon-remove icon-white"></i> Remove</button>
@@ -434,29 +434,54 @@
             </div>
         </fieldset>
 
+        <hr>
+
+        <h2>Profile Image</h2>
+
+        <div id="create-upload" pykl-upload="{dropTarget:'drop-target-create'}">
+            <img src="//placehold.it/300x300" id="drop-target-create" />
+        </div>
+
+        <div class="modal hide fade">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Crop your image</h3>
+            </div>
+            <div class="modal-body">
+                <img id="image-crop" src="" alt="">
+
+                <div style="width:250px;height:300px;overflow:hidden;margin-left:5px;">
+                    <img id="crop-preview" src="" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-crop" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+                <button id="save-crop" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
+            </div>
+        </div>
+
+        <!--<file-upload droptarget="drop-target">
+            <img src="http://placehold.it/300x300" id="drop-target" />
+        </file-upload>-->
+
+        <div id="container">
+            <br>
+            <div id="filelist"></div>
+            <br />
+            <button class="btn btn-primary" id="choose-files"><i class="icon-plus icon-white"></i> Add files</button>
+            <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
+            <h3>Or you can Drag and Drop a file</h3>
+        </div>
+
+        <br><br>
+
+        <hr>
+
         <button class="btn btn-success" ng-click="save(profile)" ng-disabled="createProfile.$invalid">
             <i class="icon-folder-open icon-white"></i> Save</button>
         <button class="btn btn-warning" ng-click="cancel()"><i class="icon-ban-circle icon-white"></i> Cancel</button>
     </form>
-    <hr>
 
-    <div pykl-upload="{dropTarget:'drop-target'}">
-        <img src="http://placehold.it/300x300" id="drop-target" />
-    </div>
-
-    <!--<file-upload droptarget="drop-target">
-        <img src="http://placehold.it/300x300" id="drop-target" />
-    </file-upload>-->
-
-    <div id="container">
-        <div id="filelist"></div>
-        <br />
-        <button class="btn btn-primary" id="choose-files"><i class="icon-plus icon-white"></i> Add files</button>
-        <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
-        <h3>Drag and Drop a file to upload</h3>
-    </div>
-
-    <hr>
 
     <!--<pre>form = {{createProfile | json}}</pre>
     <tt>createProfile.firstName.$valid = {{createProfile.firstName.$valid}}</tt><br>

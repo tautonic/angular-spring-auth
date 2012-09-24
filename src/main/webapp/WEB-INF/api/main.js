@@ -399,8 +399,8 @@ app.get('/profiles/asyncEmail/:email', function(req, email){
  * @param {JsgiRequest} request
  * @returns {JsgiResponse} An HTML <div> containing a JSON string with upload results
  */
-app.post('/profiles/pics/:id', function (req, id) {
-    var opts = {
+app.post('/profiles/images/upload/', function (req) {
+    /*var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
@@ -417,7 +417,7 @@ app.post('/profiles/pics/:id', function (req, id) {
         status:404,
         headers:{"Content-Type":'application/json'},
         body:[]
-    };
+    };*/
 
     var contentType = req.env.servletRequest.getContentType();
 
@@ -459,24 +459,6 @@ app.post('/profiles/pics/:id', function (req, id) {
             log.info('UPLOAD EXCHANGE URI', JSON.stringify(content.uri, null, 4));
 
             if(exchange.status === 200 ){
-                var data = {
-                    thumbnail: content.uri
-                };
-
-                var opts = {
-                    url: 'http://localhost:9300/myapp/api/profiles/' + id,
-                    method: 'PUT',
-                    data: JSON.stringify(data),
-                    headers: {
-                        'x-rt-index': 'gc',
-                        'Content-Type': 'application/json',
-                        'Authorization': auth
-                    },
-                    async: false
-                };
-
-                exchange = httpclient.request(opts);
-
                 return {
                     status: 200,
                     headers: {
@@ -509,8 +491,29 @@ app.post('/profiles/pics/:id', function (req, id) {
     };
 });
 
+app.post('/profiles/images/crop/', function (req) {
+    var params = req.params;
 
-app.get('/profiles/pics/:id', function(req, id){
+    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+
+    var opts = {
+        "url": 'http://localhost:9300/myapp/api/files/crop/' + params.assetKey,
+        "headers": {
+            'x-rt-index': 'gc',
+            'Authorization': auth
+        },
+        "data": params,
+        "method": 'PUT'
+    }
+
+    var exchange = httpclient.request(opts);
+
+    log.info('IMAGE CROP RESPONSE: ', JSON.stringify(exchange.content, null, 4));
+
+    return json({ response: JSON.parse(exchange.content) });
+});
+
+app.get('/profiles/images/', function(req, id){
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
         method: 'GET',

@@ -50,7 +50,7 @@ angular.module( 'bgc.directives', [] )
             }
         };
     })
-    .directive('pyklUpload', ['$auth', function($auth){
+    .directive('pyklUpload', ['$auth', '$http', function($auth, $http){
         'use strict';
         //alert('Upload Directive!');
 
@@ -60,13 +60,15 @@ angular.module( 'bgc.directives', [] )
             restrict: 'A',
             link:function (scope, elm, attrs) {
                 var options = {};
-                var uploadBtn = angular.element('#upload-files');
+                var cancelCropBtn;
+                var saveCropBtn;
 
                 var config = {
+                    scope: scope,
                     runtimes: 'html5',
                     browse_button: 'choose-files',
                     container:'container',
-                    url: '/gc/api/profiles/pics/5d7816b3a88c4cb78a2edafcd58d8a53',
+                    url: '/gc/api/profiles/images/upload/',
                     max_file_size:'10mb',
                     resize:{width:320, height:240, quality:90},
                     flash_swf_url:'../js/plupload.flash.swf',
@@ -86,19 +88,15 @@ angular.module( 'bgc.directives', [] )
 
                 //config = angular.extend({}, config, pyklConfig.upload);
 
-                function $(id) {
+                function $$(id) {
                     return document.getElementById(id);
                 }
 
                 var uploader = new plupload.Uploader(config);
 
-                uploadBtn.bind('click', function(){
-                    uploader.start();
-                });
-
                 uploader.bind('FilesAdded', function (up, files) {
                     for (var i in files) {
-                        $('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+                        $$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
                     }
 
                     setTimeout(function () {
@@ -107,12 +105,87 @@ angular.module( 'bgc.directives', [] )
                 });
 
                 uploader.bind('UploadProgress', function (up, file) {
-                    $(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                    $$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
                 });
 
-                uploader.bind('FileUploaded', function (uploader, file, response) {
-                    console.log(uploader, file, response);
-                    $(config.drop_element).src = response.response;
+                var url;
+
+                function fileUploaded(uploader, file, response) {
+                    url = response.response;
+                    //$$(config.drop_element).src = response.response;
+                }
+
+                uploader.bind('FileUploaded', fileUploaded);
+
+                var jcropApi;
+
+                uploader.bind('UploadComplete', function(uploader, file){
+                    $('#image-crop').attr('src', url);
+
+                    $('.modal.hide.fade').modal('show');
+
+                    cancelCropBtn = angular.element('#cancel-crop');
+                    saveCropBtn = angular.element('#save-crop');
+
+                    $('.jcrop-holder img').attr('src', url);
+                    $('#crop-preview').attr('src', url);
+
+                    $('#image-crop').Jcrop({
+                        bgColor: '#fff',
+                        onChange: showPreview,
+                        onSelect: showPreview,
+                        aspectRatio: 0.83333333333333
+                    }, function(){
+                        jcropApi = this;
+                    });
+
+                    cancelCropBtn.bind('click', function(){
+                        $('.modal.hide.fade').modal('hide');
+                    });
+
+                    saveCropBtn.bind('click', function(){
+                        var rxp = /^.*cms\//;
+                        var assetKey = url;
+
+                        assetKey = assetKey.replace(rxp, "");
+
+                        var coords = jcropApi.tellSelect();
+
+                        var data = {
+                            'x1':       coords.x,
+                            'x2':       coords.x2,
+                            'y1':       coords.y,
+                            'y2':       coords.y2,
+                            'w':    coords.w,
+                            'h':   coords.h,
+                            'assetKey': assetKey
+                        };
+
+                        var scope = config.scope;
+
+                        $http.post('/gc/api/profiles/images/crop/', data).success(
+                            function(data, status, headers, config){
+                                var uri = data.response.uri;
+                                uri = uri.replace(/http:/, '');
+                                scope.thumbnailURI = uri;
+                                $('#drop-target').attr('src', uri);
+                            }
+                        );
+
+                        $('.modal.hide.fade').modal('hide');
+                    });
+
+                    function showPreview(coords){
+                        var rx = 250 / coords.w;
+                        var ry = 300 / coords.h;
+
+                        $('#crop-preview').css({
+                            width: Math.round(rx * 300) + 'px',
+                            height: Math.round(ry * 360) + 'px',
+                            marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+                            marginTop: '-' + Math.round(ry * coords.y) + 'px'
+                        });
+                    }
                 });
 
                 uploader.init();

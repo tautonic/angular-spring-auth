@@ -66,6 +66,16 @@
                     return {results: data.universities};
                 }
             }
+        },
+        jq: {
+            // The qtip namespace
+            qtip: {
+                // qTip options. This object will be used as the defaults
+                position: {
+                    my: 'left center',
+                    at:'right center'
+                }
+            }
         }
     });
 
