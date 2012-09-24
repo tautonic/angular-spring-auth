@@ -120,26 +120,6 @@ angular.module( 'bgc.directives', [] )
                 var jcropApi;
 
                 uploader.bind('UploadComplete', function(uploader, file){
-                    // create a modal
-                    /*var modalDiv = $(document.createElement('div'));
-                    modalDiv.attr({
-                        'ui-modal': '',
-                        'class': 'fade',
-                        'ng-model': 'modalShown',
-                        'id': '#image-crop-modal'
-                    });
-
-                    var img = $(document.createElement('img'));
-                    img.attr({
-                        'src': url,
-                        'id': '#image-crop'
-                    });
-
-                    img.appendTo(modalDiv);
-                    modalDiv.insertBefore('#create-upload');
-
-                    config.scope.modalShown = true;*/
-
                     $('#image-crop').attr('src', url);
 
                     $('.modal.hide.fade').modal('show');
@@ -181,9 +161,14 @@ angular.module( 'bgc.directives', [] )
                             'assetKey': assetKey
                         };
 
+                        var scope = config.scope;
+
                         $http.post('/gc/api/profiles/images/crop/', data).success(
                             function(data, status, headers, config){
-                                console.log(params);
+                                var uri = data.response.uri;
+                                uri = uri.replace(/http:/, '');
+                                scope.thumbnailURI = uri;
+                                $('#drop-target').attr('src', uri);
                             }
                         );
 

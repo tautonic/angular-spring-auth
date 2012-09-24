@@ -10,6 +10,8 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.isCreateMode = false;
     $scope.modalShown = false;
 
+    $scope.thumbnailURI = '';
+
     Profile.query(function(profiles){
         $scope.profile = profiles.content[2];
     });
@@ -77,6 +79,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
     $scope.save = function(profile){
         $scope.newProfile = new Profile(profile);
+        $scope.newProfile.thumbnail = $scope.thumbnailURI;
 
         $scope.newProfile.$save(function(response){
             $scope.profile._id = response.content._id;
