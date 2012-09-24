@@ -8,8 +8,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.isViewMode = true;
     $scope.isEditMode = false;
     $scope.isCreateMode = false;
-
-    $scope.uploadDisabled = false;
+    $scope.modalShown = false;
 
     Profile.query(function(profiles){
         $scope.profile = profiles.content[2];
@@ -45,7 +44,6 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
     $scope.cancel = function(){
         $scope.profile = angular.copy($scope.master);
-
         $scope.id = $scope.master.id;
         $scope.isViewMode = true;
         $scope.isEditMode = false;
@@ -79,6 +77,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
     $scope.save = function(profile){
         $scope.newProfile = new Profile(profile);
+
         $scope.newProfile.$save(function(response){
             $scope.profile._id = response.content._id;
 
