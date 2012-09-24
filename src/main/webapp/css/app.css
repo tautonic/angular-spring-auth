@@ -156,8 +156,20 @@ li.discussion-thread:last-child {
     text-transform: none;
 }
 
-input.ng-invalid{
+input.ng-dirty.ng-invalid{
     background-color: #ffcccc;
+}
+
+input.ng-dirty.ng-valid{
+    background-color: #DFFFA5;
+}
+
+input.ng-dirty{
+    background-color: #FFFF7E;
+}
+
+input.ng-pristine{
+    background-color: #fff;
 }
 
 #drop-target{

@@ -115,15 +115,28 @@
                 </div>
                 <br>
 
-                <label class="control-label" for="institution">Institution Name</label>
+                <label class="control-label" for="institution-name">Institution Name</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-disabled=true
+                           ng-model="profile.workHistory[0].businessName"
+                           class="input-xlarge"
+                           id="institution-name"
+                           name="location"
+                           value="{{profile.workHistory[0].businessName}}">
+                </div>
+                <br>
+                <label class="control-label" for="institution-select"></label>
                 <div class="controls">
                     <input type="hidden"
                            ui-select2="selectConfig"
-                           id="institution"
-                           name="institution" >
+                           id="institution-select"
+                           ng-model="institution"
+                           ng-change="institutionChanged()"
+                           name="institution-select" >
                 </div>
                 <br>
-
+                <br>
                 <label class="control-label" for="year-started">Year Started</label>
                 <div class="controls">
                     <input type="text"
@@ -269,9 +282,6 @@
         <h6>{{profile._id}}</h6>
         <h2>{{profile.username}}</h2>
         <h6>Email</h6> {{profile.accountEmail.address}} <br>
-        <!--<h6>{{profile.status}} at</h6> {{profile.employer}} <br>
-        <h6>Lives in</h6> {{profile.currentCity}}, {{profile.currentState}} <br>
-        <h6>Hometown</h6> {{profile.homeTown}}, {{profile.homeState}}-->
     </div>
 </div>
 
@@ -288,9 +298,13 @@
                            class="input-xlarge"
                            id="username"
                            name="username"
+                           required
+                           ng-minlength="3"
+                           ng-maxlength="16"
                            value="">
                 </div>
                 <br>
+
                 <label class="control-label" for="given-name">First Name</label>
                 <div class="controls">
                     <input type="text"
@@ -298,6 +312,9 @@
                            class="input-xlarge"
                            id="given-name"
                            name="given-name"
+                           ng-minlength="3"
+                           ng-maxlength="16"
+                           required
                            value="">
                 </div>
                 <br>
@@ -308,6 +325,9 @@
                            class="input-xlarge"
                            id="surname"
                            name="surname"
+                           ng-minlength="3"
+                           ng-maxlength="16"
+                           required
                            value="">
                 </div>
                 <br>
@@ -318,6 +338,9 @@
                            class="input-xlarge"
                            id="password"
                            name="password"
+                           ng-minlength="6"
+                           ng-maxlength="16"
+                           required
                            value="">
                 </div>
                 <br>
@@ -346,7 +369,9 @@
                            class="input-xlarge"
                            id="email"
                            name="address"
-                           value="{{profile.accountEmail.address}}">
+                           ng-minlength="3"
+                           required
+                           value="">
                 </div>
                 <br>
 
@@ -358,23 +383,24 @@
                                class="input-xlarge"
                                id="website-title"
                                name="website-title"
-                               value="{{website.title}}">
+                               value="">
                     </div>
                     <br>
                     <label class="control-label" for="website-url">URL</label>
                     <div class="controls">
-                        <input type="text"
+                        <input type="url"
                                ng-model="website.url"
                                class="input-xlarge"
                                id="website-url"
                                name="website-url"
-                               value="{{website.url}}">
+                               ng-minlength="8"
+                               value="">
                     </div>
                     <button class="btn btn-danger remove" ng-hide=$first ng-click="removeContactRow($index)">
                         <i class="icon-remove icon-white"></i> Remove</button>
                 </div>
 
-                <h2>Institution
+                <h2>Institution (Work History)
                     <button class="btn btn-success" ng-click="addWorkRow()">
                         <i class="icon-plus icon-white"></i> Add</button>
                 </h2>
@@ -387,17 +413,9 @@
                                class="input-xlarge"
                                id="title"
                                name="title"
-                               value="">
-                    </div>
-                    <br>
-
-                    <label class="control-label" for="location">Location</label>
-                    <div class="controls">
-                        <input type="text"
-                               ng-model="workHistory.location"
-                               class="input-xlarge"
-                               id="location"
-                               name="location"
+                               ng-minlength="6"
+                               ng-maxlength="16"
+                               required
                                value="">
                     </div>
                     <br>
@@ -412,6 +430,20 @@
                     </div>
                     <br>
 
+                    <label class="control-label" for="location">Location</label>
+                    <div class="controls">
+                        <input type="text"
+                               ng-model="workHistory.location"
+                               class="input-xlarge"
+                               id="location"
+                               name="location"
+                               ng-minlength="6"
+                               ng-maxlength="16"
+                               required
+                               value="">
+                    </div>
+                    <br>
+
                     <label class="control-label" for="year-started">Year Started</label>
                     <div class="controls">
                         <input type="text"
@@ -419,6 +451,8 @@
                                class="input-xlarge"
                                id="year-started"
                                name="year-finished"
+                               required
+                               ng-pattern="/^(19|20)\d{2}$/"
                                value="">
                     </div>
                     <br>
@@ -430,7 +464,9 @@
                                class="input-xlarge"
                                id="year-finished"
                                name="year-finished"
-                               value="{{profile.workHistory[0].yearFinished.gregorian}}">
+                               ng-pattern="/^(19|20)\d{2}$/"
+                               ng-change="yearFinishedChanged()"
+                               value="">
                     </div>
 
                     <button class="btn btn-danger remove" ng-hide=$first ng-click="removeWorkRow($index)">
@@ -451,6 +487,9 @@
                                class="input-xlarge"
                                id="vitae-institution-name"
                                name="vitae-institution-name"
+                               ng-minlength="6"
+                               ng-maxlength="16"
+                               required
                                value="">
                     </div>
                     <br>
@@ -462,6 +501,9 @@
                                class="input-xlarge"
                                id="degree"
                                name="degree"
+                               ng-minlength="6"
+                               ng-maxlength="16"
+                               required
                                value="">
                     </div>
                     <br>
@@ -473,6 +515,9 @@
                                class="input-xlarge"
                                id="field-of-study"
                                name="field-of-study"
+                               ng-minlength="6"
+                               ng-maxlength="16"
+                               required
                                value="">
                     </div>
                     <br>
@@ -484,6 +529,9 @@
                                class="input-xlarge"
                                id="edu-country"
                                name="edu-country"
+                               ng-minlength="6"
+                               ng-maxlength="16"
+                               required
                                value="">
                     </div>
                     <br>
@@ -495,6 +543,8 @@
                                class="input-xlarge"
                                id="edu-year-from"
                                name="edu-year-from"
+                               ng-pattern="/^(19|20)\d{2}$/"
+                               required
                                value="">
                     </div>
                     <br>
@@ -506,6 +556,9 @@
                                class="input-xlarge"
                                id="edu-year-to"
                                name="edu-year-to"
+                               ng-pattern="/^(19|20)\d{2}$/"
+                               ng-change="yearToChanged()"
+                               required
                                value="">
                     </div>
                     <br>

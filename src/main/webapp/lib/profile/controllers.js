@@ -11,13 +11,16 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.modalShown = false;
 
     $scope.thumbnailURI = '';
+    $scope.institution = '';
+    $scope.originalInstitution = '';
 
     Profile.query(function(profiles){
-        $scope.profile = profiles.content[3];
+        $scope.profile = profiles.content[0];
     });
 
     $scope.edit = function(profile){
         $scope.master = angular.copy(profile);
+        $scope.originalInstitution = profile.workHistory[0].businessName;
 
         $scope.profile.newPass = '';
         $scope.profile.newPassRepeat = '';
@@ -220,6 +223,22 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
 
     $scope.removeWorkRow = function(index){
         $scope.profile.workHistory.splice(index, 1);
+    }
+
+    $scope.yearToChanged = function(){
+        //console.log($scope.profile.workHistory.yearTo.gregorian);
+    }
+
+    $scope.yearFinishedChanged = function(){
+        //console.log($scope.profile)
+    }
+
+    $scope.institutionChanged = function(){
+        if($scope.institution === null){
+            $scope.profile.workHistory[0].businessName = $scope.originalInstitution;
+        }else{
+            $scope.profile.workHistory[0].businessName = $scope.institution.text;
+        }
     }
 
     $scope.getUniversityData = function () {
