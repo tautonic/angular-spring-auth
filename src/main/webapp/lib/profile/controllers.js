@@ -32,6 +32,8 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         $scope.isEditMode = true;
         $scope.isCreateMode = false;
 
+        profile.thumbnail = $scope.thumbnailURI;
+
         Profile.update({profileId: profile._id}, profile, function(response){
             $scope.isViewMode = true;
             $scope.isEditMode = false;

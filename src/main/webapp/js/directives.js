@@ -63,11 +63,13 @@ angular.module( 'bgc.directives', [] )
                 var cancelCropBtn;
                 var saveCropBtn;
 
+                options = scope.$eval(attrs.pyklUpload);
+
                 var config = {
                     scope: scope,
                     runtimes: 'html5',
-                    browse_button: 'choose-files',
-                    container:'container',
+                    browse_button: 'choose-files-' + options.mode,
+                    container:'container-' + options.mode,
                     url: '/gc/api/profiles/images/upload/',
                     max_file_size:'10mb',
                     resize:{width:320, height:240, quality:90},
@@ -80,7 +82,6 @@ angular.module( 'bgc.directives', [] )
                 };
 
                 if (attrs.pyklUpload) {
-                    options = scope.$eval(attrs.pyklUpload);
                     if (options.dropTarget) {
                         config.drop_element = options.dropTarget;
                     }
@@ -96,7 +97,7 @@ angular.module( 'bgc.directives', [] )
 
                 uploader.bind('FilesAdded', function (up, files) {
                     for (var i in files) {
-                        $$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+                        $$('filelist-' + options.mode).innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
                     }
 
                     setTimeout(function () {
@@ -112,7 +113,6 @@ angular.module( 'bgc.directives', [] )
 
                 function fileUploaded(uploader, file, response) {
                     url = response.response;
-                    //$$(config.drop_element).src = response.response;
                 }
 
                 uploader.bind('FileUploaded', fileUploaded);
@@ -120,17 +120,17 @@ angular.module( 'bgc.directives', [] )
                 var jcropApi;
 
                 uploader.bind('UploadComplete', function(uploader, file){
-                    $('#image-crop').attr('src', url);
+                    $('#image-crop-' + options.mode).attr('src', url);
 
-                    $('.modal.hide.fade').modal('show');
+                    $('.modal.hide.fade.' + options.mode).modal('show');
 
-                    cancelCropBtn = angular.element('#cancel-crop');
-                    saveCropBtn = angular.element('#save-crop');
+                    cancelCropBtn = angular.element('#cancel-crop-' + options.mode);
+                    saveCropBtn = angular.element('#save-crop-' + options.mode);
 
                     $('.jcrop-holder img').attr('src', url);
-                    $('#crop-preview').attr('src', url);
+                    $('#crop-preview-' + options.mode).attr('src', url);
 
-                    $('#image-crop').Jcrop({
+                    $('#image-crop-' + options.mode).Jcrop({
                         bgColor: '#fff',
                         onChange: showPreview,
                         onSelect: showPreview,
@@ -140,7 +140,7 @@ angular.module( 'bgc.directives', [] )
                     });
 
                     cancelCropBtn.bind('click', function(){
-                        $('.modal.hide.fade').modal('hide');
+                        $('.modal.hide.fade.' + options.mode).modal('hide');
                     });
 
                     saveCropBtn.bind('click', function(){
@@ -156,8 +156,8 @@ angular.module( 'bgc.directives', [] )
                             'x2':       coords.x2,
                             'y1':       coords.y,
                             'y2':       coords.y2,
-                            'w':    coords.w,
-                            'h':   coords.h,
+                            'w':        coords.w,
+                            'h':        coords.h,
                             'assetKey': assetKey
                         };
 
@@ -168,18 +168,18 @@ angular.module( 'bgc.directives', [] )
                                 var uri = data.response.uri;
                                 uri = uri.replace(/http:/, '');
                                 scope.thumbnailURI = uri;
-                                $('#drop-target').attr('src', uri);
+                                $('#drop-target-' + options.mode).attr('src', uri);
                             }
                         );
 
-                        $('.modal.hide.fade').modal('hide');
+                        $('.modal.hide.fade.' + options.mode).modal('hide');
                     });
 
                     function showPreview(coords){
                         var rx = 250 / coords.w;
                         var ry = 300 / coords.h;
 
-                        $('#crop-preview').css({
+                        $('#crop-preview-' + options.mode).css({
                             width: Math.round(rx * 300) + 'px',
                             height: Math.round(ry * 360) + 'px',
                             marginLeft: '-' + Math.round(rx * coords.x) + 'px',

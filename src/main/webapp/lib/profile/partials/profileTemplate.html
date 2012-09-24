@@ -189,6 +189,45 @@
             </div>
         </fieldset>
 
+        <hr>
+
+        <h2>Profile Image</h2>
+
+        <div id="update-upload" pykl-upload="{dropTarget:'drop-target-update', mode:'update'}">
+            <img src="{{profile.thumbnail}}" id="drop-target-update" />
+        </div>
+
+        <div class="modal hide fade update">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Crop your image</h3>
+            </div>
+            <div class="modal-body">
+                <img id="image-crop-update" src="" alt="">
+
+                <div style="width:250px;height:300px;overflow:hidden;margin-left:5px;">
+                    <img id="crop-preview-update" src="" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-crop-update" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+                <button id="save-crop-update" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
+            </div>
+        </div>
+
+        <div id="container-update">
+            <br>
+            <div id="filelist-update"></div>
+            <br />
+            <button class="btn btn-primary" id="choose-files-update"><i class="icon-plus icon-white"></i> Add files</button>
+            <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
+            <h3>Or you can Drag and Drop a file</h3>
+        </div>
+
+        <br><br>
+
+        <hr>
+
         <button class="btn btn-success" ng-click="update(profile)" ng-disabled="editProfile.$invalid || isUnchanged(profile)">
             <i class="icon-pencil icon-white"></i> Update</button>
         <button class="btn btn-warning" ng-click="cancel()"><i class="icon-ban-circle icon-white"></i> Cancel</button>
@@ -438,37 +477,33 @@
 
         <h2>Profile Image</h2>
 
-        <div id="create-upload" pykl-upload="{dropTarget:'drop-target-create'}">
+        <div id="create-upload" pykl-upload="{dropTarget:'drop-target-create', mode:'create'}">
             <img src="//placehold.it/300x300" id="drop-target-create" />
         </div>
 
-        <div class="modal hide fade">
+        <div class="modal hide fade create">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h3>Crop your image</h3>
             </div>
             <div class="modal-body">
-                <img id="image-crop" src="" alt="">
+                <img id="image-crop-create" src="" alt="">
 
                 <div style="width:250px;height:300px;overflow:hidden;margin-left:5px;">
-                    <img id="crop-preview" src="" >
+                    <img id="crop-preview-create" src="" >
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="cancel-crop" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</button>
-                <button id="save-crop" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
+                <button id="cancel-crop-create" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+                <button id="save-crop-create" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
             </div>
         </div>
 
-        <!--<file-upload droptarget="drop-target">
-            <img src="http://placehold.it/300x300" id="drop-target" />
-        </file-upload>-->
-
-        <div id="container">
+        <div id="container-create">
             <br>
-            <div id="filelist"></div>
+            <div id="filelist-create"></div>
             <br />
-            <button class="btn btn-primary" id="choose-files"><i class="icon-plus icon-white"></i> Add files</button>
+            <button class="btn btn-primary" id="choose-files-create"><i class="icon-plus icon-white"></i> Add files</button>
             <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
             <h3>Or you can Drag and Drop a file</h3>
         </div>

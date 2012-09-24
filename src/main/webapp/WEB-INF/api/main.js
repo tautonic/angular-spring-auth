@@ -321,7 +321,8 @@ app.put('/profiles/:id', function(req, id){
         },
         "educationHistory" : req.postParams.educationHistory,
         "websites" : req.postParams.websites,
-        "workHistory" : req.postParams.workHistory
+        "workHistory" : req.postParams.workHistory,
+        "thumbnail": req.postParams.thumbnail,
     };
 
     if(req.postParams.newPass !== ''){
