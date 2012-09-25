@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
+function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
     $scope.master = {};
 
     $scope.isViewMode = true;
@@ -11,7 +11,8 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.modalShown = false;
 
     $scope.thumbnailURI = '';
-    $scope.institution = '';
+    $scope.workInstitutionCreate = {};
+    $scope.workInstitutionEdit = {};
     $scope.originalInstitution = '';
 
     Profile.query(function(profiles){
@@ -114,6 +115,10 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     }
 
     $scope.save = function(profile){
+        profile.educationHistory.forEach(function(school){
+            school.schoolName = school.schoolName.text;
+        });
+
         $scope.newProfile = new Profile(profile);
         $scope.newProfile.thumbnail = $scope.thumbnailURI;
 
@@ -187,6 +192,10 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         $scope.profile.educationHistory.splice(index, 1);
     }
 
+    $scope.removeEdRowEdit = function(index){
+        $scope.profile.educationHistory.splice(index, 1);
+    }
+
     $scope.addContactRow = function(){
         $scope.profile.websites.push(
             {
@@ -233,11 +242,25 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
         //console.log($scope.profile)
     }
 
-    $scope.institutionChanged = function(){
-        if($scope.institution === null){
-            $scope.profile.workHistory[0].businessName = $scope.originalInstitution;
+    $scope.workInstitutionChangedCreate = function(){
+        if($scope.workInstitutionCreate !== null){
+            $scope.profile.workHistory[0].businessName = $scope.workInstitutionCreate.text;
+        }
+    }
+
+    $scope.workInstitutionChangedEdit = function(){
+        if($scope.profile.workHistory[0].businessName !== null){
+            $scope.profile.workHistory[0].businessName = $scope.profile.workHistory[0].businessName.text;
         }else{
-            $scope.profile.workHistory[0].businessName = $scope.institution.text;
+            $scope.profile.workHistory[0].businessName = $scope.originalInstitution;
+        }
+    }
+
+    $scope.eduInstitutionChangedEdit = function(index){
+        if($scope.profile.educationHistory[index].schoolName !== null){
+            $scope.profile.educationHistory[index].schoolName = $scope.profile.educationHistory[index].schoolName.text;
+        }else{
+            $scope.profile.educationHistory[index].schoolName = $scope.originalInstitution;
         }
     }
 
@@ -261,7 +284,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, Profile) {
     $scope.selectConfig = {
         allowClear: true,
         minimumInputLength: 3,
-        placeholder: 'Select an institution'
+        placeholder: 'Select an Institution'
     }
 }
 

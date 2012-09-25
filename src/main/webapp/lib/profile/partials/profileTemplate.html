@@ -91,7 +91,7 @@
                     </div>
                 </div>
 
-                <h2>Institution</h2>
+                <h2>Institution (Work)</h2>
 
                 <label class="control-label" for="title">Title</label>
                 <div class="controls">
@@ -126,14 +126,14 @@
                            value="{{profile.workHistory[0].businessName}}">
                 </div>
                 <br>
-                <label class="control-label" for="institution-select"></label>
+                <label class="control-label" for="work-institution-select-edit"></label>
                 <div class="controls">
                     <input type="hidden"
                            ui-select2="selectConfig"
-                           id="institution-select"
-                           ng-model="institution"
-                           ng-change="institutionChanged()"
-                           name="institution-select" >
+                           id="work-institution-select-edit"
+                           ng-model="profile.workHistory[0].businessName"
+                           ng-change="workInstitutionChangedEdit()"
+                           name="work-institution-select-edit" >
                 </div>
                 <br>
                 <br>
@@ -165,15 +165,27 @@
                 </h2>
 
                 <div class="well edu-history clearfix" ng-repeat="school in profile.educationHistory">
-                    <label class="control-label" for="vitae-institution-name">Institution Name</label>
+                    <label class="control-label" for="vitae-institution-name-{{$index}}">Institution Name</label>
                     <div class="controls">
                         <input type="text"
                                ng-model="school.schoolName"
+                               ng-disabled=true
                                class="input-xlarge"
-                               id="vitae-institution-name"
-                               name="vitae-institution-name"
-                               value="{{school.schoolName}}" required>
+                               id="vitae-institution-name-{{$index}}"
+                               name="vitae-institution-name-{{$index}}"
+                               value="{{school.schoolName}}">
                     </div>
+                    <br>
+                    <label class="control-label" for="edu-institution-select-{{$index}}"></label>
+                    <div class="controls">
+                        <input type="hidden"
+                               ui-select2="selectConfig"
+                               id="edu-institution-select-{{$index}}"
+                               ng-model="school.schoolName"
+                               ng-change="eduInstitutionChangedEdit($index)"
+                               name="edu-institution-select-{{$index}}">
+                    </div>
+                    <br>
                     <br>
 
                     <label class="control-label" for="degree">Degree</label>
@@ -196,7 +208,7 @@
                                name="field-of-study"
                                value="{{school.fieldOfStudy}}" required>
                     </div>
-                    <button class="btn btn-danger remove" ng-click="removeEdRow($index)">
+                    <button class="btn btn-danger remove" ng-hide=$first ng-click="removeEdRow($index)">
                         <i class="icon-remove icon-white"></i> Remove</button>
                 </div>
             </div>
@@ -400,16 +412,13 @@
                         <i class="icon-remove icon-white"></i> Remove</button>
                 </div>
 
-                <h2>Institution (Work History)
-                    <button class="btn btn-success" ng-click="addWorkRow()">
-                        <i class="icon-plus icon-white"></i> Add</button>
-                </h2>
+                <h2>Institution (Work History)</h2>
 
-                <div class="well websites clearfix" ng-repeat="workHistory in profile.workHistory">
+                <div class="well websites clearfix">
                     <label class="control-label" for="title">Title</label>
                     <div class="controls">
                         <input type="text"
-                               ng-model="workHistory.title"
+                               ng-model="profile.workHistory[0].title"
                                class="input-xlarge"
                                id="title"
                                name="title"
@@ -420,20 +429,21 @@
                     </div>
                     <br>
 
-                    <label class="control-label" for="institution">Institution Name</label>
+                    <label class="control-label" for="work-institution-create">Institution Name</label>
                     <div class="controls">
                         <input type="hidden"
                                ui-select2="selectConfig"
-                               id="institution"
-                               name="institution"
-                               data-placeholder="Select a university">
+                               id="work-institution-create"
+                               name="work-institution-create"
+                               ng-model="workInstitutionCreate"
+                               ng-change="workInstitutionChangedCreate()">
                     </div>
                     <br>
 
                     <label class="control-label" for="location">Location</label>
                     <div class="controls">
                         <input type="text"
-                               ng-model="workHistory.location"
+                               ng-model="profile.workHistory[0].location"
                                class="input-xlarge"
                                id="location"
                                name="location"
@@ -447,7 +457,7 @@
                     <label class="control-label" for="year-started">Year Started</label>
                     <div class="controls">
                         <input type="text"
-                               ng-model="workHistory.yearStarted.gregorian"
+                               ng-model="profile.workHistory[0].yearStarted.gregorian"
                                class="input-xlarge"
                                id="year-started"
                                name="year-finished"
@@ -460,7 +470,7 @@
                     <label class="control-label" for="year-finished">Year Finished</label>
                     <div class="controls">
                         <input type="text"
-                               ng-model="workHistory.yearFinished.gregorian"
+                               ng-model="profile.workHistory[0].yearFinished.gregorian"
                                class="input-xlarge"
                                id="year-finished"
                                name="year-finished"
@@ -468,9 +478,6 @@
                                ng-change="yearFinishedChanged()"
                                value="">
                     </div>
-
-                    <button class="btn btn-danger remove" ng-hide=$first ng-click="removeWorkRow($index)">
-                        <i class="icon-remove icon-white"></i> Remove</button>
                 </div>
 
                 <h2>
@@ -480,17 +487,13 @@
                 </h2>
 
                 <div class="well edu-history clearfix" ng-repeat="school in profile.educationHistory">
-                    <label class="control-label" for="vitae-institution-name">Institution Name</label>
+                    <label class="control-label" for="edu-institution-create-{{$index}}">Institution Name</label>
                     <div class="controls">
-                        <input type="text"
+                        <input type="hidden"
+                               ui-select2="selectConfig"
+                               id="edu-institution-create-{{$index}}"
                                ng-model="school.schoolName"
-                               class="input-xlarge"
-                               id="vitae-institution-name"
-                               name="vitae-institution-name"
-                               ng-minlength="6"
-                               ng-maxlength="16"
-                               required
-                               value="">
+                               name="edu-institution-create-{{$index}}">
                     </div>
                     <br>
 
