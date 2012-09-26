@@ -266,11 +266,11 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
 
     $scope.getUniversityData = function () {
         return { // instead of writing the function to execute the request we use Select2's convenient helper
-            url: "http://localhost:8080/gc/api/data/",
-            dataType: 'jsonp',
+            url: "https://maps.googleapis.com/maps/api/place/autocomplete/json?",
+            dataType: 'json',
             data: function(term, page) {
                 return {
-                    q:term,
+                    q: "input=" + term + "&types=establishment&sensor=true&key=AIzaSyAGbAUbk7G-U0LS7t3D5oQyME9REnTfFRI",
                     page_limit: 5
                 };
             },

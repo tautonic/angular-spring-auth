@@ -586,35 +586,28 @@ app.get('/profiles/images/', function(req, id){
 });
 
 app.get('/data', function(req) {
-    var filteredUniversities = new Array();
+    var opts = {
+        url: 'https://maps.googleapis.com/maps/api/place/autocomplete/json?' + req.params.q,
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        async: false
+    };
 
-    log.info(req.params.q);
+    var exchange = httpclient.request(opts);
 
-    var query = req.params.q;
+    var universities = JSON.parse(exchange.content);
 
-    var universities = [
-        { "id": "babson", "text": "Babson" },
-        { "id": "osu", "text": "The Ohio State University" },
-        { "id": "ou", "text": "Ohio University" },
-        { "id": "owu", "text": "Ohio Wesleyan University" },
-        { "id": "bgsu", "text": "BGSU" },
-        { "id": "toledo", "text": "TOLEDO" },
-        { "id": "wisconsin", "text": "Wisconsin" },
-        { "id": "michigan", "text": "University of Michigan" },
-        { "id": "michiganstate", "text": "Michigan State" },
-        { "id": "indiana", "text": "Indiana" },
-        { "id": "iowa", "text": "Iowa" },
-        { "id": "iowastate", "text": "Iowa State" },
-        { "id": "illinois", "text": "University of Illinois" }
-    ];
-
-    universities.forEach(function(university){
-        if(university.text.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) !== -1){
-            filteredUniversities.push(university);
+    universities.predictions.forEach(function(element, index, array){
+        if(element.description.toLowerCase().indexOf('university') === -1 ||
+            element.description.toLowerCase().indexOf('college') === -1 )
+        {
+            universities.predictions.slice(index, 1);
         }
     });
 
-    return json({"universities": filteredUniversities});
+    return json({"universities": universities.predictions});
 });
 
 /************************
