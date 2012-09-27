@@ -179,10 +179,9 @@
                     <label class="control-label" for="edu-institution-select-{{$index}}"></label>
                     <div class="controls">
                         <input type="hidden"
+                               ng-model="school.schoolName"
                                ui-select2="selectConfig"
                                id="edu-institution-select-{{$index}}"
-                               ng-model="school.schoolName"
-                               ng-change="eduInstitutionChangedEdit($index)"
                                name="edu-institution-select-{{$index}}">
                     </div>
                     <br>

@@ -14,6 +14,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
     $scope.workInstitutionCreate = {};
     $scope.workInstitutionEdit = {};
     $scope.originalInstitution = '';
+    $scope.eduSchoolName = [];
 
     Profile.query(function(profiles){
         $scope.profile = profiles.content[0];
@@ -250,7 +251,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
 
     $scope.workInstitutionChangedEdit = function(){
         if($scope.profile.workHistory[0].businessName !== null){
-            $scope.profile.workHistory[0].businessName = $scope.profile.workHistory[0].businessName.text;
+            $scope.profile.workHistory[0].businessName = $scope.profile.workHistory[0].businessName.terms[0].value;
         }else{
             $scope.profile.workHistory[0].businessName = $scope.originalInstitution;
         }
@@ -262,23 +263,6 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
         }else{
             $scope.profile.educationHistory[index].schoolName = $scope.originalInstitution;
         }
-    }
-
-    $scope.getUniversityData = function () {
-        return { // instead of writing the function to execute the request we use Select2's convenient helper
-            url: "https://maps.googleapis.com/maps/api/place/autocomplete/json?",
-            dataType: 'json',
-            data: function(term, page) {
-                return {
-                    q: "input=" + term + "&types=establishment&sensor=true&key=AIzaSyAGbAUbk7G-U0LS7t3D5oQyME9REnTfFRI",
-                    page_limit: 5
-                };
-            },
-            results: function (data, page) { // parse the results into the format expected by Select2.
-                console.log("HELLO? ",data);
-                return {results: data.universities};
-            }
-        };
     }
 
     $scope.selectConfig = {
