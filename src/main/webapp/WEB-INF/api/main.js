@@ -217,7 +217,7 @@ app.get('/notifications', function(req) {
     var page = isNaN(params.page) ? '1' : params.page;
     var size = isNaN(params.pageSize) ? '10' : params.pageSize;
     var from = (page - 1) * size;
-   log.info("FILTERS THING: "+JSON.stringify(params));
+
     // Due to the way "filtering" was set up server side, we have to invert what the front end gives us (unless we want to re-write the front end, which I don't at this point)
     var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
     var allowedActivities = params.filters.trim().split(' ');
@@ -226,7 +226,7 @@ app.get('/notifications', function(req) {
     allowedActivities.forEach(function(activity) {
         filteredActivities = filteredActivities.replace(activity, '');
     });
-    log.info("USERID: "+profile.principal.id);
+
     // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
     var exchange = ajax('http://localhost:9300/myapp/api/activities/streams/' + profile.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ','));
 
@@ -234,7 +234,7 @@ app.get('/notifications', function(req) {
     try {
         var stream = exchange.content;
         var activities = [];
-        log.info("STREAM? "+JSON.stringify(stream));
+
         stream.acts.forEach(function (activity) {
             activity = new ActivityMixin(activity, request);
 
