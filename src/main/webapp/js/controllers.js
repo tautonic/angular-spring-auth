@@ -3,19 +3,24 @@
 /* Controllers */
 
 
-var MyCtrl1 = ['$scope', '$auth', function($scope, auth ) {
-	console.log( 'pyklAuth', auth );
-	console.log( '$scope.isAuthenticated', auth.isAuthenticated );
+function MyCtrl1($rootScope, $scope, $http ) {
+	console.log("IN HOMEPAGE");
 
-	$scope.reloadAuth = function() {
-		$scope.scopeIsAuthenticated = auth.isAuthenticated;
-		$scope.scopePrincipal = auth.principal;
-		$scope.scopeIsAdmin = auth.isUserInRole('role_admin');
-		$scope.scopeIsUser = auth.isUserInRole('role_user');
-	};
+    var options = {
+        data: JSON.stringify({
+            filters: "likes comments discussions collaborators ideas companies profiles spMessages"
+        })
+    };
 
-	$scope.reloadAuth();
-}];
+    $http.get('api/notifications?filters=', options).success(function(data) {
+        console.log("DATA IS: ",data);
+        $scope.stream = data;
+    });
+
+    $scope.isEmpty = function() {
+        return (($scope.stream) && ($scope.stream.itemCount === 0));
+    }
+}
 
 
 function MyCtrl2( $rootScope, $scope, $http, $log ) {
@@ -30,6 +35,7 @@ function MyCtrl2( $rootScope, $scope, $http, $log ) {
 
 	ping();
 }
+MyCtrl1.$inject = ['$rootScope', '$scope', '$http'];
 MyCtrl2.$inject = ['$rootScope', '$scope', '$http', '$log'];
 
 

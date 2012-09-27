@@ -76,8 +76,8 @@
             </ul>
         </div>
 
-        <div class="span3">
-            <div class="activity-stream">
+        <div class="span3" ng-show="auth.isAuthenticated">
+            <div class="activity-stream" ng-controller="MyCtrl1">
                 <div class="picture-frame">
                     <img src="images/190x140.gif" width="50">
                 </div>
@@ -85,8 +85,8 @@
                     <h5>Logged In As:</h5>
                     <a href="#/profile">{{auth.principal.username}}</a>
                 </div>
-                <ul id="stream">
-                    <li>
+                <ul id="stream" ng-repeat="item in stream.items">
+                    <li class="you">
                         <div class="picture-frame">
                             <img src="images/190x140.gif" width="40">
                         </div>
@@ -95,22 +95,14 @@
                             <a href="#/profile">Bob Dole</a> - 2 hours ago.
                         </div>
                     </li>
-                    <li class="you">
-                        <div class="picture-frame">
-                            <img src="images/190x140.gif" width="40">
-                        </div>
-                        <div class="update">
-                            Posted a new discussion
-                            <a href="#/profile">You</a> - 2 hours ago.
-                        </div>
-                    </li>
                 </ul>
+                <div ng-show="isEmpty()">Your stream is empty. Do something to have a stream.</div>
                 <div class="load-more gradient">
                     <a ng-href="#">Earlier today...</a>
                 </div>
             </div>
         </div>
-        <div class="span3 sign-up">
+        <div class="span3 sign-up" ng-show="!auth.isAuthenticated">
             <div class="details">
                 <h3><a href="#/profile/">Sign up today</a></h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.</p>

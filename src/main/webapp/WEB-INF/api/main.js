@@ -13,8 +13,9 @@ var {json} = require( 'ringo/jsgi/response' );
 var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
-var {getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle} = require('articles');
+var {ajax, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle} = require('articles');
 var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
+var {ActivityMixin} = require('activities');
 
 var {encode} = require('ringo/base64');
 
@@ -198,6 +199,71 @@ app.post('/discussions/:id', function(req, id) {
     return json(addReply(id, req.params.reply, getUserDetails()));
 });
 /****** End discussion posts ********/
+
+app.get('/notifications', function(req) {
+    var params = req.params;
+
+    // Get user profile obj
+    var profile = getUserDetails();
+    if(profile.principal.id === undefined) {
+        log.info("User not found or not logged in. Exiting");
+        return json({
+            itemCount: 0,
+            currentPage: 0,
+            items: []
+        });
+    }
+    // Get info for paginated results
+    var page = isNaN(params.page) ? '1' : params.page;
+    var size = isNaN(params.pageSize) ? '10' : params.pageSize;
+    var from = (page - 1) * size;
+   log.info("FILTERS THING: "+JSON.stringify(params));
+    // Due to the way "filtering" was set up server side, we have to invert what the front end gives us (unless we want to re-write the front end, which I don't at this point)
+    var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
+    var allowedActivities = params.filters.trim().split(' ');
+
+    //remove terms that are not in the active filter list
+    allowedActivities.forEach(function(activity) {
+        filteredActivities = filteredActivities.replace(activity, '');
+    });
+    log.info("USERID: "+profile.principal.id);
+    // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
+    var exchange = ajax('http://localhost:9300/myapp/api/activities/streams/' + profile.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ','));
+
+    // Try to parse the results, wrap each activity in a mixin, then return a response
+    try {
+        var stream = exchange.content;
+        var activities = [];
+        log.info("STREAM? "+JSON.stringify(stream));
+        stream.acts.forEach(function (activity) {
+            activity = new ActivityMixin(activity, request);
+
+            if (activity.description !== null) {
+                // Assign values from the mixin to a temp object, since the mixin won't be passed via JSON
+                activities.push({
+                    'thumbnailUrl': activity.thumbnailUrl,
+                    'username': activity.props.actor.username,
+                    'message': activity.description,
+                    'dateCreated': activity.props.dateCreated,
+                    'isOwner': activity.isOwner
+                });
+            }
+        });
+
+        return json({
+            itemCount: stream.total,
+            currentPage: page,
+            items: activities
+        });
+    } catch (e) {
+        log.info("Error parsing activity stream: " + e.message);
+        return json({
+            itemCount: 0,
+            currentPage: 0,
+            items: []
+        });
+    }
+});
 
 app.get( '/ping', function ( req ) {
 	var servletRequest = req.env.servletRequest;
