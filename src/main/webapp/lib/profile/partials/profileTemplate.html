@@ -118,24 +118,13 @@
                 <label class="control-label" for="institution-name">Institution Name</label>
                 <div class="controls">
                     <input type="text"
-                           ng-disabled=true
                            ng-model="profile.workHistory[0].businessName"
                            class="input-xlarge"
                            id="institution-name"
                            name="location"
                            value="{{profile.workHistory[0].businessName}}">
                 </div>
-                <br>
-                <label class="control-label" for="work-institution-select-edit"></label>
-                <div class="controls">
-                    <input type="hidden"
-                           ui-select2="selectConfig"
-                           id="work-institution-select-edit"
-                           ng-model="profile.workHistory[0].businessName"
-                           ng-change="workInstitutionChangedEdit()"
-                           name="work-institution-select-edit" >
-                </div>
-                <br>
+
                 <br>
                 <label class="control-label" for="year-started">Year Started</label>
                 <div class="controls">
@@ -169,22 +158,11 @@
                     <div class="controls">
                         <input type="text"
                                ng-model="school.schoolName"
-                               ng-disabled=true
                                class="input-xlarge"
                                id="vitae-institution-name-{{$index}}"
                                name="vitae-institution-name-{{$index}}"
                                value="{{school.schoolName}}">
                     </div>
-                    <br>
-                    <label class="control-label" for="edu-institution-select-{{$index}}"></label>
-                    <div class="controls">
-                        <input type="hidden"
-                               ng-model="school.schoolName"
-                               ui-select2="selectConfig"
-                               id="edu-institution-select-{{$index}}"
-                               name="edu-institution-select-{{$index}}">
-                    </div>
-                    <br>
                     <br>
 
                     <label class="control-label" for="degree">Degree</label>
@@ -430,12 +408,15 @@
 
                     <label class="control-label" for="work-institution-create">Institution Name</label>
                     <div class="controls">
-                        <input type="hidden"
-                               ui-select2="selectConfig"
+                        <input type="text"
+                               ng-model="profile.workHistory[0].businessName"
+                               class="input-xlarge"
                                id="work-institution-create"
                                name="work-institution-create"
-                               ng-model="workInstitutionCreate"
-                               ng-change="workInstitutionChangedCreate()">
+                               ng-minlength="6"
+                               ng-maxlength="16"
+                               required
+                               value="">
                     </div>
                     <br>
 
@@ -486,13 +467,15 @@
                 </h2>
 
                 <div class="well edu-history clearfix" ng-repeat="school in profile.educationHistory">
-                    <label class="control-label" for="edu-institution-create-{{$index}}">Institution Name</label>
+                    <label class="control-label" for="school-name">Institution Name</label>
                     <div class="controls">
-                        <input type="hidden"
-                               ui-select2="selectConfig"
-                               id="edu-institution-create-{{$index}}"
+                        <input type="text"
                                ng-model="school.schoolName"
-                               name="edu-institution-create-{{$index}}">
+                               class="input-xlarge"
+                               id="school-name"
+                               name="school-name"
+                               required
+                               value="">
                     </div>
                     <br>
 
