@@ -5,10 +5,38 @@
 function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
     $scope.master = {};
 
-    $scope.isViewMode = true;
-    $scope.isEditMode = false;
-    $scope.isCreateMode = false;
-    $scope.modalShown = false;
+    $scope.showSuccess = false;
+    $scope.showError = false;
+
+    if($routeParams.token){
+        var data = {
+            token: $routeParams.token
+        };
+
+        $http.post('/gc/api/utility/resetpassword/', data)
+            .success(function(data, status, headers, config){
+                $scope.isViewMode = false;
+                $scope.isEditMode = false;
+                $scope.isCreateMode = false;
+                $scope.isResetPassMode = true;
+
+                $scope.showSuccess = true;
+
+            }
+        ).error(function(data, status, headers, config){
+                $scope.isViewMode = false;
+                $scope.isEditMode = false;
+                $scope.isCreateMode = false;
+                $scope.isResetPassMode = true;
+
+                $scope.showError = true;
+            });
+    }else{
+        $scope.isViewMode = true;
+        $scope.isEditMode = false;
+        $scope.isCreateMode = false;
+        $scope.isResetPassMode = false;
+    }
 
     $scope.thumbnailURI = '';
     $scope.workInstitutionCreate = {};
@@ -37,7 +65,9 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
         $scope.isEditMode = true;
         $scope.isCreateMode = false;
 
-        profile.thumbnail = $scope.thumbnailURI;
+        if($scope.thumbnailURI !== ''){
+            profile.thumbnail = $scope.thumbnailURI;
+        }
 
         Profile.update({profileId: profile._id}, profile, function(response){
             $scope.isViewMode = true;
@@ -263,6 +293,28 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
         }else{
             $scope.profile.educationHistory[index].schoolName = $scope.originalInstitution;
         }
+    }
+
+    $scope.resetPassword = function(){
+        var data = {
+            profileEmail: $scope.profile.accountEmail.address
+        }
+
+        $http.post('/gc/api/utility/resettoken/', data)
+            .success(function(data, status, headers, config){
+                $scope.showSuccess = true;
+            }
+        ).error(function(data, status, headers, config){
+                $scope.showError = true;
+            });
+    }
+
+    $scope.closeSuccessAlert = function(){
+        $scope.showSucess = false;
+    }
+
+    $scope.closeErrorAlert = function(){
+        $scope.showError = false;
     }
 
     $scope.selectConfig = {

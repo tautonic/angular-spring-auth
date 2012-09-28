@@ -258,11 +258,25 @@
                 <button class="btn" ng-click="edit(profile)"><i class="icon-edit"></i> Edit</button>
                 <button class="btn btn-success" ng-click="create(profile)"><i class="icon-plus icon-white"></i> Create</button>
                 <button class="btn btn-danger" ng-click="delete()"><i class="icon-trash icon-white"></i> Delete</button>
+                <br><br>
+                <button class="btn btn-warning" ng-click="resetPassword()"><i class="icon-envelope icon-white"></i> Reset My Password</button>
+
+                <div class="alert alert-success alert-block" ng-show="showSuccess">
+                    <button type="button" class="close" ui-event="{ closed: 'closeSuccessAlert()' }" data-dismiss="alert">&times;</button>
+                    <h4>Success!</h4>
+                    Check your email account for a new password
+                </div>
+
+                <div class="alert alert-error alert-block" ng-show="showError">
+                    <button type="button" class="close" ui-event="{ closed: 'closeErrorAlert()' }" data-dismiss="alert">&times;</button>
+                    <h4>Error!</h4>
+                    There was an error while processing your request
+                </div>
             </p>
         </div>
 
         <div class="alert alert-success" ng-show="wasProfileDeleted">
-            <a class="close" data-dismiss="alert" href="#">×</a>
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
             <h4 class="alert-heading">Success!</h4> You have successfully deleted the profile of {{profile.firstName}} {{profile.lastName}}
         </div>
     </div>
@@ -614,4 +628,43 @@
     <tt>createProfile.email.$valid = {{createProfile.email.$valid}}</tt><br>
     <tt>createProfile.email.$error = {{createProfile.email.$error}}</tt><br>
     <tt>createProfile.$valid = {{createProfile.$valid}}</tt><br>-->
+</div>
+
+<div class="profile clearfix thumbnail" ng-show="isResetPassMode">
+    <div class="profile-left">
+        <img src="{{profile.thumbnail}}" alt="">
+
+        <div class="caption">
+            <!--<p>{{profile.bio}}</p>-->
+            <p>
+                <button class="btn" ng-click="edit(profile)"><i class="icon-edit"></i> Edit</button>
+                <button class="btn btn-success" ng-click="create(profile)"><i class="icon-plus icon-white"></i> Create</button>
+                <button class="btn btn-danger" ng-click="delete()"><i class="icon-trash icon-white"></i> Delete</button>
+                <br><br>
+                <button class="btn btn-warning" ng-click="resetPassword()"><i class="icon-envelope icon-white"></i> Reset My Password</button>
+
+                <div class="alert alert-success alert-block" ng-show="showSuccess">
+                    <h4>We've given you a new temporary password</h4>
+                    Check your email account for your new password.
+                </div>
+
+                <div class="alert alert-error alert-block" ng-show="showError">
+                    <button type="button" class="close" ui-event="{ closed: 'closeErrorAlert()' }" data-dismiss="alert">&times;</button>
+                    <h4>Error!</h4>
+                    There was an error while processing your request
+                </div>
+            </p>
+        </div>
+
+        <div class="alert alert-success" ng-show="wasProfileDeleted">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <h4 class="alert-heading">Success!</h4> You have successfully deleted the profile of {{profile.firstName}} {{profile.lastName}}
+        </div>
+    </div>
+
+    <div class="profile-right">
+        <h6>{{profile._id}}</h6>
+        <h2>{{profile.username}}</h2>
+        <h6>Email</h6> {{profile.accountEmail.address}} <br>
+    </div>
 </div>

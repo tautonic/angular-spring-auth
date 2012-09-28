@@ -13,7 +13,7 @@ angular.module( 'bgc.directives', [] )
     .directive('docViewer', function (){
         return{
             restrict:'E',
-            template: '<iframe src="" style="width:98%; height:700px;" frameborder="3px"></iframe>',
+            template: '<iframe src="" style="margin: 2em 0 0 2em; width:50%; height:700px;" frameborder="3px"></iframe>',
             compile: function(element, attrs){
                 var isGoogleDoc = false;
 

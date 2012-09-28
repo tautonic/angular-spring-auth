@@ -29,6 +29,9 @@
         $routeProvider.when( '/profile/:profileId', {
             templateUrl: 'lib/profile/profile.html'
         } );
+        $routeProvider.when('/passwordtoken/:token', {
+            templateUrl: 'lib/profile/profile.html'
+        });
         $routeProvider.when( '/both/:articleId', {
             templateUrl: 'partials/partial2.html'
         } );

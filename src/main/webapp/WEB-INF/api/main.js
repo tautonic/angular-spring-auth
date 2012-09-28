@@ -585,7 +585,7 @@ app.get('/profiles/images/', function(req, id){
     }
 });
 
-app.get('/data', function(req) {
+app.get('/data/', function(req) {
     var opts = {
         url: 'https://maps.googleapis.com/maps/api/place/autocomplete/json?' + req.params.q,
         method: 'GET',
@@ -608,6 +608,63 @@ app.get('/data', function(req) {
     });
 
     return json({"universities": universities.predictions});
+});
+
+app.post('/utility/resettoken/', function(req){
+    var data = req.postParams;
+    data.callback = 'http://localhost:9300/myapp/api/';
+
+    log.info('SEND PASSWORD POST DATA!!! ', JSON.stringify(data, null, 4));
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/email/resettoken',
+        method: 'POST',
+        data: JSON.stringify(data),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    console.log('EXCHANGE STATUS!!! ', exchange.status);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
+});
+
+app.post('/utility/resetpassword/', function(req){
+    var data = req.postParams;
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/email/resetpassword',
+        method: 'POST',
+        data: JSON.stringify(data),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    console.log('EXCHANGE STATUS!!! ', exchange.status);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
 });
 
 /************************
