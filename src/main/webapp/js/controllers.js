@@ -12,7 +12,7 @@ function MyCtrl1($rootScope, $scope, $http ) {
         })
     };
 
-    $http.get('api/notifications?filters=', options).success(function(data) {
+    $http.get('api/notifications?filters=likes comments discussions collaborators ideas companies profiles spMessages', options).success(function(data) {
         console.log("DATA IS: ",data);
         $scope.stream = data;
     });

@@ -83,16 +83,16 @@
                 </div>
                 <div class="personal-details">
                     <h5>Logged In As:</h5>
-                    <a href="#/profile">{{auth.principal.username}}</a>
+                    <a href="#/profile/{{auth.principal.id}}">{{auth.principal.username}}</a>
                 </div>
                 <ul id="stream" ng-repeat="item in stream.items">
                     <li class="you">
                         <div class="picture-frame">
-                            <img src="images/190x140.gif" width="40">
+                            <img src="{{item.thumbnailUrl}}" width="40">
                         </div>
                         <div class="update">
-                            Posted a new discussion
-                            <a href="#/profile">Bob Dole</a> - 2 hours ago.
+                            <p ng-bind-html="item.message"></p>
+                            {{item.dateCreated}}.
                         </div>
                     </li>
                 </ul>

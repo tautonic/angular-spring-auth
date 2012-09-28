@@ -118,6 +118,23 @@ app.get('/article/:id', function(req, id) {
     }
 });
 
+app.post('/article/new', function(req) {
+    var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
+    var auth = SecurityContextHolder.context.authentication;
+
+    var servletRequest = req.env.servletRequest;
+    if(servletRequest.isUserInRole('ROLE_ADMIN'))
+    {
+        return {
+            status:400,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
+
+    //at this point we need to send the post content to the zocia server and specifically the wordpress thing
+});
+
 /********** Discussion posts *********/
 
 /**
@@ -227,18 +244,20 @@ app.get('/notifications', function(req) {
         filteredActivities = filteredActivities.replace(activity, '');
     });
 
+    var url = 'http://localhost:9300/myapp/api/activities/streams/' + profile.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ',');
+
     // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
-    var exchange = ajax('http://localhost:9300/myapp/api/activities/streams/' + profile.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ','));
+    var exchange = ajax(url);
 
     // Try to parse the results, wrap each activity in a mixin, then return a response
     try {
         var stream = exchange.content;
         var activities = [];
-
         stream.acts.forEach(function (activity) {
-            activity = new ActivityMixin(activity, request);
+            activity = new ActivityMixin(activity, req, ctx('/'));
 
             if (activity.description !== null) {
+
                 // Assign values from the mixin to a temp object, since the mixin won't be passed via JSON
                 activities.push({
                     'thumbnailUrl': activity.thumbnailUrl,

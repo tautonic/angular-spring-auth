@@ -57,6 +57,21 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         loadContent();
     }
 
+    $scope.addNewArticle = function() {
+        $scope.pageType = "add";
+        $scope.article = {
+            title: '',
+            description: '',
+            content: ''
+        }
+    }
+
+    $scope.saveNewArticle = function() {
+        $http.post("api/article/new", $scope.article).success(function(data) {
+            alert("article inserted successfully");
+        });
+    }
+
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
     $rootScope.$on('event:logoutConfirmed', function() { loadContent(); });
 

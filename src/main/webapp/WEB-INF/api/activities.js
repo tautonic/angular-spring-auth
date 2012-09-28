@@ -9,6 +9,59 @@ var {getDiscussion} = require('discussions');
 
 var {trimpathString} = require('trimpath');
 
+var text = {
+    "notifications-activity.ac.companies": "${actorLink} invited ${directLink} to collaborate on ${aboutLink}",
+    "notifications-activity.ac.me.companies": "${actorLink} invited you to collaborate on ${aboutLink}",
+    "notifications-activity.ac.me.profiles": "${actorLink} invited you to collaborate on ${aboutLink}",
+    "notifications-activity.aco.me.profiles": "${actorLink} added you as an owner of ${aboutLink}",
+    "notifications-activity.aco.profiles": "${actorLink} added ${directLink} as an owner of ${aboutLink}",
+    "notifications-activity.c.claims": "${actorLink} put in a claim request for ${directLink}.",
+    "notifications-activity.c.comment": "${actorLink} commented on ${aboutLink}",
+    "notifications-activity.c.companies": "${actorLink} created ${directLink}",
+    "notifications-activity.c.discussions": "${actorLink} created a discussion called ${aboutLink}",
+    "notifications-activity.c.ideas": "${actorLink} created ${directLink}",
+    "notifications-activity.c.themself.profiles": "${actorLink} created your profile",
+    "notifications-activity.c.profiles": "${actorLink} created ${directLink}",
+    "notifications-activity.c.ratings": "${actorLink} gave a rating to ${aboutLink}.",
+    "notifications-activity.c.reply": "${actorLink} replied to discussion ${aboutLink}",
+    "notifications-activity.c.self.profiles": "You created your profile",
+    "notifications-activity.c.self.self.profiles": "You created your profile",
+    "notifications-activity.c.spmessages": "${aboutLink}: ${message}",
+    "notifications-activity.cv.companies": "${actorLink} closed ${directLink}",
+    "notifications-activity.dc.companies": "${actorLink} removed ${directLink} as a collaborator on ${aboutLink}",
+    "notifications-activity.dc.me.companies": "${actorLink} removed you as a collaborator on ${aboutLink}",
+    "notifications-activity.dc.self.companies": "You removed yourself as an owner of ${aboutLink}",
+    "notifications-activity.dc.themself.companies": "${actorLink} removed themself as a collaborator on ${aboutLink}",
+    "notifications-activity.fsp.companies": "${actorLink} started following ${directLink}.",
+    "notifications-activity.fsp.services": "${actorLink} stopped following ${directLink}.",
+    "notifications-activity.l.companies": "${actorLink} liked ${aboutLink}",
+    "notifications-activity.l.discussion": "${actorLink} liked ${aboutLink}",
+    "notifications-activity.l.ideas": "${actorLink} liked ${aboutLink}",
+    "notifications-activity.l.resources": "${actorLink} liked ${aboutLink}",
+    "notifications-activity.m.message": "${actorLink} sent you a private message.",
+    "notifications-activity.m.reply": "${actorLink} replied to your comment.",
+    "notifications-activity.no.results": "No recent activity results.",
+    "notifications-activity.ov.companies": "${actorLink} re-opened ${directLink}",
+    "notifications-activity.pi.companies": "${actorLink} turned ${directLink} into a company.",
+    "notifications-activity.r.discussions": "${actorLink} replied to a discussion titled ${directLink}.",
+    "notifications-activity.recent-activity": "Recent Activity",
+    "notifications-activity.spmessages.error": "(could not retrieve this message)",
+    "notifications-activity.u.accomplish": "${actorLink} updated the accomplishments for ${directLink}",
+    "notifications-activity.u.change": "${actorLink} updated something.",
+    "notifications-activity.u.companies": "${actorLink} updated the information for ${directLink}",
+    "notifications-activity.u.ideas": "${actorLink} updated the information for ${directLink}",
+    "notifications-activity.u.me.profiles": "${actorLink} updated your profile",
+    "notifications-activity.u.profiles": "${actorLink} updated ${directLink}",
+    "notifications-activity.u.self.profiles": "You updated your profile",
+    "notifications-activity.u.services": "${actorLink} updated the information for ${directLink}",
+    "notifications-activity.uc.companies": "${actorLink} updated collaborator permissions on ${aboutLink}",
+    "notifications-activity.uc.me.companies": "${actorLink} updated collaborator permissions on ${aboutLink}",
+    "notifications-activity.uco.me.profiles": "${actorLink} promoted you to be an owner of ${aboutLink}",
+    "notifications-activity.uco.profiles": "${actorLink} promoted ${directLink} to be an owner of ${aboutLink}",
+    "notifications-activity.ufsp.companies": "${actorLink} stopped following ${directLink}.",
+    "notifications-activity.ufsp.services": "${actorLink} stopped following ${directLink}."
+}
+
 function getProfile(id) {
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
@@ -31,7 +84,7 @@ function getProfile(id) {
     return result;
 }
 
-exports.ActivityMixin = function(activity, request) {
+exports.ActivityMixin = function(activity, request, baseUrl) {
     var result = {};
 
     var defAttrs = {
@@ -65,7 +118,7 @@ exports.ActivityMixin = function(activity, request) {
      */
     Object.defineProperty(result, "thumbnailUrl", {
         get: function() {
-            return getThumbnailUrl(activity.actor, 'sml')
+            return baseUrl + "images/190x140.gif";//getThumbnailUrl(activity.actor, 'sml')
         }
     }, defAttrs);
 
@@ -135,8 +188,10 @@ exports.ActivityMixin = function(activity, request) {
 
             // Look up translation
             var key = String('notifications-activity.' + verb + '.' + type).toLowerCase();
-            var skinStr = i18n(key);
-
+            var skinStr = text[key];
+            if(skinStr == undefined) {
+                log.info("Error: Notification key not found. Expecting: "+key);
+            }
             // DEBUG
             // if (key) {
             // 	log.info(key);
@@ -150,7 +205,7 @@ exports.ActivityMixin = function(activity, request) {
             // Subject link
             activity.actorLink = request.authenticatedId == activity.actor._id
                 ? "you"
-                : format('<a href="%s%s/%s">%s</a>', ctx('/'), 'users',
+                : format('<a href="%s%s/%s">%s</a>', baseUrl, 'users',
                 activity.actor.username, activity.actor.fullName || activity.actor.username);
 
             // Indirect object link
@@ -189,7 +244,7 @@ exports.ActivityMixin = function(activity, request) {
                 }
 
                 activity.aboutLink = format('<a href="%s%s/%s">%s</a>',
-                    ctx('/'), linkType, linkId, linkText);
+                    baseUrl, linkType, linkId, linkText);
             }
 
             // Direct object link
@@ -239,7 +294,7 @@ exports.ActivityMixin = function(activity, request) {
                 }
 
                 activity.directLink = format('<a href="%s%s/%s">%s</a>',
-                    ctx('/'), linkType, linkId, linkText);
+                    baseUrl, linkType, linkId, linkText);
             }
 
             // Special case: service provider messages
