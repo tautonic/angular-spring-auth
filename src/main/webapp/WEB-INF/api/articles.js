@@ -40,4 +40,4 @@ function generateBasicAuthorization(user) {
     return 'Basic ' + base64;
 }
 
-export('getAllArticles', 'getArticlesByCategory', 'getArticle', 'linkDiscussionToArticle');
+export('ajax', 'getAllArticles', 'getArticlesByCategory', 'getArticle', 'linkDiscussionToArticle');
