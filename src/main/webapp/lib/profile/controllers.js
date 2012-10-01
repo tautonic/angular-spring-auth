@@ -322,9 +322,9 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
         });
     }
 
-    $scope.resetPassword = function(){
+    $scope.reset = function(){
         var data = {
-            profileEmail: $scope.recoveryAdress
+            profileEmail: $scope.recoveryAddress
         }
 
         $http.post('/gc/api/utility/resettoken/', data)

@@ -26,9 +26,13 @@
         } );
 
         //individual controller pages, some of these might be removed
+        $routeProvider.when( '/profile', {
+            templateUrl: 'lib/profile/profile.html'
+        } );
         $routeProvider.when( '/profile/:profileId', {
             templateUrl: 'lib/profile/profile.html'
         } );
+
         $routeProvider.when('/passwordtoken/:token', {
             templateUrl: 'lib/profile/profile.html'
         });
