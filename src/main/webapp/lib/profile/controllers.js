@@ -34,10 +34,17 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
                 $scope.showError = true;
             });
     }else{
-        $scope.isViewMode = true;
+        $scope.isListMode = true
+        $scope.isViewMode = false;
         $scope.isEditMode = false;
         $scope.isCreateMode = false;
         $scope.isResetPassMode = false;
+    }
+
+    if($routeParams.profileId){
+        Profile.query(function(profile){
+            $scope.profile = profiles;
+        });
     }
 
     $scope.thumbnailURI = '';
@@ -47,7 +54,7 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
     $scope.eduSchoolName = [];
 
     Profile.query(function(profiles){
-        $scope.profile = profiles.content[0];
+        $scope.profiles = profiles.content;
     });
 
     $scope.edit = function(profile){
