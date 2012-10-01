@@ -7,6 +7,8 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
 
     $scope.showSuccess = false;
     $scope.showError = false;
+    $scope.showResetForm = true;
+    $scope.recoveryAdress = '';
 
     if($routeParams.token){
         var data = {
@@ -297,11 +299,12 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
 
     $scope.resetPassword = function(){
         var data = {
-            profileEmail: $scope.profile.accountEmail.address
+            profileEmail: $scope.recoveryAdress
         }
 
         $http.post('/gc/api/utility/resettoken/', data)
             .success(function(data, status, headers, config){
+                $scope.showResetForm = false;
                 $scope.showSuccess = true;
             }
         ).error(function(data, status, headers, config){

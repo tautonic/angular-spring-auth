@@ -259,7 +259,26 @@
                 <button class="btn btn-success" ng-click="create(profile)"><i class="icon-plus icon-white"></i> Create</button>
                 <button class="btn btn-danger" ng-click="delete()"><i class="icon-trash icon-white"></i> Delete</button>
                 <br><br>
-                <button class="btn btn-warning" ng-click="resetPassword()"><i class="icon-envelope icon-white"></i> Reset My Password</button>
+
+                <form name="resetPassword" class="form" ng-show="showResetForm" novalidate>
+                    <div class="control-group">
+                        <label class="control-label" for="pass-reset">Email</label>
+                        <div class="controls">
+                            <input type="email"
+                                   ng-model="recoveryAddress"
+                                   class="input-xlarge"
+                                   id="pass-reset"
+                                   name="pass-reset"
+                                   ng-minlength="3"
+                                   required
+                                   value="">
+                        </div>
+                        <br>
+                    </div>
+
+                    <button class="btn btn-warning" ng-click="resetPassword()">
+                        <i class="icon-envelope icon-white"></i> Reset My Password</button>
+                </form>
 
                 <div class="alert alert-success alert-block" ng-show="showSuccess">
                     <button type="button" class="close" ui-event="{ closed: 'closeSuccessAlert()' }" data-dismiss="alert">&times;</button>
