@@ -39,11 +39,21 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
         $scope.isEditMode = false;
         $scope.isCreateMode = false;
         $scope.isResetPassMode = false;
+
+        Profile.query(function(profiles){
+            $scope.profiles = profiles.content;
+        });
     }
 
     if($routeParams.profileId){
-        Profile.query(function(profile){
-            $scope.profile = profiles;
+        var profile = Profile.get({profileId: $routeParams.profileId}, function(){
+            $scope.isListMode = false
+            $scope.isViewMode = true;
+            $scope.isEditMode = false;
+            $scope.isCreateMode = false;
+            $scope.isResetPassMode = false;
+
+            $scope.profile = profile.content;
         });
     }
 
@@ -52,10 +62,6 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
     $scope.workInstitutionEdit = {};
     $scope.originalInstitution = '';
     $scope.eduSchoolName = [];
-
-    Profile.query(function(profiles){
-        $scope.profiles = profiles.content;
-    });
 
     $scope.edit = function(profile){
         $scope.master = angular.copy(profile);
@@ -302,6 +308,18 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
         }else{
             $scope.profile.educationHistory[index].schoolName = $scope.originalInstitution;
         }
+    }
+
+    $scope.list = function(){
+        $scope.isListMode = true
+        $scope.isViewMode = false;
+        $scope.isEditMode = false;
+        $scope.isCreateMode = false;
+        $scope.isResetPassMode = false;
+
+        Profile.query(function(profiles){
+            $scope.profiles = profiles.content;
+        });
     }
 
     $scope.resetPassword = function(){

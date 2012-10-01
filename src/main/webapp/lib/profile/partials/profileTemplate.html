@@ -259,6 +259,8 @@
                 <button class="btn btn-success" ng-click="create(profile)"><i class="icon-plus icon-white"></i> Create</button>
                 <button class="btn btn-danger" ng-click="delete()"><i class="icon-trash icon-white"></i> Delete</button>
                 <br><br>
+                <button class="btn btn-success" ng-click="list()"><i class="icon-list icon-white"></i> View All Profiles</button>
+                <br><br>
 
                 <form name="resetPassword" class="form" ng-show="showResetForm" novalidate>
                     <div class="control-group">
@@ -319,7 +321,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="profile in profiles">
-                <td><a href="/#/profile/{{profile._id}}">{{profile._id}}</a></td>
+                <td><a href="#/profile/{{profile._id}}">{{profile._id}}</a></td>
                 <td>{{profile.name.given}}</td>
                 <td>{{profile.name.surname}}</td>
                 <td>{{profile.username}}</td>
