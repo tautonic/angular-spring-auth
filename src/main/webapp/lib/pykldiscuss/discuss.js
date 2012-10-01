@@ -74,6 +74,7 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
             } else {
                 $scope.pageType = "new";
                 $scope.reply.title = $rootScope.title;
+                $scope.isLoaded = true;
             }
         }).error(function (data, status) {
                 $log.info("ERROR retrieving protected resource: " + data + " status: " + status);
