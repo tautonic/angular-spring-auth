@@ -191,4 +191,26 @@ angular.module( 'bgc.directives', [] )
                 uploader.init();
             }
         }
+    }])
+    .directive('emailValidator', ['$http', function($http){
+        return {
+            require: 'ngModel',
+            link: function(scope, elm, attrs, ctrl){
+
+                ctrl.$parsers.unshift(function(viewValue){
+                    $http.get('api/profiles/asyncEmail/' + viewValue).success(function(data){
+                        console.log(data);
+                        if(data === 'true'){
+                            ctrl.$setValidity('emailValidator', true);
+                            return viewValue;
+                        }else{
+                            ctrl.$setValidity('emailValidator', false);
+                            return undefined;
+                        }
+                    }).error(function(data, status){
+                            console.log(status);
+                        });
+                });
+            }
+        }
     }]);
