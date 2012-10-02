@@ -13,7 +13,7 @@ angular.module( 'bgc.directives', [] )
     .directive('docViewer', function (){
         return{
             restrict:'E',
-            template: '<iframe src="" style="width:98%; height:700px;" frameborder="3px"></iframe>',
+            template: '<iframe src="" style="margin: 2em 0 0 2em; width:50%; height:700px;" frameborder="3px"></iframe>',
             compile: function(element, attrs){
                 var isGoogleDoc = false;
 
@@ -31,6 +31,7 @@ angular.module( 'bgc.directives', [] )
     })
     .directive('passwordValidator', function(){
         return{
+            restrict: 'A',
             require: 'ngModel',
             link: function(scope, elm, attr, ctrl) {
                 var pwdWidget = elm.inheritedData('$formController')[attr.passwordValidator];
@@ -50,7 +51,7 @@ angular.module( 'bgc.directives', [] )
             }
         };
     })
-    .directive('pyklUpload', ['$auth', '$http', function($auth, $http){
+    .directive('pyklUpload', ['$http', function($http){
         'use strict';
         //alert('Upload Directive!');
 
@@ -189,6 +190,31 @@ angular.module( 'bgc.directives', [] )
                 });
 
                 uploader.init();
+            }
+        }
+    }])
+    .directive('emailValidator', ['$http', function($http){
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, elm, attrs, ctrl){
+                /*
+                    Zocia responds with a 404 when we can't find a user by email, so
+                    we're interested in a 404 response from the server to indicate
+                    an email not associated with an account
+                */
+                ctrl.$formatters.unshift(function(viewValue){
+                    console.log(ctrl.$valid);
+                    $http.get('api/profiles/asyncEmail/' + viewValue).success(function(data){
+                        if(data.status === 404){
+                            ctrl.$setValidity('emailValidator', true);
+                            return viewValue;
+                        }else{
+                            ctrl.$setValidity('emailValidator', false);
+                            return undefined;
+                        }
+                    });
+                });
             }
         }
     }]);

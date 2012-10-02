@@ -13,8 +13,9 @@ var {json} = require( 'ringo/jsgi/response' );
 var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
-var {getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle} = require('articles');
+var {ajax, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle} = require('articles');
 var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
+var {ActivityMixin} = require('activities');
 
 var {encode} = require('ringo/base64');
 
@@ -117,6 +118,23 @@ app.get('/article/:id', function(req, id) {
     }
 });
 
+app.post('/article/new', function(req) {
+    var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
+    var auth = SecurityContextHolder.context.authentication;
+
+    var servletRequest = req.env.servletRequest;
+    if(servletRequest.isUserInRole('ROLE_ADMIN'))
+    {
+        return {
+            status:400,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
+
+    //at this point we need to send the post content to the zocia server and specifically the wordpress thing
+});
+
 /********** Discussion posts *********/
 
 /**
@@ -198,6 +216,73 @@ app.post('/discussions/:id', function(req, id) {
     return json(addReply(id, req.params.reply, getUserDetails()));
 });
 /****** End discussion posts ********/
+
+app.get('/notifications', function(req) {
+    var params = req.params;
+
+    // Get user profile obj
+    var profile = getUserDetails();
+    if(profile.principal.id === undefined) {
+        log.info("User not found or not logged in. Exiting");
+        return json({
+            itemCount: 0,
+            currentPage: 0,
+            items: []
+        });
+    }
+    // Get info for paginated results
+    var page = isNaN(params.page) ? '1' : params.page;
+    var size = isNaN(params.pageSize) ? '10' : params.pageSize;
+    var from = (page - 1) * size;
+
+    // Due to the way "filtering" was set up server side, we have to invert what the front end gives us (unless we want to re-write the front end, which I don't at this point)
+    var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
+    var allowedActivities = params.filters.trim().split(' ');
+
+    //remove terms that are not in the active filter list
+    allowedActivities.forEach(function(activity) {
+        filteredActivities = filteredActivities.replace(activity, '');
+    });
+
+    var url = 'http://localhost:9300/myapp/api/activities/streams/' + profile.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ',');
+
+    // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
+    var exchange = ajax(url);
+
+    // Try to parse the results, wrap each activity in a mixin, then return a response
+    try {
+        var stream = exchange.content;
+        var activities = [];
+        stream.acts.forEach(function (activity) {
+            activity = new ActivityMixin(activity, req, ctx('/'));
+
+            if (activity.description !== null) {
+
+                // Assign values from the mixin to a temp object, since the mixin won't be passed via JSON
+                activities.push({
+                    'thumbnailUrl': activity.thumbnailUrl,
+                    'username': activity.props.actor.username,
+                    'message': activity.description,
+                    'dateCreated': activity.props.dateCreated,
+                    'isOwner': activity.isOwner
+                });
+            }
+        });
+
+        return json({
+            itemCount: stream.total,
+            currentPage: page,
+            items: activities
+        });
+    } catch (e) {
+        log.info("Error parsing activity stream: " + e.message);
+        return json({
+            itemCount: 0,
+            currentPage: 0,
+            items: []
+        });
+    }
+});
 
 app.get( '/ping', function ( req ) {
 	var servletRequest = req.env.servletRequest;
@@ -396,17 +481,23 @@ app.del('/profiles/:id', function(req, id){
 });
 
 app.get('/profiles/asyncEmail/:email', function(req, email){
-    //java.lang.Thread.sleep(5000);
-    var valid = true;
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/byprimaryemail/' + email,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
 
-    for(var key in profiles){
-        if(email === profiles[key].email){
-            valid = false;
-            break;
-        }
-    }
+    var exchange = httpclient.request(opts);
 
-    return json(valid);
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    return result;
 });
 
 /**
@@ -417,24 +508,6 @@ app.get('/profiles/asyncEmail/:email', function(req, email){
  * @returns {JsgiResponse} An HTML <div> containing a JSON string with upload results
  */
 app.post('/profiles/images/upload/', function (req) {
-    /*var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/' + id,
-        method: 'GET',
-        headers: Headers({ 'x-rt-index': 'gc' }),
-        async: false
-    };
-
-    var exchange = httpclient.request(opts);
-
-    var profile = JSON.parse(exchange.content);
-
-    log.info('EXCHANGE CONTENT ', JSON.stringify(profile, null, 4));
-
-    if (!profile) return {
-        status:404,
-        headers:{"Content-Type":'application/json'},
-        body:[]
-    };*/
 
     var contentType = req.env.servletRequest.getContentType();
 
@@ -585,7 +658,7 @@ app.get('/profiles/images/', function(req, id){
     }
 });
 
-app.get('/data', function(req) {
+app.get('/data/', function(req) {
     var opts = {
         url: 'https://maps.googleapis.com/maps/api/place/autocomplete/json?' + req.params.q,
         method: 'GET',
@@ -608,6 +681,63 @@ app.get('/data', function(req) {
     });
 
     return json({"universities": universities.predictions});
+});
+
+app.post('/utility/resettoken/', function(req){
+    var data = req.postParams;
+    data.callback = 'http://localhost:9300/myapp/api/';
+
+    log.info('SEND PASSWORD POST DATA!!! ', JSON.stringify(data, null, 4));
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/email/resettoken',
+        method: 'POST',
+        data: JSON.stringify(data),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    console.log('EXCHANGE STATUS!!! ', exchange.status);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
+});
+
+app.post('/utility/resetpassword/', function(req){
+    var data = req.postParams;
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/email/resetpassword',
+        method: 'POST',
+        data: JSON.stringify(data),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    console.log('EXCHANGE STATUS!!! ', exchange.status);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
 });
 
 /************************
