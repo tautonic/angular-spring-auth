@@ -60,29 +60,6 @@
         tinymce: {
             theme: 'simple',
             width: '50%'
-        },
-        select2: {
-            id: 'id',
-            ajax: {
-                url: "http://localhost:8080/gc/api/data/",
-                dataType: 'json',
-                data: function(term, page) {
-                    var uri = encodeURI("input=" + term + "&types=establishment&sensor=true&key=AIzaSyAGbAUbk7G-U0LS7t3D5oQyME9REnTfFRI");
-                    return {
-                        q: uri,
-                        page_limit: 10
-                    };
-                },
-                results: function (data, page) { // parse the results into the format expected by Select2.
-                    return {results: data.universities};
-                }
-            },
-            formatResult: function(object, container, query){
-                return object.terms[0].value;
-            },
-            formatSelection: function(object, container){
-                return object.terms[0].value;
-            }
         }
     });
 
