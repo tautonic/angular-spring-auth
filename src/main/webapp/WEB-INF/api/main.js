@@ -658,31 +658,6 @@ app.get('/profiles/images/', function(req, id){
     }
 });
 
-app.get('/data/', function(req) {
-    var opts = {
-        url: 'https://maps.googleapis.com/maps/api/place/autocomplete/json?' + req.params.q,
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        async: false
-    };
-
-    var exchange = httpclient.request(opts);
-
-    var universities = JSON.parse(exchange.content);
-
-    universities.predictions.forEach(function(element, index, array){
-        if(element.description.toLowerCase().indexOf('university') === -1 ||
-            element.description.toLowerCase().indexOf('college') === -1 )
-        {
-            universities.predictions.slice(index, 1);
-        }
-    });
-
-    return json({"universities": universities.predictions});
-});
-
 app.post('/utility/resettoken/', function(req){
     var data = req.postParams;
     data.callback = 'http://localhost:9300/myapp/api/';
