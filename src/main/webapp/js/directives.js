@@ -31,6 +31,7 @@ angular.module( 'bgc.directives', [] )
     })
     .directive('passwordValidator', function(){
         return{
+            restrict: 'A',
             require: 'ngModel',
             link: function(scope, elm, attr, ctrl) {
                 var pwdWidget = elm.inheritedData('$formController')[attr.passwordValidator];
@@ -50,7 +51,7 @@ angular.module( 'bgc.directives', [] )
             }
         };
     })
-    .directive('pyklUpload', ['$auth', '$http', function($auth, $http){
+    .directive('pyklUpload', ['$http', function($http){
         'use strict';
         //alert('Upload Directive!');
 
@@ -194,22 +195,24 @@ angular.module( 'bgc.directives', [] )
     }])
     .directive('emailValidator', ['$http', function($http){
         return {
+            restrict: 'A',
             require: 'ngModel',
             link: function(scope, elm, attrs, ctrl){
-
+                /*
+                    Zocia responds with a 404 when we can't find a user by email, so
+                    we're interested in a 404 response from the server to indicate
+                    an email not associated with an account
+                 */
                 ctrl.$parsers.unshift(function(viewValue){
                     $http.get('api/profiles/asyncEmail/' + viewValue).success(function(data){
-                        console.log(data);
-                        if(data === 'true'){
+                        if(data.status === 404){
                             ctrl.$setValidity('emailValidator', true);
                             return viewValue;
                         }else{
                             ctrl.$setValidity('emailValidator', false);
                             return undefined;
                         }
-                    }).error(function(data, status){
-                            console.log(status);
-                        });
+                    });
                 });
             }
         }

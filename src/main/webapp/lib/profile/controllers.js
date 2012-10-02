@@ -33,16 +33,6 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
 
                 $scope.showError = true;
             });
-    }else{
-        $scope.isListMode = true
-        $scope.isViewMode = false;
-        $scope.isEditMode = false;
-        $scope.isCreateMode = false;
-        $scope.isResetPassMode = false;
-
-        Profile.query(function(profiles){
-            $scope.profiles = profiles.content;
-        });
     }
 
     if($routeParams.profileId){
@@ -54,6 +44,16 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
             $scope.isResetPassMode = false;
 
             $scope.profile = profile.content;
+        });
+    }else{
+        $scope.isListMode = true
+        $scope.isViewMode = false;
+        $scope.isEditMode = false;
+        $scope.isCreateMode = false;
+        $scope.isResetPassMode = false;
+
+        Profile.query(function(profiles){
+            $scope.profiles = profiles.content;
         });
     }
 
@@ -97,16 +97,14 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
     }
 
     $scope.cancel = function(){
-        $scope.profile = angular.copy($scope.master);
-        $scope.id = $scope.master.id;
-        $scope.isViewMode = true;
+        $scope.isListMode = true
+        $scope.isViewMode = false;
         $scope.isEditMode = false;
         $scope.isCreateMode = false;
+        $scope.isResetPassMode = false;
     }
 
-    $scope.create = function(profile){
-        $scope.master = angular.copy(profile);
-
+    $scope.create = function(){
         $scope.profile = {};
 
         $scope.profile.workHistory = [
@@ -155,26 +153,29 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
             }
         ];
 
+        $scope.isListMode = false
         $scope.isViewMode = false;
         $scope.isEditMode = false;
         $scope.isCreateMode = true;
+        $scope.isResetPassMode = false;
     }
 
     $scope.save = function(profile){
-        profile.educationHistory.forEach(function(school){
-            school.schoolName = school.schoolName.text;
-        });
-
         $scope.newProfile = new Profile(profile);
-        $scope.newProfile.thumbnail = $scope.thumbnailURI;
+
+        if($scope.thumbnailURI !== ''){
+            $scope.newProfile.thumbnail = $scope.thumbnailURI;
+        }
 
         $scope.newProfile.$save(function(response){
             $scope.profile._id = response.content._id;
             $scope.profile.thumbnail = response.content.thumbnail;
 
+            $scope.isListMode = false
             $scope.isViewMode = true;
             $scope.isEditMode = false;
             $scope.isCreateMode = false;
+            $scope.isResetPassMode = false;
 
             $scope.responseContent = response.content;
         }, function(response){
@@ -280,46 +281,30 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
         $scope.profile.workHistory.splice(index, 1);
     }
 
-    $scope.yearToChanged = function(){
-        //console.log($scope.profile.workHistory.yearTo.gregorian);
-    }
-
-    $scope.yearFinishedChanged = function(){
-        //console.log($scope.profile)
-    }
-
-    $scope.workInstitutionChangedCreate = function(){
-        if($scope.workInstitutionCreate !== null){
-            $scope.profile.workHistory[0].businessName = $scope.workInstitutionCreate.text;
-        }
-    }
-
-    $scope.workInstitutionChangedEdit = function(){
-        if($scope.profile.workHistory[0].businessName !== null){
-            $scope.profile.workHistory[0].businessName = $scope.profile.workHistory[0].businessName.terms[0].value;
-        }else{
-            $scope.profile.workHistory[0].businessName = $scope.originalInstitution;
-        }
-    }
-
-    $scope.eduInstitutionChangedEdit = function(index){
-        if($scope.profile.educationHistory[index].schoolName !== null){
-            $scope.profile.educationHistory[index].schoolName = $scope.profile.educationHistory[index].schoolName.text;
-        }else{
-            $scope.profile.educationHistory[index].schoolName = $scope.originalInstitution;
-        }
-    }
-
     $scope.list = function(){
         $scope.isListMode = true
         $scope.isViewMode = false;
         $scope.isEditMode = false;
         $scope.isCreateMode = false;
         $scope.isResetPassMode = false;
-
+        $location.path('/profile');
         Profile.query(function(profiles){
             $scope.profiles = profiles.content;
         });
+    }
+
+    $scope.view = function(id){
+        $location.path('gc/#/profile' + id);
+
+        /*var profile = Profile.get({profileId: id}, function(){
+            $scope.isListMode = false
+            $scope.isViewMode = true;
+            $scope.isEditMode = false;
+            $scope.isCreateMode = false;
+            $scope.isResetPassMode = false;
+
+            $scope.profile = profile.content;
+        });*/
     }
 
     $scope.reset = function(){

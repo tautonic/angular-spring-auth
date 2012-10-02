@@ -46,8 +46,11 @@
             templateUrl: 'partials/partial1.html'
         } );
 		$routeProvider.otherwise( {redirectTo: '/view'} );
-	}
+    }
 
+    function locationProvider( $locationProvider ){
+        $locationProvider.html5Mode(true);
+    }
 
 	// Declare app level module which depends on filters, and services
 	var app = angular.module( 'myApp', ['bgc.directives', 'bgc.services', 'ngSanitize', 'ui', 'pykl'] )
@@ -79,16 +82,6 @@
             },
             formatSelection: function(object, container){
                 return object.terms[0].value;
-            }
-        },
-        jq: {
-            // The qtip namespace
-            qtip: {
-                // qTip options. This object will be used as the defaults
-                position: {
-                    my: 'left center',
-                    at:'right center'
-                }
             }
         }
     });

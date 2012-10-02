@@ -481,17 +481,23 @@ app.del('/profiles/:id', function(req, id){
 });
 
 app.get('/profiles/asyncEmail/:email', function(req, email){
-    //java.lang.Thread.sleep(5000);
-    var valid = true;
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/byprimaryemail/' + email,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
 
-    for(var key in profiles){
-        if(email === profiles[key].email){
-            valid = false;
-            break;
-        }
-    }
+    var exchange = httpclient.request(opts);
 
-    return json(valid);
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    return result;
 });
 
 /**
@@ -502,24 +508,6 @@ app.get('/profiles/asyncEmail/:email', function(req, email){
  * @returns {JsgiResponse} An HTML <div> containing a JSON string with upload results
  */
 app.post('/profiles/images/upload/', function (req) {
-    /*var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/' + id,
-        method: 'GET',
-        headers: Headers({ 'x-rt-index': 'gc' }),
-        async: false
-    };
-
-    var exchange = httpclient.request(opts);
-
-    var profile = JSON.parse(exchange.content);
-
-    log.info('EXCHANGE CONTENT ', JSON.stringify(profile, null, 4));
-
-    if (!profile) return {
-        status:404,
-        headers:{"Content-Type":'application/json'},
-        body:[]
-    };*/
 
     var contentType = req.env.servletRequest.getContentType();
 

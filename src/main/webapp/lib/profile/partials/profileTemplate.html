@@ -61,7 +61,6 @@
                 <div class="controls">
                     <input type="email"
                            ng-model="profile.accountEmail.address"
-                           ng-change="emailChanged()"
                            class="input-xlarge"
                            id="email"
                            name="address"
@@ -250,13 +249,12 @@
 
 <div class="profile clearfix thumbnail" ng-show="isViewMode">
     <div class="profile-left">
-        <img src="{{profile.thumbnail}}" alt="">
+        <img ng-src="{{profile.thumbnail}}" alt="">
 
         <div class="caption">
             <!--<p>{{profile.bio}}</p>-->
             <p>
                 <button class="btn" ng-click="edit(profile)"><i class="icon-edit"></i> Edit</button>
-                <button class="btn btn-success" ng-click="create(profile)"><i class="icon-plus icon-white"></i> Create</button>
                 <button class="btn btn-danger" ng-click="delete()"><i class="icon-trash icon-white"></i> Delete</button>
                 <br><br>
                 <button class="btn btn-success" ng-click="list()"><i class="icon-list icon-white"></i> View All Profiles</button>
@@ -322,7 +320,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="profile in profiles">
-                <td><a href="#/profile/{{profile._id}}">{{profile._id}}</a></td>
+                <td><a ng-href="#/profile/{{profile._id}}">{{profile._id}}</a></td>
                 <td>{{profile.name.given}}</td>
                 <td>{{profile.name.surname}}</td>
                 <td>{{profile.username}}</td>
@@ -330,6 +328,8 @@
             </tr>
         </tbody>
     </table>
+    <br>
+    <button class="btn btn-success" ng-click="create()"><i class="icon-plus icon-white"></i> Create</button>
 </div>
 
 <div class="profile clearfix thumbnail" ng-show="isCreateMode">
@@ -408,15 +408,15 @@
                     <button class="btn btn-success" ng-click="addContactRow()">
                         <i class="icon-plus icon-white"></i> Add</button>
                 </h2>
-                <label class="control-label" for="email">Email</label>
+                <label class="control-label" for="email-address">Email</label>
                 <div class="controls">
                     <input type="email"
                            ng-model="profile.accountEmail.address"
-                           ng-change="emailChanged()"
                            class="input-xlarge"
-                           id="email"
-                           name="address"
+                           id="email-address"
+                           name="email-address"
                            ng-minlength="3"
+                           email-validator
                            required
                            value="">
                 </div>
@@ -662,7 +662,7 @@
 
         <button class="btn btn-success" ng-click="save(profile)" ng-disabled="createProfile.$invalid">
             <i class="icon-folder-open icon-white"></i> Save</button>
-        <button class="btn btn-warning" ng-click="cancel()"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+        <button class="btn btn-warning" ng-click="list()"><i class="icon-ban-circle icon-white"></i> Cancel</button>
     </form>
 
 
