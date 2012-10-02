@@ -47,7 +47,8 @@
                     <li><a ng-href="#/faculty/">Faculty Fellows</a></li>
                     <li><a ng-href="#/content/">Curriculum Content</a></li>
                     <li><a ng-href="#/network/">Network</a></li>
-                    <li><a ng-href="#/profile/">Sign In</a></li>
+                    <li ng-show="!auth.isAuthenticated"><a ng-href="#/profile/">Sign In</a></li>
+                    <li ng-show="auth.isAuthenticated"><a ng-href="#/profile/{{auth.principal.id}}">My Profile</a></li>
                     <li><a href="#"><img src="images/GCEE_images_header_searchIcon.png"></a></li>
                 </ul>
                 <div class="search">
