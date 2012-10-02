@@ -202,8 +202,9 @@ angular.module( 'bgc.directives', [] )
                     Zocia responds with a 404 when we can't find a user by email, so
                     we're interested in a 404 response from the server to indicate
                     an email not associated with an account
-                 */
-                ctrl.$parsers.unshift(function(viewValue){
+                */
+                ctrl.$formatters.unshift(function(viewValue){
+                    console.log(ctrl.$valid);
                     $http.get('api/profiles/asyncEmail/' + viewValue).success(function(data){
                         if(data.status === 404){
                             ctrl.$setValidity('emailValidator', true);

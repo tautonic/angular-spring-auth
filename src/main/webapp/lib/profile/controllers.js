@@ -177,6 +177,8 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
             $scope.isCreateMode = false;
             $scope.isResetPassMode = false;
 
+            $location.path('/profile/' + $scope.profile._id);
+
             $scope.responseContent = response.content;
         }, function(response){
             console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
@@ -287,24 +289,12 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
         $scope.isEditMode = false;
         $scope.isCreateMode = false;
         $scope.isResetPassMode = false;
+
         $location.path('/profile');
+
         Profile.query(function(profiles){
             $scope.profiles = profiles.content;
         });
-    }
-
-    $scope.view = function(id){
-        $location.path('gc/#/profile' + id);
-
-        /*var profile = Profile.get({profileId: id}, function(){
-            $scope.isListMode = false
-            $scope.isViewMode = true;
-            $scope.isEditMode = false;
-            $scope.isCreateMode = false;
-            $scope.isResetPassMode = false;
-
-            $scope.profile = profile.content;
-        });*/
     }
 
     $scope.reset = function(){
