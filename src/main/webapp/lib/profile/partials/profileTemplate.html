@@ -339,30 +339,32 @@
             <legend><h2>{{profile.name.given}} {{profile.name.surname}}</h2> <h6>{{profile._id}}</h6></legend>
             <div class="control-group">
                 <h2>Basic</h2>
-                <label class="control-label" for="username">Username</label>
+                <label class="control-label" for="username-create">Username</label>
                 <div class="controls">
                     <input type="text"
                            ng-model="profile.username"
                            class="input-xlarge"
-                           id="username"
-                           name="username"
+                           id="username-create"
+                           name="username-create"
                            required
                            ng-minlength="3"
                            ng-maxlength="16"
+                           validation-tooltip
                            value="">
                 </div>
                 <br>
 
-                <label class="control-label" for="given-name">First Name</label>
+                <label class="control-label" for="given-name-create">First Name</label>
                 <div class="controls">
                     <input type="text"
                            ng-model="profile.name.given"
                            class="input-xlarge"
-                           id="given-name"
-                           name="given-name"
+                           id="given-name-create"
+                           name="given-name-create"
                            ng-minlength="3"
                            ng-maxlength="16"
                            required
+                           validation-tooltip
                            value="">
                 </div>
                 <br>

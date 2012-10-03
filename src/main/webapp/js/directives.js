@@ -204,17 +204,61 @@ angular.module( 'bgc.directives', [] )
                     an email not associated with an account
                 */
                 ctrl.$formatters.unshift(function(viewValue){
-                    console.log(ctrl.$valid);
-                    $http.get('api/profiles/asyncEmail/' + viewValue).success(function(data){
-                        if(data.status === 404){
-                            ctrl.$setValidity('emailValidator', true);
-                            return viewValue;
-                        }else{
-                            ctrl.$setValidity('emailValidator', false);
-                            return undefined;
-                        }
-                    });
+                    if(ctrl.$valid){
+                        $http.get('api/profiles/asyncEmail/' + viewValue).success(function(data){
+                            if(data.status === 404){
+                                ctrl.$setValidity('emailValidator', true);
+                                return viewValue;
+                            }else{
+                                ctrl.$setValidity('emailValidator', false);
+                                return undefined;
+                            }
+                        });
+                    }
                 });
             }
         }
-    }]);
+    }])
+    .directive('validationTooltip', function(){
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, elm, attrs, ctrl){
+                var controller = ctrl;
+
+                $('#'+attrs.id).tooltip({
+                    trigger: 'manual',
+                    placement: 'right',
+                    title: function(){
+                        return getValidationErrorMessage(attrs, controller.$error);
+                    }
+                });
+
+                elm.bind('blur', function(event){
+                    if(!controller.$valid){
+                        return scope.$apply(function(){
+                            $('#'+attrs.id).tooltip('show');
+                        });
+                    }
+                });
+
+                elm.bind('focus', function(event){
+                    return scope.$apply(function(){
+                        $('#'+attrs.id).tooltip('hide');
+                    });
+                });
+
+                function getValidationErrorMessage(attrs, error){
+                    if(error.required){
+                        return 'This is a required field';
+                    }
+                    if(error.minlength){
+                        return 'This field requires a minimum of ' + attrs.ngMinlength + ' characters';
+                    }
+                    if(error.maxlength){
+                        return 'This field requires a maximum of ' + attrs.ngMaxlength + ' characters';
+                    }
+                }
+            }
+        }
+    });
