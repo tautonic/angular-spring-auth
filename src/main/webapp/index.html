@@ -6,8 +6,8 @@
 
     <title>Babson Global Consortium</title>
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="css/app.css"/>
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/app.css"/>
     <link rel="stylesheet" href="css/homepage.css"/>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -47,8 +47,7 @@
                     <li><a ng-href="#/faculty/">Faculty Fellows</a></li>
                     <li><a ng-href="#/content/">Curriculum Content</a></li>
                     <li><a ng-href="#/network/">Network</a></li>
-                    <li ng-show="!auth.isAuthenticated"><a ng-href="#/profile/">Sign In</a></li>
-                    <li ng-show="auth.isAuthenticated"><a ng-href="#/profile/{{auth.principal.id}}">My Profile</a></li>
+                    <li><a ng-href="#/profile/">Sign In</a></li>
                     <li><a href="#"><img src="images/GCEE_images_header_searchIcon.png"></a></li>
                 </ul>
                 <div class="search">

@@ -4,8 +4,6 @@
 
 
 function MyCtrl1($rootScope, $scope, $http ) {
-	console.log("IN HOMEPAGE");
-
     var options = {
         data: JSON.stringify({
             filters: "likes comments discussions collaborators ideas companies profiles spMessages"

@@ -88,7 +88,8 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
         }
         $scope.reply.show = true;
         if (original != null) {
-            $scope.reply.message = "[quote]" + original + "[/quote]";
+            var content = "<p><blockquote>" + original + "</blockquote></p>" + "<p></p>";
+            $scope.reply.message = content;
         } else {
             $scope.reply.message = '';
         }
