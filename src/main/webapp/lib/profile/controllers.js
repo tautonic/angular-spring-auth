@@ -209,14 +209,6 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
         return angular.equals(member, $scope.master);
     }
 
-    $scope.asyncEmail = function(email){
-        $http.get('api/profiles/asyncEmail/' + email).success(function(data){
-            console.log(data);
-        }).error(function(data, status){
-            console.log(status);
-        });
-    }
-
     $scope.addEdRow = function(){
         $scope.profile.educationHistory.push({
             "schoolName" : '',

@@ -60,6 +60,11 @@
         tinymce: {
             theme: 'simple',
             width: '50%'
+        },
+        jq: {
+            tooltip: {
+                placement: 'right'
+            }
         }
     });
 
