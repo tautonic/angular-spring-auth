@@ -63,7 +63,8 @@
         },
         jq: {
             tooltip: {
-                placement: 'right'
+                placement: 'right',
+                trigger: 'manual'
             }
         }
     });

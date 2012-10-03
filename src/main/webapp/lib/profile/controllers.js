@@ -311,11 +311,5 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
     $scope.closeErrorAlert = function(){
         $scope.showError = false;
     }
-
-    $scope.selectConfig = {
-        allowClear: true,
-        minimumInputLength: 3,
-        placeholder: 'Select an Institution'
-    }
 }
 
