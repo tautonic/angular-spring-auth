@@ -305,6 +305,8 @@
         <h6>{{profile._id}}</h6>
         <h2>{{profile.username}}</h2>
         <h6>Email</h6> {{profile.accountEmail.address}} <br>
+        <span ng-show="auth.isAuthenticated"><a ng-click="followUser(profile._id)" ng-show="!profile.isUserFollowing">Follow {{profile.username}}</a>
+        <span ng-show="profile.isUserFollowing">You are currently following {{profile.username}}.</span></span>
     </div>
 </div>
 

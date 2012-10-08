@@ -295,6 +295,43 @@ app.get( '/ping', function ( req ) {
 	} );
 } );
 
+/************ Follow User functions *********/
+//generally, the user ID and the ID of the thing he's following
+app.post('/follow/:followedById/:entityId', function(req, followedById, entityId) {
+    var user = getUserDetails();
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/follow/' + followedById + "/" + entityId,
+        method: 'POST',
+        data: {},
+        headers: Headers({ "Authorization": _generateBasicAuthorization(user.username, user.password), 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    }
+
+    var exchange = httpclient.request(opts);
+
+    return json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+});
+
+function isUserFollowing(id) {
+    var user = getUserDetails();
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/follow/' + user.principal.id + "/" + id,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    }
+
+    var exchange = httpclient.request(opts);
+
+    return (exchange.status === 200);
+}
 
 /**
  * Returns the authentication credentials for the current user using the Spring Security
@@ -361,16 +398,18 @@ app.get('/profiles/:id', function(req, id){
 
     var exchange = httpclient.request(opts);
 
-    var result = json({
+    var result = {
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
-    });
+    };
 
     result.status = exchange.status;
 
-    return result;
+    result.content.isUserFollowing = isUserFollowing(result.content._id);
+
+    return json(result);
 });
 
 app.get('/profiles/', function(req){
