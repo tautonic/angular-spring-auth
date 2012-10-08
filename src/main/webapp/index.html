@@ -47,10 +47,17 @@
                     <li><a ng-href="#/faculty/">Faculty Fellows</a></li>
                     <li><a ng-href="#/content/">Curriculum Content</a></li>
                     <li><a ng-href="#/network/">Network</a></li>
-                    <li><a ng-href="#/profile/">Sign In</a></li>
+                    <li ng-show="!auth.isAuthenticated"><a ng-href="#/profile/">Sign In</a></li>
+                    <li ng-show="auth.isAuthenticated">
+                        <ul id="dropdown">
+                            <li><a ng-href="#/profile/">My profile</a></li>
+                            <li><a ng-href="#/profile/">Change Picture</a></li>
+                            <li ng-show="auth.isUserInRole('ROLE_ADMIN')"><a ng-href="#/admin/">Admin Panel</a></li>
+                            <li><a ng-href="#/profile/">Logout</a></li>
+                        </ul></li>
                     <li><a href="#"><img src="images/GCEE_images_header_searchIcon.png"></a></li>
                 </ul>
-                <div class="search">
+                <div class="search" ng-show="!auth.isAuthenticated">
                     <input type="text" name="search">
                 </div>
             </div>
