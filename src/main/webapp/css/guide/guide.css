@@ -1,0 +1,241 @@
+body {
+    position: relative;
+    padding-top: 0px;
+}
+
+a, a:link {
+    color: #b4b4b4;
+}
+
+a:hover, a:visited {
+    color: #8b8b8b;
+    text-decoration: none;
+}
+
+.bs-docs-sidenav > li > a {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: block;
+    margin: 0 0 -1px;
+    padding: 8px 14px;
+    border: 1px solid #E5E5E5;
+}
+
+.bs-docs-example{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.page-header h1{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 10px 0;
+    font-weight: bold;
+    line-height: 1;
+    color: inherit;
+    text-rendering: optimizelegibility;
+    text-transform: none;
+}
+
+h1.guide, h2.guide, h3.guide, h4.guide, h5.guide, h6.guide  {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 10px 0;
+    font-weight: bold;
+    line-height: 1;
+    color: inherit;
+    text-rendering: optimizelegibility;
+    text-transform: none;
+}
+
+p.guide  {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0 0 10px;
+}
+
+h1.guide {
+    font-size: 36px;
+    line-height: 40px;
+}
+h2.guide {
+    font-size: 30px;
+    line-height: 40px;
+}
+
+#typography .bs-docs-example p,
+.bs-docs-example address{
+    font-family: "PMN Caecilia", Georgia, serif;
+    color: #454545;
+}
+
+#typography .bs-docs-example p.muted {
+    color: #999999;
+}
+
+#typography .bs-docs-example p.text-warning {
+    color: #c09853;
+}
+
+#typography .bs-docs-example p.text-error {
+    color: #b94a48;
+}
+
+#typography .bs-docs-example p.text-info {
+    color: #3a87ad;
+}
+
+#typography .bs-docs-example p.text-success {
+    color: #468847;
+}
+
+.quote {
+    position: relative;
+    color: #117450;
+    font-weight: normal;
+}
+
+#typography .bs-docs-example .quote p {
+    min-height: 33px;
+    padding: 20px;
+    margin: 10px 10px 0 65px;
+    font-size: 18px;
+    background-color: #F1EFEF;
+    border: 1px solid #C9D9D4;
+    border-radius: 2px;
+    font-family: "PMN Caecilia", Georgia, serif;
+    color: #006644;
+
+    background: -moz-linear-gradient(top,  rgba(255,255,255,0.2) 0%, rgba(229,229,229,0.2) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.2)), color-stop(100%,rgba(229,229,229,0.2)));
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,0.2) 0%,rgba(229,229,229,0.2) 100%);
+    background: -o-linear-gradient(top,  rgba(255,255,255,0.2) 0%,rgba(229,229,229,0.2) 100%);
+    background: -ms-linear-gradient(top,  rgba(255,255,255,0.2) 0%,rgba(229,229,229,0.2) 100%);
+    background: linear-gradient(to bottom,  rgba(255,255,255,0.2) 0%,rgba(229,229,229,0.2) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#33ffffff', endColorstr='#33e5e5e5',GradientType=0 );
+}
+
+.quote img.arrow {
+    position: absolute;
+    left: 56px;
+    top: 31px;
+    z-index: 99;
+}
+
+.quote .symbol {
+    position: relative;
+    left: -10px;
+    top: 8px;
+    float: left;
+}
+
+.gradient {
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#51A463), to(#127551));
+    background-image: -webkit-linear-gradient(top, #51A463, #127551);
+    background-image: -moz-linear-gradient(top, #51A463, #127551);
+    background-image: -o-linear-gradient(top, #51A463, #127551);
+    background-image: linear-gradient(to bottom, #51A463, #127551);
+}
+
+.picture-frame{
+    display: inline-block;
+    position: relative;
+    background: #ccc;
+    border: 8px solid white;
+    position:relative;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
+    -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
+    -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
+}
+.picture-frame-bottom{
+    width: 100%;
+    height: 45%;
+    -moz-border-radius: 100px / 50px;
+    -webkit-border-radius: 100px / 50px;
+    border-radius: 400px / 70px;
+    width: 100%;
+    height: 45%;
+    position: absolute;
+    z-index: -2;
+    bottom: -6px;
+    right: 0;
+    -webkit-box-shadow: 0px 10px 2px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 10px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 10px 13px rgba(0, 0, 0, 0.3);
+}
+
+#images pre.prettyprint, #profiles pre.prettyprint.profile-images{
+    margin-top: 2em
+}
+
+#profiles .picture-frame{
+    margin: 2em 0 0 2em;
+}
+
+#profiles .picture-frame:nth-child(5){
+    margin-left: 6em;
+}
+
+#profiles .picture-frame:nth-child(6){
+    margin-left: 6em;
+}
+
+.picture-frame .more {
+    position: absolute;
+    width: 22px;
+    top: 170px;
+    left: -8px;
+    padding: 9px 0 9px 5px;
+    border: 1px solid black;
+    border-left: none;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    z-index: 100;
+    cursor: pointer;
+}
+
+.picture-frame.med{
+    border: 4px solid white;
+}
+
+.picture-frame.small{
+    border: 2px solid white;
+}
+
+.picture-frame .more a.right-arrow {
+    background-position: 100px 7px;
+    width: 100%;
+}
+
+.picture-frame .more a {
+    font-family: "PMN Caecilia", Georgia, serif;
+    color: white;
+    padding-left: 19px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+a.right-arrow {
+    min-width: 10px;
+    background-image: url('../../images/GCEE_images_arrowRight.png');
+}
+
+.right-arrow, a.left-arrow {
+    background-repeat: no-repeat;
+    background-position: 5px 9px;
+    height: 100%;
+}
+
+.right-arrow-shape{
+    position: relative;
+    display: inline-block;
+    right: -5px;
+    top: 1px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 7.5px 0 7.5px 8.7px;
+    border-color: transparent transparent transparent #ffffff;
+}
+
+button{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+

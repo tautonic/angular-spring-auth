@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>GCEE Style Guide</title>
+
+    <!-- Le styles -->
+    <link href="../css/guide/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="../css/guide/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="../css/guide/assets/css/docs.css" rel="stylesheet">
+    <link href="../css/guide/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="../css/default.css" rel="stylesheet">
+    <link href="../css/guide/guide.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+<!-- Subhead
+================================================== -->
+<header class="jumbotron subhead" id="overview">
+    <div class="container">
+        <h1>GCEE Style Guide</h1>
+
+        <p class="lead">HTML elements and components for Babson GCEE.</p>
+    </div>
+</header>
+
+
+<div class="container">
+
+<!-- Docs nav
+================================================== -->
+<div class="row">
+    <div class="span3 bs-docs-sidebar">
+        <ul class="nav nav-list bs-docs-sidenav">
+            <li><a href="#typography"><i class="icon-chevron-right"></i> Typography</a></li>
+            <li><a href="#profile-section-typography"><i class="icon-chevron-right"></i> Profile Section Typography</a></li>
+            <li><a href="#buttons"><i class="icon-chevron-right"></i> Buttons</a></li>
+            <li><a href="#images"><i class="icon-chevron-right"></i> Images</a></li>
+            <li><a href="#profiles"><i class="icon-chevron-right"></i> Profiles</a></li>
+            <li><a href="#discussions"><i class="icon-chevron-right"></i> Discussions</a></li>
+            <li><a href="#articles"><i class="icon-chevron-right"></i> Articles</a></li>
+            <li><a href="#gradients"><i class="icon-chevron-right"></i> Gradients</a></li>
+            <li><a href="#tabs"><i class="icon-chevron-right"></i> Tabs</a></li>
+        </ul>
+    </div>
+    <div class="span9">
+
+
+    <!-- Typography
+    ================================================== -->
+    <section id="typography">
+        <div class="page-header">
+            <h1>Typography</h1>
+        </div>
+
+        <h2 class="guide">Headings</h2>
+
+        <div class="bs-docs-example">
+            <h1>h1. Heading 1</h1>
+            <h2>h2. Heading 2</h2>
+            <h3>h3. Heading 3</h3>
+            <h4>h4. Heading 4</h4>
+            <h5>h5. Heading 5</h5>
+            <h6>h6. Heading 6</h6>
+        </div>
+
+        <h2 class="guide" id="body-copy">Body copy</h2>
+
+        <p class="guide">Babson's GCEE global default <code>font-size</code> is <strong>14px</strong>, with a <code>line-height</code> of
+            <strong>20px</strong>, a <code>color</code> of <strong>#454545</strong> and <code>font-family</code> of
+            <strong>"TradeGothicW01-BoldCn20 675334", "Arial Narrow", sans-serif.</strong> This is applied to the <code>&lt;body&gt;</code>. In addition, <code>&lt;p&gt;</code>
+            (paragraphs) receive a bottom margin of half their line-height (10px by default).</p>
+
+        <div class="bs-docs-example">
+            <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient
+                montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
+
+            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non
+                metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem
+                nec elit. Donec ullamcorper nulla non metus auctor fringilla.</p>
+
+            <p>Maecenas sed diam eget risus varius blandit sit amet non magna. Donec id elit non mi porta gravida at eget metus.
+                Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+        </div>
+<pre class="prettyprint">&lt;p&gt;...&lt;/p&gt;</pre>
+
+        <h3 class="guide">Lead body copy</h3>
+
+        <p class="guide">Make a paragraph stand out by adding <code>.lead</code>.</p>
+
+        <div class="bs-docs-example">
+            <p class="lead">Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo
+                luctus.</p>
+        </div>
+        <pre class="prettyprint">&lt;p class="lead"&gt;...&lt;/p&gt;</pre>
+
+        <hr class="bs-docs-separator">
+
+
+        <h2 class="guide" id="emphasis">Emphasis</h2>
+
+        <p>Make use of HTML's default emphasis tags with lightweight styles.</p>
+
+        <h3><code>&lt;small&gt;</code></h3>
+
+        <p>For de-emphasizing inline or blocks of text,
+            <small>use the small tag.</small>
+        </p>
+        <div class="bs-docs-example">
+            <p>
+                <small>This line of text is meant to be treated as fine print.</small>
+            </p>
+        </div>
+<pre class="prettyprint">
+&lt;p&gt;
+  &lt;small&gt;This line of text is meant to be treated as fine print.&lt;/small&gt;
+&lt;/p&gt;
+</pre>
+
+        <h3 class="guide">Bold</h3>
+
+        <p class="guide">For emphasizing a snippet of text with <strong>important</strong></p>
+
+        <div class="bs-docs-example">
+            <p>The following snippet of text is <strong>rendered as bold text</strong>.</p>
+        </div>
+        <pre class="prettyprint">&lt;strong&gt;rendered as bold text&lt;/strong&gt;</pre>
+
+        <h3 class="guide">Italics</h3>
+
+        <p class="guide">For emphasizing a snippet of text with <em>stress</em></p>
+
+        <div class="bs-docs-example">
+            <p>The following snippet of text is <em>rendered as italicized text</em>.</p>
+        </div>
+        <pre class="prettyprint">&lt;em&gt;rendered as italicized text&lt;/em&gt;</pre>
+
+        <p class="guide"><span class="label label-info">Heads up!</span> Feel free to use <code>&lt;b&gt;</code> and <code>&lt;i&gt;</code> in
+            HTML5. <code>&lt;b&gt;</code> is meant to highlight words or phrases without conveying additional importance while
+            <code>&lt;i&gt;</code> is mostly for voice, technical terms, etc.</p>
+
+        <h3 class="guide">Emphasis classes</h3>
+
+        <p class="guide">Convey meaning through color with a handful of emphasis utility classes.</p>
+
+        <div class="bs-docs-example">
+            <p class="muted">Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
+
+            <p class="text-warning">Etiam porta sem malesuada magna mollis euismod.</p>
+
+            <p class="text-error">Donec ullamcorper nulla non metus auctor fringilla.</p>
+
+            <p class="text-info">Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.</p>
+
+            <p class="text-success">Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+        </div>
+<pre class="prettyprint linenums">
+&lt;p class="muted"&gt;Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.&lt;/p&gt;
+&lt;p class="text-warning"&gt;Etiam porta sem malesuada magna mollis euismod.&lt;/p&gt;
+&lt;p class="text-error"&gt;Donec ullamcorper nulla non metus auctor fringilla.&lt;/p&gt;
+&lt;p class="text-info"&gt;Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.&lt;/p&gt;
+&lt;p class="text-success"&gt;Duis mollis, est non commodo luctus, nisi erat porttitor ligula.&lt;/p&gt;
+</pre>
+
+        <hr class="bs-docs-separator">
+
+        <h2 class="guide" id="addresses">Addresses</h2>
+
+        <p class="guide">Present contact information for the nearest ancestor or the entire body of work.</p>
+
+        <h3><code>&lt;address&gt;</code></h3>
+
+        <p class="guide">Preserve formatting by ending all lines with <code>&lt;br&gt;</code>.</p>
+
+        <div class="bs-docs-example">
+            <address>
+                <strong>Twitter, Inc.</strong><br>
+                795 Folsom Ave, Suite 600<br>
+                San Francisco, CA 94107<br>
+                <abbr title="Phone">P:</abbr> (123) 456-7890
+            </address>
+            <address>
+                <strong>Full Name</strong><br>
+                <a href="mailto:#">first.last@gmail.com</a>
+            </address>
+        </div>
+<pre class="prettyprint linenums">
+&lt;address&gt;
+    &lt;strong&gt;Twitter, Inc.&lt;/strong&gt;&lt;br&gt;
+    795 Folsom Ave, Suite 600&lt;br&gt;
+    San Francisco, CA 94107&lt;br&gt;
+    &lt;abbr title="Phone"&gt;P:&lt;/abbr&gt; (123) 456-7890
+&lt;/address&gt;
+
+&lt;address&gt;
+    &lt;strong&gt;Full Name&lt;/strong&gt;&lt;br&gt;
+    &lt;a href="mailto:#"&gt;first.last@gmail.com&lt;/a&gt;
+&lt;/address&gt;
+</pre>
+
+
+        <hr class="bs-docs-separator">
+
+
+        <h2 class="guide" id="blockquotes">Blockquotes</h2>
+
+        <p class="guide">For quoting blocks of content from another source within your document.</p>
+
+        <h3 class="guide">Default blockquote</h3>
+
+        <div class="bs-docs-example">
+            <div class="quote">
+                <div class="symbol"><img src="../images/block_quotes.png"></div>
+                <img class="arrow" src="../images/GCEE_images_quotation_arrow.png">
+                <p><em>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</em></p>
+            </div>
+        </div>
+<pre class="prettyprint linenums">
+&lt;div class="quote"&gt;
+    &lt;div class="symbol"&gt;&lt;img src="images/block_quotes.png"&gt;&lt;/img&gt;&lt;/div&gt;
+    &lt;img class="arrow" src="images/GCEE_images_quotation_arrow.png"&gt;&lt;/img&gt;
+    &lt;p&gt;&lt;em&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;
+</pre>
+
+    </section>
+
+    <hr class="bs-docs-separator">
+    <!-- Profile Section Typography
+    ================================================== -->
+    <section id="profile-section-typography">
+        <div class="page-header">
+            <h1 class="guide">Profile Section Typography</h1>
+        </div>
+
+        <h2 class="guide" id="profile-headings">Headings</h2>
+
+        <div class="bs-docs-example">
+            <div class="profile">
+                <h1>h1. Heading 1</h1>
+                <h2>h2. Heading 2</h2>
+                <h3>h3. Heading 3</h3>
+                <h4>h4. Heading 4</h4>
+                <h5>h5. Heading 5</h5>
+                <h6>h6. Heading 6</h6>
+            </div>
+        </div>
+
+<pre class="prettyprint linenums">
+&lt;div class="profile"&gt;
+    &lt;h1&gt;...&lt;/h1&gt;
+    &lt;h2&gt;...&lt;/h2&gt;
+    &lt;h3&gt;...&lt;/h3&gt;
+    &lt;h4&gt;...&lt;/h4&gt;
+    &lt;h5&gt;...&lt;/h5&gt;
+    &lt;h6&gt;...&lt;/h6&gt;
+&lt;/div&gt;
+</pre>
+
+    </section>
+
+
+    <!-- Buttons
+    ================================================== -->
+    <section class="guide" id="buttons">
+        <div class="page-header">
+            <h1>Buttons</h1>
+        </div>
+
+        <h2>Default buttons</h2>
+
+        <p>Button styles can be applied to anything with the <code>.btn</code> class applied. However, typically you'll want
+            to apply these to only <code>&lt;a&gt;</code> and <code>&lt;button&gt;</code> elements for the best rendering.
+        </p>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>Button</th>
+                <th>class=""</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <button type="button" class="btn">Default</button>
+                </td>
+                <td><code>btn</code></td>
+                <td>Standard gray button with gradient</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-primary">Primary</button>
+                </td>
+                <td><code>btn btn-primary</code></td>
+                <td>Provides extra visual weight and identifies the primary action in a set of buttons</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-info">Info</button>
+                </td>
+                <td><code>btn btn-info</code></td>
+                <td>Used as an alternative to the default styles</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-success">Success</button>
+                </td>
+                <td><code>btn btn-success</code></td>
+                <td>Indicates a successful or positive action</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-warning">Warning</button>
+                </td>
+                <td><code>btn btn-warning</code></td>
+                <td>Indicates caution should be taken with this action</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-danger">Danger</button>
+                </td>
+                <td><code>btn btn-danger</code></td>
+                <td>Indicates a dangerous or potentially negative action</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-inverse">Inverse</button>
+                </td>
+                <td><code>btn btn-inverse</code></td>
+                <td>Alternate dark gray button, not tied to a semantic action or use</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-link">Link</button>
+                </td>
+                <td><code>btn btn-link</code></td>
+                <td>Deemphasize a button by making it look like a link while maintaining button behavior</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h4>Cross browser compatibility</h4>
+
+        <p>IE9 doesn't crop background gradients on rounded corners, so we remove it. Related, IE9 jankifies disabled <code>button</code>
+            elements, rendering text gray with a nasty text-shadow that we cannot fix.</p>
+
+
+        <h2>Button sizes</h2>
+
+        <p>Fancy larger or smaller buttons? Add <code>.btn-large</code>, <code>.btn-small</code>, or <code>.btn-mini</code>
+            for additional sizes.</p>
+
+        <div class="bs-docs-example">
+            <p>
+                <button type="button" class="btn btn-large btn-primary">Large button</button>
+                <button type="button" class="btn btn-large">Large button</button>
+            </p>
+            <p>
+                <button type="button" class="btn btn-primary">Default button</button>
+                <button type="button" class="btn">Default button</button>
+            </p>
+            <p>
+                <button type="button" class="btn btn-small btn-primary">Small button</button>
+                <button type="button" class="btn btn-small">Small button</button>
+            </p>
+            <p>
+                <button type="button" class="btn btn-mini btn-primary">Mini button</button>
+                <button type="button" class="btn btn-mini">Mini button</button>
+            </p>
+        </div>
+<pre class="prettyprint linenums">
+&lt;p&gt;
+    &lt;button class="btn btn-large btn-primary" type="button"&gt;Large button&lt;/button&gt;
+    &lt;button class="btn btn-large" type="button"&gt;Large button&lt;/button&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;button class="btn btn-primary" type="button"&gt;Default button&lt;/button&gt;
+    &lt;button class="btn" type="button"&gt;Default button&lt;/button&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;button class="btn btn-small btn-primary" type="button"&gt;Small button&lt;/button&gt;
+    &lt;button class="btn btn-small" type="button"&gt;Small button&lt;/button&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;button class="btn btn-mini btn-primary" type="button"&gt;Mini button&lt;/button&gt;
+    &lt;button class="btn btn-mini" type="button"&gt;Mini button&lt;/button&gt;
+&lt;/p&gt;
+</pre>
+        <p>Create block level buttons&mdash;those that span the full width of a parent&mdash; by adding
+            <code>.btn-block</code>.</p>
+
+        <div class="bs-docs-example">
+            <div class="well" style="max-width: 400px; margin: 0 auto 10px;">
+                <button type="button" class="btn btn-large btn-block btn-primary">Block level button</button>
+                <button type="button" class="btn btn-large btn-block">Block level button</button>
+            </div>
+        </div>
+<pre class="prettyprint linenums">
+&lt;button class="btn btn-large btn-block btn-primary" type="button"&gt;Block level button&lt;/button&gt;
+&lt;button class="btn btn-large btn-block" type="button"&gt;Block level button&lt;/button&gt;
+</pre>
+        <h2>Disabled state</h2>
+
+        <p>Make buttons look unclickable by fading them back 50%.</p>
+
+        <h3>Anchor element</h3>
+
+        <p>Add the <code>.disabled</code> class to <code>&lt;a&gt;</code> buttons.</p>
+
+        <p class="bs-docs-example">
+            <a href="#" class="btn btn-large btn-primary disabled">Primary link</a>
+            <a href="#" class="btn btn-large disabled">Link</a>
+        </p>
+<pre class="prettyprint linenums">
+&lt;a href="#" class="btn btn-large btn-primary disabled"&gt;Primary link&lt;/a&gt;
+&lt;a href="#" class="btn btn-large disabled"&gt;Link&lt;/a&gt;
+</pre>
+        <p>
+            <span class="label label-info">Heads up!</span>
+            We use <code>.disabled</code> as a utility class here, similar to the common <code>.active</code> class, so no
+            prefix is required. Also, this class is only for aesthetic; you must use custom JavaScript to disable links
+            here.
+        </p>
+
+        <h3>Button element</h3>
+
+        <p>Add the <code>disabled</code> attribute to <code>&lt;button&gt;</code> buttons.</p>
+
+        <p class="bs-docs-example">
+            <button type="button" class="btn btn-large btn-primary disabled" disabled="disabled">Primary button</button>
+            <button type="button" class="btn btn-large" disabled>Button</button>
+        </p>
+<pre class="prettyprint linenums">
+&lt;button type="button" class="btn btn-large btn-primary disabled" disabled="disabled"&gt;Primary button&lt;/button&gt;
+&lt;button type="button" class="btn btn-large" disabled&gt;Button&lt;/button&gt;
+</pre>
+        <h2>One class, multiple tags</h2>
+
+        <p>Use the <code>.btn</code> class on an <code>&lt;a&gt;</code>, <code>&lt;button&gt;</code>, or <code>
+            &lt;input&gt;</code> element.</p>
+
+        <form class="bs-docs-example">
+            <a class="btn" href="">Link</a>
+            <button class="btn" type="submit">Button</button>
+            <input class="btn" type="button" value="Input">
+            <input class="btn" type="submit" value="Submit">
+        </form>
+    <pre class="prettyprint linenums">
+    &lt;a class="btn" href=""&gt;Link&lt;/a&gt;
+    &lt;button class="btn" type="submit"&gt;Button&lt;/button&gt;
+    &lt;input class="btn" type="button" value="Input"&gt;
+    &lt;input class="btn" type="submit" value="Submit"&gt;
+    </pre>
+        <p>As a best practice, try to match the element for your context to ensure matching cross-browser rendering. If you
+            have an <code>input</code>, use an <code>&lt;input type="submit"&gt;</code> for your button.</p>
+
+    </section>
+
+
+    <!-- Images
+    ================================================== -->
+    <section class="guide" id="images">
+        <div class="page-header">
+            <h1 class="guide">Images</h1>
+        </div>
+
+        <h2 class="guide">Header Content Images</h2>
+        <div class="picture-frame">
+            <div class="gradient more">
+                <a href="#">Read More </a>
+                <div class="right-arrow-shape"></div>
+            </div>
+            <img src="../images/open_book.jpg">
+            <div class="picture-frame-bottom"></div>
+        </div>
+
+<pre class="prettyprint linenums">
+&lt;div class="picture-frame"&gt;
+    &lt;div class="gradient more"&gt;
+        &lt;a href="..."&gt;Read More &lt;/a&gt;
+        &lt;div class="right-arrow-shape"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;img src="..."&gt;
+    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+        <h2 class="guide">Header Banner Images</h2>
+
+        <div class="bs-docs-example">
+            <div class="image-container no-bottom-border">
+                <img class="header-banner-image" src="../images/banner-image.jpg">
+                <div class="transparent-pill-shapes">
+                    <h2>NETWORK: </h2>
+                    <p>Lorem ipsum dolor sit amet prae na sed odiout mollis ligula vit</p>
+                </div>
+            </div>
+        </div>
+
+<pre class="prettyprint linenums">
+&lt;div class="image-container no-bottom-border"&gt;
+    &lt;img class="header-banner-image src="..."&gt;
+    &lt;div class="transparent-pill-shapes"&gt;
+        &lt;h2&gt;NETWORK:&lt;/h2&gt;
+        &lt;p&gt;Lorem ipsum dolor sit amet prae na sed odiout mollis ligula vit:&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+    </section>
+
+    <hr class="bs-docs-separator">
+    <!-- Profile
+    ================================================= -->
+    <section id="profiles">
+        <div class="page-header">
+            <h1 class="guide">Profiles</h1>
+        </div>
+
+        <h2 class="guide">Profile Images</h2>
+
+        <p class="guide">There are three sizes for profile images. Large, medium, and small. Large profile images
+        have a rotation of 30 degrees counter clockwise applied to them. Medium profile images have a
+        rotation of 30 degrees clockwise applied to them.</p>
+
+        <div class="picture-frame large counter-clockwise">
+            <img class="profile-image large" src="../images/rosie.jpeg">
+            <div class="picture-frame-bottom"></div>
+        </div>
+
+        <div class="picture-frame med clockwise">
+            <img class="profile-image med" src="../images/rosie.jpeg">
+            <div class="picture-frame-bottom"></div>
+        </div>
+
+        <div class="picture-frame small">
+            <img class="profile-image small" src="../images/rosie.jpeg">
+            <div class="picture-frame-bottom"></div>
+        </div>
+
+        <pre class="prettyprint linenums profile-images">
+&lt;div class="picture-frame large counter-clockwise"&gt;
+    &lt;img class="profile-image large" src="..."&gt;
+    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="picture-frame med clockwise"&gt;
+    &lt;img class="profile-image med" src="..."&gt;
+    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="picture-frame small"&gt;
+    &lt;img class="profile-image small" src="..."&gt;
+    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+&lt;/div&gt;
+        </pre>
+
+        <h2 class="guide">Profile Sidebar</h2>
+        <p class="guide">Description here...</p>
+
+        <p class="bs-docs-example"></p>
+        <pre class="prettyprint linenums">
+&lt;div class="picture-frame"&gt;
+    &lt;div class="gradient more"&gt;
+        &lt;a href="..."&gt;Read More &lt;/a&gt;
+        &lt;div class="right-arrow-shape"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;img src="..."&gt;
+    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+        </pre>
+
+        <h2 class="guide">Profile Modal</h2>
+        <h3 class="guide">Static example</h3>
+        <p class="guide">A rendered modal with a summary of profile information</p>
+
+        <div class="bs-docs-example" style="background-color: #f5f5f5;">
+            <div class="modal" style="position: relative; top: auto; left: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%;">
+                <div class="profile-modal profile">
+                    <div class="left">
+                        <div class="picture-frame large counter-clockwise">
+                            <img class="profile-image large" src="../images/rosie.jpeg">
+                            <div class="picture-frame-bottom"></div>
+                        </div>
+                    </div>
+                    <div class="center">
+                        <h3>John Greene</h3>
+                        <h5>Professor Art & Technology</h5>
+                        <h5 class="muted">The Ohio State University</h5>
+                    </div>
+                    <div class="right">
+                        <div class="close-modal"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="modal hide fade" id="my-modal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">Modal header</h3>
+            </div>
+            <div class="modal-body">
+                <p>One fine body…</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn btn-primary">Save changes</button>
+            </div>
+        </div>-->
+
+        <pre class="prettyprint linenums">
+&lt;div class="picture-frame"&gt;
+    &lt;div class="gradient more"&gt;
+        &lt;a href="..."&gt;Read More &lt;/a&gt;
+        &lt;div class="right-arrow-shape"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;img src="..."&gt;
+    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+&lt;/div&gt;
+        </pre>
+
+        <h2 class="guide">Profile Edit Form</h2>
+        <p class="guide">Description here...</p>
+
+        <p class="bs-docs-example"></p>
+        <pre class="prettyprint linenums">
+&lt;div class="picture-frame"&gt;
+    &lt;div class="gradient more"&gt;
+        &lt;a href="..."&gt;Read More &lt;/a&gt;
+        &lt;div class="right-arrow-shape"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;img src="..."&gt;
+    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+&lt;/div&gt;
+        </pre>
+    </section>
+
+    </div>
+</div>
+
+</div>
+
+
+<!-- Footer
+================================================== -->
+<footer class="footer">
+    <div class="container">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+
+        <p>Designed and built with all the love in the world <a href="http://twitter.com/twitter" target="_blank">@twitter</a>
+            by <a href="http://twitter.com/mdo" target="_blank">@mdo</a> and <a href="http://twitter.com/fat"
+                                                                                target="_blank">@fat</a>.</p>
+
+        <p>Code licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License
+            v2.0</a>. Documentation licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
+        </p>
+
+        <p>Icons from <a href="http://glyphicons.com">Glyphicons Free</a>, licensed under <a
+                href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        <ul class="footer-links">
+            <li><a href="http://blog.getbootstrap.com">Read the blog</a></li>
+            <li><a href="https://github.com/twitter/bootstrap/issues?state=open">Submit issues</a></li>
+            <li><a href="https://github.com/twitter/bootstrap/wiki">Roadmap and changelog</a></li>
+        </ul>
+    </div>
+</footer>
+
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+<script src="http://platform.twitter.com/widgets.js"></script>
+<script src="../css/guide/assets/js/jquery.js"></script>
+<script src="../css/guide/assets/js/google-code-prettify/prettify.js"></script>
+<script src="../css/guide/assets/js/bootstrap-transition.js"></script>
+<script src="../css/guide/assets/js/bootstrap-alert.js"></script>
+<script src="../css/guide/assets/js/bootstrap-modal.js"></script>
+<script src="../css/guide/assets/js/bootstrap-dropdown.js"></script>
+<script src="../css/guide/assets/js/bootstrap-scrollspy.js"></script>
+<script src="../css/guide/assets/js/bootstrap-tab.js"></script>
+<script src="../css/guide/assets/js/bootstrap-tooltip.js"></script>
+<script src="../css/guide/assets/js/bootstrap-popover.js"></script>
+<script src="../css/guide/assets/js/bootstrap-button.js"></script>
+<script src="../css/guide/assets/js/bootstrap-collapse.js"></script>
+<script src="../css/guide/assets/js/bootstrap-carousel.js"></script>
+<script src="../css/guide/assets/js/bootstrap-typeahead.js"></script>
+<script src="../css/guide/assets/js/bootstrap-affix.js"></script>
+<script src="../css/guide/assets/js/application.js"></script>
+
+<script type="text/javascript">
+    $('#launch-modal').click(function(){
+        $('#my-modal').modal('show');
+    });
+
+    $('.gradient.more a').hide();
+
+    $('.more').hover(
+        function(){
+            $(this).stop().animate({
+                width: '124px'
+            }, 250, function(){
+                $(this).children('a').show();
+            });
+
+            /*$(this).children('.right-arrow-shape').stop().animate({
+                right: '-105px'
+            }, 250);*/
+        },
+        function(){
+            $(this).children('a').hide();
+            $(this).stop().animate({
+                width: '22px'
+            }, 250);
+
+            /*$(this).children('.right-arrow-shape').stop().animate({
+                right: '-5px'
+            }, 250);*/
+        }
+    );
+</script>
+
+
+</body>
+</html>
