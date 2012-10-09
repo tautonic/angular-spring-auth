@@ -42,6 +42,19 @@
         $routeProvider.when( '/both/:articleId/:discussionId', {
             templateUrl: 'partials/partial2.html'
         } );
+
+        $routeProvider.when( '/search/faculty/:query', {
+            templateUrl: 'lib/search/partials/searchFacultyResults.html'
+        } );
+
+        $routeProvider.when( '/search/site/:query', {
+            templateUrl: 'lib/search/partials/searchSiteResults.html'
+        } );
+
+        $routeProvider.when( '/search/content/:query', {
+            templateUrl: 'lib/search/partials/searchContentResults.html'
+        } );
+
         $routeProvider.when( '/view', {
             templateUrl: 'partials/partial1.html'
         } );

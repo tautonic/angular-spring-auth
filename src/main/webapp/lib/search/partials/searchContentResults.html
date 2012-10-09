@@ -1,0 +1,24 @@
+<div class="content container" ng-controller="SearchResourcesCtrl">
+    <h1>Content Search Results</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Username</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="result in results">
+            <td><a ng-href="#/profile/{{result._id}}">{{result._id}}</a></td>
+            <td>{{result.name.given}}</td>
+            <td>{{result.name.surname}}</td>
+            <td>{{result.username}}</td>
+            <td>{{result.accountEmail.address}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

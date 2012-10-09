@@ -3,8 +3,12 @@
 /* Controllers */
 
 
-function MyCtrl1($rootScope, $scope, $http ) {
+function MyCtrl1($rootScope, $scope, $http, $location) {
 	console.log("IN HOMEPAGE");
+
+    $rootScope.query = '';
+    $rootScope.faculty_query = '';
+    $rootScope.content_query = '';
 
     var options = {
         data: JSON.stringify({
@@ -19,6 +23,18 @@ function MyCtrl1($rootScope, $scope, $http ) {
 
     $scope.isEmpty = function() {
         return (($scope.stream) && ($scope.stream.itemCount === 0));
+    }
+
+    $rootScope.search_faculty = function(){
+        $location.path('/search/faculty/' + $rootScope.faculty_query);
+    }
+
+    $rootScope.search_site = function(){
+        $location.path('/search/site/' + $rootScope.query);
+    }
+
+    $rootScope.search_content = function(){
+        $location.path('/search/content/' + $rootScope.content_query);
     }
 }
 
@@ -35,7 +51,7 @@ function MyCtrl2( $rootScope, $scope, $http, $log ) {
 
 	ping();
 }
-MyCtrl1.$inject = ['$rootScope', '$scope', '$http'];
+MyCtrl1.$inject = ['$rootScope', '$scope', '$http', '$location'];
 MyCtrl2.$inject = ['$rootScope', '$scope', '$http', '$log'];
 
 

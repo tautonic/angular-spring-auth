@@ -17,5 +17,16 @@ angular.module( 'bgc.services', ['ngResource'] )
                 username:   { method: 'GET', isArray: false }
             }
         );
+    })
+    .factory('Search', function($resource){
+        return $resource('/gc/api/search/:type',
+            {},
+            {
+                site:     { method: 'POST', isArray: false },
+                faculty:     { method: 'POST', isArray: false },
+                content:     { method: 'POST', isArray: false },
+                discussions:     { method: 'POST', isArray: false }
+            }
+        );
     });
 

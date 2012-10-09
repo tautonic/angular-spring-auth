@@ -51,13 +51,31 @@
                     <li ng-show="auth.isAuthenticated"><a ng-href="#/profile/{{auth.principal.id}}">My Profile</a></li>
                     <li><a href="#"><img src="images/GCEE_images_header_searchIcon.png"></a></li>
                 </ul>
-                <div class="search">
-                    <input type="text" name="search">
-                </div>
             </div>
-
         </div>
         <div class="row header-info">
+
+            <form name="searchSite" class="form-search">
+                <div class="input-append">
+                    <input type="text" ng-model="query" class="span2 search-query">
+                    <button type="submit" class="btn btn-success" ng-click="search_site()">Search Site</button>
+                </div>
+            </form>
+
+            <form name="searchFaculty" class="form-search">
+                <div class="input-append">
+                    <input type="text" ng-model="faculty_query" class="span2 search-query">
+                    <button type="submit" class="btn btn-success" ng-click="search_faculty()">Search Faculty</button>
+                </div>
+            </form>
+
+            <form name="searchContent" class="form-search">
+                <div class="input-append">
+                    <input type="text" ng-model="content_query" class="span2 search-query">
+                    <button type="submit" class="btn btn-success" ng-click="search_content()">Search Content</button>
+                </div>
+            </form>
+
             <div class="span4">
                 <div class="picture-frame">
                     <div class="gradient more">
@@ -125,7 +143,10 @@
 <script src="lib/pyklresource/resource.js"></script>
 <script src="lib/pykldiscuss/discuss.js"></script>
 <script src="js/services.js"></script>
-<script src="lib/profile/controllers.js"></script>
+<script src="lib/profile/profileController.js"></script>
+<script src="lib/search/searchFacultyController.js"></script>
+<script src="lib/search/searchSiteController.js"></script>
+<script src="lib/search/searchContentController.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js"></script>
