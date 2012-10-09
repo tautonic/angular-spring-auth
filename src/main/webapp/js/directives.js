@@ -203,17 +203,75 @@ angular.module( 'bgc.directives', [] )
                     we're interested in a 404 response from the server to indicate
                     an email not associated with an account
                 */
-                ctrl.$formatters.unshift(function(viewValue){
-                    if(ctrl.$valid){
-                        $http.get('api/profiles/asyncEmail/' + viewValue).success(function(data){
-                            if(data.status === 404){
-                                ctrl.$setValidity('emailValidator', true);
-                                return viewValue;
-                            }else{
-                                ctrl.$setValidity('emailValidator', false);
-                                return undefined;
-                            }
+                ctrl.$parsers.unshift(function(viewValue){
+                    $http.get('api/profiles/asyncEmail/' + viewValue).success(function(data){
+                        if(data.status === 404){
+                            ctrl.$setValidity('emailValidator', true);
+                            return viewValue;
+                        }else{
+                            ctrl.$setValidity('emailValidator', false);
+                            return undefined;
+                        }
+                    });
+                });
+
+                elm.bind('focus', function(){
+                    if(ctrl.$invalid && ctrl.$dirty){
+                        $('#'+attrs.id).tooltip('hide');
+                    }
+                });
+
+                elm.bind('blur', function(event){
+                    if(ctrl.$invalid && (ctrl.$modelValue !== '' && ctrl.$viewValue !== undefined)){
+                        $('#'+attrs.id).tooltip({
+                            trigger: 'manual',
+                            placement: 'right',
+                            title: 'This email address is already in use'
                         });
+
+                        $('#'+attrs.id).tooltip('show');
+                    }
+                });
+            }
+        }
+    }])
+    .directive('usernameValidator', ['$http', function($http){
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, elm, attrs, ctrl){
+                /*
+                 Zocia responds with a 404 when we can't find a user by username, so
+                 we're interested in a 404 response from the server to indicate
+                 an username not associated with an account
+                 */
+                ctrl.$parsers.unshift(function(viewValue){
+                    $http.get('api/profiles/asyncUsername/' + viewValue).success(function(data){
+                        if(data.status === 404){
+                            ctrl.$setValidity('usernameValidator', true);
+                            return viewValue;
+                        }else{
+                            ctrl.$setValidity('usernameValidator', false);
+                            return undefined;
+                        }
+                    });
+                });
+
+                elm.bind('focus', function(){
+                    if(ctrl.$invalid && ctrl.$dirty){
+                        $('#'+attrs.id).tooltip('hide');
+                    }
+                });
+
+                elm.bind('blur', function(event){
+                    if(ctrl.$invalid && (ctrl.$viewValue !== '')){
+                        $('#'+attrs.id).tooltip({
+                            trigger: 'manual',
+                            placement: 'right',
+                            title: 'This username is already in use'
+                        });
+
+                        $('#'+attrs.id).tooltip('show');
                     }
                 });
             }
@@ -238,6 +296,7 @@ angular.module( 'bgc.directives', [] )
                     if(!controller.$valid){
                         return scope.$apply(function(){
                             $('#'+attrs.id).tooltip('show');
+                            controller.$viewValue;
                         });
                     }
                 });
@@ -245,11 +304,12 @@ angular.module( 'bgc.directives', [] )
                 elm.bind('focus', function(event){
                     return scope.$apply(function(){
                         $('#'+attrs.id).tooltip('hide');
+                        controller.$viewValue;
                     });
                 });
 
                 function getValidationErrorMessage(attrs, error){
-                    if(error.required){
+                    if(error.required && (controller.$viewValue === undefined || controller.$viewValue !== '')){
                         return 'This is a required field';
                     }
                     if(error.minlength){
@@ -257,6 +317,9 @@ angular.module( 'bgc.directives', [] )
                     }
                     if(error.maxlength){
                         return 'This field requires a maximum of ' + attrs.ngMaxlength + ' characters';
+                    }
+                    if(error.usernameValidator){
+                        return 'This username is already in use';
                     }
                 }
             }

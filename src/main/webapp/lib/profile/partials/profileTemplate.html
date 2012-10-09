@@ -223,7 +223,6 @@
             <br />
             <button class="btn btn-primary" id="choose-files-update"><i class="icon-folder-open icon-white"></i> Browse</button>
             <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
-            <h3>Or you can Drag and Drop a file</h3>
         </div>
 
         <br><br>
@@ -232,7 +231,8 @@
 
         <button class="btn btn-success" ng-click="update(profile)" ng-disabled="editProfile.$invalid || isUnchanged(profile)">
             <i class="icon-pencil icon-white"></i> Update</button>
-        <button class="btn btn-warning" ng-click="cancel()"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+        <!--<button class="btn btn-warning" ng-click="cancel()"><i class="icon-ban-circle icon-white"></i> Cancel</button>-->
+        <a ng-href="#/profiles" class="btn btn-warning"><i class="icon-ban-circle icon-white"></i> Cancel</a>
     </form>
 
     <!--<pre>form = {{profile | json}}</pre>
@@ -323,7 +323,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="profile in profiles">
-                <td><a ng-href="#/profile/{{profile._id}}">{{profile._id}}</a></td>
+                <td><a ng-href="#/profiles/{{profile._id}}">{{profile._id}}</a></td>
                 <td>{{profile.name.given}}</td>
                 <td>{{profile.name.surname}}</td>
                 <td>{{profile.username}}</td>
@@ -370,40 +370,43 @@
                            value="">
                 </div>
                 <br>
-                <label class="control-label" for="surname">Last Name</label>
+                <label class="control-label" for="surname-create">Last Name</label>
                 <div class="controls">
                     <input type="text"
                            ng-model="profile.name.surname"
                            class="input-xlarge"
-                           id="surname"
-                           name="surname"
+                           id="surname-create"
+                           name="surname-create"
                            ng-minlength="3"
                            ng-maxlength="16"
                            required
+                           validation-tooltip
                            value="">
                 </div>
                 <br>
-                <label class="control-label" for="password">Enter Password</label>
+                <label class="control-label" for="password-create">Enter Password</label>
                 <div class="controls">
                     <input type="password"
                            ng-model="profile.password"
                            class="input-xlarge"
-                           id="password"
-                           name="password"
+                           id="password-create"
+                           name="password-create"
                            ng-minlength="6"
                            ng-maxlength="16"
                            required
+                           validation-tooltip
                            value="">
                 </div>
                 <br>
-                <label class="control-label" for="repeat-password">Repeat Password</label>
+                <label class="control-label" for="repeat-password-create">Repeat Password</label>
                 <div class="controls">
                     <input type="password"
                            ng-model="profile.newPassRepeat"
                            class="input-xlarge"
-                           id="repeat-password"
-                           name="repeat-password"
-                           password-validator="password"
+                           id="repeat-password-create"
+                           name="repeat-password-create"
+                           password-validator="password-create"
+                           validation-tooltip
                            value="">
                 </div>
                 <br>
@@ -413,16 +416,17 @@
                     <button class="btn btn-success" ng-click="addContactRow()">
                         <i class="icon-plus icon-white"></i> Add</button>
                 </h2>
-                <label class="control-label" for="email-address">Email</label>
+                <label class="control-label" for="email-address-create">Email</label>
                 <div class="controls">
                     <input type="email"
                            ng-model="profile.accountEmail.address"
                            class="input-xlarge"
-                           id="email-address"
-                           name="email-address"
+                           id="email-address-create"
+                           name="email-address-create"
                            ng-minlength="3"
                            email-validator
                            required
+                           validator-tooltip
                            value="">
                 </div>
                 <br>
@@ -631,7 +635,7 @@
         <h2>Profile Image</h2>
 
         <div id="create-upload" pykl-upload="{dropTarget:'drop-target-create', mode:'create'}">
-            <img src="//placehold.it/300x300" id="drop-target-create" />
+            <img src="http://dummyimage.com/500x300&text=Drag and drop files here" id="drop-target-create" />
         </div>
 
         <div class="modal hide fade create">
@@ -658,7 +662,6 @@
             <br />
             <button class="btn btn-primary" id="choose-files-create"><i class="icon-folder-open icon-white"></i> Browse</button>
             <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
-            <h3>Or you can Drag and Drop a file</h3>
         </div>
 
         <br><br>
@@ -667,7 +670,8 @@
 
         <button class="btn btn-success" ng-click="save(profile)" ng-disabled="createProfile.$invalid">
             <i class="icon-folder-open icon-white"></i> Save</button>
-        <button class="btn btn-warning" ng-click="list()"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+        <!--<button class="btn btn-warning" ng-click="list()"><i class="icon-ban-circle icon-white"></i> Cancel</button>-->
+        <a ng-href="#/profiles/" class="btn btn-warning"><i class="icon-ban-circle icon-white"></i> Cancel</a>
     </form>
 
 

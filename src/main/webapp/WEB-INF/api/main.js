@@ -539,6 +539,26 @@ app.get('/profiles/asyncEmail/:email', function(req, email){
     return result;
 });
 
+app.get('/profiles/asyncUsername/:username', function(req, username){
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/byusername/' + username,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    return result;
+});
+
 /**
  * @function
  * @name POST /images/upload

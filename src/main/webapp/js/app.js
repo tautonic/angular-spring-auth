@@ -26,10 +26,10 @@
         } );
 
         //individual controller pages, some of these might be removed
-        $routeProvider.when( '/profile', {
+        $routeProvider.when( '/profiles', {
             templateUrl: 'lib/profile/profile.html'
         } );
-        $routeProvider.when( '/profile/:profileId', {
+        $routeProvider.when( '/profiles/:profileId', {
             templateUrl: 'lib/profile/profile.html'
         } );
 
