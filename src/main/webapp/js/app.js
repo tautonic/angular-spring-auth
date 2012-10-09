@@ -72,7 +72,8 @@
     app.value('ui.config', {
         tinymce: {
             theme: 'simple',
-            width: '50%'
+            width: '50%',
+            preformatted: true
         },
         jq: {
             tooltip: {

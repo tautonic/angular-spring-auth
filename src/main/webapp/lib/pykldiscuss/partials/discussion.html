@@ -14,7 +14,7 @@
                     <input type="button" ng-click="cancelEdit(discussion)" value="Cancel">
                 </form>
             </div>
-            <div class="buttons clear" ng-show="auth.isAuthenticated"><button ng-click="replyTo(discussion.message)">Quote</button><button ng-click="edit(discussion)" ng-show="canEdit(discussion)">Edit</button></div>
+            <div class="buttons clear"><button ng-click="replyTo()">Reply</button><button ng-click="replyTo(discussion.message)">Quote</button><button ng-click="edit(discussion)" ng-show="canEdit(discussion)">Edit</button></div>
         </div>
 
         <div class="post threaded" ng-repeat="post in discussion.children">
@@ -30,10 +30,10 @@
                     <input type="button" ng-click="cancelEdit(post)" value="Cancel">
                 </form>
             </div>
-            <div class="buttons clear" ng-show="auth.isAuthenticated"><button ng-click="replyTo(post.message)">Quote</button><button ng-click="edit(post)" ng-show="canEdit(post)">Edit</button></div>
+            <div class="buttons clear"><button ng-click="replyTo()">Reply</button><button ng-click="replyTo(post.message)">Quote</button><button ng-click="edit(post)" ng-show="canEdit(post)">Edit</button></div>
 
         </div>
-        <button ng-click="replyTo()" ng-show="auth.isAuthenticated">Reply</button>
+        <button ng-click="replyTo()">Reply</button>
 
         <div class="reply" ng-show="reply.show">
             <form name="replyForm" ng-submit="submitReply()">

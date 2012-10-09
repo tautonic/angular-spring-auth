@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
+function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse, Profile) {
     $scope.master = {};
 
     $scope.showSuccess = false;
@@ -310,6 +310,14 @@ function ProfileCtrl($scope, $http, $routeParams, $location, $parse, Profile) {
 
     $scope.closeErrorAlert = function(){
         $scope.showError = false;
+    }
+
+    $scope.followUser = function(profileID) {
+        var url = '/gc/api/follow/' + $rootScope.auth.principal.id + '/' + profileID;
+        console.log("FOLLOWING USER WITH URL: "+url);
+        $http.post(url).success(function(data) {
+            console.log("DATA RETURNED IS: ",data);
+        })
     }
 }
 
