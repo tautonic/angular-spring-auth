@@ -43,7 +43,7 @@
             templateUrl: 'partials/partial2.html'
         } );
 
-        $routeProvider.when( '/search/faculty/:query', {
+        $routeProvider.when( '/search/profiles/:query', {
             templateUrl: 'lib/search/partials/searchFacultyResults.html'
         } );
 

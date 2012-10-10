@@ -26,7 +26,7 @@ function MyCtrl1($rootScope, $scope, $http, $location) {
     }
 
     $rootScope.search_faculty = function(){
-        $location.path('/search/faculty/' + $rootScope.faculty_query);
+        $location.path('/search/profiles/' + $rootScope.faculty_query);
     }
 
     $rootScope.search_site = function(){

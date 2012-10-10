@@ -519,7 +519,7 @@ app.del('/profiles/:id', function(req, id){
     return result;
 });
 
-app.get('/profiles/asyncEmail/:email', function(req, email){
+app.get('/profiles/byprimaryemail/:email', function(req, email){
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/byprimaryemail/' + email,
         method: 'GET',
@@ -539,7 +539,7 @@ app.get('/profiles/asyncEmail/:email', function(req, email){
     return result;
 });
 
-app.get('/profiles/asyncUsername/:username', function(req, username){
+app.get('/profiles/byusername/:username', function(req, username){
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/byusername/' + username,
         method: 'GET',

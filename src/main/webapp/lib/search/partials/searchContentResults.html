@@ -4,20 +4,19 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
-            <th>Email</th>
+            <th>ID</th>
+            <th>Ref #</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Tags</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="result in results">
-            <td><a ng-href="#/profile/{{result._id}}">{{result._id}}</a></td>
-            <td>{{result.name.given}}</td>
-            <td>{{result.name.surname}}</td>
-            <td>{{result.username}}</td>
-            <td>{{result.accountEmail.address}}</td>
+            <td><a ng-href="#/content/{{result._id}}">{{result._id}}</a></td>
+            <td>{{result.ref}}</td>
+            <td>{{result.title}}</td>
+            <td>{{result.tags}}</td>
         </tr>
         </tbody>
     </table>

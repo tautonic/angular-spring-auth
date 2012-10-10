@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 function SearchSiteCtrl($scope, $http, $routeParams, $location, $parse, Search) {
-    $scope.results = {};
+    $scope.results;
 
     var data = {
         q: $routeParams.query

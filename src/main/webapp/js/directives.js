@@ -198,39 +198,64 @@ angular.module( 'bgc.directives', [] )
             restrict: 'A',
             require: 'ngModel',
             link: function(scope, elm, attrs, ctrl){
+                var message = 'An email address is required';
+
+                function setErrorMessage(message){
+                    return message;
+                }
                 /*
                     Zocia responds with a 404 when we can't find a user by email, so
                     we're interested in a 404 response from the server to indicate
                     an email not associated with an account
                 */
-                ctrl.$parsers.unshift(function(viewValue){
-                    $http.get('api/profiles/asyncEmail/' + viewValue).success(function(data){
-                        if(data.status === 404){
-                            ctrl.$setValidity('emailValidator', true);
-                            return viewValue;
+                ctrl.$parsers.push(function(value){
+                    if(value !== undefined){
+                        if((value.length > 2 && value.length < 17) || value.length === ''){
+                            $http.get('api/profiles/byprimaryemail/' + value).success(function(data){
+                                if(data.status === 404){
+                                    ctrl.$setValidity('emailValidator', true);
+                                    return value;
+                                }else{
+                                    ctrl.$setValidity('emailValidator', false);
+                                    message = 'This email address is already in use.'
+                                    return undefined;
+                                }
+                            });
                         }else{
                             ctrl.$setValidity('emailValidator', false);
+                            if(value.length < 3){
+                                message = 'Your email address must be at least 3 characters';
+                            }else if(value.length > 16){
+                                message = 'Your email address cannot be more than 16 characters';
+                            }else{
+                                message = 'An email address is required';
+                            }
+
                             return undefined;
                         }
-                    });
+                    }else{
+                        message = 'Your email address has an invalid format'
+                    }
                 });
 
-                elm.bind('focus', function(){
-                    if(ctrl.$invalid && ctrl.$dirty){
-                        $('#'+attrs.id).tooltip('hide');
+                jQuery('#'+attrs.id).tooltip({
+                    trigger: 'manual',
+                    placement: 'right',
+                    title: function(){
+                        return setErrorMessage(message);
                     }
                 });
 
                 elm.bind('blur', function(event){
-                    if(ctrl.$invalid && (ctrl.$modelValue !== '' && ctrl.$viewValue !== undefined)){
-                        $('#'+attrs.id).tooltip({
-                            trigger: 'manual',
-                            placement: 'right',
-                            title: 'This email address is already in use'
-                        });
-
-                        $('#'+attrs.id).tooltip('show');
+                    if(ctrl.$invalid || ctrl.$viewValue === undefined){
+                        jQuery('#'+attrs.id).tooltip('show');
                     }
+                });
+
+                elm.bind('focus', function(event){
+                    return scope.$apply(function(){
+                        $('#'+attrs.id).tooltip('hide');
+                    });
                 });
             }
         }
@@ -240,39 +265,60 @@ angular.module( 'bgc.directives', [] )
             restrict: 'A',
             require: 'ngModel',
             link: function(scope, elm, attrs, ctrl){
+                var message = 'Username is required';
+
+                function setErrorMessage(message){
+                    return message;
+                }
                 /*
                  Zocia responds with a 404 when we can't find a user by username, so
                  we're interested in a 404 response from the server to indicate
-                 an username not associated with an account
+                 a username not associated with an account
                  */
-                ctrl.$parsers.unshift(function(viewValue){
-                    $http.get('api/profiles/asyncUsername/' + viewValue).success(function(data){
-                        if(data.status === 404){
-                            ctrl.$setValidity('usernameValidator', true);
-                            return viewValue;
+                ctrl.$parsers.push(function(value){
+                    if((value.length > 2 && value.length < 17) || value.length === ''){
+                        $http.get('api/profiles/byusername/' + value).success(function(data){
+                            if(data.status === 404){
+                                ctrl.$setValidity('usernameValidator', true);
+                                return value;
+                            }else{
+                                ctrl.$setValidity('usernameValidator', false);
+                                message = 'This username is already in use.'
+                                return undefined;
+                            }
+                        });
+                    }else{
+                        ctrl.$setValidity('usernameValidator', false);
+                        if(value.length < 3){
+                            message = 'Username must be at least 3 characters';
+                        }else if(value.length > 16){
+                            message = 'Username cannot be more than 16 characters';
                         }else{
-                            ctrl.$setValidity('usernameValidator', false);
-                            return undefined;
+                            message = 'Username is required';
                         }
-                    });
+
+                        return undefined;
+                    }
                 });
 
-                elm.bind('focus', function(){
-                    if(ctrl.$invalid && ctrl.$dirty){
-                        $('#'+attrs.id).tooltip('hide');
+                jQuery('#'+attrs.id).tooltip({
+                    trigger: 'manual',
+                    placement: 'right',
+                    title: function(){
+                        return setErrorMessage(message);
                     }
                 });
 
                 elm.bind('blur', function(event){
-                    if(ctrl.$invalid && (ctrl.$viewValue !== '')){
-                        $('#'+attrs.id).tooltip({
-                            trigger: 'manual',
-                            placement: 'right',
-                            title: 'This username is already in use'
-                        });
-
-                        $('#'+attrs.id).tooltip('show');
+                    if(ctrl.$invalid || ctrl.$viewValue === undefined){
+                        jQuery('#'+attrs.id).tooltip('show');
                     }
+                });
+
+                elm.bind('focus', function(event){
+                    return scope.$apply(function(){
+                        $('#'+attrs.id).tooltip('hide');
+                    });
                 });
             }
         }
@@ -288,7 +334,7 @@ angular.module( 'bgc.directives', [] )
                     trigger: 'manual',
                     placement: 'right',
                     title: function(){
-                        return getValidationErrorMessage(attrs, controller.$error);
+                        return setErrorMessage(attrs, controller.$error);
                     }
                 });
 
@@ -308,8 +354,8 @@ angular.module( 'bgc.directives', [] )
                     });
                 });
 
-                function getValidationErrorMessage(attrs, error){
-                    if(error.required && (controller.$viewValue === undefined || controller.$viewValue !== '')){
+                function setErrorMessage(attrs, error){
+                    if(error.required){
                         return 'This is a required field';
                     }
                     if(error.minlength){
@@ -317,9 +363,6 @@ angular.module( 'bgc.directives', [] )
                     }
                     if(error.maxlength){
                         return 'This field requires a maximum of ' + attrs.ngMaxlength + ' characters';
-                    }
-                    if(error.usernameValidator){
-                        return 'This username is already in use';
                     }
                 }
             }

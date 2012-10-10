@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse, Profile) {
+function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse, Profile, $timeout) {
     $scope.master = {};
 
     $scope.showSuccess = false;

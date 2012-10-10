@@ -47,7 +47,16 @@
                     <li><a ng-href="#/profiles/">Faculty Fellows</a></li>
                     <li><a ng-href="#/content/">Curriculum Content</a></li>
                     <li><a ng-href="#/network/">Network</a></li>
-                    <li><a ng-href="#/home/">Sign In</a></li>
+                    <li>
+                        <div ng-switch on="auth.isAuthenticated">
+                            <div ng-switch-when="true">
+                                <a ng-href="#/profiles/{{auth.principal.id}}">My Profile</a>
+                            </div>
+                            <div ng-switch-default>
+                                <a ng-href="#/home/">Sign In</a>
+                            </div>
+                        </div>
+                    </li>
                     <li><a href="#"><img src="images/GCEE_images_header_searchIcon.png"></a></li>
                 </ul>
             </div>
@@ -78,7 +87,7 @@
             <div class="span4">
                 <div class="picture-frame">
                     <div class="gradient more">
-                        <a href="#/faculty/" class="right-arrow">Read More </a>
+                        <a href="#/profiles/" class="right-arrow">Read More </a>
                     </div>
                     <img src="images/190x140.gif">
                 </div>
