@@ -182,7 +182,6 @@
             </activation>
             <properties>
                 <environment>dev</environment>
-
                 <!-- The URL to access web services from the gc platform. -->
                 <zociaUrl>http://localhost:9300/myapp/api</zociaUrl>
 
@@ -202,7 +201,6 @@
             <id>qa</id>
             <properties>
                 <environment>qa</environment>
-
                 <!-- The URL to access web services from the gcplatform. -->
                 <zociaUrl>http://pykl.babsongc-qa/api</zociaUrl>
 
@@ -227,7 +225,6 @@
             <id>prod</id>
             <properties>
                 <environment>prod</environment>
-
                 <!-- The URL to access web services from the gcplatform. -->
                 <zociaUrl>http://pykl.babsongc-prod/api</zociaUrl>
 
