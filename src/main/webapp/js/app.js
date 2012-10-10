@@ -47,19 +47,24 @@
         } );
 
         $routeProvider.when( '/search/profiles/:query', {
-            templateUrl: 'lib/search/partials/searchFacultyResults.html'
+            templateUrl: 'lib/search/partials/searchFacultyResults.html',
+            controller: 'SearchProfiles'
         } );
 
         $routeProvider.when( '/search/site/:query', {
-            templateUrl: 'lib/search/partials/searchSiteResults.html'
+            templateUrl: 'lib/search/partials/searchSiteResults.html',
+            controller: 'SearchSite'
+
         } );
 
         $routeProvider.when( '/search/content/:query', {
-            templateUrl: 'lib/search/partials/searchContentResults.html'
+            templateUrl: 'lib/search/partials/searchContentResults.html',
+            controller: 'SearchContent'
         } );
 
         $routeProvider.when( '/search/discussions/:query', {
-            templateUrl: 'lib/search/partials/searchDiscussionsResults.html'
+            templateUrl: 'lib/search/partials/searchDiscussionsResults.html',
+            controller: 'SearchDiscussions'
         } );
 
         $routeProvider.when( '/view', {
