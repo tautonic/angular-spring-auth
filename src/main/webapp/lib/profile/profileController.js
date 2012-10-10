@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse, Profile) {
+function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse, Profile, $timeout) {
     $scope.master = {};
 
     $scope.showSuccess = false;
@@ -44,6 +44,10 @@ function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse,
             $scope.isResetPassMode = false;
 
             $scope.profile = profile.content;
+
+            if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001'){
+                $scope.profile.thumbnail = "http://dummyimage.com/160"
+            }
         });
     }else{
         $scope.isListMode = true
@@ -69,6 +73,10 @@ function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse,
 
         $scope.profile.newPass = '';
         $scope.profile.newPassRepeat = '';
+
+        if($scope.profile.thumbnail === 'http://dummyimage.com/160'){
+            $scope.profile.thumbnail = "http://dummyimage.com/500x300&text=Drag and drop files here"
+        }
 
         $scope.isViewMode = false;
         $scope.isEditMode = true;
@@ -102,6 +110,8 @@ function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse,
         $scope.isEditMode = false;
         $scope.isCreateMode = false;
         $scope.isResetPassMode = false;
+
+        $location.path('/profile');
     }
 
     $scope.create = function(){
@@ -282,7 +292,7 @@ function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse,
         $scope.isCreateMode = false;
         $scope.isResetPassMode = false;
 
-        $location.path('/profile');
+        $location.path('/profiles/');
 
         Profile.query(function(profiles){
             $scope.profiles = profiles.content;

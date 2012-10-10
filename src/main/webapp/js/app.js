@@ -26,10 +26,10 @@
         } );
 
         //individual controller pages, some of these might be removed
-        $routeProvider.when( '/profile', {
+        $routeProvider.when( '/profiles', {
             templateUrl: 'lib/profile/profile.html'
         } );
-        $routeProvider.when( '/profile/:profileId', {
+        $routeProvider.when( '/profiles/:profileId', {
             templateUrl: 'lib/profile/profile.html'
         } );
 
@@ -43,7 +43,7 @@
             templateUrl: 'partials/partial2.html'
         } );
 
-        $routeProvider.when( '/search/faculty/:query', {
+        $routeProvider.when( '/search/profiles/:query', {
             templateUrl: 'lib/search/partials/searchFacultyResults.html'
         } );
 
