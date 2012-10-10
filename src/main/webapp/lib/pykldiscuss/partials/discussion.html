@@ -96,18 +96,20 @@
         <div id="latest-content">
             <h2>Latest Content</h2>
             <hr>
-        <div ng-show="auth.isAuthenticated">
-            <a ng-href="#/network/new">Start new discussion</a>
+            <div ng-show="auth.isAuthenticated">
+                <a ng-href="#/network/new">Start new discussion</a>
+            </div>
+            <ul class="discussions">
+                <li class="discussion-thread" ng-repeat="thread in discussion">
+                    <a ng-href="#/network/{{thread.threadId}}">{{thread.title}}</a>
+                    <div class="started-by">Started by: <a ng-href="#/profile/{{thread.creator._id}}">{{thread.creator.username}}</a></div>
+                </li>
+            </ul>
+            <div ng-show="noDiscussions()">
+                No discussions started.
+            </div>
         </div>
-        <ul class="discussions">
-            <li class="discussion-thread" ng-repeat="thread in discussion">
-                <a ng-href="#/network/{{thread.threadId}}">{{thread.title}}</a>
-                <div class="started-by">Started by: <a ng-href="#/profile/{{thread.creator._id}}">{{thread.creator.username}}</a></div>
-            </li>
-        </ul>
-        <div ng-show="noDiscussions()">
-            No discussions started.
-        </div>
+
     </div>
 
 </div>
