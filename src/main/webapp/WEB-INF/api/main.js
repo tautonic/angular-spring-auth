@@ -22,6 +22,9 @@ var {encode} = require('ringo/base64');
 var app = exports.app = Application();
 app.configure( 'notfound', 'params', 'mount', 'route' );
 
+app.mount('/cms', require('./cms'));
+
+
 registerHelper( {
 	include: function ( path, context ) {
 		return trimpath( path );

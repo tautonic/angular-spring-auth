@@ -5,10 +5,8 @@ package com.pykl.hazelcast;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.zocia.platform.hazelcast.persistence.MapPersistence;
-import org.eclipse.jetty.client.Address;
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.client.HttpExchange;
 import org.eclipse.jetty.io.ByteArrayBuffer;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.Logger;
@@ -27,8 +25,10 @@ public class ZociaMapPersistence implements MapPersistence {
 
     protected String _access = "ro";
     protected HttpClient _client;
-    protected Address _zociaAddress;
-    protected String _zociaAddressString;
+    protected String _getAddress;
+    protected String _postAddress;
+    protected String _putAddress;
+    protected String _deleteAddress;
     protected String _index;
     protected String _type;
 
@@ -63,25 +63,30 @@ public class ZociaMapPersistence implements MapPersistence {
 
     // Properties ------------------------------------------------------------------
 
-    public void setZociaUrl(String zociaUrl) {
-        String[] parts = zociaUrl.split(":");
-        if (parts.length == 1) {
-            _zociaAddress = new Address(zociaUrl, 80);
-        } else {
-            _zociaAddress = new Address(parts[0], Integer.parseInt(parts[1]));
-        }
-        _zociaAddressString = _zociaAddress.toString();
+
+    public void setGetAddress(String getAddress) {
+        _getAddress = getAddress;
     }
 
-// MapLoaderLifecycleSupport ---------------------------------------------------
+    public void setPostAddress(String postAddress) {
+        _postAddress = postAddress;
+    }
+
+    public void setPutAddress(String putAddress) {
+        _putAddress = putAddress;
+    }
+
+    public void setDeleteAddress(String deleteAddress) {
+        _deleteAddress = deleteAddress;
+    }
+
+    // MapLoaderLifecycleSupport ---------------------------------------------------
 
     /**
-     * Initializes this MapLoader implementation. Hazelcast will call
-     * this method when the map is first used on the
-     * HazelcastInstance. Implementation can
-     * initialize required resources for the implementing
-     * mapLoader such as reading a config file and/or creating
-     * database connection.
+     * Initializes this MapLoader implementation. Hazelcast will call this method when
+     * the map is first used on the HazelcastInstance. Implementation can initialize
+     * required resources for the implementing mapLoader such as reading a config file
+     * and/or creating database connection.
      *
      * @param hazelcastInstance HazelcastInstance of this mapLoader.
      * @param properties        Properties set for this mapStore. see MapStoreConfig
@@ -143,7 +148,7 @@ public class ZociaMapPersistence implements MapPersistence {
                     new Object[]{_index, _type, key});
         }
 
-        HttpExchange exchange = new MyExchange(_index, _type, key, _zociaAddressString) {
+        ContentExchange exchange = new MyExchange(_index, _type, key, _deleteAddress) {
             @Override
             protected void onResponseComplete() throws IOException {
                 if (this.getResponseStatus() % 100 == 2) return;
@@ -151,7 +156,7 @@ public class ZociaMapPersistence implements MapPersistence {
             }
         };
         exchange.setMethod("DELETE");
-        exchange.setAddress(_zociaAddress);
+        exchange.setURL(_deleteAddress);
 
         try {
             _client.send(exchange);
@@ -205,7 +210,7 @@ public class ZociaMapPersistence implements MapPersistence {
                     new Object[]{_index, _type, key});
         }
 
-        HttpExchange exchange = new MyExchange(_index, _type, key, _zociaAddressString) {
+        ContentExchange exchange = new MyExchange(_index, _type, key, _postAddress) {
             @Override
             protected void onResponseComplete() throws IOException {
                 if (this.getResponseStatus() % 100 == 2) return;
@@ -214,7 +219,7 @@ public class ZociaMapPersistence implements MapPersistence {
         };
 
         exchange.setMethod("PUT");
-        exchange.setAddress(_zociaAddress);
+        exchange.setURL(_postAddress);
 
         if (value instanceof String) {
             exchange.setRequestContent(new ByteArrayBuffer((String) value));
@@ -249,7 +254,7 @@ public class ZociaMapPersistence implements MapPersistence {
                     new Object[]{_index, _type, key});
         }
 
-        ContentExchange exchange = new MyExchange(_index, _type, key, _zociaAddressString) {
+        ContentExchange exchange = new MyExchange(_index, _type, key, _getAddress) {
             @Override
             protected void onResponseComplete() throws IOException {
                 if (this.getResponseStatus() % 100 == 2) return;
@@ -258,15 +263,22 @@ public class ZociaMapPersistence implements MapPersistence {
         };
 
         exchange.setMethod("GET");
-        exchange.setAddress(_zociaAddress);
+
+        String uri = String.format(_getAddress, key);
+        exchange.setURL(uri);
+        exchange.setRequestHeader("x-rt-index", _index);
+        exchange.setRequestHeader("Accept-Language", "en");
+
+        LOG.info("Establishing connection to " + exchange);
 
         try {
             _client.send(exchange);
-            int status = exchange.waitForDone();
+            exchange.waitForDone();
+            int status = exchange.getResponseStatus();
             if (status == 200) {
                 return exchange.getResponseContent();
             }
-            LOG.warn(String.format("Failed to load, index [%s], type [%s], key [%s], status [%d]",
+            LOG.warn(String.format("Failed to load with unexpected status, index [%s], type [%s], key [%s], status [%d]",
                     _index, _type, key, status));
             return null;
         } catch (Exception e) {
