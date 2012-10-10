@@ -21,7 +21,12 @@
                 </div>
             </div>
             <div ng-switch-default>
-                This is a {{result._type}}
+                <div class="well well-small">
+                    <h4 style="display:inline">ID: </h4> {{result._id}} <br>
+                    <h4 style="display:inline">Creator: </h4> {{result.creator.username}} <br>
+                    <h4 style="display:inline">Title: </h4> {{result.title}}<br>
+                    <h4 style="display:inline">Content: </h4> {{result.message}}
+                </div>
             </div>
         </div>
     </div>

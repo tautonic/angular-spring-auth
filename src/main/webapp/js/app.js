@@ -58,6 +58,10 @@
             templateUrl: 'lib/search/partials/searchContentResults.html'
         } );
 
+        $routeProvider.when( '/search/discussions/:query', {
+            templateUrl: 'lib/search/partials/searchDiscussionsResults.html'
+        } );
+
         $routeProvider.when( '/view', {
             templateUrl: 'partials/partial1.html'
         } );

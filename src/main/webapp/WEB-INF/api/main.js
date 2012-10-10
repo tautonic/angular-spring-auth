@@ -886,6 +886,43 @@ app.post('/search/content/', function(req){
     return result;
 });
 
+app.post('/search/discussions/', function(req){
+    var url = 'http://localhost:9300/myapp/api/search/';
+
+    var queryParams = [
+        'q=' + encodeURIComponent(req.postParams.q),
+        'from=' + 0,
+        'size=' + 30,
+        'sort=' + 'desc',
+        'sortField=' + 'dateCreated',
+        'dataType=' + 'posts'
+    ];
+
+    url += '?' + queryParams.join('&');
+
+    var opts = {
+        url: url,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    console.log('EXCHANGE STATUS!!! ', exchange.status);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
+});
+
 /************************
  *
  * Admin functions

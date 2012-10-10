@@ -82,6 +82,13 @@
                 </div>
             </form>
 
+            <form name="searchContent" class="form-search">
+                <div class="input-append">
+                    <input type="text" ng-model="discussion_query" class="span2 search-query">
+                    <button type="submit" class="btn btn-success" ng-click="search_discussions()">Search Discussions</button>
+                </div>
+            </form>
+
             <div class="span4">
                 <div class="picture-frame">
                     <div class="gradient more">
@@ -154,6 +161,7 @@
 <script src="lib/search/searchFacultyController.js"></script>
 <script src="lib/search/searchSiteController.js"></script>
 <script src="lib/search/searchContentController.js"></script>
+<script src="lib/search/searchDiscussionsController.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js"></script>

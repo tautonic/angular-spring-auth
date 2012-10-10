@@ -9,6 +9,7 @@ function MyCtrl1($rootScope, $scope, $http, $location) {
     $rootScope.query = '';
     $rootScope.faculty_query = '';
     $rootScope.content_query = '';
+    $rootScope.discussion_query = '';
 
     var options = {
         data: JSON.stringify({
@@ -21,21 +22,25 @@ function MyCtrl1($rootScope, $scope, $http, $location) {
         $scope.stream = data;
     });
 
-    $scope.isEmpty = function() {
+    $scope.isEmpty = function () {
         return (($scope.stream) && ($scope.stream.itemCount === 0));
-    }
+    };
 
     $rootScope.search_faculty = function(){
         $location.path('/search/profiles/' + $rootScope.faculty_query);
-    }
+    };
 
     $rootScope.search_site = function(){
         $location.path('/search/site/' + $rootScope.query);
-    }
+    };
 
     $rootScope.search_content = function(){
         $location.path('/search/content/' + $rootScope.content_query);
-    }
+    };
+
+    $rootScope.search_discussions = function(){
+        $location.path('/search/discussions/' + $rootScope.discussion_query);
+    };
 }
 
 

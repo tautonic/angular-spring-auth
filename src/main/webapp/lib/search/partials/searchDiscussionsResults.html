@@ -1,5 +1,5 @@
-<div class="content container" ng-controller="SearchContentCtrl">
-    <h1>Content Search Results</h1>
+<div class="content container" ng-controller="SearchDiscussionsCtrl">
+    <h1>Discussion Search Results</h1>
 
     <h2>Your search returned {{(results | filter:lengthFilter).length}} results.</h2>
 
@@ -7,18 +7,17 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>Ref #</th>
+            <th>Creator</th>
             <th>Title</th>
             <th>Content</th>
-            <th>Tags</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="result in results">
-            <td><a ng-href="#/content/{{result._id}}">{{result._id}}</a></td>
-            <td>{{result.ref}}</td>
+            <td><a ng-href="#/discussions/{{result._id}}">{{result._id}}</a></td>
+            <td>{{result.creator.username}}</td>
             <td>{{result.title}}</td>
-            <td>{{result.tags}}</td>
+            <td>{{result.message}}</td>
         </tr>
         </tbody>
     </table>
