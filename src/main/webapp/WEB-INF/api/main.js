@@ -756,6 +756,72 @@ app.post('/utility/resetpassword/', function(req){
 
 /************************
  *
+ * Admin functions
+ *
+ ************************/
+app.get('/admin/users', function(req) {
+    var url = 'http://localhost:9300/myapp/api/profiles/';
+
+    var opts = {
+        url: url,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
+});
+
+app.put('/admin/users', function(req) {
+    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+
+    var data = {
+        "username" : req.postParams.username,
+        "name" : {
+            "fullName": req.postParams.name.fullName
+        },
+        "accountEmail" : {
+            "address"  : req.postParams.accountEmail.address
+        },
+        "workHistory" : req.postParams.workHistory
+    };
+
+    log.info('PROFILE UPDATE PARAMS ' + JSON.stringify(req.postParams, null, 4));
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/' + req.postParams._id,
+        method: 'PUT',
+        data: JSON.stringify(data),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
+})
+
+/************************
+ *
  * Page functions
  *
  ************************/

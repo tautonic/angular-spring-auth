@@ -1,10 +1,6 @@
 'use strict';
-/*
- reconfigure to be more testable:
- default controller to load all discussions
- use one single $scope variable to control which view is displayed
- stick as much code into functions as possible
- */
+
+
 function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location) {
     var url = 'api/discussions/';
 
@@ -188,5 +184,5 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
         url = 'api/discussions/';
         setupScope();
         loadContent();
-    })
+    });
 }

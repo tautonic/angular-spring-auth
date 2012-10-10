@@ -314,7 +314,7 @@ function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse,
 
     $scope.followUser = function(profileID) {
         var url = '/gc/api/follow/' + $rootScope.auth.principal.id + '/' + profileID;
-        console.log("FOLLOWING USER WITH URL: "+url);
+
         $http.post(url).success(function(data) {
             console.log("DATA RETURNED IS: ",data);
         })

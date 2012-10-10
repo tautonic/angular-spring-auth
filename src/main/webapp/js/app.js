@@ -24,6 +24,9 @@
         $routeProvider.when( '/network/:discussionId', {
             templateUrl: 'lib/pykldiscuss/index.html'
         } );
+        $routeProvider.when( '/admin', {
+            templateUrl: 'lib/pykladmin/index.html'
+        });
 
         //individual controller pages, some of these might be removed
         $routeProvider.when( '/profile', {
