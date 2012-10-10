@@ -196,7 +196,6 @@ public class ZociaMapPersistence implements MapPersistence {
     }
 
     /**
-<<<<<<< HEAD
      * Stores the key-value pair. For a REST service like ours, this is typically be a two-step
      * process. We have to determine whether we are inserting a record for the first time, or
      * updating an existing record. This will require a GET request followed by either a POST or
@@ -207,9 +206,6 @@ public class ZociaMapPersistence implements MapPersistence {
      * <p/>
      * On the plus side, performance is not especially important when it comes to storing as it is
      * an asynchronous activity on the part of this persistence bridge.
-=======
-     * Stores the key-value pair.
->>>>>>> Added support to run Hazelcast embedded in the server.
      *
      * @param key   key of the entry to store
      * @param value value of the entry to store
