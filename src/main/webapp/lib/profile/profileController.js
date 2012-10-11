@@ -11,11 +11,11 @@ function listProfiles($scope, Profile){
     });
 }
 
-function viewProfile($scope, $routeParams, Profile){
+function viewProfile($scope, $routeParams, $location, $timeout, Profile){
     var profile = Profile.get({profileId: $routeParams.profileId}, function(){
         $scope.profile = profile.content;
 
-        if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001'){
+        if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001' || $scope.profile.thumbnail === null){
             $scope.profile.thumbnail = "http://dummyimage.com/160"
         }
     });
@@ -34,9 +34,21 @@ function viewProfile($scope, $routeParams, Profile){
                 $scope.showError = true;
             });
     }
+
+    $scope.delete = function(profile){
+        Profile.delete({profileId: profile._id}, function(){
+            $timeout(function(){
+                $location.path('/profiles/');
+            }, 1000);
+
+        }, function(response){
+            $scope.responseContent = 'DELETE FAILED WITH AN ERROR OF: ' + response.status;
+            console.log('DELETE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
+    }
 }
 
-function createProfile($scope, Profile){
+function createProfile($scope, $location, Profile){
     $scope.profile = {};
 
     $scope.profile.workHistory = [
@@ -84,15 +96,74 @@ function createProfile($scope, Profile){
             "url" : ''
         }
     ];
+
+    $scope.save = function(profile){
+        $scope.newProfile = new Profile(profile);
+
+        if($scope.thumbnailURI !== ''){
+            $scope.newProfile.thumbnail = $scope.thumbnailURI;
+        }
+
+        $scope.newProfile.$save(function(response){
+            $scope.profile._id = response.content._id;
+            $scope.profile.thumbnail = response.content.thumbnail;
+
+            $location.path('/profiles/view/' + $scope.profile._id);
+
+            $scope.responseContent = response.content;
+        }, function(response){
+            console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
+    }
+
+    $scope.addEdRow = function(){
+        $scope.profile.educationHistory.push({
+            "schoolName" : '',
+            "degree" : '',
+            "fieldOfStudy" : '',
+            "country" : "",
+            "yearFrom": {
+                "hijri": "",
+                "gregorian": "",
+                "preference": "gregorian"
+            },
+            "yearTo": {
+                "hijri": "",
+                "gregorian": "",
+                "preference": "gregorian"
+            },
+            "edNotes": ""
+        });
+    }
+
+    $scope.removeEdRow = function(index){
+        $scope.profile.educationHistory.splice(index, 1);
+    }
+
+    $scope.addContactRow = function(){
+        $scope.profile.websites.push(
+            {
+                "title" : '',
+                "url" : ''
+            }
+        );
+    }
+
+    $scope.removeContactRow = function(index){
+        $scope.profile.websites.splice(index, 1);
+    }
+
 }
 
-function updateProfile($scope, $routeParams, Profile){
+function updateProfile($scope, $routeParams, $location, Profile){
     $scope.profile = {};
+    $scope.master = {};
 
     var profile = Profile.get({profileId: $routeParams.profileId}, function(){
         $scope.profile = profile.content;
+        $scope.master = angular.copy($scope.profile);
 
-        if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001'){
+        if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001' || $scope.profile.thumbnail === null){
             $scope.profile.thumbnail = "http://dummyimage.com/500x300&text=Drag and drop files here"
         }
     });
@@ -106,18 +177,54 @@ function updateProfile($scope, $routeParams, Profile){
         }
 
         Profile.update({profileId: profile._id}, profile, function(response){
-            $scope.isViewMode = true;
-            $scope.isEditMode = false;
-            $scope.isCreateMode = false;
-
             $scope.responseContent = response.content;
+
+            $location.path('/profiles/view/' + profile._id);
         }, function(response){
             $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
             console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
-    }
-}
+    };
 
-function deleteProfile($scope, $http, $routeParams, $location, $parse, Profile){
+    $scope.isUnchanged = function(profile){
+        return !angular.equals(profile, $scope.master);
+    };
+
+    $scope.addEdRow = function(){
+        $scope.profile.educationHistory.push({
+            "schoolName" : '',
+            "degree" : '',
+            "fieldOfStudy" : '',
+            "country" : "",
+            "yearFrom": {
+                "hijri": "",
+                "gregorian": "",
+                "preference": "gregorian"
+            },
+            "yearTo": {
+                "hijri": "",
+                "gregorian": "",
+                "preference": "gregorian"
+            },
+            "edNotes": ""
+        });
+    }
+
+    $scope.removeEdRow = function(index){
+        $scope.profile.educationHistory.splice(index, 1);
+    }
+
+    $scope.addContactRow = function(){
+        $scope.profile.websites.push(
+            {
+                "title" : '',
+                "url" : ''
+            }
+        );
+    }
+
+    $scope.removeContactRow = function(index){
+        $scope.profile.websites.splice(index, 1);
+    }
 
 }

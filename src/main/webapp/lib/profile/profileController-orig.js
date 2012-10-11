@@ -170,7 +170,7 @@ function ProfileCtrl($rootScope, $scope, $http, $routeParams, $location, $parse,
         $scope.isResetPassMode = false;
     }
 
-    $scope.save = function(profile){
+    $scope.ma = function(profile){
         $scope.newProfile = new Profile(profile);
 
         if($scope.thumbnailURI !== ''){

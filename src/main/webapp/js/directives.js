@@ -4,12 +4,6 @@
 
 
 angular.module( 'bgc.directives', [] )
-    .directive('profile', ['$http', function ($http) {
-        return{
-            restrict:'E',
-            templateUrl:'lib/profile/partials/profileTemplate.html'
-        }
-    }])
     .directive('docViewer', function (){
         return{
             restrict:'E',
@@ -69,8 +63,8 @@ angular.module( 'bgc.directives', [] )
                 var config = {
                     scope: scope,
                     runtimes: 'html5',
-                    browse_button: 'choose-files-' + options.mode,
-                    container:'container-' + options.mode,
+                    browse_button: 'choose-files',
+                    container:'container',
                     url: '/gc/api/profiles/images/upload/',
                     max_file_size:'10mb',
                     resize:{width:320, height:240, quality:90},
@@ -98,7 +92,7 @@ angular.module( 'bgc.directives', [] )
 
                 uploader.bind('FilesAdded', function (up, files) {
                     for (var i in files) {
-                        $$('filelist-' + options.mode).innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+                        $$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
                     }
 
                     setTimeout(function () {
@@ -121,17 +115,17 @@ angular.module( 'bgc.directives', [] )
                 var jcropApi;
 
                 uploader.bind('UploadComplete', function(uploader, file){
-                    $('#image-crop-' + options.mode).attr('src', url);
+                    $('#image-crop').attr('src', url);
 
-                    $('.modal.hide.fade.' + options.mode).modal('show');
+                    $('.modal.hide.fade').modal('show');
 
-                    cancelCropBtn = angular.element('#cancel-crop-' + options.mode);
-                    saveCropBtn = angular.element('#save-crop-' + options.mode);
+                    cancelCropBtn = angular.element('#cancel-crop');
+                    saveCropBtn = angular.element('#save-crop');
 
                     $('.jcrop-holder img').attr('src', url);
-                    $('#crop-preview-' + options.mode).attr('src', url);
+                    $('#crop-preview').attr('src', url);
 
-                    $('#image-crop-' + options.mode).Jcrop({
+                    $('#image-crop').Jcrop({
                         bgColor: '#fff',
                         onChange: showPreview,
                         onSelect: showPreview,
@@ -141,7 +135,7 @@ angular.module( 'bgc.directives', [] )
                     });
 
                     cancelCropBtn.bind('click', function(){
-                        $('.modal.hide.fade.' + options.mode).modal('hide');
+                        $('.modal.hide.fade').modal('hide');
                     });
 
                     saveCropBtn.bind('click', function(){
@@ -169,18 +163,18 @@ angular.module( 'bgc.directives', [] )
                                 var uri = data.response.uri;
                                 uri = uri.replace(/http:/, '');
                                 scope.thumbnailURI = uri;
-                                $('#drop-target-' + options.mode).attr('src', uri);
+                                $('#drop-target').attr('src', uri);
                             }
                         );
 
-                        $('.modal.hide.fade.' + options.mode).modal('hide');
+                        $('.modal.hide.fade').modal('hide');
                     });
 
                     function showPreview(coords){
                         var rx = 250 / coords.w;
                         var ry = 300 / coords.h;
 
-                        $('#crop-preview-' + options.mode).css({
+                        $('#crop-preview').css({
                             width: Math.round(rx * 300) + 'px',
                             height: Math.round(ry * 360) + 'px',
                             marginLeft: '-' + Math.round(rx * coords.x) + 'px',
@@ -199,6 +193,7 @@ angular.module( 'bgc.directives', [] )
             require: 'ngModel',
             link: function(scope, elm, attrs, ctrl){
                 var message = 'An email address is required';
+                var valid = false;
 
                 function setErrorMessage(message){
                     return message;
@@ -209,18 +204,27 @@ angular.module( 'bgc.directives', [] )
                     an email not associated with an account
                 */
                 ctrl.$parsers.push(function(value){
+                    if(scope.master && scope.master.accountEmail.address === value){
+                        ctrl.$setValidity('emailValidator', true);
+                        return value;
+                    }
+
                     if(value !== undefined){
                         if((value.length > 2 && value.length < 17) || value.length === ''){
                             $http.get('api/profiles/byprimaryemail/' + value).success(function(data){
                                 if(data.status === 404){
-                                    ctrl.$setValidity('emailValidator', true);
-                                    return value;
+                                    valid = true;
                                 }else{
                                     ctrl.$setValidity('emailValidator', false);
                                     message = 'This email address is already in use.'
                                     return undefined;
                                 }
                             });
+
+                            if(valid){
+                                ctrl.$setValidity('emailValidator', true);
+                                return value;
+                            }
                         }else{
                             ctrl.$setValidity('emailValidator', false);
                             if(value.length < 3){
@@ -230,8 +234,6 @@ angular.module( 'bgc.directives', [] )
                             }else{
                                 message = 'An email address is required';
                             }
-
-                            return undefined;
                         }
                     }else{
                         message = 'Your email address has an invalid format'
@@ -254,18 +256,19 @@ angular.module( 'bgc.directives', [] )
 
                 elm.bind('focus', function(event){
                     return scope.$apply(function(){
-                        $('#'+attrs.id).tooltip('hide');
+                        jQuery('#'+attrs.id).tooltip('hide');
                     });
                 });
             }
         }
     }])
-    .directive('usernameValidator', ['$http', function($http){
+    .directive('usernameValidator', ['$http', '$timeout', function($http, $timeout){
         return {
             restrict: 'A',
             require: 'ngModel',
             link: function(scope, elm, attrs, ctrl){
                 var message = 'Username is required';
+                var valid = false;
 
                 function setErrorMessage(message){
                     return message;
@@ -276,19 +279,25 @@ angular.module( 'bgc.directives', [] )
                  a username not associated with an account
                  */
                 ctrl.$parsers.push(function(value){
+                    if(scope.master && scope.master.username === value){
+                        ctrl.$setValidity('usernameValidator', true);
+                        return value;
+                    }
                     if((value.length > 2 && value.length < 17) || value.length === ''){
                         $http.get('api/profiles/byusername/' + value).success(function(data){
                             if(data.status === 404){
-                                ctrl.$setValidity('usernameValidator', true);
-                                return value;
+                                valid = true;
                             }else{
                                 ctrl.$setValidity('usernameValidator', false);
                                 message = 'This username is already in use.'
-                                return undefined;
                             }
                         });
+
+                        if(valid){
+                            ctrl.$setValidity('usernameValidator', true);
+                            return value;
+                        }
                     }else{
-                        ctrl.$setValidity('usernameValidator', false);
                         if(value.length < 3){
                             message = 'Username must be at least 3 characters';
                         }else if(value.length > 16){
@@ -297,7 +306,7 @@ angular.module( 'bgc.directives', [] )
                             message = 'Username is required';
                         }
 
-                        return undefined;
+                        ctrl.$setValidity('usernameValidator', false);
                     }
                 });
 
@@ -317,7 +326,7 @@ angular.module( 'bgc.directives', [] )
 
                 elm.bind('focus', function(event){
                     return scope.$apply(function(){
-                        $('#'+attrs.id).tooltip('hide');
+                        jQuery('#'+attrs.id).tooltip('hide');
                     });
                 });
             }

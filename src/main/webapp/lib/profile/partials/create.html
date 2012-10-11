@@ -12,18 +12,19 @@
                        class="input-xlarge"
                        id="username-create"
                        name="username-create"
-                       username-validator>
+                       username-validator
+                       value="" >
             </div>
             <br>
 
-            <label class="control-label" for="given-name-create">First Name</label>
+            <label class="control-label" for="given-name">First Name</label>
 
             <div class="controls">
                 <input type="text"
                        ng-model="profile.name.given"
                        class="input-xlarge"
-                       id="given-name-create"
-                       name="given-name-create"
+                       id="given-name"
+                       name="given-name"
                        ng-minlength="3"
                        ng-maxlength="16"
                        required
@@ -31,14 +32,14 @@
                        value="">
             </div>
             <br>
-            <label class="control-label" for="surname-create">Last Name</label>
+            <label class="control-label" for="surname">Last Name</label>
 
             <div class="controls">
                 <input type="text"
                        ng-model="profile.name.surname"
                        class="input-xlarge"
-                       id="surname-create"
-                       name="surname-create"
+                       id="surname"
+                       name="surname"
                        ng-minlength="3"
                        ng-maxlength="16"
                        required
@@ -61,14 +62,14 @@
                        value="">
             </div>
             <br>
-            <label class="control-label" for="repeat-password-create">Repeat Password</label>
+            <label class="control-label" for="repeat-password">Repeat Password</label>
 
             <div class="controls">
                 <input type="password"
                        ng-model="profile.newPassRepeat"
                        class="input-xlarge"
-                       id="repeat-password-create"
-                       name="repeat-password-create"
+                       id="repeat-password"
+                       name="repeat-password"
                        password-validator="password-create"
                        validation-tooltip
                        value="">
@@ -81,15 +82,15 @@
                     <i class="icon-plus icon-white"></i> Add
                 </button>
             </h2>
-            <label class="control-label" for="email-address-create">Email</label>
+            <label class="control-label" for="email-address">Email</label>
 
             <div class="controls">
                 <input type="email"
                        ng-model="profile.accountEmail.address"
                        class="input-xlarge"
-                       id="email-address-create"
-                       name="email-address-create"
-                       email-validator>
+                       id="email-address"
+                       name="email-address"
+                       email-validator >
             </div>
             <br>
 
@@ -139,14 +140,14 @@
                 </div>
                 <br>
 
-                <label class="control-label" for="work-institution-create">Institution Name</label>
+                <label class="control-label" for="work-institution">Institution Name</label>
 
                 <div class="controls">
                     <input type="text"
                            ng-model="profile.workHistory[0].businessName"
                            class="input-xlarge"
-                           id="work-institution-create"
-                           name="work-institution-create"
+                           id="work-institution"
+                           name="work-institution"
                            ng-minlength="6"
                            ng-maxlength="16"
                            required
@@ -313,35 +314,35 @@
 
     <h2>Profile Image</h2>
 
-    <div id="create-upload" pykl-upload="{dropTarget:'drop-target-create', mode:'create'}">
-        <img src="http://dummyimage.com/500x300&text=Drag and drop files here" id="drop-target-create"/>
+    <div id="upload" pykl-upload="{dropTarget:'drop-target'}">
+        <img src="http://dummyimage.com/500x300&text=Drag and drop files here" id="drop-target"/>
     </div>
 
-    <div class="modal hide fade create">
+    <div class="modal hide fade">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h3>Crop your image</h3>
         </div>
         <div class="modal-body">
-            <img id="image-crop-create" src="" alt="">
+            <img id="image-crop" src="" alt="">
 
             <!--<div style="width:250px;height:300px;overflow:hidden;margin-left:5px;">
-                <img id="crop-preview-create" src="" >
+                <img id="crop-preview" src="" >
             </div>-->
         </div>
         <div class="modal-footer">
-            <button id="cancel-crop-create" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel
+            <button id="cancel-crop" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel
             </button>
-            <button id="save-crop-create" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
+            <button id="save-crop" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
         </div>
     </div>
 
-    <div id="container-create">
+    <div id="container">
         <br>
 
-        <div id="filelist-create"></div>
+        <div id="filelist"></div>
         <br/>
-        <button class="btn btn-primary" id="choose-files-create"><i class="icon-folder-open icon-white"></i> Browse</button>
+        <button class="btn btn-primary" id="choose-files"><i class="icon-folder-open icon-white"></i> Browse</button>
         <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
     </div>
 
@@ -352,7 +353,6 @@
     <button class="btn btn-success" ng-click="save(profile)" ng-disabled="createProfile.$invalid">
         <i class="icon-folder-open icon-white"></i> Save
     </button>
-    <!--<button class="btn btn-warning" ng-click="list()"><i class="icon-ban-circle icon-white"></i> Cancel</button>-->
     <a ng-href="#/profiles/" class="btn btn-warning"><i class="icon-ban-circle icon-white"></i> Cancel</a>
 </form>
 </div>

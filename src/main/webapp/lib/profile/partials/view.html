@@ -6,7 +6,7 @@
             <!--<p>{{profile.bio}}</p>-->
             <p>
                 <a class="btn btn-warning" ng-href="#/profiles/update/{{profile._id}}"><i class="icon-edit icon-white"></i> Update</a>
-                <a class="btn btn-danger" ng-href="#/profiles/delete/{{profile._id}}"><i class="icon-trash icon-white"></i> Delete</a>
+                <button class="btn btn-danger" ng-click="delete(profile)"><i class="icon-trash icon-white"></i> Delete</button>
                 <br><br>
                 <a class="btn btn-success" ng-href="#/profiles/"><i class="icon-list icon-white"></i> View All Profiles</a>
                 <br><br>
@@ -44,15 +44,11 @@
             </div>
             </p>
         </div>
-
-        <div class="alert alert-success" ng-show="wasProfileDeleted">
-            <a class="close" data-dismiss="alert" href="#">&times;</a>
-            <h4 class="alert-heading">Success!</h4> You have successfully deleted the profile of {{profile.firstName}} {{profile.lastName}}
-        </div>
     </div>
 
     <div class="profile-right">
         <h6>{{profile._id}}</h6>
+        <h2><strong>{{profile.name.given}} {{profile.name.surname}}</strong></h2>
         <h2>{{profile.username}}</h2>
         <h6>Email</h6> {{profile.accountEmail.address}} <br>
         <span ng-show="auth.isAuthenticated"><a ng-click="followUser(profile._id)" ng-show="!profile.isUserFollowing">Follow {{profile.username}}</a>
