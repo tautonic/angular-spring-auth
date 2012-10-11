@@ -1,28 +1,57 @@
-<div class="profile clearfix thumbnail" ng-show="isViewMode">
+<div class="profile clearfix thumbnail">
     <div class="profile-left">
-        <img src="http://placehold.it/260x180" alt="">
+        <img ng-src="{{profile.thumbnail}}" alt="">
 
         <div class="caption">
-            <p>{{profile.bio}}</p>
+            <!--<p>{{profile.bio}}</p>-->
             <p>
-                <button class="btn" ng-click="edit(member)"><i class="icon-edit"></i> Edit</button>
-                <button class="btn btn-success" ng-click="create()"><i class="icon-plus icon-white"></i> Create</button>
-                <button class="btn btn-danger" ng-click="delete()"><i class="icon-trash icon-white"></i> Delete</button>
-            </p>
-        </div>
+                <a class="btn btn-warning" ng-href="#/profiles/update/{{profile._id}}"><i class="icon-edit icon-white"></i> Update</a>
+                <button class="btn btn-danger" ng-click="delete(profile)"><i class="icon-trash icon-white"></i> Delete</button>
+                <br><br>
+                <a class="btn btn-success" ng-href="#/profiles/"><i class="icon-list icon-white"></i> View All Profiles</a>
+                <br><br>
 
-        <div class="alert alert-success" ng-show="profileDeleted=='true'">
-            <a class="close" data-dismiss="alert" href="#">×</a>
-            <h4 class="alert-heading">Success!</h4> You have successfully deleted the profile of {{profile.firstName}} {{profile.lastName}}
+            <form name="resetPassword" class="form" novalidate>
+                <div class="control-group">
+                    <label class="control-label" for="pass-reset">Email</label>
+                    <div class="controls">
+                        <input type="email"
+                               ng-model="recoveryAddress"
+                               class="input-xlarge"
+                               id="pass-reset"
+                               name="pass-reset"
+                               ng-minlength="3"
+                               required
+                               value="">
+                    </div>
+                    <br>
+                </div>
+
+                <button class="btn btn-warning" ng-click="reset()">
+                    <i class="icon-envelope icon-white"></i> Reset My Password</button>
+            </form>
+
+            <div class="alert alert-success alert-block" ng-show="showSuccess">
+                <button type="button" class="close" ui-event="{ closed: 'closeSuccessAlert()' }" data-dismiss="alert">&times;</button>
+                <h4>Success!</h4>
+                Check your email account for a new password
+            </div>
+
+            <div class="alert alert-error alert-block" ng-show="showError">
+                <button type="button" class="close" ui-event="{ closed: 'closeErrorAlert()' }" data-dismiss="alert">&times;</button>
+                <h4>Error!</h4>
+                There was an error while processing your request
+            </div>
+            </p>
         </div>
     </div>
 
     <div class="profile-right">
-        <h6>{{profile.id}}</h6>
-        <h2>{{profile.firstName}} {{profile.lastName}}</h2>
-        <h6>Email</h6> {{profile.email}} <br>
-        <h6>{{profile.jobTitle}} at</h6> {{profile.employer}} <br>
-        <h6>Lives in</h6> {{profile.currentCity}}, {{profile.currentState}} <br>
-        <h6>Hometown</h6> {{profile.homeTown}}, {{profile.homeState}}
+        <h6>{{profile._id}}</h6>
+        <h2><strong>{{profile.name.given}} {{profile.name.surname}}</strong></h2>
+        <h2>{{profile.username}}</h2>
+        <h6>Email</h6> {{profile.accountEmail.address}} <br>
+        <span ng-show="auth.isAuthenticated"><a ng-click="followUser(profile._id)" ng-show="!profile.isUserFollowing">Follow {{profile.username}}</a>
+        <span ng-show="profile.isUserFollowing">You are currently following {{profile.username}}.</span></span>
     </div>
 </div>

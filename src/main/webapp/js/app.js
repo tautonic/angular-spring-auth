@@ -30,10 +30,20 @@
 
         //individual controller pages, some of these might be removed
         $routeProvider.when( '/profiles', {
-            templateUrl: 'lib/profile/profile.html'
+            templateUrl: 'lib/profile/partials/list.html',
+            controller: 'listProfiles'
         } );
-        $routeProvider.when( '/profiles/:profileId', {
-            templateUrl: 'lib/profile/profile.html'
+        $routeProvider.when( '/profiles/view/:profileId', {
+            templateUrl: 'lib/profile/partials/view.html',
+            controller: 'viewProfile'
+        } );
+        $routeProvider.when( '/profiles/update/:profileId', {
+            templateUrl: 'lib/profile/partials/update.html',
+            controller: 'updateProfile'
+        } );
+        $routeProvider.when( '/profiles/create', {
+            templateUrl: 'lib/profile/partials/create.html',
+            controller: 'createProfile'
         } );
 
         $routeProvider.when('/passwordtoken/:token', {

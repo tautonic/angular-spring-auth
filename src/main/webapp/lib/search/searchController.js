@@ -5,7 +5,21 @@
  * Time: 5:20 PM
  * To change this template use File | Settings | File Templates.
  */
-function SearchContent($scope, $http, $routeParams, $location, $parse, Search) {
+function SearchSite($scope, $routeParams, $location, Search) {
+    $scope.results;
+
+    var data = {
+        q: $routeParams.query
+    };
+
+    var results = Search.site({type: 'site'}, data, function(response){
+        $scope.results = response.content;
+    }, function(response){
+        console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+    });
+}
+
+function SearchContent($scope, $routeParams, $location, Search) {
     $scope.results = {};
 
     var data = {
@@ -17,27 +31,23 @@ function SearchContent($scope, $http, $routeParams, $location, $parse, Search) {
     }, function(response){
         console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
-
-    $scope.search_content = function(){
-        $location.path('/search/content');
-    }
 }
 
-function SearchDiscussions($scope, $http, $routeParams, $location, $parse, Search) {
+function SearchDiscussions($scope, $routeParams, $location, Search) {
     $scope.results;
 
     var data = {
         q: $routeParams.query
     };
 
-    var results = Search.discussions({type: 'site'}, data, function(response){
+    var results = Search.discussions({type: 'discussions'}, data, function(response){
         $scope.results = response.content;
     }, function(response){
         console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
 }
 
-function SearchProfiles($rootScope, $scope, $http, $routeParams, $location, $parse, Search) {
+function SearchProfiles($scope, $routeParams, $location, Search) {
     $scope.results = {};
 
     var data = {
@@ -48,19 +58,5 @@ function SearchProfiles($rootScope, $scope, $http, $routeParams, $location, $par
         $scope.results = response.content;
     }, function(response){
         console.log('Faculty search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-    });
-}
-
-function SearchSite($scope, $http, $routeParams, $location, $parse, Search) {
-    $scope.results;
-
-    var data = {
-        q: $routeParams.query
-    };
-
-    var results = Search.site({type: 'site'}, data, function(response){
-        $scope.results = response.content;
-    }, function(response){
-        console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
 }
