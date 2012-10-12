@@ -4,7 +4,8 @@ address{
     color: #454545;
 }
 
-p.muted {
+p.muted,
+h5.muted{
     color: #999999;
 }
 
@@ -186,8 +187,16 @@ a.right-arrow {
     border-color: transparent transparent transparent #ffffff;
 }
 
-button{
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+button,
+a.btn{
+    /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+    font-family: "PMN Caecilia", Georgia, serif;
+    color: #ffffff;
+}
+
+a.btn:hover,
+a.btn:visited{
+    color: #ffffff;
 }
 
 .update p {
@@ -221,4 +230,33 @@ button{
 
 .stats span.likes {
     background-position: 10px 10px;
+}
+
+.btn-group > .btn:first-child{
+    -webkit-border-bottom-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    -webkit-border-top-left-radius: 20px;
+    border-top-left-radius: 20px;
+    -moz-border-radius-bottomleft: 20px;
+    -moz-border-radius-topleft: 20px;
+}
+
+.btn-group > .btn:last-child{
+    -webkit-border-bottom-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    -webkit-border-top-right-radius: 20px;
+    border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -moz-border-radius-topright: 20px;
+}
+
+h1.sans-serif, h2.sans-serif, h3.sans-serif, h4.sans-serif, h5.sans-serif, h6.sans-serif {
+    font-family: "TradeGothicW01-BoldCn20 675334", "Arial Narrow", sans-serif;
+    font-weight: bold;
+    color: #006644;
+    text-transform: uppercase;
+}
+
+h3.sans-serif{
+    font-size: 20px;
 }

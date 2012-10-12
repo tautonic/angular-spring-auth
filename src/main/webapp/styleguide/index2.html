@@ -528,8 +528,8 @@
         <h2 class="guide">Profile Images</h2>
 
         <p class="guide">There are three sizes for profile images. Large, medium, and small. Large profile images
-        have a rotation of 30 degrees counter clockwise applied to them. Medium profile images have a
-        rotation of 30 degrees clockwise applied to them.</p>
+        have a rotation of 7 degrees counter clockwise applied to them. Medium profile images have a
+        rotation of 7 degrees clockwise applied to them.</p>
 
         <div class="picture-frame large counter-clockwise">
             <img class="profile-image large" src="../images/rosie.jpeg">
@@ -577,56 +577,128 @@
         <div class="bs-docs-example" style="background-color: #f5f5f5;">
             <div class="modal" style="position: relative; top: auto; left: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%;">
                 <div class="profile-modal profile">
-                    <div class="left">
+                    <div class="left clearfix">
                         <div class="picture-frame large counter-clockwise">
                             <img class="profile-image large" src="../images/rosie.jpeg">
-                            <div class="picture-frame-bottom"></div>
                         </div>
                     </div>
-                    <div class="center">
+                    <div class="center clearfix">
                         <h3>John Greene</h3>
                         <h5>Professor Art & Technology</h5>
                         <h5 class="muted">The Ohio State University</h5>
+
+                        <div class="btn-group bgc">
+                            <button class="btn btn-success">Follow</button>
+                            <a class="btn btn-success" href="">Full Profile</a>
+                        </div>
+
+                        <h3 class="sans-serif">CONTACT</h3>
+                        <p><strong>Email: </strong>EmailName@website.com</p>
+                        <p><strong>Website: </strong>www.institution.com</p>
+
+                        <h3 class="sans-serif">INSTITUTION</h3>
+                        <p><strong>Title: </strong>Professor Title</p>
+                        <p><strong>Location: </strong>Location Name</p>
+                        <p><strong>Year started - Year Finished</strong></p>
+
+                        <h3 class="sans-serif">EDUCATION</h3>
+                        <p><strong>Institution Name: </strong>Name of Institution</p>
+                        <p><strong>Field of Study: </strong>Field of Study</p>
+                        <p><strong>Country: </strong>Country</p>
+                        <p><strong>Year started - Year Finished</strong></p>
+
+                        <p><strong>Notes: </strong><i>Lorem ipsumdolor sit amet, consectetur adipiscing
+                        elit. Eitam pulvinar enim vallis magna Nam quis mauris nunc, vel pellentes
+                        ipsum dolor sit amet.</i></p>
+
                     </div>
-                    <div class="right">
+                    <div class="right clearfix">
                         <div class="close-modal"></div>
+                        <h3 class="sans-serif">RECENT ACTIVITY</h3>
+                        <ul class="activity-list">
+                            <li class="update">
+                                <p>Posted a new comment to the <a href="#">Business in a Bundle</a> document</p>
+                                <p class="muted">5 hours ago</p>
+                            </li>
+                            <li class="update">
+                                <p>Posted a new comment to the <a href="#">Business in a Bundle</a> document</p>
+                                <p class="muted">5 hours ago</p>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--<div class="modal hide fade" id="my-modal">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">Modal header</h3>
-            </div>
-            <div class="modal-body">
-                <p>One fine body…</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                <button class="btn btn-primary">Save changes</button>
-            </div>
-        </div>-->
-
-        <pre class="prettyprint linenums">
+        <pre class="prettyprint linenums profile-images">
 &lt;div class="modal" style="position: relative; top: auto; left: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%;"&gt;
     &lt;div class="profile-modal profile"&gt;
-        &lt;div class="left"&gt;
+        &lt;div class="left clearfix"&gt;
             &lt;div class="picture-frame large counter-clockwise"&gt;
-                &lt;img class="profile-image large" src="../images/rosie.jpeg"&gt;
-                &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+                &lt;img class="profile-image large" src="..."&gt;                                    
             &lt;/div&gt;
         &lt;/div&gt;
-        &lt;div class="center"&gt;
+        &lt;div class="center clearfix"&gt;
             &lt;h3&gt;John Greene&lt;/h3&gt;
             &lt;h5&gt;Professor Art & Technology&lt;/h5&gt;
             &lt;h5 class="muted"&gt;The Ohio State University&lt;/h5&gt;
-        &lt;/div&gt;
-        &lt;div class="right"&gt;
-            &lt;div class="close-modal"&gt;&lt;/div&gt;
-        &lt;/div&gt;
+
+            &lt;div class="btn-group bgc"&gt;
+                &lt;button class="btn btn-success"&gt;Follow&lt;/button&gt;
+                &lt;a class="btn btn-success" href=""&gt;Full Profile&lt;/a&gt;
+            &lt;/div&gt;
+
+            &lt;h3 class="sans-serif"&gt;CONTACT&lt;/h3&gt;
+            &lt;p&gt;&lt;strong&gt;Email: &lt;/strong&gt;EmailName@website.com&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Website: &lt;/strong&gt;www.institution.com&lt;/p&gt;
+
+            &lt;h3 class="sans-serif"&gt;INSTITUTION&lt;/h3&gt;
+            &lt;p&gt;&lt;strong&gt;Title: &lt;/strong&gt;Professor Title&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Location: &lt;/strong&gt;Location Name&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Year started - Year Finished&lt;/strong&gt;&lt;/p&gt;
+
+            &lt;h3 class="sans-serif"&gt;EDUCATION&lt;/h3&gt;
+            &lt;p&gt;&lt;strong&gt;Institution Name: &lt;/strong&gt;Name of Institution&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Field of Study: &lt;/strong&gt;Field of Study&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Country: &lt;/strong&gt;Country&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Year started - Year Finished&lt;/strong&gt;&lt;/p&gt;
+
+            &lt;p&gt;&lt;strong&gt;Notes: &lt;/strong&gt;&lt;i&gt;Lorem ipsumdolor sit amet, consectetur adipiscing
+                elit. Eitam pulvinar enim vallis magna Nam quis mauris nunc, vel pellentes
+                ipsum dolor sit amet.&lt;/i&gt;&lt;/p&gt;
+        &lt;/div&gt;                
     &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="right clearfix"&gt;
+    &lt;div class="close-modal"&gt;&lt;/div&gt;
+    &lt;h3 class="sans-serif"&gt;RECENT ACTIVITY&lt;/h3&gt;
+    &lt;ul class="activity-list"&gt;
+        &lt;li class="update"&gt;
+            &lt;p&gt;Posted a new comment to the &lt;a href="#"&gt;Business in a Bundle&lt;/a&gt; document&lt;/p&gt;
+            &lt;p class="muted"&gt;5 hours ago&lt;/p&gt;
+        &lt;/li&gt;
+        &lt;li class="update"&gt;
+            &lt;p&gt;Posted a new comment to the &lt;a href="#"&gt;Business in a Bundle&lt;/a&gt; document&lt;/p&gt;
+            &lt;p class="muted"&gt;5 hours ago&lt;/p&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+        </pre>
+
+        <h2 class="guide">Live demo</h2>
+        <p class="guide">Toggle a modal via JavaScript by clicking the button below. It will slide down and fade in from the top of the page.</p>
+
+        <p class="bs-docs-example">
+
+        </p>
+        <pre class="prettyprint linenums">
+&lt;div class="picture-frame"&gt;
+    &lt;div class="gradient more"&gt;
+        &lt;a href="..."&gt;Read More &lt;/a&gt;
+        &lt;div class="right-arrow-shape"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;img src="..."&gt;
+    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
 &lt;/div&gt;
         </pre>
 

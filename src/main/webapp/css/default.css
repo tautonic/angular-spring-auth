@@ -22,11 +22,11 @@ a:hover, a:visited {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: "TradeGothicW01-BoldCn20 675334", "Arial Narrow", sans-serif;
-    font-weight: bold;
-    color: #006644;
-    text-transform: uppercase;
-}
+     font-family: "TradeGothicW01-BoldCn20 675334", "Arial Narrow", sans-serif;
+     font-weight: bold;
+     color: #006644;
+     text-transform: uppercase;
+ }
 
 .profile h1, .profile h2, .profile h3, .profile h5, .profile h6 {
     font-family: "PMN Caecilia", Georgia, serif;
@@ -201,7 +201,7 @@ input, button, select, textarea {
 }
 
 .profile-modal{
-    /*width: 870px;*/
+    width: 100%;
     height: 560px;
 }
 
@@ -212,19 +212,45 @@ input, button, select, textarea {
 }
 
 .profile-modal .left{
-    width: 15%;
+    width: 22%;
     float: left;
 }
 
 .profile-modal .center{
-    width: 60%;
+    width: 46%;
     float: left;
     overflow: auto;
 }
 
 .profile-modal .right{
-    width: 25%;
+    width: 31%;
     float: right;
+    border-left: #c5c5c5 solid 1px;
+}
+
+.profile-modal .right h3{
+    width: 92%;
+    margin: 0.5em auto 0 auto;
+    color: #999;
+}
+
+.activity-list li:first-child{
+    border-top: #c5c5c5 solid 1px;
+}
+
+.activity-list li{
+    border-bottom: #c5c5c5 solid 1px;
+    padding: 1em 0;
+}
+
+.activity-list{
+    list-style-type: none;
+    margin: 0;
+}
+
+.activity-list .update p{
+    width: 92%;
+    margin: 0 auto;
 }
 
 .profile-modal .picture-frame{
@@ -253,19 +279,19 @@ img.profile-image.small{
 }
 
 .counter-clockwise{
-    transform: rotate(-15deg);
-    -ms-transform: rotate(-15deg); /* IE 9 */
-    -webkit-transform: rotate(-15deg); /* Safari and Chrome */
-    -o-transform: rotate(-15deg); /* Opera */
-    -moz-transform: rotate(-15deg); /* Firefox */
+    transform: rotate(-7deg);
+    -ms-transform: rotate(-7deg); /* IE 9 */
+    -webkit-transform: rotate(-7deg); /* Safari and Chrome */
+    -o-transform: rotate(-7deg); /* Opera */
+    -moz-transform: rotate(-7deg); /* Firefox */
 }
 
 .clockwise{
-    transform: rotate(15deg);
-    -ms-transform: rotate(15deg); /* IE 9 */
-    -webkit-transform: rotate(15deg); /* Safari and Chrome */
-    -o-transform: rotate(15deg); /* Opera */
-    -moz-transform: rotate(15deg); /* Firefox */
+    transform: rotate(7deg);
+    -ms-transform: rotate(7deg); /* IE 9 */
+    -webkit-transform: rotate(7deg); /* Safari and Chrome */
+    -o-transform: rotate(7deg); /* Opera */
+    -moz-transform: rotate(7deg); /* Firefox */
 }
 
 .close-modal{

@@ -66,7 +66,7 @@ angular.module( 'bgc.directives', [] )
                     browse_button: 'choose-files',
                     container:'container',
                     url: '/gc/api/profiles/images/upload/',
-                    max_file_size:'10mb',
+                    max_file_size:'100mb',
                     resize:{width:320, height:240, quality:90},
                     flash_swf_url:'../js/plupload.flash.swf',
                     silverlight_xap_url:'../js/plupload.silverlight.xap',
@@ -99,6 +99,11 @@ angular.module( 'bgc.directives', [] )
                         uploader.start();
                     }, 500);
                 });
+
+                uploader.bind('BeforeUpload', function(upload, file){
+                    upload.settings.multipart_params = {size: file.size}
+                });
+
 
                 uploader.bind('UploadProgress', function (up, file) {
                     $$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";

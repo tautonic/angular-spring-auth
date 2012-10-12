@@ -567,6 +567,7 @@ app.get('/profiles/byusername/:username', function(req, username){
  * @returns {JsgiResponse} An HTML <div> containing a JSON string with upload results
  */
 app.post('/profiles/images/upload/', function (req) {
+    log.info('!!!REQ OBJECT!!! {}', JSON.stringify(req.params, null, 4));
 
     var contentType = req.env.servletRequest.getContentType();
 
@@ -591,8 +592,8 @@ app.post('/profiles/images/upload/', function (req) {
                     'x-rt-index': 'gc',
                     'Authorization': auth,
                     'x-rt-upload-name': params.file.filename,
-                    'x-rt-upload-content-type': params.file.contentType
-                    //'x-rt-upload-size': String(fileSize)
+                    'x-rt-upload-content-type': params.file.contentType,
+                    'x-rt-upload-size': params.size
                     //'x-rt-upload-title': ''	// This param was never set in "old" NEP
                 },
                 "data": params.file.value,
