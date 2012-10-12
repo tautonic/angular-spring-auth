@@ -88,6 +88,11 @@
  *      intro/en_GB: {...intro json for en locale...}
  *      intro/en_US: {...intro json for en locale...}
  *
+ *  todo: One way to circumvent this is to store only the key for each content object, and when there
+ *  are multiple locales for a single key, they are put into a sub-map. This puts the locale-matching
+ *  logic into this class, but avoids the issues with repetitive storage. It also complicates the
+ *  persistence layer forcing additional writes to the persistence tier. Probably not an ideal tradeoff.
+ *
  */
 
 /********************
