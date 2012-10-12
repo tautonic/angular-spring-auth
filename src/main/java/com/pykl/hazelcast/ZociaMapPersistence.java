@@ -8,6 +8,7 @@ import com.zocia.platform.hazelcast.persistence.MapPersistence;
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.io.ByteArrayBuffer;
+import org.eclipse.jetty.util.ajax.JSON;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,6 @@ public class ZociaMapPersistence implements MapPersistence {
     protected String _deleteAddress;
     protected String _index;
     protected String _type;
-
 
     // Constructors ----------------------------------------------------------------
 
@@ -63,6 +63,10 @@ public class ZociaMapPersistence implements MapPersistence {
 
     // Properties ------------------------------------------------------------------
 
+
+    public void setAccess(String access) {
+        _access = access;
+    }
 
     public void setGetAddress(String getAddress) {
         _getAddress = getAddress;
@@ -105,6 +109,7 @@ public class ZociaMapPersistence implements MapPersistence {
                 LOG.error(s);
                 throw new IllegalArgumentException(s);
             }
+            _access = access;
         }
 
         final String[] parts = mapParts(mapName);
@@ -192,24 +197,30 @@ public class ZociaMapPersistence implements MapPersistence {
     }
 
     /**
-     * Stores the key-value pair.
+     * Stores the key-value pair. For a REST service like ours, this is typically be a two-step
+     * process. We have to determine whether we are inserting a record for the first time, or
+     * updating an existing record. This will require a GET request followed by either a POST or
+     * PUT request depending on whether the record previously existed.
+     * <p/>
+     * Besides the drawback where we have to make two requests, the other problem is the GET
+     * request must return before the POST/PUT can follow up. This is a real drag to performance.
+     * <p/>
+     * On the plus side, performance is not especially important when it comes to storing as it is
+     * an asynchronous activity on the part of this persistence bridge.
      *
      * @param key   key of the entry to store
      * @param value value of the entry to store
      */
     public void store(Object key, Object value) {
+        LOG.info(String.format("Storing, key: [%s], value: [%s]", key, value));
         if (_access.equalsIgnoreCase("ro")) {
-            LOG.warn(String.format("Permission error while inserting or updating document, " +
+            LOG.warn(String.format("Readonly permission prevents either inserting or updating document, " +
                     "index [%s], type [%s], key [%s], access [%s]",
                     _index, _type, key, _access));
             return;
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Inserting or updating document, index [{}], type [{}], key [{}]",
-                    new Object[]{_index, _type, key});
-        }
-
+        // Prepare the HTTP call, however at this point we don't know whether it will be a POST or PUT
         ContentExchange exchange = new MyExchange(_index, _type, key, _postAddress) {
             @Override
             protected void onResponseComplete() throws IOException {
@@ -217,18 +228,44 @@ public class ZociaMapPersistence implements MapPersistence {
                 super.onResponseComplete();
             }
         };
+        exchange.setRequestHeader("x-rt-index", _index);
 
-        exchange.setMethod("PUT");
-        exchange.setURL(_postAddress);
 
         if (value instanceof String) {
             exchange.setRequestContent(new ByteArrayBuffer((String) value));
         } else
             throw new IllegalArgumentException("This persistor can only save String types.");
+        exchange.setRequestContentType("application/json");
 
-        exchange.setRequestContentType("text/plain");
+        // There are a couple ways to determine whether we have a POST or PUT situation. The
+        // fastest will be to determine if the value object has an _id property as the cms.js
+        // module adds this to the value in case of a PUT. However this requires us to parse
+        // the String value into a Java map...an ugly extra step. The other approach is to try
+        // to load the key/locale, but this is equally as ugly because locales don't always
+        // result in an exact match.
+        Object curValue = JSON.parse((String) value);
+        boolean isPresent = curValue instanceof Map && ((Map) curValue).containsKey("_id");
+
+        if (isPresent) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Updating existing document, index [{}], type [{}], key [{}]",
+                        new Object[]{_index, _type, key});
+            }
+            exchange.setMethod("PUT");
+            String url = String.format(_putAddress, ((Map) curValue).get("_id"));
+            exchange.setURL(url);
+
+        } else {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Inserting new document, index [{}], type [{}], key [{}]",
+                        new Object[]{_index, _type, key});
+            }
+            exchange.setMethod("POST");
+            exchange.setURL(_postAddress);
+        }
 
         try {
+            LOG.debug("Sending request: " + exchange);
             _client.send(exchange);
         } catch (IOException e) {
             LOG.warn("Failed to store, index [{}], type [[]], key [{}]",
@@ -269,7 +306,7 @@ public class ZociaMapPersistence implements MapPersistence {
         exchange.setRequestHeader("x-rt-index", _index);
         exchange.setRequestHeader("Accept-Language", "en");
 
-        LOG.info("Establishing connection to " + exchange);
+        LOG.debug("Establishing connection to " + exchange);
 
         try {
             _client.send(exchange);

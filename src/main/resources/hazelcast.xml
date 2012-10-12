@@ -84,6 +84,7 @@
                 <!-- mapstore property contains the Spring names of map store implementations -->
                 <property name="mapstore">zociaMapStore</property>
                 <property name="maploader">zociaMapStore</property>
+                <property name="access">rw</property>
             </properties>
         </map-store>
     </map>

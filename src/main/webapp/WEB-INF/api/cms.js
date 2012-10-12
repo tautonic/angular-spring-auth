@@ -32,10 +32,11 @@
  *
  * API
  *
- * GET /api/cms/:key
+ * GET /api/cms/:key[?locale=<value>]
  *     :key - a unique id that describes the content.
  *     [Accept-Language] - The header value is used to determine the locale used to retrieve
- *         the appropriate record from the cms.
+ *         the appropriate record from the cms. Locale can also be specified as a parameter
+ *         which will take precedence over the header value.
  *
  * POST /api/cms/
  *     [Accept-Language] - The header value is used to determine the locale used to create
@@ -87,6 +88,11 @@
  *      intro/en_GB: {...intro json for en locale...}
  *      intro/en_US: {...intro json for en locale...}
  *
+ *  todo: One way to circumvent this is to store only the key for each content object, and when there
+ *  are multiple locales for a single key, they are put into a sub-map. This puts the locale-matching
+ *  logic into this class, but avoids the issues with repetitive storage. It also complicates the
+ *  persistence layer forcing additional writes to the persistence tier. Probably not an ideal tradeoff.
+ *
  */
 
 /********************
@@ -95,7 +101,9 @@
 
 var {Application} = require('stick');
 var store = require('store-js');
-var {json} = require( 'ringo/jsgi/response' );
+var {json} = require('utility/extendedResponse');
+var log = require( 'ringo/logging' ).getLogger( module.id );
+
 
 /********************
  Global Vars
@@ -114,20 +122,66 @@ var map = store.getMap(INDEX, 'resources');
  * GET /api/cms/:key
  *     :key - a unique id that describes the content.
  *     [Accept-Language] - The header value is used to determine the locale used to retrieve
- *         the appropriate record from the cms.
+ *         the appropriate record from the cms. Locale can also be specified as a parameter
+ *         which will take precedence over the header value.
  */
 app.get('/:key', function (req, key) {
     var locale = req.params.locale || req.locale;
+
+    log.debug('GET /api/cms/{}, locale: {}', key, locale);
+
     var lookup = key + '/' + locale;
     return json(map.get(key));
 });
 
 
+/**
+ * POST /api/cms/
+ *     [Accept-Language] - The header value is used to determine the locale used to create
+ *         the appropriate record from the cms. If the 'locale' property is included in the
+ *         JSON record, the property will take precedence.
+ *     [Body] - A JSON object representing the CMS content to create.
+ *
+ *     Note: Does not return a location header.
+ */
+app.post('/', function (req) {
+    log.debug('POST /api/cms, locale: {}', req.locale);
+
+    // Get the JSON object holding the payload
+    var resource = req.postParams;
+
+    if (!resource) return json({message: 'Invalid request, must provide JSON resource in body.' }, 400,
+            {"Content-Type": 'text/html'});
+
+    if (!resource.locale) {
+        resource.locale = req.locale;
+    }
+
+    // Resource has several required properties
+    if (!resource.locale) return json({message: 'Invalid request, must provide a locale.' }, 400,
+            {"Content-Type": 'text/html'});
+    if (!resource.key) return json({message: 'Invalid request, must provide a key.' }, 400,
+            {"Content-Type": 'text/html'});
+
+    // Write the new resource into the map using the key/locale as the map key
+    var lookup = resource.key + '/' + resource.locale;
+    var mapResources = store.getMap(INDEX, "resources");
+    mapResources.put(lookup, resource);
+
+    // Cannot provide Location header as of yet (no _id field known).
+    return json(resource, 201, {});
+});
+
+
+/**
+ * Middleware component for Stick to inject a locale property based on the Accept-Language header.
+ * @return {Function}
+ */
 function locale() {
     return function (next) {
         return function (req) {
             Object.defineProperty(req, "locale", {
-                get:function () {
+                get: function () {
                     if (!!req.headers['x-rt-skip-locale']) return null;
 
                     var locale = req.env.servletRequest.getLocale();

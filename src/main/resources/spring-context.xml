@@ -29,8 +29,8 @@
 
     <bean id="zociaMapStore" scope="prototype" class="com.pykl.hazelcast.ZociaMapPersistence">
         <property name="getAddress" value="${zociaUrl}/resources/bykey/%s" />
-        <property name="postAddress" value="${zociaUrl}/resources/bykey/%s" />
-        <property name="putAddress" value="${zociaUrl}/resources/bykey/%s" />
+        <property name="postAddress" value="${zociaUrl}/resources/" />
+        <property name="putAddress" value="${zociaUrl}/resources/" />
         <property name="deleteAddress" value="${zociaUrl}/resources/bykey/%s" />
     </bean>
 
