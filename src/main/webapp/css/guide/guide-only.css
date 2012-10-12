@@ -1,0 +1,62 @@
+body {
+    position: relative;
+    padding-top: 0px;
+}
+
+a, a:link {
+    color: #b4b4b4;
+}
+
+a:hover, a:visited {
+    color: #8b8b8b;
+    text-decoration: none;
+}
+
+.bs-docs-sidenav > li > a {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: block;
+    margin: 0 0 -1px;
+    padding: 8px 14px;
+    border: 1px solid #E5E5E5;
+}
+
+.bs-docs-example{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.page-header h1{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 10px 0;
+    font-weight: bold;
+    line-height: 1;
+    color: inherit;
+    text-rendering: optimizelegibility;
+    text-transform: none;
+}
+
+h1.guide, h2.guide, h3.guide, h4.guide, h5.guide, h6.guide  {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 10px 0;
+    font-weight: bold;
+    line-height: 1;
+    color: inherit;
+    text-rendering: optimizelegibility;
+    text-transform: none;
+}
+
+p.guide  {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0 0 10px;
+}
+
+h1.guide {
+    font-size: 36px;
+    line-height: 40px;
+}
+h2.guide {
+    font-size: 30px;
+    line-height: 40px;
+}
+h1.lead, p.lead {
+    color: white;
+}

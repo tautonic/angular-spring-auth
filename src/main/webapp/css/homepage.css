@@ -71,11 +71,9 @@ a.left-arrow {
 
 /***** Header and menu *****/
 .header {
-    background-color: #0a4d6c;
-    /*background-image: url('../images/GCEE_images_header_bg.png');
+    background-image: url('../images/GCEE_images_homeBG.jpg');
     background-repeat: no-repeat;
     background-position: 54% 0%;
-    background-attachment: fixed;*/
 }
 
 .header .home {

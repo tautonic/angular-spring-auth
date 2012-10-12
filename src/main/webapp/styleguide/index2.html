@@ -11,6 +11,7 @@
     <link href="../css/guide/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
     <link href="../css/default.css" rel="stylesheet">
     <link href="../css/guide/guide.css" rel="stylesheet">
+    <link href="../css/guide/guide-only.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -25,7 +26,7 @@
 ================================================== -->
 <header class="jumbotron subhead" id="overview">
     <div class="container">
-        <h1>GCEE Style Guide</h1>
+        <h1 class="lead">GCEE Style Guide</h1>
 
         <p class="lead">HTML elements and components for Babson GCEE.</p>
     </div>
@@ -563,18 +564,15 @@
         </pre>
 
         <h2 class="guide">Profile Sidebar</h2>
-        <p class="guide">Description here...</p>
+        <p class="guide">Activity stream items</p>
 
-        <p class="bs-docs-example"></p>
+        <div class="bs-docs-example">
+            <div class="update">
+                <p>Posted a new comment to the <a href="#">Business in a Bundle</a> document.</p>
+                <p class="time">5 hours ago</p>
+            </div>
+        </div>
         <pre class="prettyprint linenums">
-&lt;div class="picture-frame"&gt;
-    &lt;div class="gradient more"&gt;
-        &lt;a href="..."&gt;Read More &lt;/a&gt;
-        &lt;div class="right-arrow-shape"&gt;&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;img src="..."&gt;
-    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
-&lt;/div&gt;
 
         </pre>
 
@@ -618,13 +616,23 @@
         </div>-->
 
         <pre class="prettyprint linenums">
-&lt;div class="picture-frame"&gt;
-    &lt;div class="gradient more"&gt;
-        &lt;a href="..."&gt;Read More &lt;/a&gt;
-        &lt;div class="right-arrow-shape"&gt;&lt;/div&gt;
+&lt;div class="modal" style="position: relative; top: auto; left: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%;"&gt;
+    &lt;div class="profile-modal profile"&gt;
+        &lt;div class="left"&gt;
+            &lt;div class="picture-frame large counter-clockwise"&gt;
+                &lt;img class="profile-image large" src="../images/rosie.jpeg"&gt;
+                &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="center"&gt;
+            &lt;h3&gt;John Greene&lt;/h3&gt;
+            &lt;h5&gt;Professor Art & Technology&lt;/h5&gt;
+            &lt;h5 class="muted"&gt;The Ohio State University&lt;/h5&gt;
+        &lt;/div&gt;
+        &lt;div class="right"&gt;
+            &lt;div class="close-modal"&gt;&lt;/div&gt;
+        &lt;/div&gt;
     &lt;/div&gt;
-    &lt;img src="..."&gt;
-    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
 &lt;/div&gt;
         </pre>
 
@@ -640,6 +648,37 @@
     &lt;/div&gt;
     &lt;img src="..."&gt;
     &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+&lt;/div&gt;
+        </pre>
+    </section>
+
+    <hr class="bs-docs-separator">
+    <!-- Profile
+    ================================================= -->
+    <section id="discussions">
+        <div class="page-header">
+            <h1 class="guide">Discussions</h1>
+        </div>
+
+        <h2 class="guide">Discussion List Item</h2>
+
+        <p class="guide">A single discussion (title/author) block. Used in the list of discussions.</p>
+
+        <div class="bs-docs-example">
+             <div class="discussion">
+                <h4>Discussion Title</h4>
+                <h6>By Author, 12/12/2012</h6>
+                <div class="stats">
+                    <span class="likes">Likes</span>
+                    <span class="views">Views</span>
+                    <span class="comments">Comments</span>
+                    <span class="flag">Flag for Spam</span>
+                </div>
+             </div>
+        </div>
+
+        <pre class="prettyprint linenums">
+&lt;div class="picture-frame"&gt;
 &lt;/div&gt;
         </pre>
     </section>
