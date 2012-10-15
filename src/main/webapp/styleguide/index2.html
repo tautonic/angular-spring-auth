@@ -557,7 +557,7 @@
 &lt;/div&gt;
         </pre>
 
-        <h2 class="guide">Profile Sidebar</h2>
+        <!--<h2 class="guide">Profile Sidebar</h2>
         <p class="guide">Activity stream items</p>
 
         <div class="bs-docs-example">
@@ -568,7 +568,7 @@
         </div>
         <pre class="prettyprint linenums">
 
-        </pre>
+        </pre>-->
 
         <h2 class="guide">Profile Modal</h2>
         <h3 class="guide">Static example</h3>
@@ -631,7 +631,7 @@
         </div>
 
         <pre class="prettyprint linenums profile-images">
-&lt;div class="modal" style="position: relative; top: auto; left: auto; margin: 0 auto 20px; z-index: 1; max-width: 100%;"&gt;
+&lt;div class="modal"&gt;
     &lt;div class="profile-modal profile"&gt;
         &lt;div class="left clearfix"&gt;
             &lt;div class="picture-frame large counter-clockwise"&gt;
@@ -688,32 +688,359 @@
         <h2 class="guide">Live demo</h2>
         <p class="guide">Toggle a modal via JavaScript by clicking the button below. It will slide down and fade in from the top of the page.</p>
 
-        <p class="bs-docs-example">
+        <div class="modal hide fade" id="profile-modal-rosie">
+            <div class="profile-modal profile">
+                <div class="left clearfix">
+                    <div class="picture-frame large counter-clockwise">
+                        <img class="profile-image large" src="../images/rosie.jpeg">
+                    </div>
+                </div>
+                <div class="center clearfix">
+                    <h3>John Greene</h3>
+                    <h5>Professor Art & Technology</h5>
+                    <h5 class="muted">The Ohio State University</h5>
 
+                    <div class="btn-group bgc">
+                        <button class="btn btn-success">Follow</button>
+                        <a class="btn btn-success" href="">Full Profile</a>
+                    </div>
+
+                    <h3 class="sans-serif">CONTACT</h3>
+                    <p><strong>Email: </strong>EmailName@website.com</p>
+                    <p><strong>Website: </strong>www.institution.com</p>
+
+                    <h3 class="sans-serif">INSTITUTION</h3>
+                    <p><strong>Title: </strong>Professor Title</p>
+                    <p><strong>Location: </strong>Location Name</p>
+                    <p><strong>Year started - Year Finished</strong></p>
+
+                    <h3 class="sans-serif">EDUCATION</h3>
+                    <p><strong>Institution Name: </strong>Name of Institution</p>
+                    <p><strong>Field of Study: </strong>Field of Study</p>
+                    <p><strong>Country: </strong>Country</p>
+                    <p><strong>Year started - Year Finished</strong></p>
+
+                    <p><strong>Notes: </strong><i>Lorem ipsumdolor sit amet, consectetur adipiscing
+                        elit. Eitam pulvinar enim vallis magna Nam quis mauris nunc, vel pellentes
+                        ipsum dolor sit amet.</i></p>
+
+                </div>
+                <div class="right clearfix">
+                    <div class="close-modal"></div>
+                    <h3 class="sans-serif">RECENT ACTIVITY</h3>
+                    <ul class="activity-list">
+                        <li class="update">
+                            <p>Posted a new comment to the <a href="#">Business in a Bundle</a> document</p>
+                            <p class="muted">5 hours ago</p>
+                        </li>
+                        <li class="update">
+                            <p>Posted a new comment to the <a href="#">Business in a Bundle</a> document</p>
+                            <p class="muted">5 hours ago</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <p class="bs-docs-example">
+            <a data-toggle="modal" data-target="#profile-modal-rosie" class="btn btn-primary btn-large">Launch profile modal</a>
         </p>
         <pre class="prettyprint linenums">
-&lt;div class="picture-frame"&gt;
-    &lt;div class="gradient more"&gt;
-        &lt;a href="..."&gt;Read More &lt;/a&gt;
-        &lt;div class="right-arrow-shape"&gt;&lt;/div&gt;
-    &lt;/div&gt;
-    &lt;img src="..."&gt;
-    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+<-- Button to trigger modal -->            
+&lt;a data-toggle="modal" data-target="#profile-modal-rosie" class="btn btn-primary btn-large"&gt;Launch profile modal&lt;/a&gt;
+
+<-- Modal -->
+&lt;div class="modal hide fade" id="profile-modal-rosie"&gt;
+    &lt;div class="profile-modal profile"&gt;            
+...
+    &lt;/div&gt;        
 &lt;/div&gt;
         </pre>
 
         <h2 class="guide">Profile Edit Form</h2>
         <p class="guide">Description here...</p>
 
-        <p class="bs-docs-example"></p>
+        <p class="bs-docs-example">
+            <div class="edit-profile profile">
+                <div class="edit-profile-header clearfix">
+                    <div class="picture-frame large counter-clockwise left">
+                        <img class="profile-image large" src="../images/rosie.jpeg">
+                    </div>
+                    <div class="right">
+                        <h3>John Greene</h3>
+                        <h5>User's Title</h5>
+                        <h5 class="muted">Institution</h5>
+                    </div>
+                </div>
+
+                <div class="edit-profile-form">
+                    <div class="edit-profile-contact">
+                        <h3 class="sans-serif">CONTACT <a href="#"><i class="icon-pencil"></i> Edit Contact Information</a></h3>
+                        <p><strong>Email: </strong> EmailName@website.com</p>
+                        <p><strong>Website: </strong> www.institution.com</p>
+
+                        <form class="form-horizontal" action="">
+                            <h3 class="sans-serif">CONTACT</h3>
+
+                            <div class="control-group">
+                                <label class="control-label" for="email">Email: </label>
+                                <div class="controls">
+                                    <input type="text" id="email">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="website">Year Finished: </label>
+                                <div class="controls">
+                                    <input type="text" id="website">
+                                </div>
+                            </div>
+
+                            <div class="btn-group bgc">
+                                <button class="btn btn-success">Save</button>
+                                <button class="btn btn-success">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="edit-profile-institution">
+                        <h3 class="sans-serif">INSTITUTION <a href="#"><i class="icon-pencil"></i> Edit Institution Information</a></h3>
+                        <p><strong>Title: </strong> Professor of Science</p>
+                        <p><strong>Location: </strong> College Town, U.S.A</p>
+                        <p><strong>Year Started - Year Finished</strong></p>
+
+                        <form class="form-horizontal" action="">
+                            <h3 class="sans-serif">INSTITUTION</h3>
+
+                            <div class="control-group">
+                                <label class="control-label" for="title">Title: </label>
+                                <div class="controls">
+                                    <input type="text" id="title">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="location">Location: </label>
+                                <div class="controls">
+                                    <input type="text" id="location">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="institution-started">Year Started: </label>
+                                <div class="controls">
+                                    <input type="text" id="institution-started">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="institution-finished">Year Finished: </label>
+                                <div class="controls">
+                                    <input type="text" id="institution-finished">
+                                </div>
+                            </div>
+
+                            <div class="btn-group bgc">
+                                <button class="btn btn-success">Save</button>
+                                <button class="btn btn-success">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="edit-profile-education">
+                        <h3 class="sans-serif">EDUCATION <a href="#"><i class="icon-pencil"></i> Edit Education Information</a></h3>
+                        <p><strong>Institution Name: </strong> Name of Institution</p>
+                        <p><strong>Field of Study: </strong> Science</p>
+                        <p><strong>Country: </strong>United States</p>
+                        <p><strong>Year Started - Year Finished</strong></p>
+                        <p><strong>Notes: </strong><i>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum, tortor sit amet sollicitudin rutrum, enim eros placerat purus, sit amet sagittis elit nunc sed massa. Quisque augue dolor, egestas posuere adipiscing eget, pulvinar sit amet tellus. Mauris euismod nulla vitae enim suscipit laoreet. Sed elit nulla, egestas vitae consequat a, ornare sed nibh. Nulla ac magna id ligula posuere auctor non id lacus. Pellentesque sem nulla, aliquet ut egestas quis, congue sit amet nunc. Mauris in pretium dolor. Phasellus molestie venenatis purus at euismod</i></p>
+
+                        <form class="form-horizontal" action="">
+                            <h3 class="sans-serif">Education</h3>
+
+                            <div class="control-group">
+                                <label class="control-label" for="institution-name">Institution Name: </label>
+                                <div class="controls">
+                                    <input type="text" id="institution-name">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="field-of-study">Field of Study: </label>
+                                <div class="controls">
+                                    <input type="text" id="field-of-study">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="country">Country: </label>
+                                <div class="controls">
+                                    <input type="text" id="country">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="institution-started-edu">Year Started: </label>
+                                <div class="controls">
+                                    <input type="text" id="institution-started-edu">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="institution-finished-edu">Year Finished: </label>
+                                <div class="controls">
+                                    <input type="text" id="institution-finished-edu">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="notes">Notes</label>
+                                <div class="controls">
+                                    <textarea id="notes" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="btn-group bgc">
+                                <button class="btn btn-success">Save</button>
+                                <button class="btn btn-success">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </p>
+
         <pre class="prettyprint linenums">
-&lt;div class="picture-frame"&gt;
-    &lt;div class="gradient more"&gt;
-        &lt;a href="..."&gt;Read More &lt;/a&gt;
-        &lt;div class="right-arrow-shape"&gt;&lt;/div&gt;
+&lt;div class="edit-profile profile"&gt;
+    &lt;div class="edit-profile-header clearfix"&gt;
+        &lt;div class="picture-frame large counter-clockwise left"&gt;
+            &lt;img class="profile-image large" src="../images/rosie.jpeg"&gt;
+        &lt;/div&gt;
+        &lt;div class="right"&gt;
+            &lt;h3&gt;John Greene&lt;/h3&gt;
+            &lt;h5&gt;User's Title&lt;/h5&gt;
+            &lt;h5 class="muted"&gt;Institution&lt;/h5&gt;
+        &lt;/div&gt;
     &lt;/div&gt;
-    &lt;img src="..."&gt;
-    &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+
+    &lt;div class="edit-profile-form"&gt;
+        &lt;div class="edit-profile-contact"&gt;
+            &lt;h3 class="sans-serif"&gt;CONTACT &lt;a href="#"&gt;&lt;i class="icon-pencil"&gt;&lt;/i&gt; Edit Contact Information&lt;/a&gt;&lt;/h3&gt;
+            &lt;p&gt;&lt;strong&gt;Email: &lt;/strong&gt; EmailName@website.com&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Website: &lt;/strong&gt; www.institution.com&lt;/p&gt;
+
+            &lt;form class="form-horizontal" action=""&gt;
+                &lt;h3 class="sans-serif"&gt;CONTACT&lt;/h3&gt;
+
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="email"&gt;Email: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="email"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="website"&gt;Year Finished: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="website"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="btn-group bgc"&gt;
+                    &lt;button class="btn btn-success"&gt;Save&lt;/button&gt;
+                    &lt;button class="btn btn-success"&gt;Cancel&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+
+        &lt;div class="edit-profile-institution"&gt;
+            &lt;h3 class="sans-serif"&gt;INSTITUTION &lt;a href="#"&gt;&lt;i class="icon-pencil"&gt;&lt;/i&gt; Edit Institution Information&lt;/a&gt;&lt;/h3&gt;
+            &lt;p&gt;&lt;strong&gt;Title: &lt;/strong&gt; Professor of Science&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Location: &lt;/strong&gt; College Town, U.S.A&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Year Started - Year Finished&lt;/strong&gt;&lt;/p&gt;
+
+            &lt;form class="form-horizontal" action=""&gt;
+                &lt;h3 class="sans-serif"&gt;INSTITUTION&lt;/h3&gt;
+
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="title"&gt;Title: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="title"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="location"&gt;Location: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="location"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="institution-started"&gt;Year Started: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="institution-started"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="institution-finished"&gt;Year Finished: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="institution-finished"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="btn-group bgc"&gt;
+                    &lt;button class="btn btn-success"&gt;Save&lt;/button&gt;
+                    &lt;button class="btn btn-success"&gt;Cancel&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+
+        &lt;div class="edit-profile-education"&gt;
+            &lt;h3 class="sans-serif"&gt;EDUCATION &lt;a href="#"&gt;&lt;i class="icon-pencil"&gt;&lt;/i&gt; Edit Education Information&lt;/a&gt;&lt;/h3&gt;
+            &lt;p&gt;&lt;strong&gt;Institution Name: &lt;/strong&gt; Name of Institution&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Field of Study: &lt;/strong&gt; Science&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Country: &lt;/strong&gt;United States&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Year Started - Year Finished&lt;/strong&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;strong&gt;Notes: &lt;/strong&gt;&lt;i&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum, tortor sit amet sollicitudin rutrum, enim eros placerat purus, sit amet sagittis elit nunc sed massa. Quisque augue dolor, egestas posuere adipiscing eget, pulvinar sit amet tellus. Mauris euismod nulla vitae enim suscipit laoreet. Sed elit nulla, egestas vitae consequat a, ornare sed nibh. Nulla ac magna id ligula posuere auctor non id lacus. Pellentesque sem nulla, aliquet ut egestas quis, congue sit amet nunc. Mauris in pretium dolor. Phasellus molestie venenatis purus at euismod&lt;/i&gt;&lt;/p&gt;
+
+            &lt;form class="form-horizontal" action=""&gt;
+                &lt;h3 class="sans-serif"&gt;Education&lt;/h3&gt;
+
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="institution-name"&gt;Institution Name: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="institution-name"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="field-of-study"&gt;Field of Study: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="field-of-study"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="country"&gt;Country: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="country"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="institution-started-edu"&gt;Year Started: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="institution-started-edu"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="institution-finished-edu"&gt;Year Finished: &lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;input type="text" id="institution-finished-edu"&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="control-group"&gt;
+                    &lt;label class="control-label" for="notes"&gt;Notes&lt;/label&gt;
+                    &lt;div class="controls"&gt;
+                        &lt;textarea id="notes" rows="3"&gt;&lt;/textarea&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="btn-group bgc"&gt;
+                    &lt;button class="btn btn-success"&gt;Save&lt;/button&gt;
+                    &lt;button class="btn btn-success"&gt;Cancel&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
 &lt;/div&gt;
         </pre>
     </section>
@@ -816,22 +1143,18 @@
             }, 250, function(){
                 $(this).children('a').show();
             });
-
-            /*$(this).children('.right-arrow-shape').stop().animate({
-                right: '-105px'
-            }, 250);*/
         },
         function(){
             $(this).children('a').hide();
             $(this).stop().animate({
                 width: '22px'
             }, 250);
-
-            /*$(this).children('.right-arrow-shape').stop().animate({
-                right: '-5px'
-            }, 250);*/
         }
     );
+
+    $('.edit-profile-form a').click(function(){
+        $(this).parent('h3').siblings('.form-horizontal').slideToggle();
+    });
 </script>
 
 

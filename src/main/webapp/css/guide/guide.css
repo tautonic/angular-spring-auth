@@ -78,7 +78,6 @@ p.text-success {
     position: relative;
     background: #ccc;
     border: 8px solid white;
-    position:relative;
     -webkit-box-shadow:  0px 7px 20px 1px rgba(0, 0, 0, 0.3);
     box-shadow:  0px 7px 20px 1px rgba(0, 0, 0, 0.3);
 }
@@ -259,4 +258,103 @@ h1.sans-serif, h2.sans-serif, h3.sans-serif, h4.sans-serif, h5.sans-serif, h6.sa
 
 h3.sans-serif{
     font-size: 20px;
+    line-height: 10px;
+    margin: 1.5em 0 1em 0;
+}
+
+.bs-docs-example a.btn{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.edit-profile{
+    margin: 0 auto;
+    width: 90%;
+    border: #c5c5c5 solid 1px;
+    position: relative;
+}
+
+.edit-profile-header{
+    position: absolute;
+    top: -4em;
+    left: -2em;
+}
+
+.edit-profile-header .left{
+    float: left;
+}
+
+.edit-profile-header .right{
+    float: left;
+    margin: 4em 0 0 2em;
+}
+
+.edit-profile-form{
+    margin: 11.5em 0 0 0;
+}
+
+.edit-profile-form h3 a{
+    padding: 1em;
+    float: right;
+    text-transform: none;
+    font: 0.65em normal "PMN Caecilia", Georgia, serif;
+}
+
+.form-horizontal .control-label{
+    text-align: left;
+}
+
+.form-horizontal input,
+textarea{
+    width: 98%;
+}
+
+.edit-profile-form form{
+    border-top: #c5c5c5 solid 1px;
+    border-bottom: #c5c5c5 solid 1px;
+    padding: 0 1.5em 1.5em 1.5em;
+    background: #eeeeee; /* Old browsers */
+    background: -moz-linear-gradient(top,  #eeeeee 0%, #e0e0e0 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#e0e0e0)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #eeeeee 0%,#e0e0e0 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #eeeeee 0%,#e0e0e0 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #eeeeee 0%,#e0e0e0 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #eeeeee 0%,#e0e0e0 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#e0e0e0',GradientType=0 ); /* IE6-9 */
+}
+
+.edit-profile-form h3,
+.edit-profile-form p{
+    padding: 0 1em 0 1em;
+}
+
+.edit-profile-form form h3{
+ padding: 0;
+}
+
+.edit-profile-form p{
+    padding-left: 20px;
+}
+
+.edit-profile-form .form-horizontal{
+    display: none;
+}
+
+.profile-modal .center p,
+.edit-profile.profile{
+    line-height: 15px;
+}
+
+.profile-modal .center h3:nth-child(1),
+.edit-profile-header .right h3{
+    margin-top: 1.5em;
+    line-height: 5px;
+}
+
+.profile-modal .center h5{
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.profile-modal .center h5.muted{
+    margin-bottom: 0.5em;
 }

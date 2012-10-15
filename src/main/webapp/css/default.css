@@ -231,6 +231,7 @@ input, button, select, textarea {
 .profile-modal .right h3{
     width: 92%;
     margin: 0.5em auto 0 auto;
+    padding: 1em 0;
     color: #999;
 }
 
