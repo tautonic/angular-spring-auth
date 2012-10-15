@@ -1097,7 +1097,7 @@
         <p class="guide">A single discussion (title/author) block. Used in the list of discussions.</p>
 
         <div class="bs-docs-example">
-             <div class="discussion">
+             <div class="discussion-item grey-gradient">
                 <h4>Discussion Title</h4>
                 <h6>By Author, 12/12/2012</h6>
                 <div class="stats">
@@ -1110,9 +1110,167 @@
         </div>
 
         <pre class="prettyprint linenums">
-&lt;div class="picture-frame"&gt;
+&lt;div class="discussion-item grey-gradient"&gt;
+    &lt;h4&gt;Discussion Title&lt;/h4&gt;
+    &lt;h6&gt;By Author, 12/12/2012&lt;/h6&gt;
+    &lt;div class="stats"&gt;
+        &lt;span class="likes"&gt;Likes&lt;/span&gt;
+        &lt;span class="views"&gt;Views&lt;/span&gt;
+        &lt;span class="comments"&gt;Comments&lt;/span&gt;
+        &lt;span class="flag"&gt;Flag for Spam&lt;/span&gt;
+    &lt;/div&gt;
 &lt;/div&gt;
         </pre>
+
+    <h2 class="guide">Discussion Header</h2>
+
+    <p class="guide">When the user is looking at a specific discussion, this is the content at the top of the page.</p>
+
+    <div class="bs-docs-example">
+        <div class="discussion-heading">
+            <h3>Discussion Title</h3>
+            <div class="stats">
+                <span>TWEET</span>
+                <span class="likes">Likes</span>
+                <span class="views">Views</span>
+                <span class="comments">Comments</span>
+                <span class="flag">Flag for Spam</span>
+            </div>
+        </div>
+
+        <div class="discussion-first-post grey-gradient">
+            <div class="left">
+                <div class="picture-frame large counter-clockwise">
+                    <img class="profile-image large" src="../images/rosie.jpeg">
+                    <div class="picture-frame-bottom"></div>
+                </div>
+            </div>
+            <h3>Author</h3>
+            <h5>12/12/2012</h5>
+            <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+                Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            <div class="stats">
+                <span class="likes">Like This</span>
+                <span class="flag">Flag for Spam</span>
+            </div>
+        </div>
+    </div>
+
+    <pre class="prettyprint linenums">
+&lt;div class="discussion-heading"&gt;
+    &lt;h3&gt;Discussion Title&lt;/h3&gt;
+    &lt;div class="stats"&gt;
+        &lt;span&gt;TWEET&lt;/span&gt;
+        &lt;span class="likes"&gt;Likes&lt;/span&gt;
+        &lt;span class="views"&gt;Views&lt;/span&gt;
+        &lt;span class="comments"&gt;Comments&lt;/span&gt;
+        &lt;span class="flag"&gt;Flag for Spam&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="discussion-first-post grey-gradient"&gt;
+    &lt;div class="left"&gt;
+        &lt;div class="picture-frame large counter-clockwise"&gt;
+            &lt;img class="profile-image large" src="../images/rosie.jpeg"&gt;
+            &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;h3&gt;Author&lt;/h3&gt;
+    &lt;h5&gt;12/12/2012&lt;/h5&gt;
+    &lt;p&gt;Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.&lt;/p&gt;
+    &lt;div class="stats"&gt;
+        &lt;span class="likes"&gt;Like This&lt;/span&gt;
+        &lt;span class="flag"&gt;Flag for Spam&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+    </pre>
+
+    <h2 class="guide">Discussion Post</h2>
+
+    <p class="guide">When the user is looking at a specific discussion, this is an individual post in that dicussion.</p>
+
+    <div class="bs-docs-example">
+
+        <div class="discussion-post grey-gradient">
+            <div class="left">
+                <div class="picture-frame med counter-clockwise">
+                    <img class="profile-image med" src="../images/rosie.jpeg">
+                    <div class="picture-frame-bottom"></div>
+                </div>
+            </div>
+            <h4>Discussion Title</h4>
+            <h6>Author</h6>
+            <h6>12/12/2012</h6>
+            <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+                Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.</p>
+            <div class="stats">
+                <button ng-click="" class="btn btn-primary">Reply</button>
+                <span class="likes">Like This</span>
+                <span class="flag">Flag for Spam</span>
+            </div>
+        </div>
+        
+    </div>
+
+    <pre class="prettyprint linenums">
+&lt;div class="discussion-post grey-gradient"&gt;
+    &lt;div class="left"&gt;
+        &lt;div class="picture-frame med counter-clockwise"&gt;
+            &lt;img class="profile-image med" src="../images/rosie.jpeg"&gt;
+            &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;h4&gt;Discussion Title&lt;/h4&gt;
+    &lt;h6&gt;Author&lt;/h6&gt;
+    &lt;h6&gt;12/12/2012&lt;/h6&gt;
+    &lt;p&gt;Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+        Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.&lt;/p&gt;
+    &lt;div class="stats"&gt;
+        &lt;button ng-click="" class="btn btn-primary"&gt;Reply&lt;/button&gt;
+        &lt;span class="likes"&gt;Like This&lt;/span&gt;
+        &lt;span class="flag"&gt;Flag for Spam&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+    </pre>
+        
+        
+    <h2 class="guide">New Reply</h2>
+
+    <p class="guide">The user posting a new reply.</p>
+
+    <div class="bs-docs-example">
+
+        <div class="discussion-post grey-gradient">
+            <div class="left">
+                <div class="picture-frame med clockwise">
+                    <img class="profile-image med" src="../images/rosie.jpeg">
+                    <div class="picture-frame-bottom"></div>
+                </div>
+            </div>
+            <textarea placeholder="Reply to discussion..."></textarea>
+            <div class="stats">
+                <button ng-click="" class="btn btn-primary">Post</button>
+                <span class="add">Add Image</span>
+            </div>
+        </div>
+        
+    </div>
+
+    <pre class="prettyprint linenums">
+&lt;div class="discussion-post grey-gradient"&gt;
+    &lt;div class="left"&gt;
+        &lt;div class="picture-frame med clockwise"&gt;
+            &lt;img class="profile-image med" src="../images/rosie.jpeg"&gt;
+            &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;textarea placeholder="Reply to discussion..."&gt;&lt;/textarea&gt;
+    &lt;div class="stats"&gt;
+        &lt;button ng-click="" class="btn btn-primary"&gt;Post&lt;/button&gt;
+        &lt;span class="add"&gt;Add Image&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+    </pre>
     </section>
 
     </div>
