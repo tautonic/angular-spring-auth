@@ -382,3 +382,58 @@ angular.module( 'bgc.directives', [] )
             }
         }
     });
+
+/**
+ * @ngdoc directive
+ * @name bgc.directives:cms
+ *
+ * @description
+ * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
+ * resulting content within the element it is associated. Any content within the associated element
+ * will be replaced so content is not strictly necessary, however it can be helpful to include
+ * placeholder content for documentation and static web development tools.
+ *
+ * @element ANY
+ * @param {expression} Evaluates to the string key used to identify the CMS value. The
+ *   expression can also be followed with '/<locale>' in order to force a locale-specific
+ *   version of CMS content. If a locale is not supplied, the client's Accept-Language
+ *   header will be used.
+ *
+ * @example
+   <example>
+     <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
+     <p x-cms="notfound">Testing a not found case.</p>
+     <th x-cms="name-title"/>
+   </example>
+ */
+angular.module('bgc.directives', []).directive('cms', ['$http',
+    function ($http) {
+        return {
+            // Is applied as an element's attribute
+            restrict: 'A',
+            // Current content will be replaced
+            replace: true,
+            link: function (scope, element, attrs) {
+                // Read the initial content of the element, and if none exists add something
+                var initialContent = element.html() || 'CMS Problem';
+                // Wipe out any existing content
+                element.html('');
+                var key = attrs.cms;
+                $http({method: 'GET', url: 'api/cms/' + key})
+                        .success(function (data, status, headers, config) {
+                            if (data.length && data[0] && data[0].content) {
+                                element.html(data[0].content);
+                                element[0].removeClass('cms-missing');
+                            } else {
+                                element.html(initialContent);
+                                element[0].addClass('cms-missing');
+                            }
+                        })
+                        .error(function (data, status, headers, config) {
+                            element.html(initialContent + '<span>' + status + '</span>');
+                            element[0].addClass('cms-error');
+                        });
+            }
+        }
+    }
+]);
