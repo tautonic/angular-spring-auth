@@ -475,25 +475,41 @@ textarea{
     border-radius: 200px;
 }
 
-.profile-list-item .left,
-.profile-list-item .center,
-.profile-list-item .right{
-
-}
-
 .profile-list-item{
     border: #c5c5c5 solid 1px;
     padding-bottom: 0.75em;
 }
 
+.profile-list-item .center,
+.profile-list-item .right{
+    float: right;
+}
+
+.profile-list-item .left{
+    width: 25%
+}
+
+.profile-list-item .center{
+    width: 52%;
+}
+
+.profile-list-item .right{
+    border-left: #c5c5c5 solid 1px;
+    height: 100%;
+    width: 25%;
+    padding: 0 1em;
+}
+
 .profile-list-item.profile .center h3{
     margin-top: 0.75em;
+    line-height: 10px;
 }
 
 .profile-list-item .picture-frame{
-    top: -3em;
-    left: -4em;
+    position: absolute;
+    top: 0em;
+    left: -2em;
 }
 .profile-list-item.profile .right h3{
-
+    color: #8b8b8b;
 }
