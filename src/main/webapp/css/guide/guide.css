@@ -279,11 +279,13 @@ h3.sans-serif{
     left: -2em;
 }
 
-.edit-profile-header .left{
+.edit-profile-header .left,
+.profile-list-item .left{
     float: left;
 }
 
-.edit-profile-header .right{
+.edit-profile-header .right
+.profile-list-item .right{
     float: left;
     margin: 4em 0 0 2em;
 }
@@ -340,12 +342,14 @@ textarea{
 }
 
 .profile-modal .center p,
-.edit-profile.profile{
+.edit-profile.profile,
+.profile-list-item.profile{
     line-height: 15px;
 }
 
 .profile-modal .center h3:nth-child(1),
-.edit-profile-header .right h3{
+.edit-profile-header .right h3,
+.profile-list-item.profile .right h3{
     margin-top: 1.5em;
     line-height: 5px;
 }
@@ -357,4 +361,41 @@ textarea{
 
 .profile-modal .center h5.muted{
     margin-bottom: 0.5em;
+}
+
+.btn-group-border{
+    display: inline-block;
+    padding: 2px;
+    background: -moz-linear-gradient(left,  rgba(165,165,165,0.65) 0%, rgba(58,58,58,0) 65%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(165,165,165,0.65)), color-stop(65%,rgba(58,58,58,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left,  rgba(165,165,165,0.65) 0%,rgba(58,58,58,0) 65%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left,  rgba(165,165,165,0.65) 0%,rgba(58,58,58,0) 65%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left,  rgba(165,165,165,0.65) 0%,rgba(58,58,58,0) 65%,rgba(0,0,0,0) 100%); /* IE10+ */
+    background: linear-gradient(to right,  rgba(165,165,165,0.65) 0%,rgba(58,58,58,0) 65%,rgba(0,0,0,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6a5a5a5', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+    -webkit-border-radius: 200px;
+    border-radius: 200px;
+}
+
+.profile-list-item .left,
+.profile-list-item .center,
+.profile-list-item .right{
+
+}
+
+.profile-list-item{
+    border: #c5c5c5 solid 1px;
+    padding-bottom: 0.75em;
+}
+
+.profile-list-item.profile .center h3{
+    margin-top: 0.75em;
+}
+
+.profile-list-item .picture-frame{
+    top: -3em;
+    left: -4em;
+}
+.profile-list-item.profile .right h3{
+
 }
