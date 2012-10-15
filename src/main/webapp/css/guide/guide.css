@@ -211,10 +211,92 @@ a.btn:visited{
     font-style: inherit;
 }
 
-.discussion h6 {
+.grey-gradient {
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f9f8f6));
+    background-image: -webkit-linear-gradient(top, #ffffff, #f9f8f6);
+    background-image: -moz-linear-gradient(top, #ffffff, #f9f8f6);
+    background-image: -o-linear-gradient(top, #ffffff, #f9f8f6);
+    background-image: linear-gradient(to bottom, #ffffff, #f9f8f6);
+}
+
+.discussion-item {
+    padding: 10px;
+    border: 1px solid #F1EFEF;
+}
+
+.discussion-item h4 {
+    margin: 5px 0;
+}
+
+.discussion-item h6, .discussion-post h6  {
     font-family: "PMN Caecilia", Georgia, serif;
     text-transform: none;
     color: #005172;
+}
+.discussion-item h6 {
+    margin: 5px 0;
+}
+.discussion-heading {
+    clear: both;
+    margin-bottom: 20px;
+}
+
+.discussion-first-post {
+    padding: 10px;
+    padding-left: 100px;
+    border: 1px solid #F1EFEF;
+    margin-left: 100px;
+    position: relative;
+    border-radius: 3px;
+}
+
+.discussion-first-post .picture-frame{
+    position: absolute;
+    top: 0;
+    left: -88px;
+}
+
+.discussion-first-post .stats {
+    border-top: 1px solid #F1EFEF;
+}
+
+.discussion-first-post h3, .discussion-first-post h5 {
+    margin: 0;
+    padding: 0;
+    color: #005172;
+    text-transform: none;
+}
+
+.discussion-first-post h3 {
+    line-height: 30px;
+}
+
+.discussion-post {
+    padding: 10px;
+    padding-left: 70px;
+    border: 1px solid #F1EFEF;
+    position: relative;
+    border-radius: 3px;
+}
+
+.discussion-post .picture-frame{
+    position: absolute;
+    top: 0;
+    left: -5px;
+}
+
+.discussion-post h4 {
+    margin: 0;
+}
+
+.discussion-post h6 {
+    margin: 2px 0;
+    line-height: 16px;
+}
+
+.discussion-post textarea {
+    width: 90%;
+    height: 100px;
 }
 
 .stats {
@@ -224,13 +306,29 @@ a.btn:visited{
 
 .stats span {
     padding-left: 20px;
+    margin-right: 10px;
     background-image: url('../../images/GCEE_sprite.png');
 }
 
 .stats span.likes {
-    background-position: 10px 10px;
+    background-position: -42px -27px;
 }
 
+.stats span.views {
+    background-position: -42px -47px;
+}
+
+.stats span.comments {
+    background-position: -42px -67px;
+}
+
+.stats span.flag {
+    background-position: -42px -87px;
+}
+
+.stats span.add {
+    background-position: -42px -7px;
+}
 .btn-group > .btn:first-child{
     -webkit-border-bottom-left-radius: 20px;
     border-bottom-left-radius: 20px;
