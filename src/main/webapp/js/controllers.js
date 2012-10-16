@@ -12,7 +12,7 @@ function MyCtrl1($rootScope, $scope, $http, $location, $route) {
     $rootScope.discussion_query = '';
 
     $http.get("api/getquote").success(function(data) {
-        $scope.quote = data;
+        $scope.quote = data.quote;
     });
 
     var options = {
