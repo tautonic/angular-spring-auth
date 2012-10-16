@@ -4,6 +4,25 @@
 
 
 angular.module( 'bgc.directives', [] )
+    .directive('readMoreHover', function(){
+        return{
+            restrict: 'A',
+            link: function(scope, elm, attr){
+                jQuery('.read-more').hover(
+                    function(){
+                        $(this).stop().animate({
+                            left: '0'
+                        }, 200)
+                    },
+                    function(){
+                        $(this).stop().animate({
+                            left: '-88px'
+                        }, 200)
+                    }
+                );
+            }
+        }
+    })
     .directive('docViewer', function (){
         return{
             restrict:'E',
