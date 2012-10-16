@@ -554,23 +554,28 @@ a.btn:visited{
     background-image: linear-gradient(to bottom, #ffffff, #f9f8f6);
 }
 
+/****** Discussion Styling ******/
+
+/** discussion list styles **/
 .discussion-item {
     padding: 10px;
     border: 1px solid #F1EFEF;
 }
 
-.discussion-item h4 {
+.article h4, .discussion-item h4 {
     margin: 5px 0;
 }
 
-.discussion-item h6, .discussion-post h6  {
+.article h6, .discussion-item h6, .discussion-post h6  {
     font-family: "PMN Caecilia", Georgia, serif;
     text-transform: none;
     color: #005172;
 }
-.discussion-item h6 {
+
+.article h6, .discussion-item h6 {
     margin: 5px 0;
 }
+/** single discussion, header content **/
 .discussion-heading {
     clear: both;
     margin-bottom: 20px;
@@ -605,7 +610,7 @@ a.btn:visited{
 .discussion-first-post h3 {
     line-height: 30px;
 }
-
+/** single discussion, additional posts content **/
 .discussion-post {
     padding: 10px;
     padding-left: 70px;
@@ -628,12 +633,13 @@ a.btn:visited{
     margin: 2px 0;
     line-height: 16px;
 }
-
+/** discussion reply **/
 .discussion-post textarea {
     width: 90%;
     height: 100px;
 }
 
+/********* Stat numbers, for likes, comments, etc *******/
 .stats {
     font-size: 12px;
     color: #8b8b8b;
@@ -664,6 +670,37 @@ a.btn:visited{
 .stats span.add {
     background-position: -42px -7px;
 }
+
+/********** article list styles ********/
+.article .picture-frame {
+    float: left;
+}
+
+.article .more {
+    top: 75px;
+    padding: 5px 0 5px 5px;
+}
+
+.article .more .query {
+    position: relative;
+    display: inline-block;
+    right: 3px;
+    top: 3px;
+    width: 20px;
+    height: 20px;
+    background-image: url('../../images/GCEE_sprite.png');
+    background-position: -8px -8px;
+}
+
+.article .content {
+    margin-left: 150px;
+    padding: 5px;
+}
+
+.article .content .tags a {
+    color: #cbb766;
+}
+
 .btn-group > .btn:first-child{
     -webkit-border-bottom-left-radius: 20px;
     border-bottom-left-radius: 20px;

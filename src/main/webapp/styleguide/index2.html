@@ -1226,8 +1226,7 @@
     &lt;h4&gt;Discussion Title&lt;/h4&gt;
     &lt;h6&gt;Author&lt;/h6&gt;
     &lt;h6&gt;12/12/2012&lt;/h6&gt;
-    &lt;p&gt;Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
-        Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.&lt;/p&gt;
+    &lt;p&gt;Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.&lt;/p&gt;
     &lt;div class="stats"&gt;
         &lt;button ng-click="" class="btn btn-primary"&gt;Reply&lt;/button&gt;
         &lt;span class="likes"&gt;Like This&lt;/span&gt;
@@ -1276,6 +1275,60 @@
     </pre>
     </section>
 
+    <section id="articles">
+
+    <h2 class="guide">New Reply</h2>
+
+    <p class="guide">The user posting a new reply.</p>
+
+    <div class="bs-docs-example">
+
+        <div class="article">
+            <div class="picture-frame">
+                <div class="gradient more">
+                    <a href="#">Preview</a>
+                    <div class="query"></div>
+                </div>
+                <img src="../images/rosie.jpeg" width="120px" height="130px">
+                <div class="picture-frame-bottom"></div>
+            </div>
+            <div class="content">
+                <h4>Article Title</h4>
+                <h6>By Author, 12/12/2012</h6>
+                <div class="tags">
+                    <a href="#">Tag 1,</a>
+                </div>
+                <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+                    Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.</p>
+                <div class="stats">
+                    <span>TWEET</span>
+                    <span class="likes">Likes</span>
+                    <span class="views">Views</span>
+                    <span class="comments">Comments</span>
+                    <span class="flag">Flag for Spam</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <pre class="prettyprint linenums">
+&lt;div class="discussion-post grey-gradient"&gt;
+    &lt;div class="left"&gt;
+        &lt;div class="picture-frame med clockwise"&gt;
+            &lt;img class="profile-image med" src="../images/rosie.jpeg"&gt;
+            &lt;div class="picture-frame-bottom"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;textarea placeholder="Reply to discussion..."&gt;&lt;/textarea&gt;
+    &lt;div class="stats"&gt;
+        &lt;button ng-click="" class="btn btn-primary"&gt;Post&lt;/button&gt;
+        &lt;span class="add"&gt;Add Image&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+    </pre>
+
+    </section>
     </div>
 </div>
 
