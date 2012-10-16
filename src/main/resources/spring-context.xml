@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                            http://www.springframework.org/schema/task
+                            http://www.springframework.org/schema/task/spring-task-3.0.xsd
         ">
 
     <bean id="messageSource"
@@ -15,6 +18,26 @@
             </list>
         </property>
     </bean>
+
+
+    <!-- *************************************************************************************** -->
+    <!-- Seed CMS content                                                                        -->
+    <!-- *************************************************************************************** -->
+
+    <!-- Cron jobs are triggered by the scheduler service -->
+    <task:scheduler id="zocia-tasks" pool-size="10" />
+
+    <bean id="atStartup" class="com.zocia.roundtable.scheduling.DistributedWebCronJob">
+        <property name="index" value="gc" />
+        <property name="localUrl" value="/api/seedcms" />
+        <property name="seconds" value="86400" />
+    </bean>
+
+    <task:scheduled-tasks scheduler="zocia-tasks">
+        <task:scheduled ref="atStartup" method="run"  cron="0 0 0 * * *" />
+    </task:scheduled-tasks>
+
+
 
     <!-- *************************************************************************************** -->
     <!-- Hazelcast Configuration                                                                 -->

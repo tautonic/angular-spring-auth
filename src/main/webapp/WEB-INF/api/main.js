@@ -23,6 +23,7 @@ var app = exports.app = Application();
 app.configure( 'notfound', 'params', 'mount', 'route' );
 
 app.mount('/cms', require('./cms'));
+app.mount('/seedcms', require('./seedcms'));
 
 
 registerHelper( {
