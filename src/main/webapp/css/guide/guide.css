@@ -10,6 +10,7 @@
 body {
     font-family: "PMN Caecilia", Georgia, serif;
     color: #454545;
+    background-color: #fff;
 }
 
 a, a:link {
@@ -28,7 +29,8 @@ h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
 }
 
-.profile h1, .profile h2, .profile h3, .profile h5, .profile h6 {
+.profile h1, .profile h2, .profile h3, .profile h5, .profile h6,
+.article h6, .discussion-item h6, .discussion-post h6 {
     font-family: "PMN Caecilia", Georgia, serif;
     text-transform: none;
     color: #005172;
@@ -567,12 +569,6 @@ a.btn:visited{
     margin: 5px 0;
 }
 
-.article h6, .discussion-item h6, .discussion-post h6  {
-    font-family: "PMN Caecilia", Georgia, serif;
-    text-transform: none;
-    color: #005172;
-}
-
 .article h6, .discussion-item h6 {
     margin: 5px 0;
 }
@@ -718,13 +714,6 @@ a.btn:visited{
     border-top-right-radius: 20px;
     -moz-border-radius-bottomright: 20px;
     -moz-border-radius-topright: 20px;
-}
-
-h1.sans-serif, h2.sans-serif, h3.sans-serif, h4.sans-serif, h5.sans-serif, h6.sans-serif {
-    font-family: "TradeGothicW01-BoldCn20 675334", "Arial Narrow", sans-serif;
-    font-weight: bold;
-    color: #006644;
-    text-transform: uppercase;
 }
 
 h3.sans-serif{

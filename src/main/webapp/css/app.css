@@ -220,6 +220,14 @@ body {
     background-image: linear-gradient(to bottom, #51a463, #127551);
 }
 
+.picture-frame {
+    padding: 5px;
+    background-color: white;
+    -webkit-box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);
+    /*box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);*/
+}
+
 h1, h2, h3, a, .quote {
     color: #117450;
     font-weight: normal;
