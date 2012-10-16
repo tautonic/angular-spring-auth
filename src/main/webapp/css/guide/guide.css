@@ -410,11 +410,6 @@ p.text-success {
 
 .picture-frame{
     display: inline-block;
-    position: relative;
-    background: #ccc;
-    border: 8px solid white;
-    -webkit-box-shadow:  0px 7px 20px 1px rgba(0, 0, 0, 0.3);
-    box-shadow:  0px 7px 20px 1px rgba(0, 0, 0, 0.3);
 }
 
 .med-shadow{
