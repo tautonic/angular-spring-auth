@@ -67,10 +67,6 @@ public class ZociaMapPersistence implements MapPersistence {
         _access = access;
     }
 
-    public void setAccess(String access) {
-        _access = access;
-    }
-
     public void setGetAddress(String getAddress) {
         _getAddress = getAddress;
     }
