@@ -393,9 +393,13 @@ angular.module( 'bgc.directives', [] )
  * will be replaced so content is not strictly necessary, however it can be helpful to include
  * placeholder content for documentation and static web development tools.
  *
+ * The 'at' symbol (@) can't be used as part of the key value because it is dedicated as a separator
+ * character which the CMS property uses to differentiate the key from the locale.
+ * ( ie x-cms="<key>@<locale>" )
+ *
  * @element ANY
  * @param {expression} Evaluates to the string key used to identify the CMS value. The
- *   expression can also be followed with '/<locale>' in order to force a locale-specific
+ *   expression can also be followed with '@<locale>' in order to force a locale-specific
  *   version of CMS content. If a locale is not supplied, the client's Accept-Language
  *   header will be used.
  *
@@ -403,6 +407,7 @@ angular.module( 'bgc.directives', [] )
    <example>
      <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
      <p x-cms="notfound">Testing a not found case.</p>
+     <blockquote x-cms="title/fr_CA">Forcing the French-Canadian version of the content.</blockquote>
      <th x-cms="name-title"/>
    </example>
  */
@@ -418,19 +423,32 @@ angular.module('bgc.directives', []).directive('cms', ['$http',
                 var initialContent = element.html() || 'CMS Problem';
                 // Wipe out any existing content
                 element.html('');
+                // The cms property contains the lookup key
                 var key = attrs.cms;
-                $http({method: 'GET', url: 'api/cms/' + key})
+                // Create the URL to use in order to return the CMS content and the locale if forced
+                var parts = key.split('@');
+                url = 'api/cms/' + parts[0];
+                if (parts.length > 1) url = url + '?locale=' + parts[1];
+                // Make a GET request to the server in order to perform the CMS lookup
+                $http({method: 'GET', url: url})
                         .success(function (data, status, headers, config) {
-                            if (data.length && data[0] && data[0].content) {
+                            // If the HTTP response is an array and the first element contains a content
+                            // property, then we found what we were looking for.
+                            var contentFound = data.length && data[0] && data[0].content;
+                            if (contentFound) {
+                                // Populate the HTML element with content
                                 element.html(data[0].content);
-                                element[0].removeClass('cms-missing');
                             } else {
+                                // If no content was found, put the original content back in place
                                 element.html(initialContent);
-                                element[0].addClass('cms-missing');
+                                // And set a CSS class @todo: How pervasive is addClass()?
+                                element.addClass('cms-missing');
                             }
                         })
                         .error(function (data, status, headers, config) {
-                            element.html(initialContent + '<span>' + status + '</span>');
+                            // In case of an error, add in the initial content and the status code of error
+                            element.html(initialContent + '<span> (' + status + ')</span>');
+                            // And set a CSS class to indicate the error.
                             element[0].addClass('cms-error');
                         });
             }

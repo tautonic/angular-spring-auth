@@ -660,3 +660,20 @@ ul.article-pagination li a {
     margin: 0 -10px;
     color: #111;
 }
+
+
+/* The CMS directive will add this class to its associated element when CMS content is not found. */
+.cms-missing {
+    background-color: #ff00ff;
+}
+
+/* The CMS directive will add this class to its associated element when an error occurs with the
+   fetching of CMS content. Should not generally happen on CMS fetches unless the server is down.
+    May occur if there is a permission problem with CMS update or deletes. */
+.cms-error {
+    background-color: #ff0000;
+}
+
+
+
+
