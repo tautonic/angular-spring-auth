@@ -464,7 +464,7 @@ angular.module('bgc.directives', []).directive('cms', ['$http',
                 var key = attrs.cms;
                 // Create the URL to use in order to return the CMS content and the locale if forced
                 var parts = key.split('@');
-                url = 'api/cms/' + parts[0];
+                var url = 'api/cms/' + parts[0];
                 if (parts.length > 1) url = url + '?locale=' + parts[1];
                 // Make a GET request to the server in order to perform the CMS lookup
                 $http({method: 'GET', url: url})
