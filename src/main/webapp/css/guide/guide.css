@@ -183,6 +183,7 @@ input, button, select, textarea {
     height: 187px;
     width: 436px;
     background: url('../../images/transparent-pill-shapes.png') top left;
+    padding-top: 3.25em;
 }
 
 .transparent-pill-shapes h2, .transparent-pill-shapes p{
