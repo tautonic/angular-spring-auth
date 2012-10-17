@@ -113,5 +113,6 @@
             browse_button: 'choosefiles'
         }
     });
+
 })();
 

@@ -63,17 +63,29 @@ function readAndStoreProps(bundle) {
         var names = props.stringPropertyNames().iterator();
         while (names.hasNext()) {
             var name = names.next();
-            var value = props.getProperty(name);
-            if (value) {
-                var key = name + '@' + bundle.locale;
-                log.info('Adding key [{}] and value [{}] to cms map.', key, value);
-                var resource = makeResource(name, bundle.locale, key, value);
-                map.put(key, resource);
+            if (propExists(name, bundle.locale)) {
+                var value = props.getProperty(name);
+                log.info('Property does not exist: {}@{}, value: ' + value, name, bundle.locale);
+                if (value) {
+                    var key = name + '@' + bundle.locale;
+                    log.info('Adding key [{}] and value [{}] to cms map.', key, value);
+                    var resource = makeResource(name, bundle.locale, key, value);
+                    map.put(key, resource);
+                }
             }
         }
     } finally {
         input.close();
     }
+}
+
+function propExists(key, locale) {
+    var lookup = key;
+    if (locale) lookup +=  '@' + locale;
+    var resource = map.get(lookup);
+    log.info('Found resource [{}]? {}, exist? {}', lookup, JSON.stringify(resource),
+            resource && resource.locale === locale);
+    return resource && resource.locale === locale;
 }
 
 function makeResource(name, locale, key, value) {

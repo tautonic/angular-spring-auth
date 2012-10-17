@@ -280,7 +280,8 @@ public class ZociaMapPersistence implements MapPersistence {
      * to obtain the value. Implementation can use any means of loading the given key;
      * such as an O/R mapping tool, simple SQL or reading a file etc.
      *
-     * @param key
+     * @param key The key to lookup. May contain a locale by using an '@' as delimeter.
+     *            <key>[@<locale>]
      * @return value of the key
      */
     public Object load(Object key) {
@@ -288,6 +289,11 @@ public class ZociaMapPersistence implements MapPersistence {
             LOG.debug("Loading document, index [{}], type [{}], key [{}]",
                     new Object[]{_index, _type, key});
         }
+
+        //todo: Don't assume default locale is 'en'
+        String[] keyParts = ((String) key).split("@");
+        String k = keyParts[0];
+        String locale = keyParts.length > 1 ? keyParts[1] : "en";
 
         ContentExchange exchange = new MyExchange(_index, _type, key, _getAddress) {
             @Override
@@ -299,10 +305,10 @@ public class ZociaMapPersistence implements MapPersistence {
 
         exchange.setMethod("GET");
 
-        String uri = String.format(_getAddress, key);
+        String uri = String.format(_getAddress, k);
         exchange.setURL(uri);
         exchange.setRequestHeader("x-rt-index", _index);
-        exchange.setRequestHeader("Accept-Language", "en");
+        exchange.setRequestHeader("Accept-Language", locale);
 
         LOG.debug("Establishing connection to " + exchange);
 
