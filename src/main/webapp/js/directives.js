@@ -4,6 +4,43 @@
 
 
 angular.module( 'bgc.directives', [] )
+    .directive('readMoreHover', function(){
+        return{
+            restrict: 'A',
+            link: function(scope, elm, attr){
+                jQuery('.read-more').hover(
+                    function(){
+                        $(this).stop().animate({
+                            left: '0'
+                        }, 200)
+                    },
+                    function(){
+                        $(this).stop().animate({
+                            left: '-88px'
+                        }, 200)
+                    }
+                );
+            }
+        }
+    })
+    .directive('banner', ['$location', function($location){
+        var bannerTemplate = '<div ng-include src="\'partials/home-banner.html\'"></div>';
+
+        return{
+            restrict: 'E',
+            //templateUrl: 'partials/home-banner.html',
+            compile: function(element, attrs, transclude){
+                /*scope.$watch(function(){
+                    return $location.path()
+                }, function(){});*/
+                element.html(bannerTemplate);
+
+                return function(scope, element, attr){
+
+                }
+            }
+        }
+    }])
     .directive('docViewer', function (){
         return{
             restrict:'E',

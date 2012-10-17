@@ -3,7 +3,7 @@
 /* Controllers */
 
 
-function MyCtrl1($rootScope, $scope, $http, $location) {
+function MyCtrl1($rootScope, $scope, $http, $location, $route) {
 	console.log("IN HOMEPAGE");
 
     $rootScope.query = '';
@@ -20,6 +20,10 @@ function MyCtrl1($rootScope, $scope, $http, $location) {
     $http.get('api/notifications?filters=likes comments discussions collaborators ideas companies profiles spMessages', options).success(function(data) {
         console.log("DATA IS: ",data);
         $scope.stream = data;
+    });
+
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'home';
     });
 
     $scope.isEmpty = function () {
@@ -41,6 +45,12 @@ function MyCtrl1($rootScope, $scope, $http, $location) {
     $rootScope.search_discussions = function(){
         $location.path('/search/discussions/' + $rootScope.discussion_query);
     };
+}
+
+function facultyFellows($rootScope, $scope){
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'faculty';
+    });
 }
 
 

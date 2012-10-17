@@ -44,7 +44,7 @@
                 <a class="logo" ng-href="#/home"><img src="images/GCEE_image_GCEE.png"></a>
                 <ul class="gradient menu">
                     <li><a ng-href="#/home/">Home</a></li>
-                    <li><a ng-href="#/profiles/">Faculty Fellows</a></li>
+                    <li><a ng-href="#/faculty/">Faculty Fellows</a></li>
                     <li><a ng-href="#/content/">Curriculum Content</a></li>
                     <li><a ng-href="#/network/">Network</a></li>
                     <li ng-show="!auth.isAuthenticated"><a ng-href="#/profile/">Sign In</a></li>
@@ -59,73 +59,33 @@
                 </ul>
             </div>
         </div>
-        <div class="row header-info">
 
-            <form name="searchSite" class="form-search">
-                <div class="input-append">
-                    <input type="text" ng-model="query" class="span2 search-query">
-                    <button type="submit" class="btn btn-success" ng-click="search_site()">Search Site</button>
-                </div>
-            </form>
-
-            <form name="searchFaculty" class="form-search">
-                <div class="input-append">
-                    <input type="text" ng-model="faculty_query" class="span2 search-query">
-                    <button type="submit" class="btn btn-success" ng-click="search_faculty()">Search Faculty</button>
-                </div>
-            </form>
-
-            <form name="searchContent" class="form-search">
-                <div class="input-append">
-                    <input type="text" ng-model="content_query" class="span2 search-query">
-                    <button type="submit" class="btn btn-success" ng-click="search_content()">Search Content</button>
-                </div>
-            </form>
-
-            <form name="searchContent" class="form-search">
-                <div class="input-append">
-                    <input type="text" ng-model="discussion_query" class="span2 search-query">
-                    <button type="submit" class="btn btn-success" ng-click="search_discussions()">Search Discussions</button>
-                </div>
-            </form>
-
-            <div class="span4">
-                <div class="picture-frame">
-                    <div class="gradient more">
-                        <a href="#/profiles/" class="right-arrow">Read More </a>
-                    </div>
-                    <img src="images/GCEE_image_home_facultyFellow.png">
-                </div>
-                <h2>Faculty Fellows</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula.</p>
+        <div ng-switch on="banner">
+            <div ng-switch-when="none"></div>
+            <div ng-switch-when="faculty">
+                <div ng-include src="'partials/faculty-fellows-banner.html'"></div>
             </div>
-
-            <div class="span4">
-                <div class="picture-frame">
-                    <div class="gradient more">
-                        <a href="#/content/" class="right-arrow">Read More </a>
-                    </div>
-                    <img src="images/GCEE_image_home_curriculumContent.png">
-                </div>
-                <h2>Curriculum Content</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula.</p>
+            <div ng-switch-when="curriculum">
+                <div ng-include src="'partials/curriculum-content-banner.html'"></div>
             </div>
-
-            <div class="span4">
-                <div class="picture-frame">
-                    <div class="gradient more">
-                        <a href="#/network/" class="right-arrow">Read More </a>
-                    </div>
-                    <img src="images/GCEE_image_home_network.png">
-                </div>
-                <h2>Network</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula.</p>
+            <div ng-switch-when="network">
+                <div ng-include src="'partials/network-banner.html'"></div>
+            </div>
+            <div ng-switch-default>
+                <div ng-include src="'partials/home-banner.html'"></div>
             </div>
         </div>
+
     </div>
 </div>
 
 <div id="header-separator"></div>
+
+<div class="about-section gradient">
+    <div class="about-section-mesh">
+
+    </div>
+</div>
 
 <div class="ng-view">
 </div>
