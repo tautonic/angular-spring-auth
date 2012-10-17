@@ -5,7 +5,8 @@
 
 	function routeProvider( $routeProvider ) {
         $routeProvider.when( '/home', {
-            templateUrl: 'partials/homepage.html'
+            templateUrl: 'partials/homepage.html',
+            controller: 'MyCtrl1'
         } );
 
         //babson college pages
@@ -13,8 +14,9 @@
 			templateUrl: 'partials/msce.html'
 		} );
         $routeProvider.when( '/faculty', {
-			templateUrl: 'partials/faculty.html'
-		} );
+			templateUrl: 'partials/faculty.html',
+            controller: 'facultyFellows'
+        } );
         $routeProvider.when( '/content', {
 			templateUrl: 'lib/pyklresource/index.html'
 		} );
@@ -111,5 +113,6 @@
             browse_button: 'choosefiles'
         }
     });
+
 })();
 

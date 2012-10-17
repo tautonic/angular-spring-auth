@@ -30,6 +30,39 @@
         </interfaces>
     </network>
 
+    <executor-service>
+        <core-pool-size>16</core-pool-size>
+        <max-pool-size>64</max-pool-size>
+        <keep-alive-seconds>60</keep-alive-seconds>
+    </executor-service>
+
+    <map name="scheduledTasks">
+        <backup-count>1</backup-count>
+        <eviction-policy>LRU</eviction-policy>
+        <max-size>100</max-size>
+    </map>
+
+    <map name="gc-resources">
+        <map-store enabled="true">
+            <!--
+               Number of seconds to delay to call the MapStore.store(key, value).
+               If the value is zero then it is write-through so MapStore.store(key, value)
+               will be called as soon as the entry is updated.
+               Otherwise it is write-behind so updates will be stored after write-delay-seconds
+               value by calling Hazelcast.storeAll(map). Default value is 0.
+            -->
+            <write-delay-seconds>5</write-delay-seconds>
+
+            <properties>
+                <!-- mapstore property contains the Spring names of map store implementations -->
+                <property name="mapstore">zociaMapStore</property>
+                <property name="maploader">zociaMapStore</property>
+                <property name="access">rw</property>
+            </properties>
+        </map-store>
+    </map>
+
+
     <map name="default">
         <!--
             Number of backups. If 1 is set as the backup-count for example,
@@ -69,23 +102,5 @@
             get evicted.
         -->
         <eviction-percentage>50</eviction-percentage>
-
-        <map-store enabled="true">
-            <!--
-               Number of seconds to delay to call the MapStore.store(key, value).
-               If the value is zero then it is write-through so MapStore.store(key, value)
-               will be called as soon as the entry is updated.
-               Otherwise it is write-behind so updates will be stored after write-delay-seconds
-               value by calling Hazelcast.storeAll(map). Default value is 0.
-            -->
-            <write-delay-seconds>5</write-delay-seconds>
-
-            <properties>
-                <!-- mapstore property contains the Spring names of map store implementations -->
-                <property name="mapstore">zociaMapStore</property>
-                <property name="maploader">zociaMapStore</property>
-                <property name="access">rw</property>
-            </properties>
-        </map-store>
     </map>
 </hazelcast>

@@ -4,6 +4,62 @@
 
 
 angular.module( 'bgc.directives', [] )
+    .directive('thumbnail', function(){
+        return{
+            restrict: 'E',
+            templateUrl: 'partials/thumbnail-template.html',
+
+            link: function(scope, elm, attr){
+                scope.thumbnail = {
+                    image: 'url of generic profile image',
+                    text: '',
+                    url: '',
+                    type: 'profile-thumbnail large',
+                    showAnchor: false
+                }
+
+                if(attr.type === 'profile'){
+                    if(attr.image){
+                        scope.thumbnail.image = attr.image;
+                    }
+                    scope.thumbnail.url = '';
+                    scope.thumbnail.text = '';
+                    scope.thumbnail.type = 'profile-thumbnail';
+                }
+
+                if(attr.type === 'article'){
+                    if(attr.image){
+                        scope.thumbnail.image = attr.image;
+                    }else{
+                        scope.thumbnail.image = 'url of generic article image';
+                    }
+                    scope.thumbnail.text = 'Read More';
+                    scope.thumbnail.url = '#/content';
+                    scope.thumbnail.type = 'article-thumbnail';
+                    scope.thumbnail.showAnchor = true;
+                }
+            }
+        }
+    })
+    .directive('readMoreHover', function(){
+        return{
+            restrict: 'A',
+            link: function(scope, elm, attr){
+                jQuery('.read-more').hover(
+                    function(){
+                        $(this).stop().animate({
+                            left: '0'
+                        }, 200)
+                    },
+                    function(){
+                        $(this).stop().animate({
+                            left: '-88px'
+                        }, 200)
+                    }
+                );
+            }
+        }
+    })
     .directive('docViewer', function (){
         return{
             restrict:'E',
@@ -264,6 +320,10 @@ angular.module( 'bgc.directives', [] )
                         jQuery('#'+attrs.id).tooltip('hide');
                     });
                 });
+
+                scope.$on('$routeChangeStart', function(){
+                    jQuery('.tooltip').remove();
+                });
             }
         }
     }])
@@ -411,7 +471,7 @@ angular.module( 'bgc.directives', [] )
      <th x-cms="name-title"/>
    </example>
  */
-angular.module('bgc.directives', []).directive('cms', ['$http',
+angular.module('bgc.directives').directive('cms', ['$http',
     function ($http) {
         return {
             // Is applied as an element's attribute
@@ -419,6 +479,9 @@ angular.module('bgc.directives', []).directive('cms', ['$http',
             // Current content will be replaced
             replace: true,
             link: function (scope, element, attrs) {
+//                element.html('Hello');
+//                element.addClass('cms-missing');
+//                return;
                 // Read the initial content of the element, and if none exists add something
                 var initialContent = element.html() || 'CMS Problem';
                 // Wipe out any existing content
@@ -427,7 +490,7 @@ angular.module('bgc.directives', []).directive('cms', ['$http',
                 var key = attrs.cms;
                 // Create the URL to use in order to return the CMS content and the locale if forced
                 var parts = key.split('@');
-                url = 'api/cms/' + parts[0];
+                var url = 'api/cms/' + parts[0];
                 if (parts.length > 1) url = url + '?locale=' + parts[1];
                 // Make a GET request to the server in order to perform the CMS lookup
                 $http({method: 'GET', url: url})

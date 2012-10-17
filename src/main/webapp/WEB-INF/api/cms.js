@@ -32,11 +32,16 @@
  *
  * API
  *
- * GET /api/cms/:key[?locale=<value>]
- *     :key - a unique id that describes the content.
+ * GET /api/cms/:key[?format=<locale>
+ *     :key - a unique id that describes the content. <id>[@<locale>]
  *     [Accept-Language] - The header value is used to determine the locale used to retrieve
  *         the appropriate record from the cms. Locale can also be specified as a parameter
  *         which will take precedence over the header value.
+ *
+ *     Note: The locale is extracted in one of three ways, and in this precedence.
+ *       1. The use of a suffix on the key delimited with an @ symbol. (ie /<key>@fr_CA)
+ *       2. The use of a 'format' parameter. (ie /<key>?format=fr_CA)
+ *       2. The use of the 'Accept-Language' header in the request.
  *
  * POST /api/cms/
  *     [Accept-Language] - The header value is used to determine the locale used to create
@@ -119,19 +124,27 @@ var INDEX = 'gc';
 var map = store.getMap(INDEX, 'resources');
 
 /**
- * GET /api/cms/:key
- *     :key - a unique id that describes the content.
+ * GET /api/cms/:key[?format=<locale>
+ *     :key - a unique id that describes the content. <id>[@<locale>]
  *     [Accept-Language] - The header value is used to determine the locale used to retrieve
  *         the appropriate record from the cms. Locale can also be specified as a parameter
  *         which will take precedence over the header value.
+ *
+ *     Note: The locale is extracted in one of three ways, and in this precedence.
+ *       1. The use of a suffix on the key delimited with an @ symbol. (ie /<key>@fr_CA)
+ *       2. The use of a 'format' parameter. (ie /<key>?format=fr_CA)
+ *       2. The use of the 'Accept-Language' header in the request.
  */
 app.get('/:key', function (req, key) {
     var locale = req.params.locale || req.locale;
 
-    log.debug('GET /api/cms/{}, locale: {}', key, locale);
+    // Locale specified as a suffix to the key takes precedence
+    var keyParts = key.split('@');
+    if (keyParts > 1) locale = keyParts[1];
 
-    var lookup = key + '/' + locale;
-    return json(map.get(key));
+    var lookup = key;
+    if (locale) key += '@' + locale;
+    return json(map.get(lookup));
 });
 
 
@@ -164,7 +177,7 @@ app.post('/', function (req) {
             {"Content-Type": 'text/html'});
 
     // Write the new resource into the map using the key/locale as the map key
-    var lookup = resource.key + '/' + resource.locale;
+    var lookup = resource.key + '@' + resource.locale;
     var mapResources = store.getMap(INDEX, "resources");
     mapResources.put(lookup, resource);
 

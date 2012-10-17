@@ -5,13 +5,21 @@
  * Time: 11:10 AM
  * To change this template use File | Settings | File Templates.
  */
-function listProfiles($scope, Profile){
+function listProfiles($rootScope, $scope, Profile){
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'faculty';
+    });
+
     Profile.query(function(profiles){
         $scope.profiles = profiles.content;
     });
 }
 
-function viewProfile($scope, $routeParams, $location, $timeout, Profile){
+function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, Profile){
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+    });
+
     var profile = Profile.get({profileId: $routeParams.profileId}, function(){
         $scope.profile = profile.content;
 

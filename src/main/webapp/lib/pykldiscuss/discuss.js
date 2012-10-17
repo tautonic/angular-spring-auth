@@ -14,6 +14,16 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
         };
         $scope.isLoaded = false;
 
+        $scope.$on('$routeChangeSuccess', function(){
+            if($location.path() === '/content' ){
+                $rootScope.banner = 'curriculum';
+                $rootScope.about = 'curriculum';
+            }else{
+                $rootScope.banner = 'network';
+                $rootScope.about = 'network';
+            }
+        });
+
         if ($routeParams) {
             $scope.pageType = $routeParams.discussionId || "all";
 

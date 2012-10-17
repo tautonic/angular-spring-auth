@@ -44,7 +44,7 @@
                 <a class="logo" ng-href="#/home"><img src="images/GCEE_image_GCEE.png"></a>
                 <ul class="gradient menu">
                     <li><a ng-href="#/home/">Home</a></li>
-                    <li><a ng-href="#/profiles/">Faculty Fellows</a></li>
+                    <li><a ng-href="#/faculty/">Faculty Fellows</a></li>
                     <li><a ng-href="#/content/">Curriculum Content</a></li>
                     <li><a ng-href="#/network/">Network</a></li>
                     <li ng-show="!auth.isAuthenticated"><a ng-href="#/profile/">Sign In</a></li>
@@ -59,8 +59,9 @@
                 </ul>
             </div>
         </div>
+
         <div class="row header-info">
-            <form name="searchSite" class="form-search">
+            <!--<form name="searchSite" class="form-search">
                 <div class="input-append">
                     <input type="text" ng-model="query" class="span2 search-query">
                     <button type="submit" class="btn btn-success" ng-click="search_site()">Search Site</button>
@@ -97,34 +98,44 @@
                 </div>
                 <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
                 <p x-cms="notfound">Testing a not found case.</p>
-            </div>
+            </div>-->
 
-            <div class="span4">
-                <div class="picture-frame">
-                    <div class="gradient more">
-                        <a href="#/content/" class="right-arrow">Read More </a>
-                    </div>
-                    <img src="images/GCEE_image_home_curriculumContent.png">
+            <div ng-switch on="banner">
+                <div ng-switch-when="none"></div>
+                <div ng-switch-when="faculty">
+                    <div ng-include src="'partials/faculty-fellows-banner.html'"></div>
                 </div>
-                <h2>Curriculum Content</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula.</p>
-            </div>
-
-            <div class="span4">
-                <div class="picture-frame">
-                    <div class="gradient more">
-                        <a href="#/network/" class="right-arrow">Read More </a>
-                    </div>
-                    <img src="images/GCEE_image_home_network.png">
+                <div ng-switch-when="curriculum">
+                    <div ng-include src="'partials/curriculum-content-banner.html'"></div>
                 </div>
-                <h2>Network</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula.</p>
+                <div ng-switch-when="network">
+                    <div ng-include src="'partials/network-banner.html'"></div>
+                </div>
+                <div ng-switch-default>
+                    <div ng-include src="'partials/home-banner.html'"></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <div id="header-separator"></div>
+
+<div ng-switch on="about">
+    <div ng-switch-when="none"></div>
+    <div ng-switch-when="network">
+        <div ng-include src="'partials/network-about.html'"></div>
+    </div>
+    <div ng-switch-when="curriculum">
+        <div ng-include src="'partials/curriculum-about.html'"></div>
+    </div>
+    <div ng-switch-when="home">
+        <div ng-include src="'partials/homepage-about.html'"></div>
+    </div>
+    <div ng-switch-default>
+        <div ng-include src="'partials/homepage-about.html'"></div>
+    </div>
+</div>
 
 <div class="ng-view">
 </div>
