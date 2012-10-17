@@ -283,6 +283,10 @@ angular.module( 'bgc.directives', [] )
                         jQuery('#'+attrs.id).tooltip('hide');
                     });
                 });
+
+                scope.$on('$routeChangeStart', function(){
+                    jQuery('.tooltip').remove();
+                });
             }
         }
     }])
