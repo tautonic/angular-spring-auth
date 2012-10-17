@@ -44,7 +44,7 @@
                 <a class="logo" ng-href="#/home"><img src="images/GCEE_image_GCEE.png"></a>
                 <ul class="gradient menu">
                     <li><a ng-href="#/home/">Home</a></li>
-                    <li><a ng-href="#/profiles/">Faculty Fellows</a></li>
+                    <li><a ng-href="#/faculty/">Faculty Fellows</a></li>
                     <li><a ng-href="#/content/">Curriculum Content</a></li>
                     <li><a ng-href="#/network/">Network</a></li>
                     <li ng-show="!auth.isAuthenticated"><a ng-href="#/profile/">Sign In</a></li>
@@ -60,66 +60,32 @@
             </div>
         </div>
 
-        <div class="row banner">
-            <div class="span4">
-                <div class="banner-picture-frame-3col">
-                    <img src="images/faculty-fellows.jpg" alt="">
-                    <a ng-href="">
-                        <div read-more-hover class="read-more gradient">
-                            <p>Read More</p>
-                            <div class="read-more-arrow"></div>
-                        </div>
-                    </a>
-                </div>
-
-                <h3>FACULTY FELLOWS</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer libero urna, varius in
-                    pretium vitae, dictum a turpis. Phasellus in sem tellus, nec venenatis elit. Fusce
-                    iaculis, neque in
-                </p>
+        <div ng-switch on="banner">
+            <div ng-switch-when="none"></div>
+            <div ng-switch-when="faculty">
+                <div ng-include src="'partials/faculty-fellows-banner.html'"></div>
             </div>
-            <div class="span4">
-                <div class="banner-picture-frame-3col">
-                    <img src="images/curriculum-content.jpg" alt="">
-                    <a href="">
-                        <div class="read-more gradient">
-                            <p>Read More</p>
-                            <div class="read-more-arrow"></div>
-                        </div>
-                    </a>
-                </div>
-
-                <h3>CURRICULUM CONTENT</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer libero urna, varius in
-                    pretium vitae, dictum a turpis. Phasellus in sem tellus, nec venenatis elit. Fusce
-                    iaculis, neque in
-                </p>
+            <div ng-switch-when="curriculum">
+                <div ng-include src="'partials/curriculum-content-banner.html'"></div>
             </div>
-            <div class="span4">
-                <div class="banner-picture-frame-3col">
-                    <img src="images/gcee-network.jpg" alt="">
-                    <a href="">
-                        <div class="read-more gradient">
-                            <p>Read More</p>
-                            <div class="read-more-arrow"></div>
-                        </div>
-                    </a>
-                </div>
-
-                <h3>NETWORK</h3>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer libero urna, varius in
-                    pretium vitae, dictum a turpis. Phasellus in sem tellus, nec venenatis elit. Fusce
-                    iaculis, neque in
-                </p>
+            <div ng-switch-when="network">
+                <div ng-include src="'partials/network-banner.html'"></div>
+            </div>
+            <div ng-switch-default>
+                <div ng-include src="'partials/home-banner.html'"></div>
             </div>
         </div>
+
     </div>
 </div>
 
 <div id="header-separator"></div>
+
+<div class="about-section gradient">
+    <div class="about-section-mesh">
+
+    </div>
+</div>
 
 <div class="ng-view">
 </div>
