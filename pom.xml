@@ -193,8 +193,8 @@
                      hz.aws.enabled - true if deployed to amazon ec2 environment where multicast is
                          not supported.
                 -->
-                <hz.name>hz-babsongc-${environment}-${user.name}</hz.name>
-                <hz.multicast.enabled>true</hz.multicast.enabled>
+                <hz.name>hz-com.pykl.babsongc-${environment}</hz.name>
+                <hz.multicast.enabled>false</hz.multicast.enabled>
                 <hz.aws.enabled>false</hz.aws.enabled>
             </properties>
         </profile>

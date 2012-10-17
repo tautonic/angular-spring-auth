@@ -349,6 +349,33 @@ ul.menu li:last-child a {
     background: none;
 }
 
+ul.dropdown-menu {
+    padding: 0;
+    margin: 0;
+}
+
+ul.dropdown-menu li {
+    background: none;
+    float: none;
+    width: 100%;
+}
+
+ul.dropdown-menu li span {
+    display: inline-block;
+    width: 100%;
+    border: 1px solid black;
+    border-top: none;
+}
+
+ul.dropdown-menu li a {
+    margin: 10px 5px;
+}
+
+ul.dropdown-menu li:last-child a {
+    margin: 10px 5px;
+    background: none;
+}
+
 /***** Second Header *****/
 .header-info {
     margin: 0 -10px;

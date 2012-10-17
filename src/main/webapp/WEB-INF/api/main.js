@@ -976,7 +976,6 @@ app.put('/admin/users', function(req) {
         "workHistory" : req.postParams.workHistory
     };
 
-    log.info('PROFILE UPDATE PARAMS ' + JSON.stringify(req.postParams, null, 4));
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + req.postParams._id,
         method: 'PUT',
