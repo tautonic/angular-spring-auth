@@ -430,7 +430,7 @@ angular.module( 'bgc.directives', [] )
      <th x-cms="name-title"/>
    </example>
  */
-angular.module('bgc.directives', []).directive('cms', ['$http',
+angular.module('bgc.directives').directive('cms', ['$http',
     function ($http) {
         return {
             // Is applied as an element's attribute
