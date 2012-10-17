@@ -4,6 +4,43 @@
 
 
 angular.module( 'bgc.directives', [] )
+    .directive('thumbnail', function(){
+        return{
+            restrict: 'E',
+            templateUrl: 'partials/thumbnail-template.html',
+
+            link: function(scope, elm, attr){
+                scope.thumbnail = {
+                    image: 'url of generic profile image',
+                    text: '',
+                    url: '',
+                    type: 'profile-thumbnail large',
+                    showAnchor: false
+                }
+
+                if(attr.type === 'profile'){
+                    if(attr.image){
+                        scope.thumbnail.image = attr.image;
+                    }
+                    scope.thumbnail.url = '';
+                    scope.thumbnail.text = '';
+                    scope.thumbnail.type = 'profile-thumbnail';
+                }
+
+                if(attr.type === 'article'){
+                    if(attr.image){
+                        scope.thumbnail.image = attr.image;
+                    }else{
+                        scope.thumbnail.image = 'url of generic article image';
+                    }
+                    scope.thumbnail.text = 'Read More';
+                    scope.thumbnail.url = '#/content';
+                    scope.thumbnail.type = 'article-thumbnail';
+                    scope.thumbnail.showAnchor = true;
+                }
+            }
+        }
+    })
     .directive('readMoreHover', function(){
         return{
             restrict: 'A',

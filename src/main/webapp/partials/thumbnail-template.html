@@ -1,0 +1,12 @@
+<div class="new-picture-frame {{thumbnail.type}}">
+    <img src ="{{thumbnail.image}}" alt="">
+
+    <div ng-show="thumbnail.showAnchor">
+        <a ng-href="{{thumbnail.url}}">
+            <div read-more-hover class="read-more gradient">
+                <p>{{thumbnail.text}}</p>
+                <div class="read-more-arrow"></div>
+            </div>
+        </a>
+    </div>
+</div>

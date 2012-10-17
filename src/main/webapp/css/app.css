@@ -708,10 +708,12 @@ a:hover .read-more .read-more-arrow{
 a .read-more p{
     font-weight: normal;
     display: inline-block;
+    color: #ffffff;
 }
 
 .read-more-arrow{
-    margin: 0 0 -1px 9px;
+    margin: 6px 0 -1px 9px;
+    float: right;
     display: inline-block;
     width: 0px;
     height: 0px;
@@ -757,5 +759,19 @@ a .read-more p{
 
 .curriculum-about img{
     position: absolute;
+}
+
+.article-thumbnail{
+    width: 215px;
+    height: 169px;
+    display: inline-block;
+}
+
+.article-thumbnail .read-more{
+    top: 100px;
+}
+
+.article-thumbnail img{
+    margin: 7px 0 0 7px;
 }
 
