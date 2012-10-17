@@ -130,7 +130,7 @@ app.get('/:key', function (req, key) {
 
     log.debug('GET /api/cms/{}, locale: {}', key, locale);
 
-    var lookup = key + '/' + locale;
+    var lookup = key + '@' + locale;
     return json(map.get(key));
 });
 
@@ -164,7 +164,7 @@ app.post('/', function (req) {
             {"Content-Type": 'text/html'});
 
     // Write the new resource into the map using the key/locale as the map key
-    var lookup = resource.key + '/' + resource.locale;
+    var lookup = resource.key + '@' + resource.locale;
     var mapResources = store.getMap(INDEX, "resources");
     mapResources.put(lookup, resource);
 

@@ -40,10 +40,59 @@ var map = store.getMap(INDEX, 'resources');
  * GET /api/seedcms/:bundle
  */
 app.get('/:basename', function (req, basename) {
-    scanForBundles(basename);
+    // Get the names/locales of all resource bundles with the given basename on the
+    // classpath. For each bundle, read the properties and put into our CMS map (which
+    // will send content to Zocia).
+    scanForBundles(basename).forEach(function(bundle) {
+        readAndStoreProps(bundle);
+    });
+
     return json({status: 'ok'});
 });
 
+
+function readAndStoreProps(bundle) {
+    log.info('Processing bundle {}', JSON.stringify(bundle, null, 4));
+
+    var loader = java.lang.Thread.currentThread().getContextClassLoader();
+    var input = new java.io.InputStreamReader(loader.getResourceAsStream(bundle.name), 'UTF-8');
+    try {
+        var props = new java.util.Properties();
+        props.load(input);
+
+        var names = props.stringPropertyNames().iterator();
+        while (names.hasNext()) {
+            var name = names.next();
+            var value = props.getProperty(name);
+            if (value) {
+                var key = name + '@' + bundle.locale;
+                log.info('Adding key [{}] and value [{}] to cms map.', key, value);
+                var resource = makeResource(name, bundle.locale, key, value);
+                map.put(key, resource);
+            }
+        }
+    } finally {
+        input.close();
+    }
+}
+
+function makeResource(name, locale, key, value) {
+    // Value can contain a title and content. These are separated in the value using a
+    // pipe. (i.e.  Title|Some body content )
+    var vals = value.split('|');
+    var content = vals.slice(-1)[0];
+    var title = vals.shift() || '';
+
+    return {
+        key: name,
+        author: 'seedcms',
+        title: title,
+        format: 'aside',
+        locale: locale,
+        mimetype: 'text/html',
+        content: content
+    }
+}
 
 /**
  * This function will scan the classpath for all resource bundle files matching the basename.
@@ -59,20 +108,29 @@ function scanForBundles(basename) {
     );
 
     // Obtain an array of all files which match the naming of the resource bundles
-    var regex = '^' + basename + '(_\\w{2}(_\\w{2})?)?\\.properties$';
+    var regex = new RegExp('^' + basename + '(_\\w{2}(_\\w{2})?)?\\.properties$');
     var files = root.listFiles(
             new java.io.FilenameFilter(
                     {
                         accept: function (dir, name) {
-                            return name.matches(regex);
+                            log.info('Type: ', typeof name);
+                            return !!name.match(regex);
                         }
                     }
             )
     );
 
-    files.forEach(function(file) {
-        log.info('Found resource bundle: ' + file.name);
-    }
+    // todo: Use properties to determine the default locale instead of assuming english
+    return files.map(function(file) {
+        var re = file.name.match(regex).filter(function(part) {
+            return part != null;
+        });
+        log.info('Match on {} is {}', file.name, JSON.stringify(re, null, 4));
+        return {
+            name: file.name,
+            locale: re.length > 1 && re[1] ? re.slice(1).join('').substring(1) : 'en'
+        };
+    });
 }
 
 

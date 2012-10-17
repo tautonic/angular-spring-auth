@@ -479,6 +479,9 @@ angular.module('bgc.directives').directive('cms', ['$http',
             // Current content will be replaced
             replace: true,
             link: function (scope, element, attrs) {
+//                element.html('Hello');
+//                element.addClass('cms-missing');
+//                return;
                 // Read the initial content of the element, and if none exists add something
                 var initialContent = element.html() || 'CMS Problem';
                 // Wipe out any existing content

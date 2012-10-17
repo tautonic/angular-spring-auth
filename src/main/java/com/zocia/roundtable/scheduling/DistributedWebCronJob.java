@@ -68,10 +68,15 @@ public class DistributedWebCronJob implements ApplicationContextAware {
     public void run() {
         boolean canRun = _scheduleUtil.canRunTask(_localUrl, _seconds);
         if (canRun) {
-            LOG.info("Job [{}] will be executed by this instance.", _name);
-            invokeGetRequest(_localUrl);
+            LOG.debug("Job [{}] will be executed by this instance.", _name);
+            boolean success = invokeGetRequest(_localUrl);
+            if (!success) {
+                // Try again next time
+                LOG.debug("Job [{}] failed. Will be added back to queue.", _name);
+                _scheduleUtil.didNotRunTask(_localUrl, _seconds);
+            }
         } else {
-            LOG.info("Job [{}] will not be executed by this instance.", _name);
+            LOG.debug("Job [{}] will not be executed by this instance.", _name);
         }
     }
 
@@ -96,16 +101,17 @@ public class DistributedWebCronJob implements ApplicationContextAware {
 
     // Protecteds ------------------------------------------------------------------
 
-    protected void invokeGetRequest(String urlName) {
+    protected boolean invokeGetRequest(String urlName) {
         try {
-            URL url = new URL("http", "localhost", 9300, _contextPath + urlName);
-            get(url);
+            URL url = new URL(urlName);
+            return get(url);
         } catch (MalformedURLException e) {
             LOG.error("Failed to trigger CRON job", e);
         }
+        return false;
     }
 
-    protected void get(URL url) {
+    protected boolean get(URL url) {
         try {
             LOG.debug("Invoking URL: {}", url);
             URLConnection conn = url.openConnection();
@@ -114,11 +120,13 @@ public class DistributedWebCronJob implements ApplicationContextAware {
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             try {
                 while (in.readLine() != null) ;
+                return true;
             } finally {
                 in.close();
             }
         } catch (IOException e) {
             LOG.warn("Error while executing HTTP request: " + url, e);
         }
+        return false;
     }
 }

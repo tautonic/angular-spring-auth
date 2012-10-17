@@ -43,7 +43,9 @@ public class ScheduleUtil {
 
 
     public ScheduleUtil() {
+        LOG.info("Obtaining Hazelcast map for name: " + MAP_NAME);
         map = Hazelcast.getMap(MAP_NAME);
+        LOG.info("Obtaining Hazelcast map for name: " + MAP_NAME);
     }
 
     // Publics ---------------------------------------------------------------------
@@ -67,17 +69,18 @@ public class ScheduleUtil {
         try {
             final String timeKey = getTimeKey(interval);
             LOG.debug("Generated TimeKey [{}] for task [{}]", timeKey, taskType);
-            if (weAreFirst(taskType, timeKey)) {
-                return true;
-            }
+            return weAreFirst(taskType, timeKey);
         } catch (InterruptedException e) {
             LOG.error("Error while attempting to evaluate scheduled task [{}]", taskType);
         }
         return false;
     }
 
+    public void didNotRunTask(String taskType, long interval) {
+        map.evict(taskType);
+    }
 
-    // Protecteds ------------------------------------------------------------------
+        // Protecteds ------------------------------------------------------------------
 
     /**
      * A time key is a String representation of the snapshot time in ISO8601 format. It will be used as
