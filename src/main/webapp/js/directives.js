@@ -8,14 +8,16 @@ angular.module( 'bgc.directives', [] )
         return{
             restrict: 'E',
             templateUrl: 'partials/thumbnail-template.html',
-
+            scope: {},
             link: function(scope, elm, attr){
                 scope.thumbnail = {
                     image: 'url of generic profile image',
                     text: '',
                     url: '',
                     type: 'profile-thumbnail large',
-                    showAnchor: false
+                    showAnchor: false,
+                    size: 'large',
+                    facultyFellow: false
                 }
 
                 if(attr.type === 'profile'){
@@ -33,7 +35,12 @@ angular.module( 'bgc.directives', [] )
                     }else{
                         scope.thumbnail.image = 'url of generic article image';
                     }
-                    scope.thumbnail.text = 'Read More';
+
+                    if(attr.text){
+                        scope.thumbnail.text = attr.text;
+                    }else{
+                        scope.thumbnail.text = 'Read More';
+                    }
                     scope.thumbnail.url = '#/content';
                     scope.thumbnail.type = 'article-thumbnail';
                     scope.thumbnail.showAnchor = true;
