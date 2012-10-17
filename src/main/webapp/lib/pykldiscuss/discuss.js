@@ -17,8 +17,10 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
         $scope.$on('$routeChangeSuccess', function(){
             if($location.path() === '/content' ){
                 $rootScope.banner = 'curriculum';
+                $rootScope.about = 'curriculum';
             }else{
                 $rootScope.banner = 'network';
+                $rootScope.about = 'network';
             }
         });
 

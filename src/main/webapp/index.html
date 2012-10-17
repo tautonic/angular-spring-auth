@@ -121,9 +121,19 @@
 
 <div id="header-separator"></div>
 
-<div class="about-section gradient">
-    <div class="about-section-mesh">
-
+<div ng-switch on="about">
+    <div ng-switch-when="none"></div>
+    <div ng-switch-when="network">
+        <div ng-include src="'partials/network-about.html'"></div>
+    </div>
+    <div ng-switch-when="curriculum">
+        <div ng-include src="'partials/curriculum-about.html'"></div>
+    </div>
+    <div ng-switch-when="home">
+        <div ng-include src="'partials/homepage-about.html'"></div>
+    </div>
+    <div ng-switch-default>
+        <div ng-include src="'partials/homepage-about.html'"></div>
     </div>
 </div>
 

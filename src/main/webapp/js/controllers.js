@@ -24,6 +24,7 @@ function MyCtrl1($rootScope, $scope, $http, $location, $route) {
 
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'home';
+        $rootScope.about = 'home';
     });
 
     $scope.isEmpty = function () {
@@ -50,6 +51,7 @@ function MyCtrl1($rootScope, $scope, $http, $location, $route) {
 function facultyFellows($rootScope, $scope){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'faculty';
+        $rootScope.about = 'none';
     });
 }
 
