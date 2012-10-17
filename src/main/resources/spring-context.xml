@@ -15,5 +15,26 @@
             </list>
         </property>
     </bean>
+
+    <!-- *************************************************************************************** -->
+    <!-- Hazelcast Configuration                                                                 -->
+    <!-- *************************************************************************************** -->
+
+    <bean id="hzServer" class="com.zocia.platform.hazelcast.HazelcastBootstrap"
+          init-method="init" destroy-method="destroy">
+        <property name="mapStoreFactory" ref="mapStoreFactory" />
+    </bean>
+
+    <bean id="mapStoreFactory" class="com.zocia.platform.hazelcast.persistence.DelegatingMapStoreFactory" />
+
+    <bean id="zociaMapStore" scope="prototype" class="com.pykl.hazelcast.ZociaMapPersistence">
+        <property name="getAddress" value="${zociaUrl}/resources/bykey/%s" />
+        <property name="postAddress" value="${zociaUrl}/resources/" />
+        <property name="putAddress" value="${zociaUrl}/resources/" />
+        <property name="deleteAddress" value="${zociaUrl}/resources/bykey/%s" />
+    </bean>
+
+
+
 </beans>
 

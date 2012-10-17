@@ -20,6 +20,7 @@
         <trimpath-version>1.0.7</trimpath-version>
         <spring-version>3.1.2.RELEASE</spring-version>
         <springsec-version>3.1.1.RELEASE</springsec-version>
+        <store-version>1.0.6-SNAPSHOT</store-version>
     </properties>
 
     <prerequisites>
@@ -50,6 +51,22 @@
             <version>${trimpath-version}</version>
         </dependency>
 
+
+        <!-- SSJS Persistence -->
+
+        <dependency>
+            <groupId>com.zocia.platform</groupId>
+            <artifactId>store-js</artifactId>
+            <version>${store-version}</version>
+        </dependency>
+
+        <!-- Jetty's HTTP Client -->
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-client</artifactId>
+            <version>${jetty-version}</version>
+        </dependency>
 
         <!-- Logging -->
 
@@ -164,8 +181,69 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <!-- The URL to access web services from zocia platform. -->
+                <environment>dev</environment>
+
+                <!-- The URL to access web services from the gc platform. -->
                 <zociaUrl>http://localhost:9300/myapp/api</zociaUrl>
+
+                <!-- Hazelcast configuration
+                     hz.name - Specifies a unique name for the hazelcast cluster.
+                     hz.multicast.enabled - true if used to locate cluster members in an environment
+                         supporting multicast. (used only for development)
+                     hz.aws.enabled - true if deployed to amazon ec2 environment where multicast is
+                         not supported.
+                -->
+                <hz.name>hz-com.pykl.babsongc-${environment}</hz.name>
+                <hz.multicast.enabled>true</hz.multicast.enabled>
+                <hz.aws.enabled>false</hz.aws.enabled>
+            </properties>
+        </profile>
+        <profile>
+            <id>qa</id>
+            <properties>
+                <environment>qa</environment>
+                <!-- The URL to access web services from the gcplatform. -->
+                <zociaUrl>http://pykl.babsongc-qa/api</zociaUrl>
+
+                <!-- Hazelcast configuration
+                     hz.name - Specifies a unique name for the hazelcast cluster.
+                     hz.multicast.enabled - true if used to locate cluster members in an environment
+                         supporting multicast. (used only for development)
+                     hz.aws.enabled - true if deployed to amazon ec2 environment where multicast is
+                         not supported.
+                -->
+                <hz.name>hz-babsongc-${environment}</hz.name>
+                <hz.multicast.enabled>false</hz.multicast.enabled>
+                <hz.aws.enabled>true</hz.aws.enabled>
+
+                <!-- Amazon Web Services configuration
+                -->
+                <aws.access_key>${babsongc.qa.aws.access_key}</aws.access_key>
+                <aws.secret_key>${babsongc.qa.aws.secret_key}</aws.secret_key>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <environment>prod</environment>
+                <!-- The URL to access web services from the gcplatform. -->
+                <zociaUrl>http://pykl.babsongc-prod/api</zociaUrl>
+
+                <!-- Hazelcast configuration
+                     hz.name - Specifies a unique name for the hazelcast cluster.
+                     hz.multicast.enabled - true if used to locate cluster members in an environment
+                         supporting multicast. (used only for development)
+                     hz.aws.enabled - true if deployed to amazon ec2 environment where multicast is
+                         not supported.
+                -->
+                <hz.name>hz-babsongc-${environment}</hz.name>
+                <hz.multicast.enabled>false</hz.multicast.enabled>
+                <hz.aws.enabled>true</hz.aws.enabled>
+
+                <!-- Amazon Web Services configuration
+                -->
+                <aws.access_key>${babsongc.qa.aws.access_key}</aws.access_key>
+                <aws.secret_key>${babsongc.qa.aws.secret_key}</aws.secret_key>
             </properties>
         </profile>
     </profiles>
