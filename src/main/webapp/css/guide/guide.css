@@ -287,22 +287,6 @@ img.profile-image.small{
     height: 30px;
 }
 
-.counter-clockwise{
-    transform: rotate(-7deg);
-    -ms-transform: rotate(-7deg); /* IE 9 */
-    -webkit-transform: rotate(-7deg); /* Safari and Chrome */
-    -o-transform: rotate(-7deg); /* Opera */
-    -moz-transform: rotate(-7deg); /* Firefox */
-}
-
-.clockwise{
-    transform: rotate(7deg);
-    -ms-transform: rotate(7deg); /* IE 9 */
-    -webkit-transform: rotate(7deg); /* Safari and Chrome */
-    -o-transform: rotate(7deg); /* Opera */
-    -moz-transform: rotate(7deg); /* Firefox */
-}
-
 .close-modal{
     border-radius: 50%;
     border: #424242 2px solid;

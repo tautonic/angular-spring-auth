@@ -819,15 +819,35 @@ a .read-more p{
     position: absolute;
 }
 
-.profile-thumbnail.large{
-    -moz-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    -webkit-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    -o-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    -ms-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+.counter-clockwise{
+    transform: rotate(-10deg);
+    -ms-transform: rotate(-10deg); /* IE 9 */
+    -webkit-transform: rotate(-10deg); /* Safari and Chrome */
+    -o-transform: rotate(-10deg); /* Opera */
+    -moz-transform: rotate(-10deg); /* Firefox */
+}
+
+.clockwise{
+    transform: rotate(10deg);
+    -ms-transform: rotate(10deg); /* IE 9 */
+    -webkit-transform: rotate(10deg); /* Safari and Chrome */
+    -o-transform: rotate(10deg); /* Opera */
+    -moz-transform: rotate(10deg); /* Firefox */
+}
+
+.no-rotation{
+    transform: none;
+    -ms-transform: none;
+    -webkit-transform: none;
+    -o-transform: none;
+    -moz-transform: none;
+}
+
+.profile-thumbnail.large{    
     width: 155px;
     height: 165px;
 }
+
 .profile-thumbnail.large img{
     width: 135px;
     height: 135px;
@@ -835,11 +855,6 @@ a .read-more p{
 
 
 .profile-thumbnail.med{
-    -moz-transform: scale(1) rotate(10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    -webkit-transform: scale(1) rotate(10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    -o-transform: scale(1) rotate(10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    -ms-transform: scale(1) rotate(10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    transform: scale(1) rotate(10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
     width: 60px;
     height: 64px;
 }
@@ -851,17 +866,12 @@ a .read-more p{
 }
 
 .profile-thumbnail.small{
-    -moz-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    -webkit-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    -o-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    -ms-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-    transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
     width: 35px;
     height: 37px;
 }
 
 .profile-thumbnail.small img{
-    margin: 2px 0 0 2px;
+    margin: 3px 0 0 2px;
     width: 30px;
     height: 30px;
 }
