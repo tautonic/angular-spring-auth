@@ -26,6 +26,7 @@ public class RoundtableUser implements UserDetails {
     private String country;
 	private String profileType;
     private String accountType;
+    private String thumbnail;
 
 
     public RoundtableUser(Map user) {
@@ -36,6 +37,7 @@ public class RoundtableUser implements UserDetails {
         this.country = (String) user.get("country");
 		this.profileType = (String) user.get("profileType");
         this.accountType = (String) user.get("accountType");
+        this.thumbnail = (String) user.get("thumbnail");
 
 		if (user.get("name") != null) {
 			this.name = (String) ((Map) user.get("name")).get("fullName");

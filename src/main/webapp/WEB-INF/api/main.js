@@ -13,7 +13,7 @@ var {json} = require( 'ringo/jsgi/response' );
 var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
-var {ajax, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle} = require('articles');
+var {ajax, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle, returnRandomQuote} = require('articles');
 var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
 var {ActivityMixin} = require('activities');
 
@@ -56,6 +56,7 @@ function getRequest() {
 	return null;
 }
 
+
 /************************
  *
  * Website Get/Post functions
@@ -69,6 +70,10 @@ app.get( '/', function ( req ) {
 app.get( '/index.html', function ( req ) {
 	return homepage( req );
 } );
+
+app.get('/getquote', function(req) {
+    return json(returnRandomQuote());
+})
 
 /********** Articles and resources *********/
 
@@ -971,7 +976,6 @@ app.put('/admin/users', function(req) {
         "workHistory" : req.postParams.workHistory
     };
 
-    log.info('PROFILE UPDATE PARAMS ' + JSON.stringify(req.postParams, null, 4));
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + req.postParams._id,
         method: 'PUT',
@@ -1029,7 +1033,8 @@ function getUserDetails() {
             email: principal.email,
             country: principal.country,
             profileType: principal.profileType,
-            accountType: principal.accountType
+            accountType: principal.accountType,
+            thumbnail: principal.thumbnail
         },
         username: principal.username,
         "password": digest("secret").toLowerCase(),

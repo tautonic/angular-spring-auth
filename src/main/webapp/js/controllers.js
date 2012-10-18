@@ -11,6 +11,10 @@ function MyCtrl1($rootScope, $scope, $http, $location, $route) {
     $rootScope.content_query = '';
     $rootScope.discussion_query = '';
 
+    $http.get("api/getquote").success(function(data) {
+        $scope.quote = data.quote;
+    });
+
     var options = {
         data: JSON.stringify({
             filters: "likes comments discussions collaborators ideas companies profiles spMessages"

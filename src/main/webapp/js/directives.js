@@ -720,6 +720,15 @@ angular.module('bgc.directives')
                 }
             }
         }
+    })
+    .directive('dropdown', function(){
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, elm){
+                elm.dropdown();
+            }
+        }
     });
 
 /**

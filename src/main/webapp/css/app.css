@@ -220,6 +220,14 @@ body {
     background-image: linear-gradient(to bottom, #51a463, #127551);
 }
 
+.picture-frame {
+    padding: 5px;
+    background-color: white;
+    -webkit-box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);
+    /*box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.75);*/
+}
+
 h1, h2, h3, a, .quote {
     color: #117450;
     font-weight: normal;
@@ -338,6 +346,37 @@ ul.menu li a {
 
 ul.menu li:last-child a {
     margin: 10px;
+    background: none;
+}
+
+.ul.menu li.dropdown a {
+    margin-top: 5px;
+}
+
+ul.dropdown-menu {
+    padding: 0;
+    margin: 0;
+}
+
+ul.dropdown-menu li {
+    background: none;
+    float: none;
+    width: 100%;
+}
+
+ul.dropdown-menu li span {
+    display: inline-block;
+    width: 100%;
+    border: 1px solid black;
+    border-top: none;
+}
+
+ul.dropdown-menu li a {
+    margin: 10px 5px;
+}
+
+ul.dropdown-menu li:last-child a {
+    margin: 10px 5px;
     background: none;
 }
 

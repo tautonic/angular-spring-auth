@@ -48,12 +48,15 @@
                     <li><a ng-href="#/content/" x-cms="menu_3">{{cms.content}}</a></li>
                     <li><a ng-href="#/network/" x-cms="menu_4">{{cms.content}}</a></li>
                     <li ng-show="!auth.isAuthenticated"><a ng-href="#/profile/" x-cms="menu_signin">{{cms.content}}</a></li>
-                    <li ng-show="auth.isAuthenticated">
-                        <ul id="dropdown">
-                            <li><a ng-href="#/profile/">My profile</a></li>
-                            <li><a ng-href="#/profile/">Change Picture</a></li>
-                            <li ng-show="auth.isUserInRole('ROLE_ADMIN')"><a ng-href="#/admin/">Admin Panel</a></li>
-                            <li><a ng-href="#/profile/">Logout</a></li>
+                    <li ng-show="auth.isAuthenticated" class="dropdown" ng-dropdown><a data-toggle="dropdown">
+                        <div class="picture-frame small small-shadow">
+                            <img class="profile-image small" src="{{auth.principal.thumbnail}}">
+                        </div></a>
+                        <ul class="dropdown-menu">
+                            <li><span class="gradient"><a ng-href="#/profile/">My profile</a></span></li>
+                            <li><span class="gradient"><a ng-href="#/profile/">Change Picture</a></span></li>
+                            <li ng-show="auth.isUserInRole('ROLE_ADMIN')"><span class="gradient"><a ng-href="#/admin/">Admin Panel</a></span></li>
+                            <li><span class="gradient"><a ng-href="#/profile/">Logout</a></span></li>
                         </ul></li>
                     <li><a href="#"><img src="images/GCEE_images_header_searchIcon.png"></a></li>
                 </ul>
@@ -87,7 +90,7 @@
                     <input type="text" ng-model="discussion_query" class="span2 search-query">
                     <button type="submit" class="btn btn-success" ng-click="search_discussions()">Search Discussions</button>
                 </div>
-            </form>
+            </form> -->
 
             <div class="span4">
                 <div class="picture-frame">
@@ -140,18 +143,18 @@
 <div class="ng-view">
 </div>
 
-<div class="container">
-    <div class="footer">
+<div class="footer">
+    <div class="container">
         <div class="row">
             <div class="span2">
                 <img src="images/GCEE_image_BabsonGlobal.png">
             </div>
-            <div class="span8">
+            <!--<div class="span8">
                 <img src="images/shareicons.png">
             </div>
             <div class="span10 offset2">
                 Babson Park, Massachusetts 02457-0310 | 781-235-1200 | &copy; 2012 Babson College. All Rights Reserved
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
@@ -172,5 +175,6 @@
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.js"></script>
 <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tooltip.js"></script>
+<script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-dropdown.js"></script>
 </body>
 </html>
