@@ -685,7 +685,6 @@ ul.article-pagination li a {
 .footer {
     background-color: #c4c4c4;
     padding: 10px 20px;
-    margin: 0 -10px;
     color: #111;
 }
 
@@ -920,17 +919,18 @@ a .read-more p{
     position: relative;
 }
 
-.article p{
+.article p.article-brief{
     margin-bottom: 0;
 }
 
 .article p.article-meta{
     color: #005172;
+    margin-bottom: 0.5em;
 }
 
 .article-stats{
     position: relative;
-    top: -2px;
+    top: 2px;
     list-style-type: none;
     margin-left: 0;
 }
