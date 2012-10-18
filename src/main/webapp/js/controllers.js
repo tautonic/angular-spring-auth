@@ -3,9 +3,7 @@
 /* Controllers */
 
 
-function MyCtrl1($rootScope, $scope, $http, $location, $route) {
-	console.log("IN HOMEPAGE");
-
+function HomepageController($rootScope, $scope, $http, $location, $route) {
     $rootScope.query = '';
     $rootScope.faculty_query = '';
     $rootScope.content_query = '';
@@ -72,7 +70,7 @@ function MyCtrl2( $rootScope, $scope, $http, $log ) {
 
 	ping();
 }
-MyCtrl1.$inject = ['$rootScope', '$scope', '$http', '$location'];
+HomepageController.$inject = ['$rootScope', '$scope', '$http', '$location'];
 MyCtrl2.$inject = ['$rootScope', '$scope', '$http', '$log'];
 
 

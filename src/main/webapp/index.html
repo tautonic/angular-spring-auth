@@ -37,8 +37,6 @@
     <link rel="stylesheet" href="lib/angularui/select2/select2.css"/>
 </head>
 <body>
-<pykl-login ng-controller="LoginCtrl" ng-show="loginNeeded">
-</pykl-login>
 <div class="header">
     <div class="container">
         <div class="row">
@@ -49,7 +47,7 @@
                     <li><a ng-href="#/faculty/" x-cms="menu_2">{{cms.content}}</a></li>
                     <li><a ng-href="#/content/" x-cms="menu_3">{{cms.content}}</a></li>
                     <li><a ng-href="#/network/" x-cms="menu_4">{{cms.content}}</a></li>
-                    <li ng-show="!auth.isAuthenticated"><a ng-href="#/profile/" x-cms="menu_signin">{{cms.content}}</a></li>
+                    <li ng-show="!auth.isAuthenticated"><a ng-href="#/login/" x-cms="menu_signin">Login{{cms.content}}</a></li>
                     <li ng-show="auth.isAuthenticated" class="dropdown" ng-dropdown><a data-toggle="dropdown">
                         <thumbnail
                             type="profile"
