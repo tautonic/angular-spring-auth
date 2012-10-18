@@ -1033,7 +1033,8 @@ function getUserDetails() {
             email: principal.email,
             country: principal.country,
             profileType: principal.profileType,
-            accountType: principal.accountType
+            accountType: principal.accountType,
+            thumbnail: principal.thumbnail
         },
         username: principal.username,
         "password": digest("secret").toLowerCase(),
