@@ -63,9 +63,9 @@ function readAndStoreProps(bundle) {
         var names = props.stringPropertyNames().iterator();
         while (names.hasNext()) {
             var name = names.next();
-            if (propExists(name, bundle.locale)) {
+            if (!propExists(name, bundle.locale)) {
                 var value = props.getProperty(name);
-                log.info('Property does not exist: {}@{}, value: ' + value, name, bundle.locale);
+                log.info('Property does not exist: {}@{}, value: {}', name, bundle.locale, value);
                 if (value) {
                     var key = name + '@' + bundle.locale;
                     log.info('Adding key [{}] and value [{}] to cms map.', key, value);
@@ -82,10 +82,15 @@ function readAndStoreProps(bundle) {
 function propExists(key, locale) {
     var lookup = key;
     if (locale) lookup +=  '@' + locale;
-    var resource = map.get(lookup);
-    log.info('Found resource [{}]? {}, exist? {}', lookup, JSON.stringify(resource),
-            resource && resource.locale === locale);
-    return resource && resource.locale === locale;
+    var resources = map.get(lookup);
+
+    log.info('Found resource [{}]? {}', lookup, JSON.stringify(resources));
+    if (!Array.isArray(resources) || resources.length === 0) return false;
+
+    var resource = resources.shift();
+    log.info('Does resource locale [{}] match requested locale [{}]? {}',
+            resource.locale, locale, !!(resource.locale === locale));
+    return resource.locale === locale;
 }
 
 function makeResource(name, locale, key, value) {
