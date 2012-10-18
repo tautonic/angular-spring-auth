@@ -51,9 +51,12 @@
                     <li><a ng-href="#/network/" x-cms="menu_4">{{cms.content}}</a></li>
                     <li ng-show="!auth.isAuthenticated"><a ng-href="#/profile/" x-cms="menu_signin">{{cms.content}}</a></li>
                     <li ng-show="auth.isAuthenticated" class="dropdown" ng-dropdown><a data-toggle="dropdown">
-                        <div class="picture-frame small small-shadow">
-                            <img class="profile-image small" src="{{auth.principal.thumbnail}}">
-                        </div></a>
+                        <thumbnail
+                            type="profile"
+                            size="med"
+                            rotation="clockwise"
+                            image="images/rosie.jpeg"/>
+                        </a>
                         <ul class="dropdown-menu">
                             <li><span class="gradient"><a ng-href="#/profile/">My profile</a></span></li>
                             <li><span class="gradient"><a ng-href="#/profile/">Change Picture</a></span></li>

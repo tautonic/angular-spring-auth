@@ -111,7 +111,52 @@
 
         <div class="span4">
             <div class="activity-stream">
-
+                <div class="activity-stream-header">
+                    <thumbnail
+                        type="profile"
+                        size="med"
+                        rotation="none"
+                        image="images/rosie.jpeg" />
+                    <h4>LOGGED IN AS:</h4>
+                </div>
+                <div class="activity-stream-content">
+                    <p class="activity-stream-owner">Rosie O'Donnell</p>
+                    <ul class="activity-stream-items">
+                        <li class="activity-stream-item">
+                            <div class="activity-item-content clearfix">
+                                <div class="left">
+                                    <thumbnail type="profile" size="small" rotation="none" />
+                                </div>
+                                <div class="right">
+                                    <p><i>Posted a new comment to your discussion</i></p>
+                                    <p><span class="activity-item-owner">Sean Grey</span> - <span class="muted">2 hours ago</span></p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="activity-stream-item">
+                            <div class="activity-item-content mine clearfix">
+                                <div class="left">
+                                    <thumbnail type="profile" size="small" rotation="none" image="images/rosie.jpeg" />
+                                </div>
+                                <div class="right">
+                                    <p><i>Posted a new comment to your discussion</i></p>
+                                    <p><span class="activity-item-owner">You</span> - <span class="muted">2 hours ago</span></p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="activity-stream-item">
+                            <div class="activity-item-content clearfix">
+                                <div class="left">
+                                    <thumbnail type="profile" size="small" rotation="none" />
+                                </div>
+                                <div class="right">
+                                    <p><i>Posted a new comment about the <a href="">Business in a Bundle</a> document</i></p>
+                                    <p><span class="activity-item-owner">Sean Grey</span> - <span class="muted">2 hours ago</span></p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <!--<div class="span3" ng-show="auth.isAuthenticated">
