@@ -720,7 +720,9 @@ angular.module('bgc.directives')
                 }
             }
         }
-    })
+    });
+
+angular.module('bgc.directives')
     .directive('dropdown', function(){
         return {
             restrict: 'A',
