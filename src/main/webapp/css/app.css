@@ -775,3 +775,54 @@ a .read-more p{
     margin: 7px 0 0 7px;
 }
 
+.profile-thumbnail{
+    display: inline-block;
+    position: absolute;
+}
+
+.profile-thumbnail.large{
+    -moz-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -webkit-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -o-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -ms-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    width: 155px;
+    height: 165px;
+}
+.profile-thumbnail.large img{
+    width: 135px;
+    height: 135px;
+}
+
+
+.profile-thumbnail.med{
+    -moz-transform: scale(1) rotate(10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -webkit-transform: scale(1) rotate(10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -o-transform: scale(1) rotate(10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -ms-transform: scale(1) rotate(10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    transform: scale(1) rotate(10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    width: 60px;
+    height: 64px;
+}
+
+.profile-thumbnail.med img{
+    margin: 5px 0 0 5px;
+    width: 50px;
+    height: 50px;
+}
+
+.profile-thumbnail.small{
+    -moz-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -webkit-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -o-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -ms-transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    transform: scale(1) rotate(-10deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    width: 35px;
+    height: 37px;
+}
+
+.profile-thumbnail.small img{
+    margin: 2px 0 0 2px;
+    width: 30px;
+    height: 30px;
+}

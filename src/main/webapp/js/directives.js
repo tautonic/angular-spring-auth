@@ -21,15 +21,17 @@
  * @param {String} facultyFellow    Does not need a value. If present will display a small globe in the upper right
  *                                  corner of a profile thumbnail. Used with profile type
  *
- * All parameters are optional. If none are given, the directive will generate
- * a profile thumbnail with a generic image that's 135px square. Also, some parameters will be ignored
- * depending on the type of thumbnail you intend to generate. For example, if you want to
- * generate a profile thumbnail and include text and url attributes, they will be ignored since a
- * profile thumbnail does not use any of those attributes. If you list a size attribute for
- * an article thumbnail it will be ignored because article thumbnails have one size.
+ * If no parameters are given, the directive will generate a profile thumbnail with a generic
+ * image that's 135px square rotated 10 degrees clockwise. Some parameters will be ignored
+ * depending on the type of thumbnail you intend to generate. For example, if you want to generate
+ * a profile thumbnail and include text and url attributes, they will be ignored since a profile
+ * thumbnail does not use any of those attributes. If you list a size attribute for an article
+ * thumbnail it will be ignored because article thumbnails have one size.
  *
  * @example
  <example>
+ <thumbnail />
+
  <thumbnail
     type="profile"
     size="large"
@@ -52,7 +54,7 @@ angular.module( 'bgc.directives', [] )
             scope: {},
             link: function(scope, elm, attr){
                 scope.thumbnail = {
-                    image: 'url of generic profile image',
+                    image: 'images/GCEE_image_profileMale_135x135.jpeg',
                     text: '',
                     url: '',
                     type: 'profile-thumbnail large',
@@ -62,12 +64,23 @@ angular.module( 'bgc.directives', [] )
                 }
 
                 if(attr.type === 'profile'){
+                    if(attr.size){
+                        switch(attr.size)
+                        {
+                            case 'med':
+                                scope.thumbnail.type = 'profile-thumbnail ' + attr.size;
+                                break;
+                            case 'small':
+                                scope.thumbnail.type = 'profile-thumbnail ' + attr.size;
+                                break;
+                        }
+                    }
+
                     if(attr.image){
                         scope.thumbnail.image = attr.image;
                     }
-                    scope.thumbnail.url = '';
-                    scope.thumbnail.text = '';
-                    scope.thumbnail.type = 'profile-thumbnail';
+
+                    return;
                 }
 
                 if(attr.type === 'article'){
@@ -85,6 +98,8 @@ angular.module( 'bgc.directives', [] )
                     scope.thumbnail.url = '#/content';
                     scope.thumbnail.type = 'article-thumbnail';
                     scope.thumbnail.showAnchor = true;
+
+                    return;
                 }
             }
         }
