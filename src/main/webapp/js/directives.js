@@ -849,9 +849,11 @@ angular.module('bgc.directives').directive('cms', ['$http',
                                     // Populate the HTML element with content
                                     scope.cms = data[0];
                                 } else {
+                                    scope.cms = 'CMS CONTENT NOT FOUND!';
                                 }
                             })
                             .error(function (data, status, headers, config) {
+                                scope.cms = 'CMS CONTENT NOT FOUND!';
                             });
                 }
             }
