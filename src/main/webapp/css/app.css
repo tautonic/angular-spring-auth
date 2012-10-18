@@ -197,7 +197,7 @@ form[name="editProfile"] legend + .control-group{
 
 /***** Basics *****/
 body {
-    background-color: #b7b6b4;
+    background-color: #ffffff;
 }
 
 .container {
@@ -205,10 +205,6 @@ body {
 }
 
 .container.content {
-    background-color: white;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
     padding-top: 3em;
 }
 
@@ -897,4 +893,19 @@ a .read-more p{
     width: 20px;
     height: 20px;
     background: url(../images/GCEE_sprite.png) -9px -8px no-repeat;
+}
+
+.articles h2{
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 2em;
+}
+
+.articles{
+    margin-bottom: 3em;
+}
+
+.articles .article{
+    border-bottom: 1px solid #E7EBEA;
+    padding: 1em 0;
 }

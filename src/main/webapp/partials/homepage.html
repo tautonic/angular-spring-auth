@@ -8,116 +8,35 @@
     </div>
     <div class="row">
         <div class="span8">
-            <h2>Global Consortium News</h2>
-            <hr>
             <div class="articles">
-                <div class="article">
-                    <thumbnail type="content" text="Preview" />
-
-                    <div class="content">
-                        <h3>Article headline</h3>
-                        <div class="byline">by author, 09/09/2012</div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.
-                            Nunc auctor lectus laoreet ipsum fringilla sit amet vehicula mauris posuere. Phasellus eu velit eu leo fringilla ullamcorper.</p>
-                        <div class="social">Tweet | Like</div>
-                    </div>
-                    <hr>
-                </div>
+                <h2>Global Consortium News</h2>
+                <hr>
 
                 <div class="article">
-                    <thumbnail type="article" text="Read Less" />
-
-                    <div class="content">
-                        <h3>Article headline</h3>
-                        <div class="byline">by author, 09/09/2012</div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.
-                            Nunc auctor lectus laoreet ipsum fringilla sit amet vehicula mauris posuere. Phasellus eu velit eu leo fringilla ullamcorper.</p>
-                        <div class="social">Tweet | Like</div>
-                    </div>
-                    <hr>
+                    <thumbnail
+                        type="article"
+                        url="#/12345678" />
                 </div>
 
                 <div class="article">
                     <thumbnail
-                        type="profile"
-                        rotate="counter-clockwise"
-                        size="large"
-                        image="images/rosie.jpeg" />
-
-                    <div class="content">
-                        <h3>Article headline</h3>
-                        <div class="byline">by author, 09/09/2012</div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.
-                            Nunc auctor lectus laoreet ipsum fringilla sit amet vehicula mauris posuere. Phasellus eu velit eu leo fringilla ullamcorper.</p>
-                        <div class="social">Tweet | Like</div>
-                    </div>
-                    <hr>
+                        type="article"
+                        text="Read More"
+                        url="#/article/12345678"
+                        image="images/homepage-article-image-one.jpg" />
                 </div>
 
                 <div class="article">
                     <thumbnail
-                        type="profile"
-                        rotate="clockwise"
-                        size="med"
-                        image="images/rosie.jpeg" />
-
-                    <div class="content">
-                        <h3>Article headline</h3>
-                        <div class="byline">by author, 09/09/2012</div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.
-                            Nunc auctor lectus laoreet ipsum fringilla sit amet vehicula mauris posuere. Phasellus eu velit eu leo fringilla ullamcorper.</p>
-                        <div class="social">Tweet | Like</div>
-                    </div>
-                    <hr>
-                </div>
-
-                <div class="article">
-                    <thumbnail
-                        type="profile"
-                        size="small"
-                        rotate="no-rotation"
-                        image="images/rosie.jpeg" />
-
-                    <div class="content">
-                        <h3>Article headline</h3>
-                        <div class="byline">by author, 09/09/2012</div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.
-                            Nunc auctor lectus laoreet ipsum fringilla sit amet vehicula mauris posuere. Phasellus eu velit eu leo fringilla ullamcorper.</p>
-                        <div class="social">Tweet | Like</div>
-                    </div>
-                    <hr>
-                </div>
-
-                <div class="article">
-                    <thumbnail
-                            type="article"
-                            text="Read More"
-                            url="#/content/12345678"
-                            image="images/row-of-students.jpg" />
-
-                    <div class="content">
-                        <h3>Article headline</h3>
-                        <div class="byline">by author, 09/09/2012</div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.
-                            Nunc auctor lectus laoreet ipsum fringilla sit amet vehicula mauris posuere. Phasellus eu velit eu leo fringilla ullamcorper. Vivamus dapibus venenatis turpis ac suscipit. Sed eu leo dolor.
-                            Nullam dui lectus, blandit vel feugiat non, suscipit nec mauris.</p>
-                        <div class="social">Tweet | Like</div>
-                    </div>
-                    <hr>
+                        type="article"
+                        text="Read More"
+                        url="#/article/12345678"
+                        image="images/row-of-students.jpg" />
                 </div>
             </div>
-            <ul class="article-pagination gradient">
-                <!--<li><a href="#" class="left-arrow">&nbsp;</a></li>-->
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#" class="right-arrow">&nbsp;</a></li>
-            </ul>
         </div>
 
-        <div class="span3" ng-show="auth.isAuthenticated">
+        <!--<div class="span3" ng-show="auth.isAuthenticated">
             <div class="activity-stream">
                 <div class="picture-frame">
                     <img src="images/190x140.gif" width="50">
@@ -142,14 +61,14 @@
                     <a ng-href="#">Earlier today...</a>
                 </div>
             </div>
-        </div>
-        <div class="span3 sign-up" ng-show="!auth.isAuthenticated">
+        </div>-->
+        <!--<div class="span3 sign-up" ng-show="!auth.isAuthenticated">
             <div class="details">
                 <h3><a href="#/profile/">Sign up today</a></h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.</p>
                 <h4>Your Email</h4>
                 <input type="email"><a href="#/profile/" class="gradient"><img src="images/GCEE_images_arrowRight.png"></a>
             </div>
-        </div>
+        </div>-->
     </div>
 </div>
