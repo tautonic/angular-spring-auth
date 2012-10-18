@@ -916,6 +916,55 @@ a .read-more p{
     line-height: 23px;
 }
 
+.article{
+    position: relative;
+}
+
+.article p{
+    margin-bottom: 0;
+}
+
 .article p.article-meta{
     color: #005172;
 }
+
+.article-stats{
+    position: relative;
+    top: -2px;
+    list-style-type: none;
+    margin-left: 0;
+}
+
+.article-stats li{
+    display: inline;
+    padding-right: 0.5em;
+}
+
+i.likes,
+i.views,
+i.comments{
+    background: url('../images/GCEE_sprite.png') 10px 10px no-repeat;
+    width: 13px;
+    height: 13px;
+    display: inline-block;
+}
+
+i.likes{
+    background-position: -45px -25px;
+}
+
+i.views{
+    background-position: -45px -46px;
+}
+
+i.comments{
+    background-position: -45px -66px;
+}
+
+.article-tweet-button{
+    position: relative;
+    top: 4px;
+    width: 77px;
+    display: inline-block;
+}
+
