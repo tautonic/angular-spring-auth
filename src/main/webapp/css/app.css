@@ -197,7 +197,7 @@ form[name="editProfile"] legend + .control-group{
 
 /***** Basics *****/
 body {
-    background-color: #b7b6b4;
+    background-color: #ffffff;
 }
 
 .container {
@@ -205,10 +205,6 @@ body {
 }
 
 .container.content {
-    background-color: white;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
     padding-top: 3em;
 }
 
@@ -689,7 +685,6 @@ ul.article-pagination li a {
 .footer {
     background-color: #c4c4c4;
     padding: 10px 20px;
-    margin: 0 -10px;
     color: #111;
 }
 
@@ -898,3 +893,157 @@ a .read-more p{
     height: 20px;
     background: url(../images/GCEE_sprite.png) -9px -8px no-repeat;
 }
+
+.articles h2{
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 2em;
+}
+
+.articles{
+    margin-bottom: 3em;
+}
+
+.articles .article{
+    border-bottom: 1px solid #E7EBEA;
+    padding: 1em 0;
+}
+
+.article h3{
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 23px;
+}
+
+.article{
+    position: relative;
+}
+
+.article p.article-brief{
+    margin-bottom: 0;
+}
+
+.article p.article-meta{
+    color: #005172;
+    margin-bottom: 0.5em;
+}
+
+.article-stats{
+    position: relative;
+    top: 2px;
+    list-style-type: none;
+    margin-left: 0;
+}
+
+.article-stats li{
+    display: inline;
+    padding-right: 0.5em;
+}
+
+i.likes,
+i.views,
+i.comments{
+    background: url('../images/GCEE_sprite.png') 10px 10px no-repeat;
+    width: 13px;
+    height: 13px;
+    display: inline-block;
+}
+
+i.likes{
+    background-position: -45px -25px;
+}
+
+i.views{
+    background-position: -45px -46px;
+}
+
+i.comments{
+    background-position: -45px -66px;
+}
+
+.article-tweet-button{
+    position: relative;
+    top: 4px;
+    width: 77px;
+    display: inline-block;
+}
+
+.activity-stream{
+    margin-top: 4em;
+    border: 1px solid #E7EBEA;
+}
+
+.activity-stream-header{
+    position: relative;
+    background-color: #cecece;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#cecece), to(#b5b5b5));
+    background-image: -webkit-linear-gradient(top, #cecece, #b5b5b5);
+    background-image: -moz-linear-gradient(top, #cecece, #b5b5b5);
+    background-image: -o-linear-gradient(top, #cecece, #b5b5b5);
+    background-image: linear-gradient(to bottom, #cecece, #b5b5b5);
+    border-bottom: 1px solid #E7EBEA;
+}
+
+.activity-stream-header .profile-thumbnail{
+    left: 0.75em;
+    top: 1.25em;
+}
+
+.activity-stream-header h4{
+    margin-top: 0;
+    padding: 1em 0 0.5em 5em;
+    color: #ffffff;
+}
+
+.activity-stream-items{
+    list-style-type: none;
+    position: relative;
+    margin-left: 0
+}
+
+.activity-stream-owner{
+    color: #005172;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.5em 0 1em 0;
+    margin: 0 0 0 1.5em;
+    font-size: 20px;
+}
+
+.activity-stream-item{
+    border-top: 1px solid #E7EBEA;
+}
+
+.activity-item-content{
+    padding: 0.5em 0.75em 0.5em 0.8em;
+}
+
+.activity-item-content.mine{
+    background-color: #ffffff;
+}
+
+.activity-item-content .left{
+    width: 20%;
+    float: left;
+}
+
+.activity-item-content .right{
+    width: 80%;
+    float: left;
+}
+
+.activity-item-content .right a{
+    color: #eeaf00;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.activity-item-content .left .profile-thumbnail{
+    position: static;
+}
+
+.activity-item-owner{
+    color: #005172;
+    font-weight: bold;
+}
+

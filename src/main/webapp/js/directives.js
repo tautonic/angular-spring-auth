@@ -15,7 +15,7 @@
  * @element ELEMENT
  * @param {String}  type            Will accept "profile", "article" or "content"
  * @param {String}  size            Will accept "large", "med", or "small". Used with profile type
- * @param {String}  rotation        Will accept "clockwise", "counter-clockwise" or "no-rotation" Used with profile type
+ * @param {String}  rotation        Will accept "clockwise", "counter-clockwise" or "none" Used with profile type
  * @param {String}  text            Text to display in the hyperlink. Used with article and content types
  * @param {String}  url             The url of the link to navigate to. Used with article and content types
  * @param {String}  image           The url of the image to be used for the thumbnail.
@@ -67,8 +67,9 @@ angular.module( 'bgc.directives', [] )
                 }
 
                 if(attr.type === 'profile'){
-                    if(attr.size && attr.rotate){
-                        scope.thumbnail.type = 'profile-thumbnail ' + attr.size + ' ' + attr.rotate;
+                    if(attr.size && attr.rotation){
+                        if(attr.rotation === 'none') attr.rotation = 'no-rotation';
+                        scope.thumbnail.type = 'profile-thumbnail ' + attr.size + ' ' + attr.rotation;
                     }
 
                     if(attr.image){
