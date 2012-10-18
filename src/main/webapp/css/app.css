@@ -909,3 +909,13 @@ a .read-more p{
     border-bottom: 1px solid #E7EBEA;
     padding: 1em 0;
 }
+
+.article h3{
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 23px;
+}
+
+.article p.article-meta{
+    color: #005172;
+}
