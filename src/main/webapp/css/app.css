@@ -751,9 +751,9 @@ a .read-more p{
 }
 
 .read-more-arrow{
-    margin: 6px 0 -1px 9px;
-    float: right;
-    display: inline-block;
+    position: absolute;
+    top: 16px;
+    right: 11px;
     width: 0px;
     height: 0px;
     border-style: solid;
@@ -864,4 +864,27 @@ a .read-more p{
     margin: 2px 0 0 2px;
     width: 30px;
     height: 30px;
+}
+
+.content-thumbnail{
+    width: 145px;
+    height: 165px;
+}
+
+.content-thumbnail .read-more{
+    top: 92px;
+}
+
+.content-thumbnail img{
+    width: 126px;
+    height: 138px;
+}
+
+.content-thumbnail .preview-lens{
+    position: absolute;
+    top: 10px;
+    right: 9px;
+    width: 20px;
+    height: 20px;
+    background: url(../images/GCEE_sprite.png) -9px -8px no-repeat;
 }

@@ -55,12 +55,13 @@ angular.module( 'bgc.directives', [] )
             link: function(scope, elm, attr){
                 scope.thumbnail = {
                     image: 'images/GCEE_image_profileMale_135x135.jpeg',
-                    text: '',
+                    text: 'Read More',
                     url: '',
                     type: 'profile-thumbnail large',
-                    showAnchor: false,
+                    anchor: false,
                     size: 'large',
-                    facultyFellow: false
+                    facultyFellow: false,
+                    decoration: 'none'
                 }
 
                 if(attr.type === 'profile'){
@@ -83,21 +84,37 @@ angular.module( 'bgc.directives', [] )
                     return;
                 }
 
-                if(attr.type === 'article'){
+                if(attr.type === 'article' || attr.type === 'content'){
+                    var defaultImage = 'images/document-default.jpg';
+                    var thumbnailType = 'content-thumbnail';
+                    var thumbnailUrl = '#/content';
+
+                    scope.thumbnail.anchor = true;
+                    scope.thumbnail.decoration = 'lens';
+                    scope.thumbnail.url = '#/content';
+
+                    if(attr.type === 'article'){
+                        defaultImage = 'images/row-of-columns.jpg';
+                        thumbnailType = 'article-thumbnail';
+                        thumbnailUrl = '#/article';
+                        scope.thumbnail.decoration = 'arrow';
+                    }
+
+                    scope.thumbnail.image = defaultImage;
+                    scope.thumbnail.type = thumbnailType;
+                    scope.thumbnail.url = thumbnailUrl;
+
                     if(attr.image){
                         scope.thumbnail.image = attr.image;
-                    }else{
-                        scope.thumbnail.image = 'url of generic article image';
                     }
 
                     if(attr.text){
                         scope.thumbnail.text = attr.text;
-                    }else{
-                        scope.thumbnail.text = 'Read More';
                     }
-                    scope.thumbnail.url = '#/content';
-                    scope.thumbnail.type = 'article-thumbnail';
-                    scope.thumbnail.showAnchor = true;
+
+                    if(attr.url){
+                        scope.thumbnail.url = attr.url;
+                    }
 
                     return;
                 }
