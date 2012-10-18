@@ -704,7 +704,8 @@ angular.module('bgc.directives')
                     }
                 }
             }
-        });
+        }
+    });
 
 /**
  * @ngdoc directive
