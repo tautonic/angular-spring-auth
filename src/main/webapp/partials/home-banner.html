@@ -12,40 +12,30 @@
         <h3>{{cms.title}}</h3>
         <p>{{cms.content}}</p>
     </div>
-    <div class="span4">
+    <div class="span4" x-cms="home_banner_col2">
         <div class="new-picture-frame banner-3-col">
-            <img src="images/curriculum-content.jpg" alt="">
+            <img src="{{cms.thumbnail}}" alt="{{cms.title}}">
             <a ng-href="#/content">
                 <div read-more-hover class="read-more gradient">
-                    <p>Read More</p>
+                    <p x-cms="read_more">{{cms.content}}</p>
                     <div class="read-more-arrow"></div>
                 </div>
             </a>
         </div>
-
-        <h3>CURRICULUM CONTENT</h3>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer libero urna, varius in
-            pretium vitae, dictum a turpis. Phasellus in sem tellus, nec venenatis elit. Fusce
-            iaculis, neque in
-        </p>
+        <h3>{{cms.title}}</h3>
+        <p>{{cms.content}}</p>
     </div>
-    <div class="span4">
+    <div class="span4" x-cms="home_banner_col3">
         <div class="new-picture-frame banner-3-col">
-            <img src="images/gcee-network.jpg" alt="">
+            <img src="{{cms.thumbnail}}" alt="{{cms.title}}">
             <a ng-href="#/network">
                 <div read-more-hover class="read-more gradient">
-                    <p>Read More</p>
+                    <p x-cms="read_more">{{cms.content}}</p>
                     <div class="read-more-arrow"></div>
                 </div>
             </a>
         </div>
-
-        <h3>NETWORK</h3>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer libero urna, varius in
-            pretium vitae, dictum a turpis. Phasellus in sem tellus, nec venenatis elit. Fusce
-            iaculis, neque in
-        </p>
+        <h3>{{cms.title}}</h3>
+        <p>{{cms.content}}</p>
     </div>
 </div>

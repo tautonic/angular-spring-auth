@@ -53,7 +53,7 @@ app.get('/:basename', function (req, basename) {
 
 
 function readProps(bundle) {
-    log.info('Reading bundle {}', JSON.stringify(bundle, null, 4));
+    log.debug('Reading bundle {}', JSON.stringify(bundle, null, 4));
     var result = {};
 
     var loader = java.lang.Thread.currentThread().getContextClassLoader();
@@ -71,10 +71,10 @@ function readProps(bundle) {
                         'must have only one period.', bundle.name, name);
             }
 
-            var key = result[name];
-            if (!key) result[name] = {};
+            var key = result[nameParts[0]];
+            if (!key) key = result[nameParts[0]] = {};
 
-            key[nameParts[0]][nameParts[1]] = props.getProperty(name);
+            key[nameParts[1]] = props.getProperty(name);
         }
     } finally {
         input.close();
@@ -82,14 +82,14 @@ function readProps(bundle) {
     return result;
 }
 function writeProps(props, locale) {
-    log.info('Writing props: {}, locale: {}', JSON.stringify(props, null, 4), locale);
+    log.debug('Writing props: {}, locale: {}', JSON.stringify(props, null, 4), locale);
 
     Object.keys(props).forEach(function(name) {
         if (!propExists(name, locale)) {
             var record = props[name];
-            log.info('Property does not exist: {}@{}, value: {}', name, locale, JSON.stringify(record));
+            log.debug('Property does not exist: {}@{}, value: {}', name, locale, JSON.stringify(record));
             var key = name + '@' + locale;
-            log.info('Adding key [{}] and value [{}] to cms map.', key, record);
+            log.debug('Adding key [{}] and value [{}] to cms map.', key, record);
             var resource = makeResource(name, locale, record);
             map.put(key, resource);
         }
@@ -101,11 +101,11 @@ function propExists(key, locale) {
     if (locale) lookup +=  '@' + locale;
     var resources = map.get(lookup);
 
-    log.info('Found resource [{}]? {}', lookup, JSON.stringify(resources));
+    log.debug('Found resource [{}]? {}', lookup, JSON.stringify(resources));
     if (!Array.isArray(resources) || resources.length === 0) return false;
 
     var resource = resources.shift();
-    log.info('Does resource locale [{}] match requested locale [{}]? {}',
+    log.debug('Does resource locale [{}] match requested locale [{}]? {}',
             resource.locale, locale, !!(resource.locale === locale));
     return resource.locale === locale;
 }
@@ -114,6 +114,7 @@ function makeResource(name, locale, record) {
     // Record will be a JSON object with properties { title: 'text', content: 'more text' }
     var result = {
         key: name,
+        title: '',
         author: 'seedcms',
         format: 'aside',
         locale: locale,
@@ -144,7 +145,6 @@ function scanForBundles(basename) {
             new java.io.FilenameFilter(
                     {
                         accept: function (dir, name) {
-                            log.info('Type: ', typeof name);
                             return !!name.match(regex);
                         }
                     }
@@ -156,7 +156,7 @@ function scanForBundles(basename) {
         var re = file.name.match(regex).filter(function(part) {
             return part != null;
         });
-        log.info('Match on {} is {}', file.name, JSON.stringify(re, null, 4));
+        log.debug('Match on {} is {}', file.name, JSON.stringify(re, null, 4));
         return {
             name: file.name,
             locale: re.length > 1 && re[1] ? re.slice(1).join('').substring(1) : 'en'
