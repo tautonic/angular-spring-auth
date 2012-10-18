@@ -2,7 +2,34 @@
 
 /* Directives */
 
-
+/**
+ * @ngdoc directive
+ * @name bgc.directives:cms
+ *
+ * @description
+ * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
+ * resulting content within the element it is associated. Any content within the associated element
+ * will be replaced so content is not strictly necessary, however it can be helpful to include
+ * placeholder content for documentation and static web development tools.
+ *
+ * The 'at' symbol (@) can't be used as part of the key value because it is dedicated as a separator
+ * character which the CMS property uses to differentiate the key from the locale.
+ * ( ie x-cms="<key>@<locale>" )
+ *
+ * @element ANY
+ * @param {expression} Evaluates to the string key used to identify the CMS value. The
+ *   expression can also be followed with '@<locale>' in order to force a locale-specific
+ *   version of CMS content. If a locale is not supplied, the client's Accept-Language
+ *   header will be used.
+ *
+ * @example
+ <example>
+ <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
+ <p x-cms="notfound">Testing a not found case.</p>
+ <blockquote x-cms="title/fr_CA">Forcing the French-Canadian version of the content.</blockquote>
+ <th x-cms="name-title"/>
+ </example>
+ */
 angular.module( 'bgc.directives', [] )
     .directive('thumbnail', function(){
         return{
