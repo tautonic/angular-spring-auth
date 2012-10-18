@@ -44,15 +44,17 @@ app.get('/:basename', function (req, basename) {
     // classpath. For each bundle, read the properties and put into our CMS map (which
     // will send content to Zocia).
     scanForBundles(basename).forEach(function(bundle) {
-        readAndStoreProps(bundle);
+        var props = readProps(bundle);
+        writeProps(props, bundle.locale);
     });
 
     return json({status: 'ok'});
 });
 
 
-function readAndStoreProps(bundle) {
-    log.info('Processing bundle {}', JSON.stringify(bundle, null, 4));
+function readProps(bundle) {
+    log.info('Reading bundle {}', JSON.stringify(bundle, null, 4));
+    var result = {};
 
     var loader = java.lang.Thread.currentThread().getContextClassLoader();
     var input = new java.io.InputStreamReader(loader.getResourceAsStream(bundle.name), 'UTF-8');
@@ -63,20 +65,35 @@ function readAndStoreProps(bundle) {
         var names = props.stringPropertyNames().iterator();
         while (names.hasNext()) {
             var name = names.next();
-            if (!propExists(name, bundle.locale)) {
-                var value = props.getProperty(name);
-                log.info('Property does not exist: {}@{}, value: {}', name, bundle.locale, value);
-                if (value) {
-                    var key = name + '@' + bundle.locale;
-                    log.info('Adding key [{}] and value [{}] to cms map.', key, value);
-                    var resource = makeResource(name, bundle.locale, key, value);
-                    map.put(key, resource);
-                }
+            var nameParts = name.split('.');
+            if (nameParts.length != 2) {
+                throw java.lang.String.format('Illegal name format in CMS bundle [%s]. Name [%s] ' +
+                        'must have only one period.', bundle.name, name);
             }
+
+            var key = result[name];
+            if (!key) result[name] = {};
+
+            key[nameParts[0]][nameParts[1]] = props.getProperty(name);
         }
     } finally {
         input.close();
     }
+    return result;
+}
+function writeProps(props, locale) {
+    log.info('Writing props: {}, locale: {}', JSON.stringify(props, null, 4), locale);
+
+    Object.keys(props).forEach(function(name) {
+        if (!propExists(name, locale)) {
+            var record = props[name];
+            log.info('Property does not exist: {}@{}, value: {}', name, locale, JSON.stringify(record));
+            var key = name + '@' + locale;
+            log.info('Adding key [{}] and value [{}] to cms map.', key, record);
+            var resource = makeResource(name, locale, record);
+            map.put(key, resource);
+        }
+    });
 }
 
 function propExists(key, locale) {
@@ -93,22 +110,19 @@ function propExists(key, locale) {
     return resource.locale === locale;
 }
 
-function makeResource(name, locale, key, value) {
-    // Value can contain a title and content. These are separated in the value using a
-    // pipe. (i.e.  Title|Some body content )
-    var vals = value.split('|');
-    var content = vals.slice(-1)[0];
-    var title = vals.shift() || '';
-
-    return {
+function makeResource(name, locale, record) {
+    // Record will be a JSON object with properties { title: 'text', content: 'more text' }
+    var result = {
         key: name,
         author: 'seedcms',
-        title: title,
         format: 'aside',
         locale: locale,
-        mimetype: 'text/html',
-        content: content
-    }
+        mimetype: 'text/html'
+    };
+    Object.keys(record).forEach(function (key) {
+        result[key] = record[key];
+    });
+    return result;
 }
 
 /**
