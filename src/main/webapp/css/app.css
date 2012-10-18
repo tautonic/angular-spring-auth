@@ -322,7 +322,7 @@ ul.menu li {
     background-image: url('../images/GCEE_images_divider.png');
     background-position: 100% 0;
     background-repeat: repeat-y;
-    text-transform: uppercase;
+    text-transform: inherit;
 }
 
 ul.menu li:last-child {
