@@ -1,11 +1,20 @@
 <div class="new-picture-frame {{thumbnail.type}}">
     <img src ="{{thumbnail.image}}" alt="">
 
-    <div ng-show="thumbnail.showAnchor">
+    <div ng-show="thumbnail.anchor">
         <a ng-href="{{thumbnail.url}}">
             <div read-more-hover class="read-more gradient">
                 <p>{{thumbnail.text}}</p>
-                <div class="read-more-arrow"></div>
+
+                <div ng-switch on="thumbnail.decoration">
+                    <div ng-switch-when="arrow">
+                        <div class="read-more-arrow"></div>
+                    </div>
+                    <div ng-switch-when="lens">
+                        <div class="preview-lens"></div>
+                    </div>
+                    <div ng-switch-when="none"></div>
+                </div>
             </div>
         </a>
     </div>
