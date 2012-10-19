@@ -49,7 +49,7 @@
   */
 angular.module( 'bgc.directives', [] )
     .directive('thumbnail', function(){
-        
+
         return{
             restrict: 'E',
             templateUrl: 'partials/thumbnail-template.html',
