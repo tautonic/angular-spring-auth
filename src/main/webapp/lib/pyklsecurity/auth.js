@@ -144,7 +144,6 @@
 			};
 		}
 		initAuth();
-
 		function getAuth() {
 			return $http.get( 'api/auth' )
 					.success( function ( data, status, headers, config ) {
@@ -207,66 +206,53 @@
     pyklSecurity.directive( 'pyklLogin', ['$auth', function (auth) {
 		return {
 			restrict: 'ACME',
-			template: ' \
-	<p ng-show="auth.isAuthenticated"> \
-		Welcome {{username}} \
-		<button ng-click="signout()">Sign out</button> \
-	</p> \
-	<p ng-hide="auth.isAuthenticated"> \
-		<button ng-click="signin()">Sign in</button> \
-	</p> \
-	                 \
-	<form name="login" ng-show="form.visible" ng-submit="submit()"> \
-		<p> \
-			<label for="username">Username:</label> \
-			<input id="username" type="text" ng-model="username" required/> \
-		</p> \
-		<p> \
-			<label for="password">Password:</label> \
-			<input id="password" type="password" ng-model="password" required/> \
-		</p> \
-		<p><input type="submit" value="Submit"/></p> \
-	</form> \
-		'
+			template: '<li>\
+        <span ng-show="!auth.isAuthenticated"><a ng-click="callLoginPage()"><span x-cms="menu_signin">{{cms.content}}</span></a></span> \
+        <div ng-show="auth.isAuthenticated" class="dropdown" ng-dropdown> \
+            <a data-toggle="dropdown" class="thumb"> \
+                <thumbnail  type="profile" size="small" rotation="clockwise"  image="images/rosie.jpeg"/> \
+            </a> \
+        <ul class="dropdown-menu"> \
+            <li><span class="gradient"><a ng-href="#/profile/">My profile</a></span></li> \
+            <li><span class="gradient"><a ng-href="#/profile/">Change Picture</a></span></li> \
+        <li ng-show="auth.isUserInRole(\'ROLE_ADMIN\')"><span class="gradient"><a ng-href="#/admin/">Admin Panel</a></span></li> \
+            <li><span class="gradient"><a ng-click="signout()">Logout</a></span></li> \
+        </ul> \
+        </div> \
+        </li>',
+            replace: true
 		}
 	}] );
 
-    pyklSecurity.controller( 'LoginCtrl', ['$rootScope', '$scope', '$log',
-		function ( $rootScope, $scope, $log ) {
-			$scope.username = 'fred';
-			$scope.password = 'secret';
-            $scope.loginNeeded = true;
-			$scope.form = {
-				visible: false
-			};
+    pyklSecurity.controller( 'LoginWatch', ['$rootScope', '$scope', '$location', '$log',
+		function ( $rootScope, $scope, $location, $log ) {
+            var referral;
+
+            function gotoLoginPage() {
+                referral = $location.path();
+                $location.path('login');
+            }
+
+            $scope.callLoginPage = gotoLoginPage;
 
 			$rootScope.$on( 'event:loginConfirmed', function () {
 				$log.info( 'event:loginConfirmed detected.' );
-				$scope.form.visible = false;
+                $location.path(referral);
+
 			} );
 
 			$rootScope.$on( 'event:loginRequired', function () {
 				$log.info( $scope.$id, 'event:loginRequired detected.' );
-				$scope.form.visible = true;
+                gotoLoginPage();
 			} );
 
 			$rootScope.$on( 'event:logoutConfirmed', function () {
-				$scope.form.visible = false;
-			} );
 
-			$scope.signin = function () {
-				$scope.form.visible = true;
-			};
+			});
 
 			$scope.signout = function () {
 				$rootScope.$broadcast( 'event:logoutRequest' );
 			};
-
-			$scope.submit = function () {
-				$log.info( 'Submitting form', $scope.username, $scope.password );
-				$log.info( 'Broadcasting event:loginRequest: ', $scope.username, $scope.password );
-				$rootScope.$broadcast( 'event:loginRequest', $scope.username, $scope.password );
-			}
 		}]
 	);
 
@@ -371,3 +357,21 @@
 
 
 })(window, window.angular);
+
+function LoginCtrl( $rootScope, $scope, $log ) {
+    $scope.username = 'fred';
+    $scope.password = 'secret';
+
+    $scope.submit = function () {
+        $log.info( 'Submitting form', $scope.username, $scope.password );
+        $log.info( 'Broadcasting event:loginRequest: ', $scope.username, $scope.password );
+        $rootScope.$broadcast( 'event:loginRequest', $scope.username, $scope.password );
+    }
+
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+        $rootScope.about = 'none';
+    });
+}
+
+LoginCtrl.$inject = ['$rootScope', '$scope', '$log'];

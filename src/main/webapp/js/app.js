@@ -30,7 +30,7 @@
             templateUrl: 'lib/pykladmin/index.html'
         });
 
-        $routeProvider.when( '/login/:redirect', {
+        $routeProvider.when( '/login', {
             templateUrl: 'lib/pyklsecurity/partials/signin-form.html',
             controller: 'LoginCtrl'
         });
