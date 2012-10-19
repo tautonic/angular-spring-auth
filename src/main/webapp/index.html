@@ -37,7 +37,24 @@
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </head>
 <body>
+<div ui-modal class="fade clearfix" ng-controller="cmsCtrl" ng-model="modalShown">
+    <form name="editCMS" class="form-horizontal" novalidate>
+        <fieldset>
+            <legend>
+                <h2>CMS Editor</h2>
+            </legend>
+        </fieldset>
 
+        <button class="btn btn-success" ng-click="submit()" ng-disabled="false">
+            <i class="icon-pencil icon-white"/>
+            Update
+        </button>
+        <a ng-href="cancel()" class="btn btn-warning">
+            <i class="icon-ban-circle icon-white"></i>
+            Cancel
+        </a>
+    </form>
+</div>
 <div class="header">
     <div class="container">
         <div id="outside-logo"><img src="images/GCEE_image_BabsonGlobal_light.png"></div>
@@ -178,6 +195,7 @@
 <script src="js/filters.js"></script>
 <script src="js/app.js"></script>
 <script src="js/controllers.js"></script>
+<script src="lib/pyklcms/cms.js"></script>
 <script src="lib/pyklsecurity/auth.js"></script>
 <script src="lib/pykladmin/adminCtrl.js"></script>
 <script src="lib/pyklresource/resource.js"></script>
