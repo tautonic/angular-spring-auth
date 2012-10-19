@@ -268,6 +268,8 @@ a.left-arrow {
     background-image: url('../images/GCEE_images_homeBG.jpg');
     background-repeat: no-repeat;
     background-position: 54% 0%;
+    padding-top: 4em;
+    background-size: 147%
 }
 
 .header .home {
@@ -314,8 +316,8 @@ a.left-arrow {
 ul.menu {
     float: left;
     list-style-type: none;
-    margin: 0 -11px 0 9px;
-    height: 45px;
+    margin: 13 -11px 0 28px;
+    height: 40px;
     border: 1px solid black;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -334,14 +336,14 @@ ul.menu li:last-child {
 }
 
 ul.menu li a {
-    margin: 15px 20px 10px;
+    margin: 9px 20px 10px;
     color: white;
     text-decoration: none;
     display: inline-block;
 }
 
 ul.menu li:last-child a {
-    margin: 15px 10px 10px;
+    margin: 8px 14px 10px;
     background: none;
 }
 
@@ -350,7 +352,7 @@ ul.menu li.dropdown a {
 }
 
 ul.menu li div.dropdown {
-    width: 50px;
+    width: 80px;
 }
 
 ul.menu li div.dropdown a.thumb {
@@ -640,6 +642,7 @@ ul.dropdown-menu li:last-child a {
 
 .banner{
     padding: 0 0 2em 0;
+    margin-top: 2em;
 }
 
 .banner-full{
@@ -761,6 +764,7 @@ a .read-more p{
 .profile-thumbnail{
     display: inline-block;
     position: absolute;
+    z-index: 2000;
 }
 
 .counter-clockwise{
@@ -1020,5 +1024,9 @@ i.comments{
     margin: 0;
     font-size: 14px;
     font-weight: normal;
+}
+
+.dropdown .profile-thumbnail{
+    top: -7px;
 }
 

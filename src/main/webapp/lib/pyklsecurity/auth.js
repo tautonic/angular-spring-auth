@@ -210,7 +210,7 @@
         <span ng-show="!auth.isAuthenticated"><a ng-click="callLoginPage()"><span x-cms="menu_signin">{{cms.content}}</span></a></span> \
         <div ng-show="auth.isAuthenticated" class="dropdown" ng-dropdown> \
             <a data-toggle="dropdown" class="thumb"> \
-                <div class="new-picture-frame profile-thumbnail small clockwise">\
+                <div class="new-picture-frame profile-thumbnail med clockwise">\
                     <img ng-src ="{{auth.principal.thumbnail}}" alt="">\
                 </div>\
             </a> \
