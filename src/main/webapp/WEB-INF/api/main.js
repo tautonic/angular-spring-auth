@@ -1025,6 +1025,7 @@ function getUserDetails() {
     // principal can be a simple string or a spring security user object
     //todo setup so that auth.principal doesn't fail if it ever happens to be a string (test to see if it's ever a string)
     var principal = (typeof auth.principal === 'string') ? auth.principal : auth.principal;
+
     var result = {
         principal: {
             id: principal.id,
@@ -1045,6 +1046,11 @@ function getUserDetails() {
     while ( authorities.hasNext() ) {
         var authority = authorities.next();
         result.roles.push( authority.toString().toLowerCase() );
+    }
+
+    if(result.principal.thumbnail === 'profiles-0000-0000-0000-000000000001' ||
+        result.principal.thumbnail === ''){
+        result.principal.thumbnail = 'images/GCEE_image_profileMale_135x135.jpeg';
     }
 
     return result;
