@@ -261,7 +261,7 @@ app.get('/notifications', function(req) {
     // Try to parse the results, wrap each activity in a mixin, then return a response
     try {
         var stream = exchange.content;
-        var activities = [];
+        var activities = [];     log.info("ACITIVITY STREAM IS: "+JSON.stringify(exchange.content));
         stream.acts.forEach(function (activity) {
             activity = new ActivityMixin(activity, req, ctx('/'));
 
