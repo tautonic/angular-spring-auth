@@ -807,9 +807,11 @@ angular.module('bgc.directives').directive('cms', ['$http',
         }
     }
 ]);
-*/
-angular.module('bgc.directives').directive('cms', ['$http',
-    function ($http) {
+ *
+ * Requires jQuery
+ */
+angular.module('bgc.directives').directive('cms', ['$http', '$auth',
+    function ($http, $auth) {
         return {
             // Is applied as an element's attribute
             restrict: 'A',
@@ -817,7 +819,30 @@ angular.module('bgc.directives').directive('cms', ['$http',
             replace: true,
             scope: {},
             compile: function (tElement, tAttrs, transclude) {
-                return function(scope, element, attrs) {
+                var editBtn;
+
+                // Adds an edit button to the upper right corner of the cms element
+                function attachEdit(element) {
+                    editBtn = angular.element(
+                        '<a ng-click="" class="btn btn-mini" style="position: absolute; right: 0; top:0">Edit</a>'
+                    );
+                    element
+                        .css('position', 'relative')
+                        .append(editBtn);
+                    hideEdit();
+                }
+
+                function showEdit() {
+                    editBtn.show();
+                }
+
+                function hideEdit() {
+                    editBtn.hide();
+                }
+
+                return function (scope, element, attrs) {
+
+                    attachEdit(element);
 
                     // The cms property contains the lookup key
                     var key = attrs.cms;
@@ -829,20 +854,20 @@ angular.module('bgc.directives').directive('cms', ['$http',
 
                     // Make a GET request to the server in order to perform the CMS lookup
                     $http({method: 'GET', url: url})
-                            .success(function (data, status, headers, config) {
-                                // If the HTTP response is an array and the first element contains a content
-                                // property, then we found what we were looking for.
-                                var contentFound = data.length && data[0] && data[0].content;
-                                if (contentFound) {
-                                    // Populate the HTML element with content
-                                    scope.cms = data[0];
-                                } else {
-                                    scope.cms = 'CMS CONTENT NOT FOUND!';
-                                }
-                            })
-                            .error(function (data, status, headers, config) {
+                        .success(function (data, status, headers, config) {
+                            // If the HTTP response is an array and the first element contains a content
+                            // property, then we found what we were looking for.
+                            var contentFound = data.length && data[0] && data[0].content;
+                            if (contentFound) {
+                                // Populate the HTML element with content
+                                scope.cms = data[0];
+                            } else {
                                 scope.cms = 'CMS CONTENT NOT FOUND!';
-                            });
+                            }
+                        })
+                        .error(function (data, status, headers, config) {
+                            scope.cms = 'CMS CONTENT NOT FOUND!';
+                        });
                 }
             }
         }
