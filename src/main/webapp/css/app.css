@@ -971,6 +971,9 @@ i.comments{
 .activity-stream{
     margin-top: 4em;
     border: 1px solid #E7EBEA;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
 }
 
 .activity-stream-header{
@@ -986,19 +989,20 @@ i.comments{
 
 .activity-stream-header .profile-thumbnail{
     left: 0.75em;
-    top: 1.25em;
+    top: 1em;
 }
 
 .activity-stream-header h4{
     margin-top: 0;
-    padding: 1em 0 0.5em 5em;
+    padding: 0.75em 0 0 5em;
     color: #ffffff;
 }
 
 .activity-stream-items{
     list-style-type: none;
     position: relative;
-    margin-left: 0
+    margin-left: 0;
+    margin-bottom: 0;
 }
 
 .activity-stream-owner{
@@ -1032,6 +1036,10 @@ i.comments{
     float: left;
 }
 
+.activity-item-content .right p:nth-child(2){
+    margin-bottom: 0;
+}
+
 .activity-item-content .right a{
     color: #eeaf00;
     text-decoration: none;
@@ -1045,5 +1053,23 @@ i.comments{
 .activity-item-owner{
     color: #005172;
     font-weight: bold;
+}
+
+.activity-stream-footer{
+    border: 1px solid #014F36;
+    padding: 1em;
+    text-align: center;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
+}
+
+.activity-stream-footer a{
+    text-decoration: none;
+    color: white;
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
 }
 
