@@ -341,17 +341,25 @@ ul.menu li a {
 }
 
 ul.menu li:last-child a {
-    margin: 10px;
+    margin: 15px 10px 10px;
     background: none;
 }
 
-.ul.menu li.dropdown a {
+ul.menu li.dropdown a {
     margin-top: 5px;
+}
+
+ul.menu li div.dropdown {
+    width: 50px;
+}
+
+ul.menu li div.dropdown a.thumb {
+    margin: 8px 5px;
 }
 
 ul.dropdown-menu {
     padding: 0;
-    margin: 0;
+    margin: 24px 0 0 -110px;
 }
 
 ul.dropdown-menu li {
@@ -369,6 +377,7 @@ ul.dropdown-menu li span {
 
 ul.dropdown-menu li a {
     margin: 10px 5px;
+    width: 100%;
 }
 
 ul.dropdown-menu li:last-child a {
@@ -468,36 +477,6 @@ ul.dropdown-menu li:last-child a {
     color: #fff;
     margin-top: 0;
     text-transform: uppercase;
-}
-
-/***** Quote *****/
-.quote {
-    position: relative;
-    height: 70px;
-}
-
-.quote .symbol {
-    float: left;
-    padding: 10px 15px;
-    margin-top: 20px;
-    border: 1px solid #0c5d42;
-    border-radius: 5px;
-}
-
-.quote p {
-    padding: 20px;
-    margin: 10px 10px 0 65px;
-    font-size: 18px;
-    background-color: #f1efef;
-    border: 1px solid #c9d9d4;
-    border-radius: 2px;
-}
-
-.quote img.arrow {
-    position: absolute;
-    left: 56px;
-    top: 31px;
-    z-index: 99;
 }
 
 /****** Articles ******/
@@ -648,36 +627,6 @@ ul.dropdown-menu li:last-child a {
 
 .activity-stream .load-more a {
     color: #fff;
-    display: inline-block;
-}
-
-/****** Article Pagination *****/
-ul.article-pagination {
-    margin-top: 20px;
-    list-style: none;
-    height: 26px;
-    width: 132px;
-    border: 1px solid black;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-
-ul.article-pagination li {
-    float: left;
-    background-image: url('../images/GCEE_images_divider.png');
-    background-position: 100% 0;
-    background-repeat: repeat-y;
-    text-transform: uppercase;
-}
-
-ul.article-pagination li:last-child {
-    background: none;
-}
-
-ul.article-pagination li a {
-    color: white;
-    padding: 3px 10px 3px 5px;
-    text-decoration: none;
     display: inline-block;
 }
 

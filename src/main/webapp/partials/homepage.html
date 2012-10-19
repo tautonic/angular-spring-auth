@@ -1,8 +1,8 @@
 <div class="content container">
     <div class="row">
         <div class="span12 quote">
-            <div class="symbol"><img src="images/block_quotes.png"></img></div>
-            <img class="arrow" src="images/GCEE_images_quotation_arrow.png"></img>
+            <div class="symbol"><img ng-src="images/block_quotes.png"></div>
+            <img class="arrow" src="images/GCEE_images_quotation_arrow.png">
             <p><em>{{quote}}</em></p>
         </div>
     </div>
@@ -15,9 +15,12 @@
                 <div class="article">
                     <div class="row">
                         <div class="span3">
-                            <thumbnail
+                            <!--<thumbnail
                                 type="article"
-                                url="#/12345678" />
+                                url="#/12345678" />-->
+                            <div class="new-picture-frame article-thumbnail">
+                                <img ng-src ="images/row-of-columns.jpg" alt="">
+                            </div>
                         </div>
                         <div class="span5">
                             <h3>NEWS ARTICLE NAME</h3>
@@ -45,11 +48,14 @@
                 <div class="article">
                     <div class="row">
                         <div class="span3">
-                            <thumbnail
+                            <!--<thumbnail
                                     type="article"
                                     text="Read More"
                                     url="#/article/12345678"
-                                    image="images/homepage-article-image-one.jpg" />
+                                    image="images/homepage-article-image-one.jpg" />-->
+                            <div class="new-picture-frame article-thumbnail">
+                                <img ng-src ="images/homepage-article-image-one.jpg" alt="">
+                            </div>
                         </div>
                         <div class="span5">
                             <h3>NEWS ARTICLE NAME</h3>
@@ -77,11 +83,14 @@
                 <div class="article">
                     <div class="row">
                         <div class="span3">
-                            <thumbnail
+                            <!--<thumbnail
                                     type="article"
                                     text="Read More"
                                     url="#/article/12345678"
-                                    image="images/row-of-students.jpg" />
+                                    image="images/row-of-students.jpg" />-->
+                            <div class="new-picture-frame article-thumbnail">
+                                <img ng-src ="images/row-of-students.jpg" alt="">
+                            </div>
                         </div>
                         <div class="span5">
                             <h3>NEWS ARTICLE NAME</h3>
@@ -109,52 +118,102 @@
             </div>
         </div>
 
-        <div class="span4">
+        <div class="span4" ng-show="auth.isAuthenticated">
             <div class="activity-stream">
                 <div class="activity-stream-header">
-                    <thumbnail
+                    <!--<thumbnail
                         type="profile"
                         size="med"
                         rotation="none"
-                        image="images/rosie.jpeg" />
+                        image="{{username}}" />-->
+
+                    <div ng-switch on="auth.principal.thumbnail">
+                        <div ng-switch-when="profiles-0000-0000-0000-000000000001">
+                            <div class="new-picture-frame profile-thumbnail med no-rotation">
+                                <img ng-src ="images/GCEE_image_profileMale_135x135.jpeg" alt="">
+                            </div>
+                        </div>
+                        <div ng-switch-when="">
+                            <div class="new-picture-frame profile-thumbnail med no-rotation">
+                                <img ng-src ="images/GCEE_image_profileMale_135x135.jpeg" alt="">
+                            </div>
+                        </div>
+                        <div ng-switch-default>
+                            <div class="new-picture-frame profile-thumbnail med no-rotation">
+                                <img ng-src ="{{auth.principal.thumbnail}}" alt="">
+                            </div>
+                        </div>
+                    </div>
+
                     <h4>LOGGED IN AS:</h4>
                 </div>
                 <div class="activity-stream-content">
-                    <p class="activity-stream-owner">Rosie O'Donnell</p>
-                    <ul class="activity-stream-items">
-                        <li class="activity-stream-item">
+                    <p class="activity-stream-owner">
+                        <a ng-href="#/profiles/view/{{auth.principal.id}}">{{auth.principal.username}}</a>
+                    </p>
+                    <ul class="activity-stream-items" ng-repeat="item in stream.items">
+                        <!--<li class="activity-stream-item">
                             <div class="activity-item-content clearfix">
                                 <div class="left">
-                                    <thumbnail type="profile" size="small" rotation="none" />
+                                    &lt;!&ndash;<thumbnail type="profile" size="small" rotation="none" />&ndash;&gt;
+                                    <div class="new-picture-frame profile-thumbnail small no-rotation">
+                                        <img ng-src ="images/GCEE_image_profileFemale_135x135.jpeg" alt="">
+                                    </div>
                                 </div>
                                 <div class="right">
                                     <p><i>Posted a new comment to your discussion</i></p>
                                     <p><span class="activity-item-owner">Sean Grey</span> - <span class="muted">2 hours ago</span></p>
                                 </div>
                             </div>
-                        </li>
-                        <li class="activity-stream-item">
+                        </li>-->
+
+                        <!--<li class="activity-stream-item">
+                            <div ng-switch on=auth.principal.thumbnail>
+                                <div ng-switch-when></div>
+                            </div>
+
                             <div class="activity-item-content mine clearfix">
                                 <div class="left">
-                                    <thumbnail type="profile" size="small" rotation="none" image="images/rosie.jpeg" />
+                                    &lt;!&ndash;<thumbnail type="profile" size="small" rotation="none" image="images/rosie.jpeg" />&ndash;&gt;
+                                    <div ng-switch on="auth.principal.thumbnail">
+                                        <div ng-switch-when="profiles-0000-0000-0000-000000000001">
+                                            <div class="new-picture-frame profile-thumbnail small no-rotation">
+                                                <img ng-src ="images/GCEE_image_profileMale_135x135.jpeg" alt="">
+                                            </div>
+                                        </div>
+                                        <div ng-switch-when="">
+                                            <div class="new-picture-frame profile-thumbnail small no-rotation">
+                                                <img ng-src ="images/GCEE_image_profileMale_135x135.jpeg" alt="">
+                                            </div>
+                                        </div>
+                                        <div ng-switch-default>
+                                            <div class="new-picture-frame profile-thumbnail small no-rotation">
+                                                <img ng-src ="{{auth.principal.thumbnail}}" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="right">
-                                    <p><i>Posted a new comment to your discussion</i></p>
-                                    <p><span class="activity-item-owner">You</span> - <span class="muted">2 hours ago</span></p>
+                                    <p><i ng-bind-html="item.message"></i></p>
+                                    <p><span class="activity-item-owner">You</span> - <span class="muted">{{item.dateCreated}}</span></p>
                                 </div>
                             </div>
-                        </li>
-                        <li class="activity-stream-item">
+                        </li>-->
+
+                        <!--<li class="activity-stream-item">
                             <div class="activity-item-content clearfix">
                                 <div class="left">
-                                    <thumbnail type="profile" size="small" rotation="none" />
+                                    &lt;!&ndash;<thumbnail type="profile" size="small" rotation="none" />&ndash;&gt;
+                                    <div class="new-picture-frame profile-thumbnail small no-rotation">
+                                        <img ng-src ="images/GCEE_image_profileFemale_135x135.jpeg" alt="">
+                                    </div>
                                 </div>
                                 <div class="right">
                                     <p><i>Posted a new comment about the <a href="">Business in a Bundle</a> document</i></p>
                                     <p><span class="activity-item-owner">Sean Grey</span> - <span class="muted">2 hours ago</span></p>
                                 </div>
                             </div>
-                        </li>
+                        </li>-->
                     </ul>
                     <div class="activity-stream-footer gradient">
                         <a href="">Earlier today...</a>
@@ -165,7 +224,7 @@
         <!--<div class="span3" ng-show="auth.isAuthenticated">
             <div class="activity-stream">
                 <div class="picture-frame">
-                    <img src="images/190x140.gif" width="50">
+                    <img ng-src="images/190x140.gif" width="50">
                 </div>
                 <div class="personal-details">
                     <h5>Logged In As:</h5>
@@ -174,7 +233,7 @@
                 <ul id="stream" ng-repeat="item in stream.items">
                     <li class="you">
                         <div class="picture-frame">
-                            <img src="{{item.thumbnailUrl}}" width="40">
+                            <img ng-src="{{item.thumbnailUrl}}" width="40">
                         </div>
                         <div class="update">
                             <p ng-bind-html="item.message"></p>
@@ -188,13 +247,13 @@
                 </div>
             </div>
         </div>-->
-        <!--<div class="span3 sign-up" ng-show="!auth.isAuthenticated">
+        <div class="span4 sign-up" ng-show="!auth.isAuthenticated">
             <div class="details">
                 <h3><a href="#/profile/">Sign up today</a></h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.</p>
                 <h4>Your Email</h4>
-                <input type="email"><a href="#/profile/" class="gradient"><img src="images/GCEE_images_arrowRight.png"></a>
+                <input type="email"><a href="#/profile/" class="gradient"><img ng-src="images/GCEE_images_arrowRight.png"></a>
             </div>
-        </div>-->
+        </div>
     </div>
 </div>

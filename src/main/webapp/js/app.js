@@ -6,7 +6,7 @@
 	function routeProvider( $routeProvider ) {
         $routeProvider.when( '/home', {
             templateUrl: 'partials/homepage.html',
-            controller: 'MyCtrl1'
+            controller: 'HomepageController'
         } );
 
         //babson college pages
@@ -28,6 +28,11 @@
         } );
         $routeProvider.when( '/admin', {
             templateUrl: 'lib/pykladmin/index.html'
+        });
+
+        $routeProvider.when( '/login', {
+            templateUrl: 'lib/pyklsecurity/partials/signin-form.html',
+            controller: 'LoginCtrl'
         });
 
         //individual controller pages, some of these might be removed

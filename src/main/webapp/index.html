@@ -37,8 +37,7 @@
     <link rel="stylesheet" href="lib/angularui/select2/select2.css"/>
 </head>
 <body>
-<pykl-login ng-controller="LoginCtrl" ng-show="loginNeeded">
-</pykl-login>
+
 <div class="header">
     <div class="container">
         <div class="row">
@@ -49,13 +48,30 @@
                     <li><a ng-href="#/faculty/" x-cms="menu_2">{{cms.content}}</a></li>
                     <li><a ng-href="#/content/" x-cms="menu_3">{{cms.content}}</a></li>
                     <li><a ng-href="#/network/" x-cms="menu_4">{{cms.content}}</a></li>
-                    <li ng-show="!auth.isAuthenticated"><a ng-href="#/profile/" x-cms="menu_signin">{{cms.content}}</a></li>
+                    <li ng-show="!auth.isAuthenticated"><a ng-href="#/login/" x-cms="menu_signin">{{cms.content}}</a></li>
                     <li ng-show="auth.isAuthenticated" class="dropdown" ng-dropdown><a data-toggle="dropdown">
-                        <thumbnail
+                        <!--<thumbnail
                             type="profile"
                             size="med"
                             rotation="clockwise"
-                            image="images/rosie.jpeg"/>
+                            image="images/rosie.jpeg"/>-->
+                        <div ng-switch on="auth.principal.thumbnail">
+                            <div ng-switch-when="profiles-0000-0000-0000-000000000001">
+                                <div class="new-picture-frame profile-thumbnail med clockwise">
+                                    <img src ="images/GCEE_image_profileMale_135x135.jpeg" alt="">
+                                </div>
+                            </div>
+                            <div ng-switch-when="">
+                                <div class="new-picture-frame profile-thumbnail med clockwise">
+                                    <img src ="images/GCEE_image_profileMale_135x135.jpeg" alt="">
+                                </div>
+                            </div>
+                            <div ng-switch-default>
+                                <div class="new-picture-frame profile-thumbnail med clockwise">
+                                    <img src ="{{auth.principal.thumbnail}}" alt="">
+                                </div>
+                            </div>
+                        </div>
                         </a>
                         <ul class="dropdown-menu">
                             <li><span class="gradient"><a ng-href="#/profile/">My profile</a></span></li>

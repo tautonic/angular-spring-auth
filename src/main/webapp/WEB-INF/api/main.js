@@ -72,7 +72,7 @@ app.get( '/index.html', function ( req ) {
 } );
 
 app.get('/getquote', function(req) {
-    return json(returnRandomQuote());
+    return json({ "quote": returnRandomQuote() });
 })
 
 /********** Articles and resources *********/
