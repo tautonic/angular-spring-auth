@@ -120,7 +120,9 @@
                     <h4>LOGGED IN AS:</h4>
                 </div>
                 <div class="activity-stream-content">
-                    <p class="activity-stream-owner">Rosie O'Donnell</p>
+                    <p class="activity-stream-owner">
+                        <a ng-href="#/profiles/{{auth.principal.id}}">{{auth.principal.username}}</a>
+                    </p>
                     <ul class="activity-stream-items">
                         <li class="activity-stream-item">
                             <div class="activity-item-content clearfix">
