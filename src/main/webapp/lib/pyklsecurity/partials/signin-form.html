@@ -1,11 +1,14 @@
-<form name="login" ng-submit="submit()">
-	<p>
-		<label for="username">Username:</label>
-		<input id="username" type="text" ng-model="username" required/>
-	</p>
-	<p>
-		<label for="password">Password:</label>
-		<input id="password" type="password" ng-model="password" required/>
-	</p>
-	<p><input type="submit" value="Submit"/></p>
-</form>
+<div class="content container">
+    <h2>Login</h2>
+    <form name="login" ng-submit="submit()">
+        <p>
+            <label for="username">Username:</label>
+            <input id="username" type="text" ng-model="username" required/>
+        </p>
+        <p>
+            <label for="password">Password:</label>
+            <input id="password" type="password" ng-model="password" required/>
+        </p>
+        <p><input class="btn btn-success" type="submit" value="Submit"/></p>
+    </form>
+</div>
