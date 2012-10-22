@@ -188,10 +188,6 @@ body {
     padding: 0 10px;
 }
 
-.container.content {
-    padding-top: 3em;
-}
-
 .gradient {
     background-image: -webkit-gradient(linear, left top, left bottom, from(#51a463), to(#127551));
     background-image: -webkit-linear-gradient(top, #51a463, #127551);
@@ -742,12 +738,14 @@ ul.dropdown-menu li:last-child a {
     padding: 0.65em 15px 0.12em 15px;
 }
 
-a:visited .read-more .read-more-arrow,
-a:hover .read-more .read-more-arrow{
+.read-more a,
+.read-more a:visited,
+.read-more a:hover{
     color: #ffffff;
+    text-decoration: none;
 }
 
-a .read-more p{
+.read-more a p{
     font-weight: normal;
     display: inline-block;
     color: #ffffff;
@@ -927,6 +925,10 @@ a .read-more p{
     line-height: 23px;
 }
 
+.article h3 a {
+    text-decoration: none;
+}
+
 .article{
     position: relative;
 }
@@ -938,6 +940,39 @@ a .read-more p{
 .article p.article-meta{
     color: #005172;
     margin-bottom: 0.5em;
+}
+
+/***** document type logos for article content pages and such ****/
+span.doc-type {
+    background-image: url('../images/GCEE_sprite.png');
+    width: 32px;
+    height: 24px;
+    float: left;
+}
+
+span.doc-type.video {
+    background-position: -72px -9px;
+}
+span.doc-type.image {
+    background-position: -72px -39px;
+}
+span.doc-type.pdf {
+    background-position: -72px -69px;
+}
+span.doc-type.doc {
+    background-position: -72px -100px;
+}
+span.doc-type.powerpoint {
+    background-position: -72px -132px;
+}
+span.doc-type.excel {
+    background-position: -72px -163px;
+}
+span.doc-type.text {
+    background-position: -72px -195px;
+}
+span.doc-type.rtf {
+    background-position: -72px -226px;
 }
 
 .article-stats{

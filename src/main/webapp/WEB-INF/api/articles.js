@@ -23,15 +23,66 @@ function ajax(url) {
 }
 
 var getAllArticles = function(type) {
-    return ajax('http://localhost:9300/myapp/api/resources/' + type);
+    var result = ajax('http://localhost:9300/myapp/api/resources/' + type);
+
+    result.content.forEach(function(article) {
+        article.doctype = getDocType(article.mimetype);
+    });
+
+    return result;
 }
 
 var getArticlesByCategory = function(category) {
-    return ajax('http://localhost:9300/myapp/api/resources/bycategory/' + category);
+    var result = ajax('http://localhost:9300/myapp/api/resources/bycategory/' + category);
+
+    result.content.forEach(function(article) {
+        article.doctype = getDocType(article.mimetype);
+    });
+
+    return result;
 }
 
 var getArticle = function(id) {
-    return ajax('http://localhost:9300/myapp/api/resources/' + id);
+    var result = ajax('http://localhost:9300/myapp/api/resources/' + id);
+
+    result.content.doctype = getDocType(result.content.mimetype);
+
+    return result;
+}
+
+function getDocType(mimetype) {
+    var doctype;
+    switch(mimetype)
+    {
+        case 'application/pdf':
+            doctype = 'pdf';
+            break;
+        case 'application/msword':
+            doctype = 'doc';
+            break;
+        case 'application/mspowerpoint':
+        case 'application/powerpoint':
+        case 'application/vnd.ms-powerpoint':
+        case 'application/x-mspowerpoint':
+            doctype = 'powerpoint';
+            break;
+        case 'application/excel':
+        case 'application/vnd.ms-excel':
+        case 'application/x-excel':
+        case 'application/x-msexcel':
+            doctype = 'excel';
+            break;
+        case 'application/rtf':
+        case 'application/x-rtf':
+        case 'text/richtext':
+            doctype = 'rtf';
+            break;
+        default:
+            doctype = mimetype.split('/')[0];
+            break;
+    }
+
+    return doctype;
 }
 
 var quotes = [
