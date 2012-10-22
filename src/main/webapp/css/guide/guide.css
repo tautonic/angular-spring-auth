@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #005172;
 }
 
-.profile h4 {
+.profile h4, #search-panel h4 {
     font-family: "Trade Gothic W01 Cn 18", "Arial Narrow", sans-serif;
     color: white;
 
@@ -68,6 +68,21 @@ h1, h2, h3, h4, h5, h6 {
     background-clip: padding-box;
     /*Use "background-clip: padding-box" when using rounded corners to avoid the gradient bleeding through the corners*/
     /*--IE9 WILL PLACE THE FILTER ON TOP OF THE ROUNDED CORNERS--*/
+}
+
+#search-panel {
+    width: 230px;
+    float: right;
+}
+
+#search-panel h4 {
+    padding: 5px 10px;
+    line-height: 120%;
+}
+
+#search-panel input[type=checkbox] {
+    float: left;
+    margin: 3px 5px;
 }
 
 a.btn {
