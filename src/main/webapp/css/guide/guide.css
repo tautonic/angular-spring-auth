@@ -673,11 +673,6 @@ a.btn:visited{
     background-position: -8px -8px;
 }
 
-.article .content {
-    margin-left: 150px;
-    padding: 5px;
-}
-
 .article .content .tags a {
     color: #cbb766;
 }

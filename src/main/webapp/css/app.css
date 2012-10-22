@@ -69,10 +69,6 @@
     list-style: none;
 }
 
-.article-list .article {
-    clear: none;
-}
-
 .category-sort {
     float: right;
     width: 200px;
@@ -506,11 +502,6 @@ ul.dropdown-menu li:last-child a {
 
 .article .picture-frame .more {
     top: 110px;
-}
-
-.article .content {
-    margin-left: 200px;
-    padding: 0 10px;
 }
 
 .article .content p {
