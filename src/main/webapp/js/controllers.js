@@ -4,7 +4,7 @@
 
 
 function HomepageController($rootScope, $scope, $http, $location, $route) {
-    $rootScope.query = '';
+    $rootScope.siteQuery = '';
     $rootScope.faculty_query = '';
     $rootScope.content_query = '';
     $rootScope.discussion_query = '';
@@ -33,13 +33,11 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
         return (($scope.stream) && ($scope.stream.itemCount === 0));
     };
 
-    $rootScope.search_faculty = function(){
+    /*$rootScope.search_faculty = function(){
         $location.path('/search/profiles/' + $rootScope.faculty_query);
     };
 
-    $rootScope.search_site = function(){
-        $location.path('/search/site/' + $rootScope.query);
-    };
+
 
     $rootScope.search_content = function(){
         $location.path('/search/content/' + $rootScope.content_query);
@@ -47,6 +45,13 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
 
     $rootScope.search_discussions = function(){
         $location.path('/search/discussions/' + $rootScope.discussion_query);
+    };*/
+}
+
+function SiteSearchController($rootScope, $scope, $location){
+    $scope.searchSite = function(){
+        //console.log('Search Site called');
+        $location.path('/search/site/' + $scope.siteQuery);
     };
 }
 

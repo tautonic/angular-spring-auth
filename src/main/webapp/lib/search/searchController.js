@@ -5,7 +5,10 @@
  * Time: 5:20 PM
  * To change this template use File | Settings | File Templates.
  */
-function SearchSite($scope, $routeParams, $location, Search) {
+function SearchSite($rootScope, $scope, $routeParams, $location, Search) {
+    $rootScope.banner = 'none';
+    $rootScope.about = 'none';
+
     $scope.results;
 
     var data = {

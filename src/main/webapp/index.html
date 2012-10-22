@@ -31,8 +31,6 @@
 
     <script src="lib/jquery.Jcrop.min.js"></script>
 
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
     <link rel="stylesheet" href="css/jquery.Jcrop.min.css">
     <link rel="stylesheet" href="lib/angularui/select2/select2.css"/>
 </head>
@@ -49,7 +47,19 @@
                     <li><a ng-href="#/content/" x-cms="menu_3">{{cms.content}}</a></li>
                     <li><a ng-href="#/network/" x-cms="menu_4">{{cms.content}}</a></li>
                     <pykl-login ng-controller="LoginWatch"></pykl-login>
-                    <li><a href="#"><img src="images/GCEE_images_header_searchIcon.png"></a></li>
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" href="#"><img src="images/GCEE_images_header_searchIcon.png"></a>
+                        <ul class="dropdown-menu search-dropdown">
+                            <li>
+                                <span class="gradient">
+                                    <form ng-submit="searchSite()" ng-controller="SiteSearchController" class="form-search gradient">
+                                        <input ng-model="siteQuery" type="text" class="input-medium search-query span2">
+                                    </form>
+                                    <p><i>Press return to start your search</i></p>
+                                </span>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -137,6 +147,8 @@
         </div>
     </div>
 </div>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
 <script src="lib/angular/angular-resource.js"></script>
 <script src="http://code.angularjs.org/1.0.1/angular-sanitize-1.0.1.js "></script>

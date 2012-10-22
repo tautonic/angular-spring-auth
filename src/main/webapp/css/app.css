@@ -142,26 +142,6 @@ blockquote p {
     font-weight: normal;
 }
 
-.profile{
-    margin: 2em 0 4em 2em;
-    width: 800px;
-}
-
-.profile-left{
-    float: left;
-    width: 50%
-}
-
-.profile-right{
-    float: right;
-    width: 50%;
-}
-
-.profile-right h6{
-    display: inline-block;
-    text-transform: none;
-}
-
 input.ng-dirty.ng-invalid{
     background-color: #ffcccc;
 }
@@ -669,7 +649,8 @@ ul.dropdown-menu li:last-child a {
     margin: 10px 0 0 10px;
 }
 
-.read-more{
+.read-more,
+.search-lens{
     border-bottom: solid 1px #014f36;
     border-top: solid 1px #014f36;
     border-right: solid 1px #014f36;
@@ -838,13 +819,16 @@ a .read-more p{
     height: 138px;
 }
 
+.preview-lens{
+    background: url(../images/GCEE_sprite.png) -9px -8px no-repeat;
+}
+
 .content-thumbnail .preview-lens{
     position: absolute;
     top: 10px;
     right: 9px;
     width: 20px;
     height: 20px;
-    background: url(../images/GCEE_sprite.png) -9px -8px no-repeat;
 }
 
 .articles h2{
@@ -921,7 +905,8 @@ i.comments{
     display: inline-block;
 }
 
-.activity-stream{
+.activity-stream,
+.site-search-box{
     margin-top: 4em;
     border: 1px solid #E7EBEA;
     -moz-border-radius: 3px;
@@ -929,7 +914,8 @@ i.comments{
     border-radius: 3px;
 }
 
-.activity-stream-header{
+.activity-stream-header,
+.site-search-box .header{
     position: relative;
     background-color: #cecece;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#cecece), to(#b5b5b5));
@@ -1029,4 +1015,224 @@ i.comments{
 .dropdown .profile-thumbnail{
     top: -7px;
 }
+
+.search-dropdown{
+    top: 18px;
+    left: -107px;
+}
+
+.search-dropdown p{
+    color: white;
+    text-align: center;
+}
+
+.search-dropdown .form-search{
+    margin: 20px 40px 0px 10px;
+}
+
+input.input-medium.search-query{
+    width: 100%;
+}
+
+.search-results-list{
+    list-style-type: none;
+    margin: 1em 0 1em 0;
+}
+
+.search-results-list li{
+    border-bottom: 2px solid #E7EBEA;
+    padding: 1em 0 2em 0;
+}
+
+.search-results h1{
+    font-weight: bold;
+}
+
+.search-results h1,
+.search-results p{
+    display: inline-block;
+}
+
+.profile-right h6{
+    display: inline-block;
+    text-transform: none;
+}
+
+.profile-activity{
+    border-left: 1px solid #014F36;
+}
+
+.profile-activity h3{
+    margin: 0 0 1em 0;
+    font-family: "TradeGothicW01-BoldCn20 675334", "Arial Narrow", sans-serif;
+    color: #999;
+}
+
+.profile-list-item .profile-left{
+    float: left;
+    width: 40%;
+    padding-left: 14em;
+}
+
+.profile-list-item .profile-right{
+    float: left;
+    width: 25%;
+    border-left: solid 1px #C5C5C5;
+    padding: 1em;
+}
+
+.profile-left h3{
+    font-weight: bold;
+    margin-bottom: 0;
+    line-height: 28px;
+}
+
+.profile-left h5{
+    margin-top: 0;
+}
+
+.profile-right h3{
+    margin: 0 0 5px 0;
+    font: 17px bold "TradeGothicW01-BoldCn20 675334", "Arial Narrow", sans-serif;
+    font-weight: bold;
+    color: #999999;
+}
+.profile-right a{
+    color: #eeaf00;
+    text-decoration: none;
+}
+
+.search-result{
+    position: relative;
+}
+
+.search-result .content{
+    float: right;
+    margin-left: 0;
+    width: 64%;
+}
+
+.search-result ul>li{
+    padding: 0 15px 0 0;
+    border-bottom: 0;
+}
+
+.search-result .content-thumbnail{
+    float: left;
+}
+
+.doc-type-thumbnail{
+    height: 26px;
+    width: 26px;
+    display: inline-block;
+    margin: 0 1em 0 0;
+}
+
+.word{
+    background: url('../images/GCEE_sprite.png') -72px -99px no-repeat;
+}
+.pdf{
+    background: url('../images/GCEE_sprite.png') -72px -68px no-repeat;
+}
+.ppt{
+    background: url('../images/GCEE_sprite.png') -72px -131px no-repeat;
+}
+.xls{
+    background: url('../images/GCEE_sprite.png') -72px -162px no-repeat;
+}
+.txt{
+    background: url('../images/GCEE_sprite.png') -72px -194px no-repeat;
+}
+.rtf{
+    background: url('../images/GCEE_sprite.png') -72px -225px no-repeat;
+}
+
+.document h6{
+    position: relative;
+    top: -10px;
+    display: inline;
+}
+
+.attached-doc{
+    position: absolute;
+    top: 14px;
+    right: 3em;
+}
+
+.paper-clip{
+    position: absolute;
+    width: 17px;
+    height: 43px;
+    top: 1px;
+    right: 4.25em;
+    background: url('../images/GCEE_sprite.png') -116px -81px no-repeat;
+    z-index: 2;
+}
+
+.content-thumbnail.small{
+    width: 72px;
+    height: 96px;
+}
+
+.content-thumbnail.small img{
+    width: 62px;
+    height: 81px;
+    margin: 5px 0 0 5px;
+}
+
+.discussion-item a{
+    color: #eeaf00;
+    text-decoration: none;
+}
+
+.site-search-box{
+    margin: 0;
+}
+
+.site-search-box .header{
+    padding: 0
+}
+
+.site-search-box .header h4{
+    color: #ffffff;
+    margin: 0;
+    text-align: center;
+    padding: 0.5em 0;
+}
+
+.site-search-box .form-container{
+    overflow: hidden;
+    position: relative;
+    padding: 1em;
+    background: rgb(247,247,247); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(247,247,247,1) 0%, rgba(229,229,229,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(247,247,247,1)), color-stop(100%,rgba(229,229,229,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(247,247,247,1) 0%,rgba(229,229,229,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(247,247,247,1) 0%,rgba(229,229,229,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(247,247,247,1) 0%,rgba(229,229,229,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(247,247,247,1) 0%,rgba(229,229,229,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+}
+.site-search-box .form-container input{
+    width: 80%;
+    margin: auto 0;
+    height: 30px;
+    padding-left: 2em;
+}
+
+.site-search-box .form-container form{
+    margin-bottom: 0
+}
+
+.search-lens{
+    top: 13px;
+}
+
+.form-container .preview-lens{
+    height: 29px;
+    width: 110%;
+    background-position: 68px -8px;
+}
+
+
 

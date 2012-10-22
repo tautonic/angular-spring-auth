@@ -71,7 +71,6 @@
         $routeProvider.when( '/search/site/:query', {
             templateUrl: 'lib/search/partials/searchSiteResults.html',
             controller: 'SearchSite'
-
         } );
 
         $routeProvider.when( '/search/content/:query', {
