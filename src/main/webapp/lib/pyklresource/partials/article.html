@@ -16,18 +16,7 @@
 
     <div ng-switch-default>
         <div class="category-sort">
-            <h2>Categories</h2>
-            <hr>
-            <a ng-click="byType('video')">Video</a><br>
-            <a ng-click="byType('articles')">Article</a><br>
-            <a ng-click="byType('picture')">Picture</a>
-            <hr>
-            <a ng-click="byCategory('job')">Jobs</a><br>
-            <a ng-click="byCategory('job')">Lorem</a><br>
-            <a ng-click="byCategory('job')">Ipsum</a><br>
-            <a ng-click="byCategory('job')">Dolar</a><br>
-            <a ng-click="byCategory('job')">Simar</a><br>
-            <a ng-click="byCategory('job')">Est</a>
+            Search panel
             <br><button ng-show="auth.isUserInRole('ROLE_ADMIN')" ng-click="addNewArticle()">Add Article</button>
         </div>
         <div id="top-content">
@@ -40,11 +29,32 @@
         <div id="latest-content">
             <h2>Latest Content</h2>
             <hr>
-            <ul class="article-list">
-                <li class="article" ng-repeat="article in articles">
-                    <a ng-href="#/content/{{article._id}}">{{article.title}}</a>
-                </li>
-            </ul>
+            <div class="articles">
+                <div class="article row" ng-repeat="article in articles">
+                    <div class="span3">
+                        <div class="new-picture-frame article-thumbnail">
+                            <div read-more-hover class="read-more gradient">
+                                <p><a ng-href="#/content/{{article._id}}"><span x-cms="read_more">{{cms.content}}</span></a></p>
+                                <div class="read-more-arrow"></div>
+                            </div>
+                            <img ng-src="{{article.thumbnail}}" alt="Image for {{article.title}}">
+                        </div>
+                    </div>
+                    <div class="span5 content">
+                        <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
+                        <p class="article-meta"><strong>by {{article.author}}, {{article.dateCreated}}</strong></p>
+                        <div class="tags">
+                            <a href="#">Tag 1,</a>
+                        </div>
+                        <p class="article-brief">{{article.description}}</p>
+                        <ul class="article-stats">
+                            <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
+                            <li class="muted"><i class="views"></i> {{article.views}} Views</li>
+                            <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

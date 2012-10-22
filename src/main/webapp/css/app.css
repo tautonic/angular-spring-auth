@@ -1,6 +1,14 @@
 .select2-container {
     width: 270px;
 }
+.container {
+    position: relative;
+}
+#outside-logo {
+    position: absolute;
+    left: 1000px;
+    top: 10px;
+}
 
 /** MSCE Page Styles **/
 #course-list {
@@ -59,10 +67,6 @@
 
 .article-list {
     list-style: none;
-}
-
-.article-list .article {
-    clear: none;
 }
 
 .category-sort {
@@ -480,11 +484,6 @@ ul.dropdown-menu li:last-child a {
     top: 110px;
 }
 
-.article .content {
-    margin-left: 200px;
-    padding: 0 10px;
-}
-
 .article .content p {
 }
 
@@ -616,7 +615,83 @@ ul.dropdown-menu li:last-child a {
 .footer {
     background-color: #c4c4c4;
     padding: 10px 20px;
-    color: #111;
+}
+
+.footer h3, .footer p {
+    color: #fefefe;
+    text-transform: none;
+}
+
+.footer h3 {
+    margin-top: 0;
+    line-height: 30px;
+}
+
+.footer .logo {
+    border-right: 2px solid #b3b3b3;
+    margin-top: 6px;
+}
+
+.footer .logo #shareIcons {
+    padding: 10px 20px 0 50px;
+}
+
+.footer .logo #shareIcons a {
+    background-image: url('../images/GCEE_sprite.png');
+    width: 30px;
+    height: 26px;
+    margin-left: 5px;
+    display: inline-block;
+}
+/***** footer social logos ******/ 
+.footer .logo #shareIcons a.facebook {
+    background-position: -105px -41px;
+}
+.footer .logo #shareIcons a.twitter {
+    background-position: -140px -41px;
+}
+.footer .logo #shareIcons a.linkedin {
+    background-position: -174px -41px;
+}
+.footer .logo #shareIcons a.youtube {
+    background-position: -209px -41px;
+}
+.footer .logo #shareIcons a.circles {
+    background-position: -243px -41px;
+}
+.footer .logo #shareIcons a.wordpress {
+    background-position: -278px -41px;
+}
+.footer .logo #shareIcons a.google {
+    background-position: -312px -41px;
+}
+.footer .logo #shareIcons a.lifeat {
+    background-position: -346px -41px;
+}
+
+.footer .logo #shareIcons a.facebook:hover {
+    background-position: -105px -8px;
+}
+.footer .logo #shareIcons a.twitter:hover {
+    background-position: -140px -8px;
+}
+.footer .logo #shareIcons a.linkedin:hover {
+    background-position: -174px -8px;
+}
+.footer .logo #shareIcons a.youtube:hover {
+    background-position: -209px -8px;
+}
+.footer .logo #shareIcons a.circles:hover {
+    background-position: -243px -8px;
+}
+.footer .logo #shareIcons a.wordpress:hover {
+    background-position: -278px -8px;
+}
+.footer .logo #shareIcons a.google:hover {
+    background-position: -312px -8px;
+}
+.footer .logo #shareIcons a.lifeat:hover {
+    background-position: -346px -8px;
 }
 
 
