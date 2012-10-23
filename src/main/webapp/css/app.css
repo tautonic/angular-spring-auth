@@ -1027,7 +1027,7 @@ i.comments{
 }
 
 .activity-stream-header,
-.site-search-box .header{
+.search-box .header{
     position: relative;
     background-color: #cecece;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#cecece), to(#b5b5b5));
@@ -1201,6 +1201,7 @@ input.input-medium.search-query{
     width: 25%;
     border-left: solid 1px #C5C5C5;
     padding: 1em;
+    min-height: 120px;
 }
 
 .profile-left h3{
@@ -1315,22 +1316,26 @@ input.input-medium.search-query{
     text-decoration: none;
 }
 
-.site-search-box{
+.search-box.site{
     margin: 2em 0 0 0;
 }
 
-.site-search-box .header{
+.search-box.members{
+    margin-top: 0;
+}
+
+.search-box .header{
     padding: 0
 }
 
-.site-search-box .header h4{
+.search-box .header h4{
     color: #ffffff;
     margin: 0;
     text-align: center;
     padding: 0.5em 0;
 }
 
-.site-search-box .form-container{
+.search-box .form-container{
     overflow: hidden;
     position: relative;
     padding: 1em;
@@ -1343,14 +1348,14 @@ input.input-medium.search-query{
     background: linear-gradient(to bottom,  rgba(247,247,247,1) 0%,rgba(229,229,229,1) 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
 }
-.site-search-box .form-container input{
+.search-box .form-container input{
     width: 80%;
     margin: auto 0;
     height: 30px;
     padding-left: 2em;
 }
 
-.site-search-box .form-container form{
+.search-box .form-container form{
     margin-bottom: 0
 }
 
@@ -1376,7 +1381,8 @@ input.input-medium.search-query{
     display: inline;
 }
 
-#curriculum-content{
+#curriculum-content,
+#gcee-network{
     position: relative;
     top: -37px;
 }
@@ -1409,7 +1415,8 @@ input.input-medium.search-query{
     border-left: 1px solid #C2C2C2;
 }
 
-#curriculum-content .nav-tabs > li:last-child{
+#curriculum-content .nav-tabs > li:last-child,
+#gcee-network .nav-tabs > li:last-child{
     border-right: 1px solid #C2C2C2;
 }
 

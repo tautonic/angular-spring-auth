@@ -766,6 +766,7 @@ textarea{
 .edit-profile.profile,
 .profile-list-item.profile{
     line-height: 15px;
+    margin-bottom: 3em;
 }
 
 .profile-modal .center h3:nth-child(1),

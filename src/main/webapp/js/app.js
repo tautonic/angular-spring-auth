@@ -23,7 +23,7 @@
         $routeProvider.when( '/content/:articleId', {
             templateUrl: 'lib/pyklresource/index.html'
         } );
-        $routeProvider.when( '/network/:discussionId', {
+        $routeProvider.when( '/network', {
             templateUrl: 'lib/pykldiscuss/index.html'
         } );
         $routeProvider.when( '/admin', {
@@ -36,10 +36,6 @@
         });
 
         //individual controller pages, some of these might be removed
-        $routeProvider.when( '/profiles', {
-            templateUrl: 'lib/profile/partials/list.html',
-            controller: 'listProfiles'
-        } );
         $routeProvider.when( '/profiles/view/:profileId', {
             templateUrl: 'lib/profile/partials/view.html',
             controller: 'viewProfile'
