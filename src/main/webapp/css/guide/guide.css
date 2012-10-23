@@ -13,11 +13,11 @@ body {
     background-color: #fff;
 }
 
-a, a:link {
+.profile a, .profile a:link {
     color: #b4b4b4;
 }
 
-a:hover, a:visited {
+.profile a:hover, .profile a:visited {
     color: #8b8b8b;
     text-decoration: none;
 }
@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #005172;
 }
 
-.profile h4 {
+.profile h4, #search-panel h4 {
     font-family: "Trade Gothic W01 Cn 18", "Arial Narrow", sans-serif;
     color: white;
 
@@ -70,6 +70,21 @@ h1, h2, h3, h4, h5, h6 {
     /*--IE9 WILL PLACE THE FILTER ON TOP OF THE ROUNDED CORNERS--*/
 }
 
+#search-panel {
+    width: 230px;
+    float: right;
+}
+
+#search-panel h4 {
+    padding: 5px 10px;
+    line-height: 120%;
+}
+
+#search-panel input[type=checkbox] {
+    float: left;
+    margin: 3px 5px;
+}
+
 a.btn {
     color: #333333;
 }
@@ -83,7 +98,6 @@ a.btn {
     color: #ffffff;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     background-color: #006644;
-    *background-color: #006644;
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#74bc66), to(#006644));
     background-image: -webkit-linear-gradient(top, #74bc66, #006644);
     background-image: -o-linear-gradient(top, #74bc66, #006644);
@@ -103,7 +117,6 @@ a.btn {
 .btn-babson[disabled] {
     color: #ffffff;
     background-color: #006644;
-    *background-color: #006644;
 }
 
 .btn-babson:active,
@@ -356,6 +369,7 @@ p.text-success {
     position: relative;
     color: #117450;
     font-weight: normal;
+    margin-top: 3em;
 }
 
 .quote p {
@@ -618,38 +632,6 @@ a.btn:visited{
 .discussion-post textarea {
     width: 90%;
     height: 100px;
-}
-
-/********* Stat numbers, for likes, comments, etc *******/
-.stats {
-    font-size: 12px;
-    color: #8b8b8b;
-}
-
-.stats span {
-    padding-left: 20px;
-    margin-right: 10px;
-    background-image: url('../../images/GCEE_sprite.png');
-}
-
-.stats span.likes {
-    background-position: -42px -27px;
-}
-
-.stats span.views {
-    background-position: -42px -47px;
-}
-
-.stats span.comments {
-    background-position: -42px -67px;
-}
-
-.stats span.flag {
-    background-position: -42px -87px;
-}
-
-.stats span.add {
-    background-position: -42px -7px;
 }
 
 /********** article list styles ********/
