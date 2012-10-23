@@ -31,7 +31,7 @@
                         <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
                         <p class="article-meta"><span class="doc-type {{article.doctype}}"></span><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
                         <div class="tags">
-                            <span ng-repeat="tag in article.taggable"><a href="#">{{tag}},</a> </span>
+                            <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
                         </div>
                         <p class="article-brief">{{article.description}}</p>
                         <ul class="article-stats">

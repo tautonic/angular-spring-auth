@@ -13,7 +13,7 @@ var {json} = require( 'ringo/jsgi/response' );
 var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
-var {ajax, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle, returnRandomQuote} = require('articles');
+var {ajax, searchAllArticles, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle, returnRandomQuote} = require('articles');
 var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
 var {ActivityMixin} = require('activities');
 
@@ -95,6 +95,15 @@ function articles(req, type) {
     return json(false);
 }
 
+app.post('/article/search', function(req) {
+    var articles = searchAllArticles(req.params);
+
+    if(articles.success) {
+        return json(articles.content);
+    }
+    return json(false);
+})
+
 app.get('/article/all/bycategory/:category', function(req, category) {
     var articles = getArticlesByCategory(category);
 
@@ -102,7 +111,7 @@ app.get('/article/all/bycategory/:category', function(req, category) {
         return json(articles.content);
     }
     return json(false);
-})
+});
 
 app.get('/article/:id', function(req, id) {
     var article = getArticle(id);

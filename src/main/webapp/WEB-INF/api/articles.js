@@ -22,6 +22,45 @@ function ajax(url) {
     };
 }
 
+var searchAllArticles = function(params) {
+    var query = {
+        "query":{
+            "bool":{
+                "must":[
+                    { "field":{ "_all":params.searchTerm } }
+                ],
+                "should":[
+                    { "field":{ "locale":"en" } },
+                    { "field":{ "dataType":"profiles posts ventures resources" } }
+                ],
+                "must_not":[
+                    { "field":{ "privacyVisibility.searchResults":"noone" } },
+                    { "field":{ "active":"false" } }
+                ],
+                'minimum_number_should_match':1
+            }
+        }
+    }
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/resources/search',
+        method: 'POST',
+        body: query,
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    var result = JSON.parse(exchange.content);
+
+    result.content.forEach(function(article) {
+        article.doctype = getDocType(article.mimetype);
+    });
+
+    return result;
+}
+
 var getAllArticles = function(type) {
     var result = ajax('http://localhost:9300/myapp/api/resources/' + type);
 
@@ -152,4 +191,4 @@ function generateBasicAuthorization(user) {
     return 'Basic ' + base64;
 }
 
-export('ajax', 'getAllArticles', 'getArticlesByCategory', 'getArticle', 'linkDiscussionToArticle', 'returnRandomQuote');
+export('ajax', 'searchAllArticles', 'getAllArticles', 'getArticlesByCategory', 'getArticle', 'linkDiscussionToArticle', 'returnRandomQuote');

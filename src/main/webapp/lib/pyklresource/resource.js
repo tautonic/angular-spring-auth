@@ -72,6 +72,11 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         });
     }
 
+    $scope.search = function() {
+        url = 'api/article/search?term='+$scope.searchTerm;
+        loadContent();
+    }
+
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
     $rootScope.$on('event:logoutConfirmed', function() { loadContent(); });
 
