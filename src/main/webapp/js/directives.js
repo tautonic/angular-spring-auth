@@ -888,6 +888,7 @@ angular.module('bgc.directives').directive('streamItem', ['$http',
             restrict: 'A',
             replace: true,
             scope: {
+                item: '=',
                 auth: '='
             },
             //transclude: 'element',

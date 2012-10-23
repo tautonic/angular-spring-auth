@@ -5,7 +5,7 @@
         </div>
     </div>
     <div class="right">
-        <p><i ng-bind-html-unsafe=""></i></p>
-        <p><span class="activity-item-owner">{{auth.principal.thumbnail}}</span> - <span class="muted">2 hours ago</span></p>
+        <p><i ng-bind-html-unsafe=item.message></i></p>
+        <p><span class="activity-item-owner">{{item.username}}</span> - <span class="muted">{{item.dateCreated | date: 'MM/dd/yyyy'}}</span></p>
     </div>
 </div>
