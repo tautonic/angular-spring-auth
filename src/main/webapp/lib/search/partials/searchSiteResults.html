@@ -30,12 +30,12 @@
 
                             <div class="discussion-item grey-gradient">
                                 <h4>{{result.title}}</h4>
-                                <h6>By {{result.creator.username}}, {{result.dateCreated | date: 'fullDate'}}</h6>
+                                <h6>By {{result.creator.username}}, {{result.dateCreated | asDate: 'fullDate'}}</h6>
                                 <p class="muted"><strong>Document:</strong> <a href="#/content">Document Title</a></p>
                                 <ul class="article-stats">
-                                    <li class="muted"><i class="likes"></i> 12 Likes</li>
-                                    <li class="muted"><i class="views"></i> 100 Views</li>
-                                    <li class="muted"><i class="comments"></i> 22 Comments</li>
+                                    <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
+                                    <li class="muted"><i class="views"></i> {{result.views}} Views</li>
+                                    <li class="muted"><i class="comments"></i> {{result.comments}} Comments</li>
                                 </ul>
                             </div>
                             <div class="paper-clip"></div>
@@ -62,7 +62,7 @@
                                         </div>
                                         <div class="content document">
                                             <h4>{{result.title}}</h4>
-                                            <div class="doc-type-thumbnail word"></div><h6>by {{result.author}}, {{result.dateCreated | date: 'MM/dd/yyyy'}}</h6>
+                                            <div class="doc-type-thumbnail word"></div><h6>by {{result.author}}, {{result.dateCreated | asDate: 'MM/dd/yyyy'}}</h6>
                                             <div class="tags">
                                                 <div ng-repeat="tag in result.taggable">
                                                     <a href="#">{{tag}}</a>
@@ -95,7 +95,7 @@
                                         </div>
                                         <div class="content">
                                             <h4>{{result.title}}</h4>
-                                            <h6>by {{result.author}}, {{result.dateCreated | date: 'MM/dd/yyyy'}}</h6>
+                                            <h6>by {{result.author}}, {{result.dateCreated | asDate: 'MM/dd/yyyy'}}</h6>
                                             <div class="tags">
                                                 <div ng-repeat="tag in result.taggable">
                                                     <a href="#">{{tag}}</a>

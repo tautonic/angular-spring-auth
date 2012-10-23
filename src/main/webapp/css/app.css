@@ -1169,6 +1169,7 @@ input.input-medium.search-query{
 
 .search-results h1,
 .search-results p{
+    margin-top: 1em;
     display: inline-block;
 }
 
@@ -1313,7 +1314,7 @@ input.input-medium.search-query{
 }
 
 .site-search-box{
-    margin: 0;
+    margin: 2em 0 0 0;
 }
 
 .site-search-box .header{
