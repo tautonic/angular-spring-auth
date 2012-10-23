@@ -191,8 +191,8 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
             // Subject link
             activity.actorLink = request.authenticatedId == activity.actor._id
                 ? "you"
-                : format('<a href="%s%s/%s">%s</a>', baseUrl, 'users',
-                activity.actor.username, activity.actor.fullName || activity.actor.username);
+                : format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
+                activity.actor._id, activity.actor.fullName || activity.actor.username);
 
             // Indirect object link
             if (about) {

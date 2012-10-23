@@ -1,0 +1,11 @@
+<div class="activity-item-content clearfix">
+    <div class="left">
+        <div class="new-picture-frame profile-thumbnail small no-rotation">
+            <img ng-src ="" alt="">
+        </div>
+    </div>
+    <div class="right">
+        <p><i ng-bind-html-unsafe=item.message></i></p>
+        <p><span class="activity-item-owner">{{item.username}}</span> - <span class="muted">{{item.dateCreated | date: 'MM/dd/yyyy'}}</span></p>
+    </div>
+</div>
