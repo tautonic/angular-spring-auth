@@ -1,71 +1,80 @@
-<div ng-switch on="pageType">
-    <div ng-switch-when="single">
-        <h1>{{article.title}}</h1>
-        <p ng-bind-html="article.description" ng-show="abstractVisible()"></p>
-        <p ng-bind-html="article.content"></p>
-    </div>
-
-    <div ng-switch-when="add">
-        <h2>Add new article</h2>
-        Article Title: <input type="text" ng-model="article.title"><br><br>
-        Article Summary: <textarea style="width: 100%; height: 50px;" ng-model="article.description" ui-tinymce></textarea><br>
-        Article Content: <textarea style="width: 100%; height: 50px;" ng-model="article.content" ui-tinymce></textarea>
-
-        <button ng-click="saveNewArticle()">Save Article</button>
-    </div>
-
-    <div ng-switch-default>
-        <div class="row">
-            <div class="articles span8">
-                <div class="article row" ng-repeat="article in articles">
-                    <div class="span3">
-                        <img thumbnail
-                             type="article"
-                             text="Read More"
-                             thumb=article />
-                        <!--<div class="new-picture-frame article-thumbnail">
-                            <div read-more-hover class="read-more gradient">
-                                <p><a ng-href="#/content/{{article._id}}"><span x-cms="read_more">{{cms.content}}</span></a></p>
-                                <div class="read-more-arrow"></div>
-                            </div>
-                            <img ng-src="http://images.ruwad.org.sa/assets/{{article.thumbnail}}" alt="Image for {{article.title}}">
-                        </div>-->
-                    </div>
-                    <div class="span5 content">
-                        <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
-                        <p class="article-meta"><span class="doc-type {{article.doctype}}"></span><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
-                        <div class="tags">
-                            <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
-                        </div>
-                        <p class="article-brief">{{article.description}}</p>
-                        <ul class="article-stats">
-                            <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
-                            <li class="muted"><i class="views"></i> {{article.views}} Views</li>
-                            <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
-                        </ul>
-                    </div>
-                </div>
+<div id="curriculum-content" ui-tabs="{tab1: {label: 'FEATURED CONTENT'}, tab2: {label: 'MOST RECENT'}, tab3: {label: 'MOST POPULAR'}}">
+    <div>
+        <div ng-switch on="pageType">
+            <div ng-switch-when="single">
+                <h1>{{article.title}}</h1>
+                <p ng-bind-html="article.description" ng-show="abstractVisible()"></p>
+                <p ng-bind-html="article.content"></p>
             </div>
 
-            <div id="search-panel" class="span4">
-                <h4>Search this section</h4>
-                <form>
-                <input ng-model="searchTerm"><button ng-click="search()" class="btn">Go</button><br>
-                <input type="checkbox" id="documents"><label for="documents">Documents</label>
-                <div class="documents-sub">
-                    <input type="checkbox" id="pdf"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat</label>
-                    <input type="checkbox" id="doc"><label for="doc"><span class="doc-type doc"></span>Microsoft Word</label>
-                    <input type="checkbox" id="powerpoint"><label for="powerpoint"><span class="doc-type powerpoint"></span>PowerPoint</label>
-                    <input type="checkbox" id="excel"><label for="excel"><span class="doc-type excel"></span>Excel Spreadsheet</label>
-                    <input type="checkbox" id="text"><label for="text"><span class="doc-type text"></span>Text File</label>
-                    <input type="checkbox" id="rtf"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document</label>
+            <div ng-switch-when="add">
+                <h2>Add new article</h2>
+                Article Title: <input type="text" ng-model="article.title"><br><br>
+                Article Summary: <textarea style="width: 100%; height: 50px;" ng-model="article.description" ui-tinymce></textarea><br>
+                Article Content: <textarea style="width: 100%; height: 50px;" ng-model="article.content" ui-tinymce></textarea>
+
+                <button ng-click="saveNewArticle()">Save Article</button>
+            </div>
+
+            <div ng-switch-default>
+                <div class="row">
+                    <div class="articles span8">
+                        <div class="article row" ng-repeat="article in articles">
+                            <div class="span3">
+                                <img thumbnail
+                                     type="article"
+                                     text="Read More"
+                                     thumb=article />
+                                <!--<div class="new-picture-frame article-thumbnail">
+                                    <div read-more-hover class="read-more gradient">
+                                        <p><a ng-href="#/content/{{article._id}}"><span x-cms="read_more">{{cms.content}}</span></a></p>
+                                        <div class="read-more-arrow"></div>
+                                    </div>
+                                    <img ng-src="http://images.ruwad.org.sa/assets/{{article.thumbnail}}" alt="Image for {{article.title}}">
+                                </div>-->
+                            </div>
+                            <div class="span5 content">
+                                <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
+                                <p class="article-meta"><span class="doc-type {{article.doctype}}"></span><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
+                                <div class="tags">
+                                    <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
+                                </div>
+                                <p class="article-brief">{{article.description}}</p>
+                                <ul class="article-stats">
+                                    <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
+                                    <li class="muted"><i class="views"></i> {{article.views}} Views</li>
+                                    <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="search-panel" class="span4">
+                        <h4>Search this section</h4>
+                        <form>
+                            <input ng-model="searchTerm"><button ng-click="search()" class="btn">Go</button><br>
+                            <input type="checkbox" id="documents"><label for="documents">Documents</label>
+                            <div class="documents-sub">
+                                <input type="checkbox" id="pdf"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat</label>
+                                <input type="checkbox" id="doc"><label for="doc"><span class="doc-type doc"></span>Microsoft Word</label>
+                                <input type="checkbox" id="powerpoint"><label for="powerpoint"><span class="doc-type powerpoint"></span>PowerPoint</label>
+                                <input type="checkbox" id="excel"><label for="excel"><span class="doc-type excel"></span>Excel Spreadsheet</label>
+                                <input type="checkbox" id="text"><label for="text"><span class="doc-type text"></span>Text File</label>
+                                <input type="checkbox" id="rtf"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document</label>
+                            </div>
+                            <input type="checkbox" id="videos"><label for="videos"><span class="doc-type video"></span>Videos</label>
+                            <input type="checkbox" id="pictures"><label for="pictures"><span class="doc-type image"></span>Pictures</label>
+                        </form>
+                        <br><button ng-show="auth.isUserInRole('ROLE_ADMIN')" ng-click="addNewArticle()" class="btn btn-info">Add Article</button>
+                    </div>
                 </div>
-                <input type="checkbox" id="videos"><label for="videos"><span class="doc-type video"></span>Videos</label>
-                <input type="checkbox" id="pictures"><label for="pictures"><span class="doc-type image"></span>Pictures</label>
-                </form>
-                <br><button ng-show="auth.isUserInRole('ROLE_ADMIN')" ng-click="addNewArticle()" class="btn btn-info">Add Article</button>
+
             </div>
         </div>
-
     </div>
+
+    <div ng-include="'partials/most-recent-content-template.html'"></div>
+    <div ng-include="'partials/most-popular-content-template.html'"></div>
 </div>
+
+
