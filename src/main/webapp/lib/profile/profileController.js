@@ -15,7 +15,7 @@ function listProfiles($rootScope, $scope, Profile){
     });
 }
 
-function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, Profile){
+function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $http, Profile){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
     });
@@ -52,6 +52,12 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, Prof
         }, function(response){
             $scope.responseContent = 'DELETE FAILED WITH AN ERROR OF: ' + response.status;
             console.log('DELETE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
+    }
+
+    $scope.followUser = function(id) {
+        $http.post('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
+            $scope.profile.isUserFollowing = data.success;
         });
     }
 }
