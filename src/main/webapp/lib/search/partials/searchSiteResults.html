@@ -61,22 +61,23 @@
                                             </a>
                                         </div>
                                         <div class="content document">
-                                            <h4>BUSINESS PLAN CHECKLIST</h4>
-                                            <div class="doc-type-thumbnail word"></div><h6>By Author, 12/12/2012</h6>
+                                            <h4>{{result.title}}</h4>
+                                            <div class="doc-type-thumbnail word"></div><h6>by {{result.author}}, {{result.dateCreated | date: 'MM/dd/yyyy'}}</h6>
                                             <div class="tags">
-                                                <a href="#">Tag 1,</a>
+                                                <div ng-repeat="tag in result.taggable">
+                                                    <a href="#">{{tag}}</a>
+                                                </div>
                                             </div>
-                                            <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et
-                                                magnis dis parturient montes, nascetur ridiculus mus.</p>
+                                            <p>{{result.description}}</p>
                                             <ul class="article-stats">
                                                 <li>
                                                     <div class="article-tweet-button">
                                                         <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
                                                     </div>
                                                 </li>
-                                                <li class="muted"><i class="likes"></i> 12 Likes</li>
-                                                <li class="muted"><i class="views"></i> 100 Views</li>
-                                                <li class="muted"><i class="comments"></i> 22 Comments</li>
+                                                <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
+                                                <li class="muted"><i class="views"></i> {{result.views}} Views</li>
+                                                <li class="muted"><i class="comments"></i> {{result.comments}} Comments</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -93,22 +94,23 @@
                                             </a>
                                         </div>
                                         <div class="content">
-                                            <h4>Article Title</h4>
-                                            <h6>By Author, 12/12/2012</h6>
+                                            <h4>{{result.title}}</h4>
+                                            <h6>by {{result.author}}, {{result.dateCreated | date: 'MM/dd/yyyy'}}</h6>
                                             <div class="tags">
-                                                <a href="#">Tag 1,</a>
+                                                <div ng-repeat="tag in result.taggable">
+                                                    <a href="#">{{tag}}</a>
+                                                </div>
                                             </div>
-                                            <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et
-                                                magnis dis parturient montes, nascetur ridiculus mus.</p>
+                                            <p>{{result.description}}</p>
                                             <ul class="article-stats">
                                                 <li>
                                                     <div class="article-tweet-button">
                                                         <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
                                                     </div>
                                                 </li>
-                                                <li class="muted"><i class="likes"></i> 12 Likes</li>
-                                                <li class="muted"><i class="views"></i> 100 Views</li>
-                                                <li class="muted"><i class="comments"></i> 22 Comments</li>
+                                                <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
+                                                <li class="muted"><i class="views"></i> {{result.views}} Views</li>
+                                                <li class="muted"><i class="comments"></i> {{result.comments}} Comments</li>
                                             </ul>
                                         </div>
                                     </div>

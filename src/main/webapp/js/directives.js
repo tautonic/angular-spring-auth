@@ -860,3 +860,41 @@ angular.module('bgc.directives').directive('cms', ['$http',
         }
     }
 ]);
+
+/**
+ * @ngdoc directive
+ * @name bgc.directives:stream-item
+ *
+ * @description
+ *
+ *
+ * @element ELEMENT
+ * @param {String}  type            Will accept "profile", "article" or "content"
+ * @param {String}  size            Will accept "large", "med", or "small". Used with profile type                                  corner of a profile thumbnail. Used with profile type
+ *
+ * If no parameters are given, the directive will generate a profile thumbnail with a generic
+ * image that's 135px square rotated 10 degrees clockwise. Some parameters will be ignored
+ * depending on the type of thumbnail you intend to generate. For example, if you want to generate
+ * a profile thumbnail and include text and url attributes, they will be ignored since a profile
+ * thumbnail does not use any of those attributes. If you list a size attribute for an article
+ * thumbnail it will be ignored because article thumbnails have one size.
+ *
+ * @example
+
+ */
+angular.module('bgc.directives').directive('streamItem', ['$http',
+    function($http){
+        return{
+            restrict: 'A',
+            replace: true,
+            scope: {
+                auth: '='
+            },
+            //transclude: 'element',
+            templateUrl: 'partials/activityStreamItem.html',
+            link: function(scope, elm, attr){
+                console.log();
+            }
+        }
+    }
+]);

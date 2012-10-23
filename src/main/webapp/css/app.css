@@ -1096,6 +1096,14 @@ i.comments{
     left: -107px;
 }
 
+.search-dropdown .form-horizontal .control-label{
+    width: 0;
+}
+
+.search-dropdown .form-horizontal .controls{
+    margin-left: 60px;
+}
+
 .search-dropdown p{
     color: white;
     text-align: center;
@@ -1103,6 +1111,7 @@ i.comments{
 
 .search-dropdown .form-search{
     margin: 20px 40px 0px 10px;
+    background: none;
 }
 
 input.input-medium.search-query{
@@ -1185,6 +1194,14 @@ input.input-medium.search-query{
     float: right;
     margin-left: 0;
     width: 64%;
+}
+
+.form-search .control-group{
+    margin-bottom: 0;
+}
+
+.form-search .control-group .control-label{
+    color: #ffffff;
 }
 
 .search-result ul>li{
@@ -1307,6 +1324,18 @@ input.input-medium.search-query{
     height: 29px;
     width: 110%;
     background-position: 68px -8px;
+}
+
+.search-dropdown li span:first-child{
+    height: 135%
+}
+
+.search-dropdown li:first-child{
+    height: 46px;
+}
+
+.tags div{
+    display: inline;
 }
 
 

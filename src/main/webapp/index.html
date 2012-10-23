@@ -53,10 +53,15 @@
                         <ul class="dropdown-menu search-dropdown">
                             <li>
                                 <span class="gradient">
-                                    <form ng-submit="searchSite()" ng-controller="SiteSearchController" class="form-search gradient">
-                                        <input ng-model="siteQuery" type="text" class="input-medium search-query span2">
+                                    <form class="form-horizontal form-search" ng-submit="searchSite()" ng-controller="SiteSearchController" class="form-search gradient">
+                                        <div class="control-group">
+                                            <label class="control-label" for="site-query">Search</label>
+                                            <div class="controls">
+                                                <input id="site-query" ng-model="siteQuery" type="text" class="input-medium search-query">
+                                            </div>
+                                        </div>
                                     </form>
-                                    <p><i>Press return to start your search</i></p>
+                                    <!--<p><i>Press return to start your search</i></p>-->
                                 </span>
                             </li>
                         </ul>
