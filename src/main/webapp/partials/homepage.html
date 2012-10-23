@@ -95,11 +95,11 @@
                 <div class="article">
                     <div class="row">
                         <div class="span3">
-                            <!--<thumbnail
+                            <!--<img thumbnail
                                     type="article"
                                     text="Read More"
                                     url="#/article/12345678"
-                                    image="images/row-of-students.jpg" />-->
+                                    image=article />-->
                             <div class="new-picture-frame article-thumbnail">
                                 <img ng-src ="images/row-of-students.jpg" alt="">
                                 <a ng-href="#/article">
@@ -139,15 +139,15 @@
         <div class="span4" ng-show="auth.isAuthenticated">
             <div class="activity-stream">
                 <div class="activity-stream-header">
-                    <!--<thumbnail
+                    <img thumbnail
                         type="profile"
                         size="med"
                         rotation="none"
-                        image="{{username}}" />-->
+                        image=auth />
 
-                    <div class="new-picture-frame profile-thumbnail med no-rotation">
+                    <!--<div class="new-picture-frame profile-thumbnail med no-rotation">
                         <img ng-src ="{{auth.principal.thumbnail}}" alt="">
-                    </div>
+                    </div>-->
 
                     <h4>LOGGED IN AS:</h4>
                 </div>

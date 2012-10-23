@@ -51,9 +51,11 @@ angular.module( 'bgc.directives', [] )
     .directive('thumbnail', function(){
 
         return{
-            restrict: 'E',
+            restrict: 'A',
             templateUrl: 'partials/thumbnail-template.html',
-            scope: {},
+            scope: {
+                auth: '='
+            },
             link: function(scope, elm, attr){
                 scope.thumbnail = {
                     image: 'images/GCEE_image_profileMale_135x135.jpeg',

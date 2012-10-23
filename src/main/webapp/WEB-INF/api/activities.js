@@ -266,6 +266,12 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         linkText = direct.title;
                         linkType = 'discussions';	// fix the URL
 
+                        if(linkText === ''){
+                            var discussion = getDiscussion(direct._id);
+                            linkText = discussion.content[0].title;
+                            log.info('Direct discussion object {}:', JSON.stringify(discussion, null, 4));
+                        }
+
                         // If the "about" object is a venture, this means the discussion is "private"
                         if (about && about.dataType === 'ventures') {
                             linkId = about.username + '/private/discussions/' + linkId;
