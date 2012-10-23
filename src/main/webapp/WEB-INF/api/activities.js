@@ -16,6 +16,7 @@ var text = {
     "notifications-activity.c.claims": "${actorLink} put in a claim request for ${directLink}.",
     "notifications-activity.c.comment": "${actorLink} commented on ${aboutLink}",
     "notifications-activity.c.discussions": "${actorLink} created a discussion called ${aboutLink}",
+    "notifications-activity.c.discussions": "${actorLink} created a discussion called ${directLink}",
     "notifications-activity.c.ideas": "${actorLink} created ${directLink}",
     "notifications-activity.c.themself.profiles": "You created your profile",
     "notifications-activity.c.profiles": "${actorLink} created ${directLink}",
@@ -70,7 +71,7 @@ function getProfile(id) {
     return result;
 }
 
-exports.ActivityMixin = function(activity, request, baseUrl) {
+exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
     var result = {};
 
     var defAttrs = {
@@ -94,7 +95,7 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
      */
     Object.defineProperty(result, "isOwner", {
         get: function() {
-            return request.authenticatedId === activity.actor._id;
+            return authenticatedId === activity.actor._id;
         }
     }, defAttrs);
 
@@ -104,7 +105,20 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
      */
     Object.defineProperty(result, "thumbnailUrl", {
         get: function() {
-            return baseUrl + "images/190x140.gif";//getThumbnailUrl(activity.actor, 'sml')
+            //return baseUrl + "images/190x140.gif";//getThumbnailUrl(activity.actor, 'sml')
+            return activity.actor.thumbnail;
+        }
+    }, defAttrs);
+
+    Object.defineProperty(result, "fullName", {
+        get: function() {
+            return activity.actor.fullName;
+        }
+    }, defAttrs);
+
+    Object.defineProperty(result, "profileId", {
+        get: function() {
+            return activity.actor._id;
         }
     }, defAttrs);
 
@@ -115,8 +129,6 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
 
     Object.defineProperty(result, "description", {
         get: function() {
-
-            //log.info(JSON.stringify(activity));
 
             var actor = activity.actor,
                 verb = activity.verb,
@@ -142,8 +154,12 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
                 }
 
                 // Determine if a post is a "reply" or not - if activity parentId prop resolves, it's a reply
-                var thread = getDiscussion(direct.parentId);
-                if (thread) {
+                //var thread = getDiscussion(direct.parentId);
+                //if (thread) {
+                    //verb = 'r';	// for "reply"
+                //}
+
+                if (direct.parentId !== direct._id) {
                     verb = 'r';	// for "reply"
                 }
             }
@@ -174,6 +190,7 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
 
             // Look up translation
             var key = String('notifications-activity.' + verb + '.' + type).toLowerCase();
+
             var skinStr = text[key];
             if(skinStr == undefined) {
                 log.info("Error: Notification key not found. Expecting: "+key);
@@ -189,8 +206,10 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
             // Substitute links
 
             // Subject link
-            activity.actorLink = request.authenticatedId == activity.actor._id
-                ? "you"
+            log.info('Authenticated id {}:' + authenticatedId);
+
+            activity.actorLink = authenticatedId == activity.actor._id
+                ? "You"
                 : format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
                 activity.actor._id, activity.actor.fullName || activity.actor.username);
 
