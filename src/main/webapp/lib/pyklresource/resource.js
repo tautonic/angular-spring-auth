@@ -27,7 +27,7 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
                 } else if ($scope.pageType === "all")
                 {
                     $scope.articles = data;
-                    if($scope.articles.length == 0) {
+                    if($scope.articles.length === 0) {
                         $log.info("No articles found.");
                     }
                 }
@@ -72,8 +72,8 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         });
     }
 
-    $scope.search = function() {
-        url = 'api/article/search?term='+$scope.searchTerm;
+    $scope.search = function(term) {
+        url = 'api/article/search/?term='+term;
         loadContent();
     }
 

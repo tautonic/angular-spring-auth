@@ -95,13 +95,10 @@ function articles(req, type) {
     return json(false);
 }
 
-app.post('/article/search', function(req) {
+app.get('/article/search', function(req) {
     var articles = searchAllArticles(req.params);
 
-    if(articles.success) {
-        return json(articles.content);
-    }
-    return json(false);
+    return json(articles);
 })
 
 app.get('/article/all/bycategory/:category', function(req, category) {

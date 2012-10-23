@@ -25,38 +25,60 @@ function ajax(url) {
 var searchAllArticles = function(params) {
     var query = {
         "query":{
-            "bool":{
-                "must":[
-                    { "field":{ "_all":params.searchTerm } }
-                ],
-                "should":[
+            "bool": {
+                "must":   [
                     { "field":{ "locale":"en" } },
-                    { "field":{ "dataType":"profiles posts ventures resources" } }
+                    { "field": {"format":"article"} }
                 ],
-                "must_not":[
-                    { "field":{ "privacyVisibility.searchResults":"noone" } },
-                    { "field":{ "active":"false" } }
+                "should": [
+                    { "field": { "title": params.term } },
+                    { "field": { "content": params.term } },
+                    { "field": { "description": params.term } }
                 ],
-                'minimum_number_should_match':1
+                "minimum_number_should_match": 1
             }
         }
     }
 
+    /*
+    "constant_score": {
+     "filter": {
+     "and": [
+     {
+     "terms": {
+     "locale": [
+     "en",
+     "en_US"
+     ]
+     }
+     },
+     {
+     "term": {
+     "format": "article"
+     }
+     }
+     ]
+     }
+     }
+     */
+
     var opts = {
         url: 'http://localhost:9300/myapp/api/resources/search',
         method: 'POST',
-        body: query,
-        headers: Headers({ 'x-rt-index': 'gc' }),
+        data: JSON.stringify(query),
+        headers: Headers({ 'x-rt-index': 'gc', "Content-Type": "application/json" }),
         async: false
     };
-
+    //todo: handle errors if something goes wrong by returning no results
     var exchange = httpclient.request(opts);
 
     var result = JSON.parse(exchange.content);
 
-    result.content.forEach(function(article) {
-        article.doctype = getDocType(article.mimetype);
-    });
+    if(typeof(result) == "object" ) {
+        result.forEach(function(article) {
+            article.doctype = getDocType(article.mimetype);
+        });
+    }
 
     return result;
 }
@@ -117,7 +139,12 @@ function getDocType(mimetype) {
             doctype = 'rtf';
             break;
         default:
-            doctype = mimetype.split('/')[0];
+            if(mimetype != undefined)
+            {
+                doctype = mimetype.split('/')[0];
+            } else {
+                doctype = "text";
+            }
             break;
     }
 
