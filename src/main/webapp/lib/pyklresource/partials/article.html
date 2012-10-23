@@ -19,13 +19,17 @@
             <div class="articles span8">
                 <div class="article row" ng-repeat="article in articles">
                     <div class="span3">
-                        <div class="new-picture-frame article-thumbnail">
+                        <img thumbnail
+                             type="article"
+                             text="Read More"
+                             thumb=article />
+                        <!--<div class="new-picture-frame article-thumbnail">
                             <div read-more-hover class="read-more gradient">
                                 <p><a ng-href="#/content/{{article._id}}"><span x-cms="read_more">{{cms.content}}</span></a></p>
                                 <div class="read-more-arrow"></div>
                             </div>
                             <img ng-src="http://images.ruwad.org.sa/assets/{{article.thumbnail}}" alt="Image for {{article.title}}">
-                        </div>
+                        </div>-->
                     </div>
                     <div class="span5 content">
                         <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>

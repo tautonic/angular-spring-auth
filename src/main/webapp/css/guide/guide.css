@@ -889,6 +889,7 @@ a:hover .read-more .read-more-arrow{
 a .read-more p{
     font-weight: normal;
     display: inline-block;
+    color: white;
 }
 
 .read-more-arrow{

@@ -52,19 +52,21 @@ angular.module( 'bgc.directives', [] )
 
         return{
             restrict: 'A',
+            replace: true,
             templateUrl: 'partials/thumbnail-template.html',
             scope: {
-                auth: '='
+                auth: '=',
+                thumb: '='
             },
             link: function(scope, elm, attr){
                 scope.thumbnail = {
-                    image: 'images/GCEE_image_profileMale_135x135.jpeg',
+                    image: 'images/GCEE_image_profileFemale_135x135.jpeg',
                     text: 'Read More',
-                    url: '',
                     type: 'profile-thumbnail large counter-clockwise',
                     anchor: false,
                     size: 'large',
                     facultyFellow: false,
+                    authUserThumb: false,
                     decoration: 'none'
                 }
 
@@ -78,40 +80,44 @@ angular.module( 'bgc.directives', [] )
                         scope.thumbnail.image = attr.image;
                     }
 
+                    if(attr.authuserthumb === 'true'){
+                        scope.thumbnail.authUserThumb = true;
+                    }
+
                     return;
                 }
 
                 if(attr.type === 'article' || attr.type === 'content'){
-                    var defaultImage = 'images/document-default.jpg';
+                    //var defaultImage = 'images/document-default.jpg';
                     var thumbnailType = 'content-thumbnail';
-                    var thumbnailUrl = '#/content';
+                    //var thumbnailUrl = '#/content';
 
                     scope.thumbnail.anchor = true;
                     scope.thumbnail.decoration = 'lens';
-                    scope.thumbnail.url = '#/content';
+                    //scope.thumbnail.url = '#/content';
 
                     if(attr.type === 'article'){
-                        defaultImage = 'images/row-of-columns.jpg';
+                        //defaultImage = 'images/row-of-columns.jpg';
                         thumbnailType = 'article-thumbnail';
-                        thumbnailUrl = '#/article';
+                        //thumbnailUrl = '#/article';
                         scope.thumbnail.decoration = 'arrow';
                     }
 
-                    scope.thumbnail.image = defaultImage;
+                    //scope.thumbnail.image = defaultImage;
                     scope.thumbnail.type = thumbnailType;
-                    scope.thumbnail.url = thumbnailUrl;
+                    //scope.thumbnail.url = thumbnailUrl;
 
                     if(attr.image){
-                        scope.thumbnail.image = attr.image;
+                        //scope.thumbnail.image = attr.image;
                     }
 
                     if(attr.text){
                         scope.thumbnail.text = attr.text;
                     }
 
-                    if(attr.url){
-                        scope.thumbnail.url = attr.url;
-                    }
+                    //if(attr.url){
+                        //scope.thumbnail.url = attr.url;
+                    //}
 
                     return;
                 }

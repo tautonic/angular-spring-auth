@@ -264,7 +264,7 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                     case 'posts':
                         linkId = direct._id;
                         linkText = direct.title;
-                        linkType = 'discussions';	// fix the URL
+                        linkType = '#/network';	// fix the URL
 
                         if(linkText === ''){
                             var discussion = getDiscussion(direct._id);

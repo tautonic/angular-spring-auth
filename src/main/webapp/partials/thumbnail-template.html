@@ -1,8 +1,10 @@
 <div class="new-picture-frame {{thumbnail.type}}">
-    <img src ="{{auth.principal.thumbnail}}" alt="">
+    <div style="overflow:hidden; height:90%;">
+        <img src="http://images.ruwad.org.sa/assets/{{thumb.thumbnail}}" width="93%" alt="">
+    </div>
 
     <div ng-show="thumbnail.anchor">
-        <a ng-href="{{thumbnail.url}}">
+        <a ng-href="#/content/{{thumb._id}}">
             <div read-more-hover class="read-more gradient">
                 <p>{{thumbnail.text}}</p>
 

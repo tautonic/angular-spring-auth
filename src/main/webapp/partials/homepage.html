@@ -15,18 +15,10 @@
                 <div class="article">
                     <div class="row">
                         <div class="span3">
-                            <!--<thumbnail
+                            <img thumbnail
                                 type="article"
-                                url="#/12345678" />-->
-                            <div class="new-picture-frame article-thumbnail">
-                                <img ng-src ="images/row-of-columns.jpg" alt="">
-                                <a ng-href="#/article">
-                                    <div read-more-hover class="read-more gradient">
-                                        <p>Read More</p>
-                                        <div class="read-more-arrow"></div>
-                                    </div>
-                                </a>
-                            </div>
+                                url="#/12345678" />
+
                         </div>
                         <div class="span5">
                             <h3>NEWS ARTICLE NAME</h3>
@@ -54,20 +46,10 @@
                 <div class="article">
                     <div class="row">
                         <div class="span3">
-                            <!--<thumbnail
+                            <img thumbnail
                                     type="article"
                                     text="Read More"
-                                    url="#/article/12345678"
-                                    image="images/homepage-article-image-one.jpg" />-->
-                            <div class="new-picture-frame article-thumbnail">
-                                <img ng-src ="images/homepage-article-image-one.jpg" alt="">
-                                <a ng-href="#/article">
-                                    <div read-more-hover class="read-more gradient">
-                                        <p>Read More</p>
-                                        <div class="read-more-arrow"></div>
-                                    </div>
-                                </a>
-                            </div>
+                                    image="images/homepage-article-image-one.jpg" />
                         </div>
                         <div class="span5">
                             <h3>NEWS ARTICLE NAME</h3>
@@ -95,20 +77,10 @@
                 <div class="article">
                     <div class="row">
                         <div class="span3">
-                            <!--<img thumbnail
+                            <img thumbnail
                                     type="article"
-                                    text="Read More"
-                                    url="#/article/12345678"
-                                    image=article />-->
-                            <div class="new-picture-frame article-thumbnail">
-                                <img ng-src ="images/row-of-students.jpg" alt="">
-                                <a ng-href="#/article">
-                                    <div read-more-hover class="read-more gradient">
-                                        <p>Read More</p>
-                                        <div class="read-more-arrow"></div>
-                                    </div>
-                                </a>
-                            </div>
+                                    text="Read Less"
+                                    image="images/row-of-students.jpg" />
                         </div>
                         <div class="span5">
                             <h3>NEWS ARTICLE NAME</h3>
@@ -143,7 +115,8 @@
                         type="profile"
                         size="med"
                         rotation="none"
-                        image=auth />
+                        authUserThumb=true
+                        auth=auth />
 
                     <!--<div class="new-picture-frame profile-thumbnail med no-rotation">
                         <img ng-src ="{{auth.principal.thumbnail}}" alt="">
