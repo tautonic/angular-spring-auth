@@ -1099,7 +1099,7 @@ i.comments{
     position: static;
 }
 
-.activity-item-owner{
+.activity-item-content .right .activity-item-owner{
     color: #005172;
     font-weight: bold;
 }

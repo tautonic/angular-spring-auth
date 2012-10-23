@@ -261,19 +261,24 @@ app.get('/notifications', function(req) {
     // Try to parse the results, wrap each activity in a mixin, then return a response
     try {
         var stream = exchange.content;
+
+        log.info('Activity stream returned from Zocia: {}', JSON.stringify(stream, null, 4));
+
         var activities = [];
         stream.acts.forEach(function (activity) {
-            activity = new ActivityMixin(activity, req, ctx('/'));
+            activity = new ActivityMixin(activity, req, ctx('/'), profile.principal.id);
 
             if (activity.description !== null) {
 
                 // Assign values from the mixin to a temp object, since the mixin won't be passed via JSON
                 activities.push({
                     'thumbnailUrl': activity.thumbnailUrl,
+                    'fullName': activity.fullName,
                     'username': activity.props.actor.username,
                     'message': activity.description,
                     'dateCreated': activity.props.dateCreated,
-                    'isOwner': activity.isOwner
+                    'isOwner': activity.isOwner,
+                    'profileId': activity.profileId
                 });
             }
         });

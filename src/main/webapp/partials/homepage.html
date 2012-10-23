@@ -155,21 +155,9 @@
                     <p class="activity-stream-owner">
                         <a ng-href="#/profiles/view/{{auth.principal.id}}">{{auth.principal.username}}</a>
                     </p>
-                    <ul class="activity-stream-items" ng-repeat="item in stream.items">
-                        <li class="activity-stream-item">
-                            <!--<div class="activity-item-content clearfix">
-                                <div class="left">
-                                    <div class="new-picture-frame profile-thumbnail small no-rotation">
-                                        <img ng-src ="{{auth.principal.thumbnail}}" alt="">
-                                    </div>
-                                </div>
-                                <div class="right">
-                                    <p><i ng-bind-html-unsafe="item.message"></i></p>
-                                    <p><span class="activity-item-owner">Sean Grey</span> - <span class="muted">2 hours ago</span></p>
-                                </div>
-                            </div>-->
+                    <ul class="activity-stream-items">
+                        <li class="activity-stream-item" ng-repeat="item in stream.items">
                             <div stream-item item=item auth=auth></div>
-
                         </li>
 
                         <!--<li class="activity-stream-item">

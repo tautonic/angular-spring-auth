@@ -1,11 +1,25 @@
 <div class="activity-item-content clearfix">
     <div class="left">
         <div class="new-picture-frame profile-thumbnail small no-rotation">
-            <img ng-src ="" alt="">
+            <div ng-switch on="item.thumbnailUrl">
+                <div ng-switch-when=profiles-0000-0000-0000-000000000001>
+                    <img ng-src ="images/GCEE_image_profileMale_135x135.jpeg" alt="">
+                </div>
+                <div ng-switch-default>
+                    <img ng-src ="{{item.thumbnailUrl}}" alt="">
+                </div>
+            </div>
         </div>
     </div>
     <div class="right">
         <p><i ng-bind-html-unsafe=item.message></i></p>
-        <p><span class="activity-item-owner">{{item.username}}</span> - <span class="muted">{{item.dateCreated | asDate: 'MM/dd/yyyy'}}</span></p>
+        <div ng-switch on="item.isOwner">
+            <div ng-switch-when=true>
+                <p><a class="activity-item-owner" ng-href="#/profiles/view/{{item.profileId}}">You</a> - <span class="muted">{{item.dateCreated | asDate: 'MM/dd/yyyy'}}</span></p>
+            </div>
+            <div ng-switch-default>
+                <p><a class="activity-item-owner" ng-href="#/profiles/view/{{item.profileId}}">{{item.fullName}}</a> - <span class="muted">{{item.dateCreated | asDate: 'MM/dd/yyyy'}}</span></p>
+            </div>
+        </div>
     </div>
 </div>
