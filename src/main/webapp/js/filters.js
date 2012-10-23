@@ -9,4 +9,11 @@ angular.module('bgc.filters', []).filter( 'asDate', function () {
 	}
 });
 
+angular.module('bgc.filters', []).filter( 'timeago', function () {
+    return function (dateInput) {
+        var date = new Date(dateInput);
+        return jQuery.timeago(date);
+    }
+});
+
 
