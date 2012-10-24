@@ -121,7 +121,7 @@
         <div class="span8">
             <div ng-repeat="post in discussion">
                 <div class="discussion-stack-container">
-                    <div discussion-stack class="discussion-item grey-gradient">
+                    <div discussion-stack comments={{post.commentCount}} class="discussion-item grey-gradient">
                         <a ng-href="#/network/{{post._id}}"><h4>{{post.title}}</h4></a>
                         <h6>By <a ng-href="#/profiles/view/{{post.creator._id}}">{{post.creator.username}}</a>, {{post.dateCreated | asDate: 'fullDate'}}</h6>
                         <!--<p class="muted"><strong>Document:</strong> <a href="#/content">Document Title</a></p>-->
