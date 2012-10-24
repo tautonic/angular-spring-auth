@@ -57,6 +57,20 @@ var searchAllArticles = function(params) {
         }
     };
 
+    if(params.filters) {
+        var mimetypeFilters = [];
+        var filters = params.filters.split(',');
+
+        //currently set up to skip the last filter in the list. this is because an extra comma is added to the filters param, which is interpreted as a blank string
+        //blank strings are otherwise useless in mimetype stuff, so we drop it entirely as it is junk data
+        for(var i = 0; i < filters.length - 1; i++)
+        {
+            mimetypeFilters = mimetypeFilters.concat(getPossibleMimetypes(filters[i]));
+        }
+        log.info("query filter?: "+JSON.stringify(mimetypeFilters));
+        query.query.filtered.filter.and.push({ "terms": { "mimetype": mimetypeFilters }});
+    }
+
     var opts = {
         url: 'http://localhost:9300/myapp/api/resources/search',
         method: 'POST',
@@ -64,7 +78,7 @@ var searchAllArticles = function(params) {
         headers: Headers({ 'x-rt-index': 'gc', "Content-Type": "application/json" }),
         async: false
     };
-    //todo: handle errors if something goes wrong by returning no results
+
     var exchange = httpclient.request(opts);
 
     var result = JSON.parse(exchange.content);
@@ -116,7 +130,7 @@ function getDocType(mimetype) {
             doctype = 'pdf';
             break;
         case 'application/msword':
-            doctype = 'doc';
+            doctype = 'word';
             break;
         case 'application/mspowerpoint':
         case 'application/powerpoint':
@@ -146,6 +160,33 @@ function getDocType(mimetype) {
     }
 
     return doctype;
+}
+
+function getPossibleMimetypes(doctype) {
+    var mimetypes;
+    switch(doctype)
+    {
+        case 'pdf':
+            mimetypes = ['application/pdf'];
+            break;
+        case 'word':
+            mimetypes = ['application/msword'];
+            break;
+        case 'powerpoint':
+            mimetypes = ['application/mspowerpoint', 'application/powerpoint', 'application/vnd.ms-powerpoint', 'application/x-mspowerpoint'];
+            break;
+        case 'excel':
+            mimetypes = ['application/excel', 'application/vnd.ms-excel', 'application/x-excel', 'application/x-msexcel'];
+            break;
+        case 'rtf':
+            mimetypes = ['application/rtf', 'application/x-rtf', 'text/richtext'];
+            break;
+        default:
+            mimetypes = ['text/html', 'text/plain', 'text/xml'];
+            break;
+    }
+
+    return mimetypes;
 }
 
 var quotes = [

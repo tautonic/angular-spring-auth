@@ -1269,11 +1269,11 @@ input.input-medium.search-query{
     margin: 0 1em 0 0;
 }
 
-.word{
-    background: url('../images/GCEE_sprite.png') -72px -99px no-repeat;
-}
 .pdf{
     background: url('../images/GCEE_sprite.png') -72px -68px no-repeat;
+}
+.word{
+    background: url('../images/GCEE_sprite.png') -72px -99px no-repeat;
 }
 .ppt{
     background: url('../images/GCEE_sprite.png') -72px -131px no-repeat;

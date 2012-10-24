@@ -2,6 +2,7 @@
 
 function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
     var url = 'api/article/';
+    $scope.filters = {};
 
     setup();
 
@@ -72,12 +73,24 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         });
     }
 
+    function buildFilters() {
+        var result = "";
+        //skips the last filter value, which is fine as long as the comma is always placed after the last real filter
+        for(var property in $scope.filters) {
+            if($scope.filters[property]) {
+                result += property + ",";
+            }
+        }
+
+        return result;
+    }
+
     $scope.search = function(term) {
         if(term === "")
         {
             url = "api/article/all";
         } else {
-            url = "api/article/search/?term="+term;
+            url = "api/article/search/?term=" + term + "&filters=" + buildFilters();
         }
         loadContent();
     }

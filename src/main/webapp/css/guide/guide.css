@@ -72,7 +72,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .search-box.content input[type=checkbox] {
     float: left;
-    margin: 3px 5px;
+    margin: 5px;
+}
+
+.search-box.content label {
+    font-weight: normal;
 }
 
 a.btn {
