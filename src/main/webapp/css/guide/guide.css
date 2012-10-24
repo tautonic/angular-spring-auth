@@ -559,7 +559,7 @@ a.btn:visited{
 
 /** discussion list styles **/
 .discussion-item {
-    padding: 0px 10px;
+    padding: 8px 10px 0 10px;
     border: 1px solid #F1EFEF;
 }
 
