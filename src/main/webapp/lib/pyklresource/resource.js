@@ -25,6 +25,7 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
                 {
                     $scope.article = data;
                     $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
+                    $http.post("api/views/" + $scope.article._id);
                 } else if ($scope.pageType === "all")
                 {
                     $scope.articles = data;
