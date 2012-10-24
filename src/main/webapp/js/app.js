@@ -26,6 +26,9 @@
         $routeProvider.when( '/network', {
             templateUrl: 'lib/pykldiscuss/index.html'
         } );
+        /*$routeProvider.when( '/network/:discussionId', {
+            templateUrl: 'lib/pykldiscuss/index.html'
+        } );*/
         $routeProvider.when( '/admin', {
             templateUrl: 'lib/pykladmin/index.html'
         });
@@ -82,7 +85,7 @@
         $routeProvider.when( '/view', {
             templateUrl: 'partials/partial1.html'
         } );
-		$routeProvider.otherwise( {redirectTo: '/view'} );
+		$routeProvider.otherwise( {redirectTo: '/home'} );
     }
 
     function locationProvider( $locationProvider ){

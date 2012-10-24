@@ -901,8 +901,8 @@ angular.module('bgc.directives').directive('streamItem', ['$http',
             },
             //transclude: 'element',
             templateUrl: 'partials/activityStreamItem.html',
-            link: function(scope, elm, attr){
-                console.log();
+            link: function(scope, elm, attrs){
+                //console.log(attrs.ngModel);
             }
         }
     }
@@ -977,4 +977,37 @@ angular.module('bgc.directives').directive('uiTabs', ['$compile', function ($com
             element.prepend($compile("<ul class='nav nav-tabs'>" + html + "</ul>")(scope));
         }
     };
+}]);
+
+angular.module('bgc.directives').directive('discussionStack', ['$compile', function($compile){
+    'use strict';
+
+    return {
+            link: function(scope, element, attrs){
+                var top = 4;
+                var left = 5;
+                var zIndex = -1;
+                var height = element.height() - element.css('margin-bottom').replace('px', '');
+
+                for(var i=1; i < 5; i++){
+                    //var div = '<div class="discussion-item discussion-stack-div grey-gradient" style="width:' + element.css('width') + ';height:70px;top:5px;left:21px;"></div>';
+                    var div = document.createElement('div');
+                    div = jQuery(div);
+                    div.addClass('discussion-item discussion-stack-div grey-gradient');
+                    div.css({
+                        'width': element.css('width'),
+                        'height': height + 8,
+                        'top': top,
+                        'left': left,
+                        'z-index': zIndex
+                    });
+
+                    element.parent('.discussion-stack-container').append($compile(div)(scope));
+
+                    top += 4;
+                    left += 4;
+                    zIndex -= 1;
+                }
+            }
+    }
 }]);

@@ -996,7 +996,8 @@ span.doc-type.rtf {
 
 i.likes,
 i.views,
-i.comments{
+i.comments,
+i.flag{
     background: url('../images/GCEE_sprite.png') 10px 10px no-repeat;
     width: 13px;
     height: 13px;
@@ -1013,6 +1014,10 @@ i.views{
 
 i.comments{
     background-position: -45px -66px;
+}
+
+i.flag{
+    background-position: -45px -87px;
 }
 
 .article-tweet-button{
@@ -1317,8 +1322,12 @@ input.input-medium.search-query{
 }
 
 .discussion-item a{
-    color: #eeaf00;
+    color: #005172;
     text-decoration: none;
+}
+
+.discussion-item .article-stats li:last-child{
+    cursor: pointer;
 }
 
 .search-box.site{
@@ -1472,6 +1481,20 @@ input.input-medium.search-query{
 .btn-success.disabled,
 .btn-success[disabled]{
     background-color: #127551;
+}
+
+#discussions .discussion-item{
+    margin-bottom: 2em;
+}
+
+.discussion-stack-container{
+    position: relative;
+}
+
+.discussion-stack-div{
+    position: absolute;
+    top: 5px;
+    left: 21px;
 }
 
 

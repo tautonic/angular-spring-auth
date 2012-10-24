@@ -1,9 +1,9 @@
 <div id="gcee-network" class="content container">
     <div class="row">
         <div class="span12">
-            <div ui-tabs="{tab1: {label: 'MEMBERS'}, tab2: {label: 'DISCUSSIONS'}}">
-                <div ng-include="'lib/profile/partials/list.html'" ng-controller="listProfiles"></div>
+            <div ui-tabs="{tab1: {label: 'DISCUSSIONS'}, tab2: {label: 'MEMBERS'}}">
                 <div ng-include="'lib/pykldiscuss/partials/discussion.html'" ng-controller="DiscussionCtrl"></div>
+                <div ng-include="'lib/profile/partials/list.html'" ng-controller="listProfiles"></div>
             </div>
         </div>
     </div>

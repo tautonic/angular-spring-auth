@@ -559,12 +559,13 @@ a.btn:visited{
 
 /** discussion list styles **/
 .discussion-item {
-    padding: 10px;
+    padding: 0px 10px;
     border: 1px solid #F1EFEF;
 }
 
 .article h4, .discussion-item h4 {
     margin: 5px 0;
+    display: inline;
 }
 
 .article h6, .discussion-item h6 {

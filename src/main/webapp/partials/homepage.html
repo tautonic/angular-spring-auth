@@ -130,7 +130,7 @@
                     </p>
                     <ul class="activity-stream-items">
                         <li class="activity-stream-item" ng-repeat="item in stream.items">
-                            <div stream-item item=item auth=auth></div>
+                            <div stream-item item=item auth=auth id="{{auth.principal.id}}"></div>
                         </li>
 
                         <!--<li class="activity-stream-item">
