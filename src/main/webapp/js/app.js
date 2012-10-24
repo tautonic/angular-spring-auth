@@ -55,12 +55,6 @@
         $routeProvider.when('/passwordtoken/:token', {
             templateUrl: 'lib/profile/profile.html'
         });
-        $routeProvider.when( '/both/:articleId', {
-            templateUrl: 'partials/partial2.html'
-        } );
-        $routeProvider.when( '/both/:articleId/:discussionId', {
-            templateUrl: 'partials/partial2.html'
-        } );
 
         $routeProvider.when( '/search/profiles/:query', {
             templateUrl: 'lib/search/partials/searchFacultyResults.html',

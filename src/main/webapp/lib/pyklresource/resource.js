@@ -2,6 +2,7 @@
 
 function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
     var url = 'api/article/';
+    $scope.filters = {};
 
     setup();
 
@@ -72,9 +73,39 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         });
     }
 
+    function buildFilters() {
+        var result = "";
+        //skips the last filter value, which is fine as long as the comma is always placed after the last real filter
+        for(var property in $scope.filters) {
+            if($scope.filters[property]) {
+                result += property + ",";
+            }
+        }
+
+        return result;
+    }
+
     $scope.search = function(term) {
-        url = 'api/article/search/?term='+term;
+        if(term === "")
+        {
+            url = "api/article/all";
+        } else {
+            url = "api/article/search/?term=" + term + "&filters=" + buildFilters();
+        }
         loadContent();
+    }
+
+    $scope.count = function(what) {
+        if(typeof($scope.articles) === "undefined")
+        {
+            return 0;
+        }
+
+        var result = $scope.articles.filter(function(article) {
+            return (article.doctype === what);
+        });
+
+        return result.length;
     }
 
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });

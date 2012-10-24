@@ -70,19 +70,13 @@ h1, h2, h3, h4, h5, h6 {
     /*--IE9 WILL PLACE THE FILTER ON TOP OF THE ROUNDED CORNERS--*/
 }
 
-#search-panel {
-    width: 230px;
-    float: right;
-}
-
-#search-panel h4 {
-    padding: 5px 10px;
-    line-height: 120%;
-}
-
-#search-panel input[type=checkbox] {
+.search-box.content input[type=checkbox] {
     float: left;
-    margin: 3px 5px;
+    margin: 5px;
+}
+
+.search-box.content label {
+    font-weight: normal;
 }
 
 a.btn {
