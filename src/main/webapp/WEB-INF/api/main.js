@@ -75,6 +75,19 @@ app.get('/getquote', function(req) {
     return json({ "quote": returnRandomQuote() });
 })
 
+app.post('/views/:id', function(req, id) {
+    var opts = {
+        url: "http://localhost:9300/myapp/api/views/" + id,
+        method: 'POST',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+     log.info("VIEWED THING" + exchange.content);
+    return json(true);
+})
+
 /********** Articles and resources *********/
 
 /* Attempt to allow for sorting by type. didn't quite work */
