@@ -73,8 +73,26 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
     }
 
     $scope.search = function(term) {
-        url = 'api/article/search/?term='+term;
+        if(term === "")
+        {
+            url = "api/article/all";
+        } else {
+            url = "api/article/search/?term="+term;
+        }
         loadContent();
+    }
+
+    $scope.count = function(what) {
+        if(typeof($scope.articles) === "undefined")
+        {
+            return 0;
+        }
+
+        var result = $scope.articles.filter(function(article) {
+            return (article.doctype === what);
+        });
+
+        return result.length;
     }
 
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });

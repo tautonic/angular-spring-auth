@@ -24,43 +24,38 @@ function ajax(url) {
 
 var searchAllArticles = function(params) {
     var query = {
-        "query":{
-            "bool": {
-                "must":   [
-                    { "field":{ "locale":"en" } },
-                    { "field": {"format":"article"} }
-                ],
-                "should": [
-                    { "field": { "title": params.term } },
-                    { "field": { "content": params.term } },
-                    { "field": { "description": params.term } }
-                ],
-                "minimum_number_should_match": 1
+        "query": {
+            "filtered": {
+                "query":{
+                    "bool": {
+                        "should": [
+                            { "field": { "title": params.term } },
+                            { "field": { "content": params.term } },
+                            { "field": { "description": params.term } }
+                        ],
+                        "minimum_number_should_match": 1
+                    }
+                },
+                "filter": {
+                    "and": [
+                        {
+                            "terms": {
+                                "locale": [
+                                    "en",
+                                    "en_US"
+                                ]
+                            }
+                        },
+                        {
+                            "term": {
+                                "format": "article"
+                            }
+                        }
+                    ]
+                }
             }
         }
-    }
-
-    /*
-    "constant_score": {
-     "filter": {
-     "and": [
-     {
-     "terms": {
-     "locale": [
-     "en",
-     "en_US"
-     ]
-     }
-     },
-     {
-     "term": {
-     "format": "article"
-     }
-     }
-     ]
-     }
-     }
-     */
+    };
 
     var opts = {
         url: 'http://localhost:9300/myapp/api/resources/search',
@@ -78,6 +73,8 @@ var searchAllArticles = function(params) {
         result.forEach(function(article) {
             article.doctype = getDocType(article.mimetype);
         });
+    } else {
+        result = [];
     }
 
     return result;

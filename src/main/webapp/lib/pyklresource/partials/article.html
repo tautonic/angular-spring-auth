@@ -40,23 +40,24 @@
                             </ul>
                         </div>
                     </div>
+                    <div ng-show="(articles.length == 0)">No articles found.</div>
                 </div>
 
                 <div id="search-panel" class="span4">
                     <h4>Search this section</h4>
                     <form>
                     <input ng-model="searchTerm" type="text"><button ng-click="search(searchTerm)" class="btn">Go</button><br>
-                    <input type="checkbox" id="documents"><label for="documents">Documents</label>
+                    <input type="checkbox" id="documents"><label for="documents">Documents ({{count('docs')}})</label>
                     <div class="documents-sub">
-                        <input type="checkbox" id="pdf"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat</label>
-                        <input type="checkbox" id="doc"><label for="doc"><span class="doc-type doc"></span>Microsoft Word</label>
-                        <input type="checkbox" id="powerpoint"><label for="powerpoint"><span class="doc-type powerpoint"></span>PowerPoint</label>
-                        <input type="checkbox" id="excel"><label for="excel"><span class="doc-type excel"></span>Excel Spreadsheet</label>
-                        <input type="checkbox" id="text"><label for="text"><span class="doc-type text"></span>Text File</label>
-                        <input type="checkbox" id="rtf"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document</label>
+                        <input type="checkbox" id="pdf"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{count('pdf')}})</label>
+                        <input type="checkbox" id="doc"><label for="doc"><span class="doc-type doc"></span>Microsoft Word ({{count('doc')}})</label>
+                        <input type="checkbox" id="powerpoint"><label for="powerpoint"><span class="doc-type powerpoint"></span>PowerPoint ({{count('powerpoint')}})</label>
+                        <input type="checkbox" id="excel"><label for="excel"><span class="doc-type excel"></span>Excel Spreadsheet ({{count('excel')}})</label>
+                        <input type="checkbox" id="text"><label for="text"><span class="doc-type text"></span>Text File ({{count('text')}})</label>
+                        <input type="checkbox" id="rtf"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{count('rtf')}})</label>
                     </div>
-                    <input type="checkbox" id="videos"><label for="videos"><span class="doc-type video"></span>Videos</label>
-                    <input type="checkbox" id="pictures"><label for="pictures"><span class="doc-type image"></span>Pictures</label>
+                    <input type="checkbox" id="videos"><label for="videos"><span class="doc-type video"></span>Videos ({{count('videos')}})</label>
+                    <input type="checkbox" id="pictures"><label for="pictures"><span class="doc-type image"></span>Pictures ({{count('image')}})</label>
                     </form>
                     <br><button ng-show="auth.isUserInRole('ROLE_ADMIN')" ng-click="addNewArticle()" class="btn btn-info">Add Article</button>
                 </div>
