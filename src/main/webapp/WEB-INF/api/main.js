@@ -454,9 +454,48 @@ app.get('/profiles/', function(req){
 
     var exchange = httpclient.request(opts);
 
+    var profiles = JSON.parse(exchange.content);
+
+    //log.info('Array of profile objects sent from Zocia {}', JSON.stringify(profiles, null, 4));
+    // grab the latest activity for each profile before sending on
+    // to angular
+    /*profiles.forEach(function(profile){
+        var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
+        var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
+        var allowedActivities = filters.trim().split(' ');
+
+        //remove terms that are not in the active filter list
+        allowedActivities.forEach(function(activity) {
+            filteredActivities = filteredActivities.replace(activity, '');
+        });
+
+        var url = 'http://localhost:9300/myapp/api/activities/streams/' + profile._id + '?filters=' + filteredActivities.trim().replace(/ /g, ',');
+
+        var opts = {
+            url: url,
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc' }),
+            async: false
+        }
+
+        // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
+        exchange = httpclient.request(opts);
+
+        var stream = JSON.parse(exchange.content);
+
+        var latestActivity;
+
+        if(stream._type === 'activityStreams'){
+            var activity = new ActivityMixin(stream.acts[0], req, ctx('/'), profile._id);
+            //log.info('Latest activity {}', JSON.stringify(activity, null, 4));
+        }
+
+        //profile.latestActivity;
+    });*/
+
     var result = json({
         'status': exchange.status,
-        'content': JSON.parse(exchange.content),
+        'content': profiles,
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });

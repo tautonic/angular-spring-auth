@@ -128,6 +128,7 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
      */
 
     Object.defineProperty(result, "description", {
+
         get: function() {
 
             var actor = activity.actor,
@@ -135,6 +136,7 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                 about = activity.about,
                 direct = activity.direct,
                 type;
+
 
             // Try to determine the "type" of the activity
             if (direct && direct.dataType) {
@@ -182,7 +184,7 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
             }
 
             // Try to determine if the user is taking action against their own profile
-            if (activity.actor._id === activity.direct._id && request.authenticatedId === activity.direct._id) {
+            if (activity.actor._id === activity.direct._id && authenticatedId === activity.direct._id) {
                 verb += '.self';
             } else if (activity.actor._id === activity.direct._id) {
                 verb += '.themself';
@@ -297,7 +299,7 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         linkId = direct.username;
                         linkText = direct.fullName || direct.username;
                         // If showing this message to the same user, use the "you" word
-                        if (request.authenticatedId === direct._id) {
+                        if (authenticatedId === direct._id) {
                             linkText = nativeYou.toLowerCase();
                         }
                         linkType = 'users';

@@ -5,7 +5,7 @@
  * Time: 11:10 AM
  * To change this template use File | Settings | File Templates.
  */
-function listProfiles($rootScope, $scope, Profile){
+function listProfiles($rootScope, $scope, $http, Profile){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'faculty';
     });

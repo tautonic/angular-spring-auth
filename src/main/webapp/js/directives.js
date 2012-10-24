@@ -979,7 +979,7 @@ angular.module('bgc.directives').directive('uiTabs', ['$compile', function ($com
     };
 }]);
 
-angular.module('bgc.directives').directive('discussionStack', ['$compile', '$parse', function($compile, $parse){
+angular.module('bgc.directives').directive('discussionStack', ['$compile', function($compile){
     'use strict';
     return {
         link: function(scope, element, attrs){
@@ -1015,3 +1015,28 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', '$par
         }
     }
 }]);
+
+/*
+angular.module('bgc.directives').directive('latestActivity', ['$http', function($http){
+    'use strict';
+
+    return {
+        restrict: 'A',
+        templateUrl: 'partials/latestActivityTemplate.html',
+        scope: {},
+        link: function(scope, element, attrs){
+            var options = {
+                data: JSON.stringify({
+                    filters: "likes comments discussions collaborators ideas companies profiles spMessages"
+                })
+            };
+
+            attrs.$observe('profileid', function(value){
+                $http.get('api/latestactivity?userId='+value+'&filters=likes comments discussions collaborators ideas companies profiles spMessages', options).success(function(data) {
+                    scope.stream = data;
+                });
+            });
+        }
+    }
+}]);
+*/
