@@ -159,7 +159,7 @@ angular.module('bgc.directives')
         return{
             restrict: 'A',
             link: function(scope, elm, attr){
-                jQuery('.read-more').hover(
+                jQuery(elm).hover(
                     function(){
                         $(this).stop().animate({
                             left: '0'
