@@ -37,23 +37,155 @@
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </head>
 <body>
-<div ui-modal class="fade clearfix" ng-controller="cmsCtrl" ng-model="modalShown">
-    <form name="editCMS" class="form-horizontal" novalidate>
-        <fieldset>
-            <legend>
-                <h2>CMS Editor</h2>
-            </legend>
-        </fieldset>
+<div ui-modal class="modal fade" ng-controller="cmsCtrl" ng-model="modalShown">
+    <div class="modal-header">
+        <h2>CMS Editor</h2>
+    </div>
+    <div class="modal-body">
+        <form name="editCMS" class="form-horizontal" novalidate>
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#locale-en" data-toggle="tab">en</a></li>
+                    <li class=""><a href="#locale-fr_CA" data-toggle="tab">fr_CA</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="locale-en">
+                        <fieldset>
+                            <h4>English</h4>
+                            <label class="control-label" for="cms-en-title">Title</label>
+                            <div class="controls">
+                                <input type="text"
+                                       ng-model="cms.en.title"
+                                       class="input-xlarge"
+                                       id="cms-en-title"
+                                       name="cms-en-title"
+                                       validation-tooltip
+                                       value="{{cms.en.title}}" />
+                            </div>
+
+                            <br />
+
+                            <label class="control-label" for="cms-en-body">Body</label>
+                            <div class="controls">
+                                <textarea
+                                        rows="10"
+                                        cols="100"
+                                        ng-model="cms.en.content"
+                                        class="input-xlarge"
+                                        id="cms-en-body"
+                                        name="cms-en-body"
+                                        value="{{cms.en.content}}"
+                                        validation-tooltip
+                                        required
+                                        ui-tinymce>
+                                </textarea>
+                            </div>
+
+                            <br />
+
+                            <label class="control-label" for="cms-en-thumbnail">Image</label>
+                            <div id="cms-en-thumbnail" pykl-upload="{dropTarget:'cms-en-drop-target'}">
+                                <img src="{{cms.en.thumbnail}}" id="cms-en-drop-target" />
+                            </div>
+
+                            <div class="modal hide fade">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h3>Crop your image</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <img id="en-image-crop" src="" alt="">
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="en-cancel-crop" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+                                    <button id="en-save-crop" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
+                                </div>
+                            </div>
+
+                            <div id="en-container">
+                                <br />
+                                <div id="en-filelist"></div>
+                                <br />
+                                <button class="btn btn-primary" id="en-choose-files"><i class="icon-folder-open icon-white"></i> Browse</button>
+                                <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="tab-pane" id="locale-fr_CA">
+                        <fieldset>
+                            <h4>French Canadian</h4>
+                            <label class="control-label" for="cms-fr_CA-title">Title</label>
+                            <div class="controls">
+                                <input type="text"
+                                       ng-model="cms.fr_CA.title"
+                                       class="input-xlarge"
+                                       id="cms-fr_CA-title"
+                                       name="cms-fr_CA-title"
+                                       validation-tooltip
+                                       value="{{cms.fr_CA.title}}" />
+                            </div>
+
+                            <br />
+
+                            <label class="control-label" for="cms-fr_CA-body">Body</label>
+                            <div class="controls">
+                                <textarea
+                                        rows="10"
+                                        cols="100"
+                                        ng-model="cms.fr_CA.content"
+                                        class="input-xlarge"
+                                        id="cms-fr_CA-body"
+                                        name="cms-fr_CA-body"
+                                        value="{{cms.fr_CA.content}}"
+                                        validation-tooltip
+                                        required
+                                        ui-tinymce>
+                                </textarea>
+                            </div>
+
+                            <br />
+
+                            <label class="control-label" for="cms-fr_CA-thumbnail">Image</label>
+                            <div id="cms-fr_CA-thumbnail" pykl-upload="{dropTarget:'cms-fr_CA-drop-target'}">
+                                <img src="{{cms.fr_CA.thumbnail}}" id="cms-fr_CA-drop-target" />
+                            </div>
+
+                            <div class="modal hide fade">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h3>Crop your image</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <img id="fr_CA-image-crop" src="" alt="">
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="fr_CA-cancel-crop" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+                                    <button id="fr_CA-save-crop" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
+                                </div>
+                            </div>
+
+                            <div id="fr_CA-container">
+                                <br />
+                                <div id="fr_CA-filelist"></div>
+                                <br />
+                                <button class="btn btn-primary" id="fr_CA-choose-files"><i class="icon-folder-open icon-white"></i> Browse</button>
+                                <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a ng-click="cancel()" class="btn btn-warning">
+            <i class="icon-ban-circle icon-white"></i> Cancel
+        </a>
 
         <button class="btn btn-success" ng-click="submit()" ng-disabled="false">
-            <i class="icon-pencil icon-white"/>
-            Update
+            <i class="icon-pencil icon-white"></i> Update
         </button>
-        <a ng-href="cancel()" class="btn btn-warning">
-            <i class="icon-ban-circle icon-white"></i>
-            Cancel
-        </a>
-    </form>
+    </div>
 </div>
 <div class="header">
     <div class="container">
