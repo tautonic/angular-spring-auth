@@ -79,6 +79,24 @@ var getDiscussionList = function() {
         return !(element.title === "");
     });
 
+    //loop through each thread and add an attribute that contains the
+    //number of replies
+    threads.forEach(function(thread){
+        opts = {
+            url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread._id + '&types=discussion',
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc' }),
+            async: false
+        };
+
+        exchange = httpclient.request(opts);
+
+        var comment = JSON.parse(exchange.content);
+
+        thread.commentCount = comment.count;
+    });
+
+
     return {
         'status': exchange.status,
         'content': threads,

@@ -988,6 +988,8 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
                 var left = 5;
                 var zIndex = -1;
                 var height = element.height() - element.css('margin-bottom').replace('px', '');
+                //var height = element.height();
+                height += 8;
 
                 for(var i=1; i < 5; i++){
                     //var div = '<div class="discussion-item discussion-stack-div grey-gradient" style="width:' + element.css('width') + ';height:70px;top:5px;left:21px;"></div>';
@@ -996,7 +998,7 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
                     div.addClass('discussion-item discussion-stack-div grey-gradient');
                     div.css({
                         'width': element.css('width'),
-                        'height': height + 8,
+                        'height': height,
                         'top': top,
                         'left': left,
                         'z-index': zIndex
