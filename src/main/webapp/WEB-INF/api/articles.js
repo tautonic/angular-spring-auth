@@ -150,6 +150,7 @@ function getDocType(mimetype) {
             doctype = 'rtf';
             break;
         default:
+            //this handles video and image cases, and defaults to text if it doesn't know what it is
             if(mimetype != undefined)
             {
                 doctype = mimetype.split('/')[0];
@@ -181,6 +182,13 @@ function getPossibleMimetypes(doctype) {
         case 'rtf':
             mimetypes = ['application/rtf', 'application/x-rtf', 'text/richtext'];
             break;
+        case 'video':
+            mimetypes = ['video/x-qtc', 'video/quicktime', 'video/mpeg', 'video/x-mpeg', 'video/x-mpeq2a', 'video/x-mpeg', 'video/x-sgi-movie', 'video/x-motion-jpeg', 'video/avi', 'video/msvideo', 'video/x-msvideo', 'video/x-ms-asf', 'video/x-ms-asf-plugin'];
+            break;
+        case 'image':
+            mimetypes = ['image/png', 'image/tiff', 'image/x-tiff', 'image/x-quicktime', 'image/pict', 'image/x-pict', 'image/x-pcx', 'image/x-jps', 'image/pjpeg', 'image/jpeg', 'image/x-icon', 'image/gif', 'image/x-windows-bmp', 'image/bmp'];
+            break;
+        case 'text':
         default:
             mimetypes = ['text/html', 'text/plain', 'text/xml'];
             break;
