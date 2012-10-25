@@ -830,6 +830,7 @@ ul.dropdown-menu li:last-child a {
 
 .profile-list-item .profile-right p{
     line-height: 20px;
+    margin: 0;
 }
 
 .profile-list-item .profile-right a{
@@ -1183,6 +1184,10 @@ input.input-medium.search-query{
     padding: 1em 0 2em 0;
 }
 
+li.search-result.members{
+    border-bottom: none;
+}
+
 .search-results h1{
     font-weight: bold;
 }
@@ -1344,6 +1349,10 @@ input.input-medium.search-query{
 
 .search-box.members{
     margin-top: 0;
+}
+
+.search-results .search-box.members{
+    margin-top: 3em;
 }
 
 .search-box .header{

@@ -911,18 +911,60 @@ app.post('/search/faculty/', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
+    var profileExchange = httpclient.request(opts);
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    var profiles = JSON.parse(profileExchange.content);
 
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
+    // grab the latest activity for each profile that was done by the user before sending on
+    // to angular
+    profiles.forEach(function(profile){
+        var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
+        var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
+        var allowedActivities = filters.trim().split(' ');
+
+        //remove terms that are not in the active filter list
+        allowedActivities.forEach(function(activity) {
+            filteredActivities = filteredActivities.replace(activity, '');
+        });
+
+        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
+
+        var opts = {
+            url: url,
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc' }),
+            async: false
+        }
+
+        // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
+        var activityExchange = httpclient.request(opts);
+
+        var stream = JSON.parse(activityExchange.content);
+
+        var latestActivity;
+
+        log.info('Activity stream for {}: {}', profile.username, JSON.stringify(stream, null, 4));
+
+        // find the latest activity directly taken by the owner of the profile
+        var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
+
+        latestActivity = {
+            'fullName': activity.fullName,
+            'message': activity.description,
+            'dateCreated': activity.props.dateCreated
+        }
+
+        profile.activity = latestActivity;
     });
 
-    result.status = exchange.status;
+    var result = json({
+        'status': profileExchange.status,
+        'content': profiles,
+        'headers': profileExchange.headers,
+        'success': Math.floor(profileExchange.status / 100) === 2
+    });
+
+    result.status = profileExchange.status;
 
     return result;
 });

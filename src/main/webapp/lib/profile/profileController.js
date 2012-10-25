@@ -242,3 +242,9 @@ function updateProfile($scope, $routeParams, $location, Profile){
     }
 
 }
+
+function searchProfiles($scope, $location){
+    $scope.searchProfiles = function(){
+        $location.path('/search/profiles/' + $scope.profileSearchQuery);
+    };
+}
