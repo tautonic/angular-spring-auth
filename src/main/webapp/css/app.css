@@ -825,7 +825,15 @@ ul.dropdown-menu li:last-child a {
 
 .profile-list-item .profile-thumbnail{
     left: -2em;
-    top: -1em;
+    top: -0.6em;
+}
+
+.profile-list-item .profile-right p{
+    line-height: 20px;
+}
+
+.profile-list-item .profile-right a{
+    color: #eeaf00;
 }
 
 .counter-clockwise{

@@ -281,7 +281,7 @@ app.get('/notifications', function(req) {
     try {
         var stream = exchange.content;
 
-        log.info('Activity stream returned from Zocia: {}', JSON.stringify(stream, null, 4));
+        //log.info('Activity stream returned from Zocia: {}', JSON.stringify(stream, null, 4));
 
         var activities = [];
         stream.acts.forEach(function (activity) {
@@ -465,14 +465,13 @@ app.get('/profiles/', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
+    var profileExchange = httpclient.request(opts);
 
-    var profiles = JSON.parse(exchange.content);
+    var profiles = JSON.parse(profileExchange.content);
 
-    //log.info('Array of profile objects sent from Zocia {}', JSON.stringify(profiles, null, 4));
-    // grab the latest activity for each profile before sending on
+    // grab the latest activity for each profile that was done by the user before sending on
     // to angular
-    /*profiles.forEach(function(profile){
+    profiles.forEach(function(profile){
         var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
         var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
         var allowedActivities = filters.trim().split(' ');
@@ -482,7 +481,7 @@ app.get('/profiles/', function(req){
             filteredActivities = filteredActivities.replace(activity, '');
         });
 
-        var url = 'http://localhost:9300/myapp/api/activities/streams/' + profile._id + '?filters=' + filteredActivities.trim().replace(/ /g, ',');
+        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
 
         var opts = {
             url: url,
@@ -492,28 +491,34 @@ app.get('/profiles/', function(req){
         }
 
         // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
-        exchange = httpclient.request(opts);
+        var activityExchange = httpclient.request(opts);
 
-        var stream = JSON.parse(exchange.content);
+        var stream = JSON.parse(activityExchange.content);
 
         var latestActivity;
 
-        if(stream._type === 'activityStreams'){
-            var activity = new ActivityMixin(stream.acts[0], req, ctx('/'), profile._id);
-            //log.info('Latest activity {}', JSON.stringify(activity, null, 4));
+        log.info('Activity stream for {}: {}', profile.username, JSON.stringify(stream, null, 4));
+
+        // find the latest activity directly taken by the owner of the profile
+        var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
+
+        latestActivity = {
+            'fullName': activity.fullName,
+            'message': activity.description,
+            'dateCreated': activity.props.dateCreated
         }
 
-        //profile.latestActivity;
-    });*/
-
-    var result = json({
-        'status': exchange.status,
-        'content': profiles,
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
+        profile.activity = latestActivity;
     });
 
-    result.status = exchange.status;
+    var result = json({
+        'status': profileExchange.status,
+        'content': profiles,
+        'headers': profileExchange.headers,
+        'success': Math.floor(profileExchange.status / 100) === 2
+    });
+
+    result.status = profileExchange.status;
 
     return result;
 });
