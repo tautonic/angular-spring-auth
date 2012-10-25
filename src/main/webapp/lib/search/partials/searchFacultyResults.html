@@ -1,24 +1,77 @@
-<div class="content container">
-    <h1>Faculty Search Results</h1>
+<div class="content container search-results">
+    <div class="row">
+        <div class="span9">
+            <h1>Search Results</h1> <p class="muted"> 10 of {{(results | filter:lengthFilter).length}}</p>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
-            <th>Email</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="result in results">
-            <td><a ng-href="#/profile/{{result._id}}">{{result._id}}</a></td>
-            <td>{{result.name.given}}</td>
-            <td>{{result.name.surname}}</td>
-            <td>{{result.username}}</td>
-            <td>{{result.accountEmail.address}}</td>
-        </tr>
-        </tbody>
-    </table>
+            <hr>
+
+            <ul class="search-results-list">
+                <li class="search-result members" ng-repeat="result in results">
+                    <div class="profile-list-item profile grey-gradient clearfix">
+                        <div class="new-picture-frame profile-thumbnail large counter-clockwise">
+                            <img class="profile-image large" src="images/rosie.jpeg">
+                        </div>
+                        <div class="profile-left">
+                            <h3>{{result.name.given}} {{result.name.surname}}</h3>
+                            <h5>{{result.workHistory[0].title}}</h5>
+                            <h5 class="muted">{{result.workHistory[0].businessName}}</h5>                            
+                        </div>
+                        <div class="profile-right">
+                            <h3 class="sans-serif">LATEST ACTIVITY:</h3>
+                            <p><i ng-bind-html-unsafe=result.activity.message></i></p>
+                            <p class="muted">about {{result.activity.dateCreated | timeago}}</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="span3">
+            <div class="site search-box">
+                <div class="header">
+                    <h4>SEARCH MEMBERS</h4>
+                </div>
+                <div class="form-container">
+                    <form ng-controller="SiteSearchController" ng-submit="searchSite()">
+                        <input type="text" ng-model="siteQuery" placeholder="Search All...">
+                        <div class="btn-group-border"></div>
+                        <div class="search-lens read-more gradient">
+                            <div class="preview-lens"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--<h2>Your search returned {{(results | filter:lengthFilter).length}} results.</h2>-->
+
+    <!--<div ng-repeat="result in results">
+        <div ng-switch on="result._type">
+            <div ng-switch-when="profiles">
+                <div class="well well-small">
+                    <h4 style="display:inline">ID: </h4> {{result._id}} <br>
+                    <h4 style="display:inline">Name: </h4> {{result.name.given}} {{result.name.surname}} <br>
+                    <h4 style="display:inline">Email: </h4> {{result.accountEmail.address}}
+                </div>
+            </div>
+            <div ng-switch-when="resources">
+                <div class="well well-small">
+                    <h4 style="display:inline">ID: </h4> {{result._id}} <br>
+                    <h4 style="display:inline">Ref: </h4> {{result.ref}} <br>
+                    <h4 style="display:inline">Title: </h4> {{result.title}} <br>
+                    <h4 style="display:inline">Content: </h4> {{result.content}}
+                </div>
+            </div>
+            <div ng-switch-default>
+                <div class="well well-small">
+                    <h4 style="display:inline">ID: </h4> {{result._id}} <br>
+                    <h4 style="display:inline">Creator: </h4> {{result.creator.username}} <br>
+                    <h4 style="display:inline">Title: </h4> {{result.title}}<br>
+                    <h4 style="display:inline">Content: </h4> {{result.message}}
+                </div>
+            </div>
+        </div>
+    </div>-->
 </div>
