@@ -1,37 +1,16 @@
 'use strict';
 
-function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
-    var url = 'api/article/';
+function ListResources( $rootScope, $scope, $routeParams, $http, $log ) {
+    var url = 'api/article/all';
     $scope.filters = {};
-
-    setup();
-
-    function setup() {
-        if(($routeParams) && ($routeParams.articleId)) {
-            url += $routeParams.articleId;
-            $scope.pageType = "single";
-        } else {
-            url += 'all';
-            $scope.pageType = "all";
-            $routeParams.articleId = "none";
-        }
-    }
 
     function loadContent() {
         $http.get( url ).success( function (data) {
             console.log("ARTICLE RETURNED: ",data);
             if(data !== "false") {
-                if($scope.pageType === "single")
-                {
-                    $scope.article = data;
-                    $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
-                    $http.post("api/views/" + $scope.article._id);
-                } else if ($scope.pageType === "all")
-                {
-                    $scope.articles = data;
-                    if($scope.articles.length === 0) {
-                        $log.info("No articles found.");
-                    }
+                $scope.articles = data;
+                if($scope.articles.length === 0) {
+                    $log.info("No articles found.");
                 }
             } else {
                 $log.info("ERROR getting article, or resource.");
@@ -40,15 +19,7 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
     }
-
-    $scope.abstractVisible = function () {
-        if(typeof($scope.article) === "undefined")
-        {
-            return false;
-        }
-        return (typeof($scope.article.content) === "undefined");
-    }
-
+    //this is likely not going to be used anymore, the filtering will take care of it from here on out
     $scope.byType = function(type) {
         url = 'api/article/all/' + type;
         loadContent();
@@ -58,7 +29,8 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         url = 'api/article/all/bycategory/' + category;
         loadContent();
     }
-
+    /*
+    perhaps this should be moved to the admin panel, instead of being part of the resource page itself?
     $scope.addNewArticle = function() {
         $scope.pageType = "add";
         $scope.article = {
@@ -72,7 +44,7 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
         $http.post("api/article/new", $scope.article).success(function(data) {
             alert("article inserted successfully");
         });
-    }
+    }*/
 
     function buildFilters() {
         var result = "";
@@ -111,8 +83,51 @@ function ResourceCtrl( $rootScope, $scope, $routeParams, $http, $log ) {
 
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
     $rootScope.$on('event:logoutConfirmed', function() { loadContent(); });
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'curriculum';
+        $rootScope.about = 'curriculum';
+    });
 
     loadContent();
 }
 
-ResourceCtrl.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log'];
+
+function ViewResource( $rootScope, $scope, $routeParams, $http, $log ) {
+    var url = 'api/article/' + $routeParams.articleId;
+    $scope.filters = {};
+
+    function loadContent() {
+        $http.get( url ).success( function (data) {
+            console.log("ARTICLE RETURNED: ",data);
+            if(data !== "false") {
+                    $scope.article = data;
+                    $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
+                    $http.post("api/views/" + $scope.article._id);
+            } else {
+                $log.info("ERROR getting article, or resource.");
+            }
+        }).error(function(data, status) {
+                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+            });
+    }
+
+    $scope.abstractVisible = function () {
+        if(typeof($scope.article) === "undefined")
+        {
+            return false;
+        }
+        return (typeof($scope.article.content) === "undefined");
+    }
+
+    $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
+    $rootScope.$on('event:logoutConfirmed', function() { loadContent(); });
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'curriculum';
+        $rootScope.about = 'curriculum';
+    });
+
+    loadContent();
+}
+
+ListResources.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log'];
+ViewResource.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log'];
