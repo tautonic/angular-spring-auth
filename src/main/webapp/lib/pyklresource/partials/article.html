@@ -18,15 +18,15 @@
 
         <div ng-switch-default>
             <div class="row">
-                <div class="articles span8">
+                <div class="articles span9">
                     <div class="article row" ng-repeat="article in articles">
-                        <div class="span3">
+                        <div class="span2">
                             <img thumbnail
-                                 type="article"
-                                 text="Read More"
+                                 type="content"
+                                 text="Preview"
                                  thumb=article />
                         </div>
-                        <div class="span5 content">
+                        <div class="span6 content">
                             <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
                             <p class="article-meta"><span class="doc-type {{article.doctype}}"></span><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
                             <div class="tags">
@@ -40,25 +40,38 @@
                             </ul>
                         </div>
                     </div>
+                    <div ng-show="(articles.length == 0)">No articles found.</div>
                 </div>
 
-                <div id="search-panel" class="span4">
-                    <h4>Search this section</h4>
-                    <form>
-                    <input ng-model="searchTerm" type="text"><button ng-click="search(searchTerm)" class="btn">Go</button><br>
-                    <input type="checkbox" id="documents"><label for="documents">Documents</label>
-                    <div class="documents-sub">
-                        <input type="checkbox" id="pdf"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat</label>
-                        <input type="checkbox" id="doc"><label for="doc"><span class="doc-type doc"></span>Microsoft Word</label>
-                        <input type="checkbox" id="powerpoint"><label for="powerpoint"><span class="doc-type powerpoint"></span>PowerPoint</label>
-                        <input type="checkbox" id="excel"><label for="excel"><span class="doc-type excel"></span>Excel Spreadsheet</label>
-                        <input type="checkbox" id="text"><label for="text"><span class="doc-type text"></span>Text File</label>
-                        <input type="checkbox" id="rtf"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document</label>
+                <div class="span3">
+                    <div class="search-box content">
+                        <div class="header">
+                            <h4>SEARCH THIS SECTION</h4>
+                        </div>
+                        <div class="form-container">
+                            <form ng-submit="search(searchTerm)">
+                                <input type="text" ng-model="searchTerm" placeholder="Search Articles...">
+                                <div class="btn-group-border"></div>
+                                <div class="search-lens read-more gradient">
+                                    <div class="preview-lens"></div>
+                                </div>
+
+                                <input type="checkbox" id="documents" ng-model="filters.documents"><label for="documents">Documents ({{count('docs')}})</label>
+                                <div class="documents-sub">
+                                    <input type="checkbox" id="pdf" ng-model="filters.pdf"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{count('pdf')}})</label>
+                                    <input type="checkbox" id="word" ng-model="filters.word"><label for="word"><span class="doc-type word"></span>Microsoft Word ({{count('word')}})</label>
+                                    <input type="checkbox" id="powerpoint" ng-model="filters.powerpoint"><label for="powerpoint"><span class="doc-type powerpoint"></span>PowerPoint ({{count('powerpoint')}})</label>
+                                    <input type="checkbox" id="excel" ng-model="filters.excel"><label for="excel"><span class="doc-type excel"></span>Excel Spreadsheet ({{count('excel')}})</label>
+                                    <input type="checkbox" id="text" ng-model="filters.text"><label for="text"><span class="doc-type text"></span>Text File ({{count('text')}})</label>
+                                    <input type="checkbox" id="rtf" ng-model="filters.rtf"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{count('rtf')}})</label>
+                                </div>
+                                <input type="checkbox" id="videos" ng-model="filters.videos"><label for="videos"><span class="doc-type video"></span>Videos ({{count('videos')}})</label>
+                                <input type="checkbox" id="image" ng-model="filters.image"><label for="image"><span class="doc-type image"></span>Pictures ({{count('image')}})</label>
+                            </form>
+                            <br><button ng-show="auth.isUserInRole('ROLE_ADMIN')" ng-click="addNewArticle()" class="btn btn-info">Add Article</button>
+
+                        </div>
                     </div>
-                    <input type="checkbox" id="videos"><label for="videos"><span class="doc-type video"></span>Videos</label>
-                    <input type="checkbox" id="pictures"><label for="pictures"><span class="doc-type image"></span>Pictures</label>
-                    </form>
-                    <br><button ng-show="auth.isUserInRole('ROLE_ADMIN')" ng-click="addNewArticle()" class="btn btn-info">Add Article</button>
                 </div>
             </div>
         </div>

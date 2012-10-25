@@ -18,7 +18,8 @@ var text = {
     "notifications-activity.c.discussions": "${actorLink} created a discussion called ${aboutLink}",
     "notifications-activity.c.discussions": "${actorLink} created a discussion called ${directLink}",
     "notifications-activity.c.ideas": "${actorLink} created ${directLink}",
-    "notifications-activity.c.themself.profiles": "You created your profile",
+    //"notifications-activity.c.themself.profiles": "You created your profile",
+    "notifications-activity.c.themself.profiles": "${actorLink} created a profile",
     "notifications-activity.c.profiles": "${actorLink} created ${directLink}",
     "notifications-activity.c.ratings": "${actorLink} gave a rating to ${aboutLink}.",
     "notifications-activity.c.reply": "${actorLink} replied to discussion ${aboutLink}",
@@ -128,6 +129,7 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
      */
 
     Object.defineProperty(result, "description", {
+
         get: function() {
 
             var actor = activity.actor,
@@ -135,6 +137,7 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                 about = activity.about,
                 direct = activity.direct,
                 type;
+
 
             // Try to determine the "type" of the activity
             if (direct && direct.dataType) {
@@ -182,7 +185,7 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
             }
 
             // Try to determine if the user is taking action against their own profile
-            if (activity.actor._id === activity.direct._id && request.authenticatedId === activity.direct._id) {
+            if (activity.actor._id === activity.direct._id && authenticatedId === activity.direct._id) {
                 verb += '.self';
             } else if (activity.actor._id === activity.direct._id) {
                 verb += '.themself';
@@ -206,12 +209,16 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
             // Substitute links
 
             // Subject link
-            log.info('Authenticated id {}:' + authenticatedId);
 
-            activity.actorLink = authenticatedId == activity.actor._id
-                ? "You"
-                : format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
-                activity.actor._id, activity.actor.fullName || activity.actor.username);
+            if(authenticatedId !== undefined){
+                activity.actorLink = authenticatedId == activity.actor._id
+                    ? "You"
+                    : format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
+                    activity.actor._id, activity.actor.fullName || activity.actor.username);
+            }else{
+                activity.actorLink = format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
+                    activity.actor._id, activity.actor.fullName || activity.actor.username);
+            }
 
             // Indirect object link
             if (about) {
@@ -269,7 +276,6 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         if(linkText === ''){
                             var discussion = getDiscussion(direct._id);
                             linkText = discussion.content[0].title;
-                            log.info('Direct discussion object {}:', JSON.stringify(discussion, null, 4));
                         }
 
                         // If the "about" object is a venture, this means the discussion is "private"
@@ -297,8 +303,10 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         linkId = direct.username;
                         linkText = direct.fullName || direct.username;
                         // If showing this message to the same user, use the "you" word
-                        if (request.authenticatedId === direct._id) {
+                        if (authenticatedId === direct._id) {
                             linkText = nativeYou.toLowerCase();
+                        }else{
+                            linkText = direct.fullName;
                         }
                         linkType = 'users';
                         break;

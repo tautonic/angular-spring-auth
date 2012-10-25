@@ -825,7 +825,15 @@ ul.dropdown-menu li:last-child a {
 
 .profile-list-item .profile-thumbnail{
     left: -2em;
-    top: -1em;
+    top: -0.6em;
+}
+
+.profile-list-item .profile-right p{
+    line-height: 20px;
+}
+
+.profile-list-item .profile-right a{
+    color: #eeaf00;
 }
 
 .counter-clockwise{
@@ -1269,11 +1277,11 @@ input.input-medium.search-query{
     margin: 0 1em 0 0;
 }
 
-.word{
-    background: url('../images/GCEE_sprite.png') -72px -99px no-repeat;
-}
 .pdf{
     background: url('../images/GCEE_sprite.png') -72px -68px no-repeat;
+}
+.word{
+    background: url('../images/GCEE_sprite.png') -72px -99px no-repeat;
 }
 .ppt{
     background: url('../images/GCEE_sprite.png') -72px -131px no-repeat;
@@ -1362,7 +1370,7 @@ input.input-medium.search-query{
     background: linear-gradient(to bottom,  rgba(247,247,247,1) 0%,rgba(229,229,229,1) 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
 }
-.search-box .form-container input{
+.search-box .form-container input[type="text"]{
     width: 80%;
     margin: auto 0;
     height: 30px;

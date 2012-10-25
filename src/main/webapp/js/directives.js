@@ -159,7 +159,7 @@ angular.module('bgc.directives')
         return{
             restrict: 'A',
             link: function(scope, elm, attr){
-                jQuery('.read-more').hover(
+                jQuery(elm).hover(
                     function(){
                         $(this).stop().animate({
                             left: '0'
@@ -981,18 +981,19 @@ angular.module('bgc.directives').directive('uiTabs', ['$compile', function ($com
 
 angular.module('bgc.directives').directive('discussionStack', ['$compile', function($compile){
     'use strict';
-
     return {
-            link: function(scope, element, attrs){
-                var top = 4;
-                var left = 5;
-                var zIndex = -1;
-                var height = element.height() - element.css('margin-bottom').replace('px', '');
-                //var height = element.height();
-                height += 8;
+        link: function(scope, element, attrs){
+            var top = 4;
+            var left = 5;
+            var zIndex = -1;
+            var height = element.height() - element.css('margin-bottom').replace('px', '');
+            //var height = element.height();
+            height += 8;
 
-                for(var i=1; i < 5; i++){
-                    //var div = '<div class="discussion-item discussion-stack-div grey-gradient" style="width:' + element.css('width') + ';height:70px;top:5px;left:21px;"></div>';
+            attrs.$observe('comments', function(value){
+                var stacks = value;
+
+                for(var i=0; i < stacks; i++){
                     var div = document.createElement('div');
                     div = jQuery(div);
                     div.addClass('discussion-item discussion-stack-div grey-gradient');
@@ -1010,6 +1011,32 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
                     left += 4;
                     zIndex -= 1;
                 }
-            }
+            });
+        }
     }
 }]);
+
+/*
+angular.module('bgc.directives').directive('latestActivity', ['$http', function($http){
+    'use strict';
+
+    return {
+        restrict: 'A',
+        templateUrl: 'partials/latestActivityTemplate.html',
+        scope: {},
+        link: function(scope, element, attrs){
+            var options = {
+                data: JSON.stringify({
+                    filters: "likes comments discussions collaborators ideas companies profiles spMessages"
+                })
+            };
+
+            attrs.$observe('profileid', function(value){
+                $http.get('api/latestactivity?userId='+value+'&filters=likes comments discussions collaborators ideas companies profiles spMessages', options).success(function(data) {
+                    scope.stream = data;
+                });
+            });
+        }
+    }
+}]);
+*/

@@ -19,8 +19,8 @@
                     </div>
                     <div class="profile-right">
                         <h3 class="sans-serif">LATEST ACTIVITY:</h3>
-                        <p><i>Posted a new comment to the <a href="#">Business in a Bundle</a> document</i></p>
-                        <p class="muted">5 hours ago</p>
+                        <p><i ng-bind-html-unsafe=profile.activity.message></i></p>
+                        <p class="muted">about {{profile.activity.dateCreated | timeago}}</p>
                     </div>
                 </div>
             </div>
