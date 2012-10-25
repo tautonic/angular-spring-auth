@@ -1180,8 +1180,7 @@ input.input-medium.search-query{
 }
 
 .search-results-list li{
-    border-bottom: 2px solid #E7EBEA;
-    padding: 1em 0 2em 0;
+    padding: 1em 0 0 0;
 }
 
 li.search-result.members{
@@ -1520,6 +1519,10 @@ li.search-result.members{
 
 .search-results hr{
     margin-bottom: 1em;
+}
+
+#discussions.site .discussion-item{
+    padding-bottom: 10px;
 }
 
 

@@ -874,18 +874,86 @@ app.post('/search/site/', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
+    var gceeExchange = httpclient.request(opts);
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    // We need to take the discussion and profile objects returned from Zocia and modify
+    // them slightly
+    console.log('EXCHANGE STATUS!!! ', gceeExchange.status);
 
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
+    // filters out threads with empty titles and threads that are tied to an article
+    // this basically leaves us with post parents and no replies
+    var gceeObjects = JSON.parse(gceeExchange.content).filter(function(element) {
+        return !(element.title === "" && element.dataType === 'posts');
     });
 
-    result.status = exchange.status;
+    gceeObjects.forEach(function(object){
+        //log.info('GCEE object returned from Zocia {}', JSON.stringify(object, null, 4));
+        // We have to get last activity information for each profile
+        if(object.dataType === 'profiles'){
+            var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
+            var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
+            var allowedActivities = filters.trim().split(' ');
+
+            //remove terms that are not in the active filter list
+            allowedActivities.forEach(function(activity) {
+                filteredActivities = filteredActivities.replace(activity, '');
+            });
+
+            var url = 'http://localhost:9300/myapp/api/activities/byactor/' + object._id;
+
+            var opts = {
+                url: url,
+                method: 'GET',
+                headers: Headers({ 'x-rt-index': 'gc' }),
+                async: false
+            }
+
+            // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
+            var activityExchange = httpclient.request(opts);
+
+            var stream = JSON.parse(activityExchange.content);
+
+            var latestActivity;
+
+            // find the latest activity directly taken by the owner of the profile
+            var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
+
+            latestActivity = {
+                'fullName': activity.fullName,
+                'message': activity.description,
+                'dateCreated': activity.props.dateCreated
+            }
+
+            object.activity = latestActivity;
+        }
+
+        // We have to get the number of comments for each discussion object
+        if(object.dataType === 'posts'){
+            log.info('Filtered discussion object {}', JSON.stringify(object, null, 4));
+
+            var opts = {
+                url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + object._id + '&types=discussion',
+                method: 'GET',
+                headers: Headers({ 'x-rt-index': 'gc' }),
+                async: false
+            };
+
+            var discussionExchange = httpclient.request(opts);
+
+            var comment = JSON.parse(discussionExchange.content);
+
+            object.commentCount = comment.count;
+        }
+    });
+
+    var result = json({
+        'status': gceeExchange.status,
+        'content': gceeObjects,
+        'headers': gceeExchange.headers,
+        'success': Math.floor(gceeExchange.status / 100) === 2
+    });
+
+    result.status = gceeExchange.status;
 
     return result;
 });
