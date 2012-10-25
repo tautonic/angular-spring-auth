@@ -7,6 +7,7 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
     setupScope();
 
     function setupScope() {
+        $scope.query = '';
         $scope.enterReply = "Reply to discussion";
         $scope.reply = {
             show:false,

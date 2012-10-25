@@ -1514,5 +1514,13 @@ li.search-result.members{
     left: 21px;
 }
 
+.search-results{
+    margin-bottom: 1em;
+}
+
+.search-results hr{
+    margin-bottom: 1em;
+}
+
 
 

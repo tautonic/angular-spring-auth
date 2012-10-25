@@ -55,6 +55,12 @@ function SiteSearchController($rootScope, $scope, $location){
     };
 }
 
+function searchDiscussionsController($scope, $location){
+    $scope.searchDiscussions = function(){
+        $location.path('/search/discussions/' + $scope.query);
+    }
+}
+
 function facultyFellows($rootScope, $scope){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'faculty';

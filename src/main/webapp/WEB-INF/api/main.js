@@ -1020,6 +1020,8 @@ app.post('/search/discussions/', function(req){
 
     url += '?' + queryParams.join('&');
 
+    log.info('Search discussions url {}', url);
+
     var opts = {
         url: url,
         method: 'GET',
@@ -1029,11 +1031,33 @@ app.post('/search/discussions/', function(req){
 
     var exchange = httpclient.request(opts);
 
+    //filters out threads with empty titles and threads that are tied to an article
+    var threads = JSON.parse(exchange.content).filter(function(element) {
+        return !(element.title === "");
+    });
+
+    //loop through each thread and add an attribute that contains the
+    //number of replies/comments
+    threads.forEach(function(thread){
+        opts = {
+            url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread._id + '&types=discussion',
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc' }),
+            async: false
+        };
+
+        exchange = httpclient.request(opts);
+
+        var comment = JSON.parse(exchange.content);
+
+        thread.commentCount = comment.count;
+    });
+
     console.log('EXCHANGE STATUS!!! ', exchange.status);
 
     var result = json({
         'status': exchange.status,
-        'content': JSON.parse(exchange.content),
+        'content': threads,
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });

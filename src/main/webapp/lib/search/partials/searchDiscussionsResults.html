@@ -1,24 +1,49 @@
-<div class="content container">
-    <h1>Discussion Search Results</h1>
+<div id="discussions" class="content container search-results">
+    <div class="row">
+        <div class="span8">
 
-    <h2>Your search returned {{(results | filter:lengthFilter).length}} results.</h2>
+            <h1>Discussion Search Results</h1> <p class="muted"> 10 of {{(results | filter:lengthFilter).length}} results</p>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Creator</th>
-            <th>Title</th>
-            <th>Content</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="result in results">
-            <td><a ng-href="#/discussions/{{result._id}}">{{result._id}}</a></td>
-            <td>{{result.creator.username}}</td>
-            <td>{{result.title}}</td>
-            <td>{{result.message}}</td>
-        </tr>
-        </tbody>
-    </table>
+            <hr>
+
+            <div ng-repeat="result in results">
+                <div class="discussion-stack-container">
+                    <div discussion-stack comments={{result.commentCount}} class="discussion-item grey-gradient">
+                        <a ng-href="#/network/{{result._id}}"><h4>{{result.title}}</h4></a>
+                        <h6>By <a ng-href="#/profiles/view/{{result.creator._id}}">{{result.creator.username}}</a>, {{result.dateCreated | asDate: 'fullDate'}}</h6>
+                        <!--<p class="muted"><strong>Document:</strong> <a href="#/content">Document Title</a></p>-->
+                        <ul class="article-stats">
+                            <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
+                            <li class="muted"><i class="views"></i> {{result.views}} Views</li>
+                            <li class="muted"><i class="comments"></i> {{result.commentCount}} Comments</li>
+                            <li ng-click="flag({{result._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--<div class="paper-clip"></div>
+                <div class="attached-doc">
+                    <div class="new-picture-frame small content-thumbnail">
+                        <img ng-src ="images/document-default.jpg" alt="">
+                    </div>
+                </div>-->
+            </div>
+        </div>
+        <div class="span3 offset1">
+            <div class="search-box members">
+                <div class="header">
+                    <h4>SEARCH DISCUSSIONS</h4>
+                </div>
+                <div class="form-container">
+                    <form ng-controller="searchDiscussionsController" ng-submit="searchDiscussions()">
+                        <input type="text" ng-model="query" placeholder="Search Discussions...">
+                        <div class="btn-group-border"></div>
+                        <div class="search-lens read-more gradient">
+                            <div class="preview-lens"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

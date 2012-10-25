@@ -36,7 +36,10 @@ function SearchContent($scope, $routeParams, $location, Search) {
     });
 }
 
-function SearchDiscussions($scope, $routeParams, $location, Search) {
+function SearchDiscussions($rootScope, $scope, $routeParams, $location, Search) {
+    $rootScope.banner = 'none';
+    $rootScope.about = 'none';
+
     $scope.results;
 
     var data = {

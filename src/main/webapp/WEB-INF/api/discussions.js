@@ -80,7 +80,7 @@ var getDiscussionList = function() {
     });
 
     //loop through each thread and add an attribute that contains the
-    //number of replies
+    //number of replies/comments
     threads.forEach(function(thread){
         opts = {
             url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread._id + '&types=discussion',
