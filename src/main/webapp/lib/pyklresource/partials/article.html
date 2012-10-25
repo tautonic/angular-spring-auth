@@ -65,7 +65,7 @@
                                     <input type="checkbox" id="text" ng-model="filters.text"><label for="text"><span class="doc-type text"></span>Text File ({{count('text')}})</label>
                                     <input type="checkbox" id="rtf" ng-model="filters.rtf"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{count('rtf')}})</label>
                                 </div>
-                                <input type="checkbox" id="videos" ng-model="filters.videos"><label for="videos"><span class="doc-type video"></span>Videos ({{count('videos')}})</label>
+                                <input type="checkbox" id="videos" ng-model="filters.video"><label for="videos"><span class="doc-type video"></span>Videos ({{count('videos')}})</label>
                                 <input type="checkbox" id="image" ng-model="filters.image"><label for="image"><span class="doc-type image"></span>Pictures ({{count('image')}})</label>
                             </form>
                             <br><button ng-show="auth.isUserInRole('ROLE_ADMIN')" ng-click="addNewArticle()" class="btn btn-info">Add Article</button>
