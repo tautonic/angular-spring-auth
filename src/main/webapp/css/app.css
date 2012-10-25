@@ -1351,6 +1351,10 @@ li.search-result.members{
     margin-top: 0;
 }
 
+.search-results .search-box.members{
+    margin-top: 3em;
+}
+
 .search-box .header{
     padding: 0
 }
