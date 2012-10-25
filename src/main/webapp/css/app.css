@@ -1559,4 +1559,41 @@ li.search-result.members{
 }
 
 
+.search-box.content {
+    border: 1px solid #e8e8e8;
+    border-radius: 2px;
+}
+
+.search-box.content .form-container {
+    background: #f6f6f6;
+}
+
+.search-box.content input[type=checkbox] {
+    float: left;
+    margin: 10px 5px 5px;
+}
+
+.search-box.content label {
+    font-size: 12px;
+    font-weight: normal;
+    padding: 5px 2px;
+}
+
+.search-box.content .sub {
+    background-color: #d3d3d3;
+    margin: 5px -1em;
+    padding: 5px 1em 5px 1.25em;
+    border-top: 2px solid #e8e8e8;
+    border-bottom: 2px solid #e8e8e8;
+}
+
+.search-box.content .search-input {
+    margin-bottom: 10px;
+}
+
+.search-box.content hr {
+    margin: 0 -1em;
+    width: 120%;
+}
+
 

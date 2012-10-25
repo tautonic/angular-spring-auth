@@ -1,7 +1,7 @@
 'use strict';
 
 function ListResources( $rootScope, $scope, $routeParams, $http, $log ) {
-    var url = 'api/article/all';
+    var url = "api/article/search/";
     $scope.filters = {};
 
     function loadContent() {
@@ -58,13 +58,19 @@ function ListResources( $rootScope, $scope, $routeParams, $http, $log ) {
         return result;
     }
 
+    $scope.toggleDocuments = function() {
+        $scope.filters.pdf = $scope.filters.documents;
+        $scope.filters.word = $scope.filters.documents;
+        $scope.filters.powerpoint = $scope.filters.documents;
+        $scope.filters.excel = $scope.filters.documents;
+        $scope.filters.text = $scope.filters.documents;
+        $scope.filters.rtf = $scope.filters.documents;
+    }
+
     $scope.search = function(term) {
-        if(term === "")
-        {
-            url = "api/article/all";
-        } else {
-            url = "api/article/search/?term=" + term + "&filters=" + buildFilters();
-        }
+        term = term || "";
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters();
+
         loadContent();
     }
 
