@@ -1,7 +1,63 @@
 'use strict';
 
 
-function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location) {
+function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $location) {
+    var url = 'api/discussions/all';
+
+    setupScope();
+
+    function setupScope() {
+        $scope.query = '';
+        $scope.enterReply = "Reply to discussion";
+        $scope.reply = {
+            show:false,
+            message:''
+        };
+        $scope.isLoaded = false;
+
+        $scope.$on('$routeChangeSuccess', function(){
+            $rootScope.banner = 'network';
+            $rootScope.about = 'network';
+        });
+    }
+
+    function loadContent() {
+        if ($routeParams.articleId === "none") {
+            $scope.pageType = "none";
+            $scope.isLoaded = true;
+            return;
+        }
+        $http.get(url).success(function (data) {
+            if (data !== "false") {
+                $scope.discussion = data;
+                $scope.isLoaded = true;  console.log("discussion results: ", data)
+            } else {
+                $log.info("Error loading discussion.");
+            }
+        }).error(function (data, status) {
+            $log.info("ERROR retrieving protected resource: " + data + " status: " + status);
+        });
+    }
+
+    $scope.hasLinkedObject = function(post) {  console.log("POST IS: ",post);
+        return post.linkedItem.exists;
+    }
+
+    $scope.noDiscussions = function () {
+        return (($scope.discussion) && ($scope.discussion.length === 0));
+    }
+
+    loadContent();
+
+    $rootScope.$on('event:logoutConfirmed', function () {
+        if ($scope.$scope.pageType == "new") {
+            $location.path('/discussion/all');
+        }
+    });
+}
+
+
+function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location) {
     var url = 'api/discussions/';
 
     setupScope();
@@ -26,7 +82,7 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
         });
 
         if ($routeParams) {
-            $scope.pageType = $routeParams.discussionId || "all";
+            $scope.pageType = $routeParams.discussionId;
 
             //this check is needed to handle things like discussions connected with articles
             if ($routeParams.articleId) {
@@ -37,29 +93,8 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
                 $scope.hasContent = true;
             }
 
-            switch ($scope.pageType) {
-                case "none":
-                    break;
-                case "new":
-                    $scope.isLoaded = true;
-                    $scope.reply.title = '';
-                    url = url + "new";
-                    break;
-                case "all":
-                    url = url + "all";
-                    break;
-                default:
-                    url = url + $scope.pageType;
-                    $scope.pageType = "single";
-                    break;
-            }
-        } else {
-            $scope.pageType = "all";
-            url = url + "all";
-        }
-
-        if (("new" === $scope.pageType) && (!$rootScope.auth.isAuthenticated)) {
-            $location.path('/network/all');
+            url = url + $scope.pageType;
+            $scope.pageType = "single";
         }
         //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
     }
@@ -100,33 +135,6 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
         } else {
             $scope.reply.message = '';
         }
-    }
-
-    $scope.createDiscussion = function () {
-        var newPost = {
-            title:$scope.reply.title,
-            parentId:($routeParams.articleId || null),
-            posts:[
-                {
-                    message:$scope.reply.message
-                }
-            ]
-        };
-
-        $http.post('api/discussions/new', newPost).success(function (data) {
-
-            if (data.success === true) {
-                url = 'api/discussions/byParent/' + $routeParams.articleId;
-                $scope.pageType = "single";
-                loadContent();
-            } else {
-                if (data.newId !== false) {
-                    $location.path('/network/' + data.newId);
-                } else {
-                    alert("There was an error.");
-                }
-            }
-        });
     }
 
     $scope.submitReply = function () {
@@ -174,13 +182,10 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
         });
     }
 
-    $scope.noDiscussions = function () {
-        return (($scope.discussion) && ($scope.discussion.length === 0));
-    }
     /*
      $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
      */
-    if (($scope.pageType != "new") && ($scope.pageType != "none")) {
+    if ($scope.pageType != "none") {
         loadContent();
     }
 
@@ -195,5 +200,68 @@ function DiscussionCtrl($rootScope, $scope, $routeParams, $http, $log, $location
         url = 'api/discussions/';
         setupScope();
         loadContent();
+    });
+}
+
+function NewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location) {
+    var url = 'api/discussions/';
+    $scope.hasContent = false;
+    $scope.$on('$routeChangeSuccess', function(){
+        if($location.path() === '/content' ){
+            $rootScope.banner = 'curriculum';
+            $rootScope.about = 'curriculum';
+        }else{
+            $rootScope.banner = 'network';
+            $rootScope.about = 'network';
+        }
+    });
+
+    setupScope();
+
+    function setupScope() {
+        $scope.query = '';
+        $scope.enterReply = "Reply to discussion";
+        $scope.reply = {
+            show:false,
+            message:''
+        };
+
+        $scope.reply.title = '';
+        url = url + "new";
+
+        if (("new" === $scope.pageType) && (!$rootScope.auth.isAuthenticated)) {
+            $location.path('/network/all');
+        }
+        //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
+    }
+
+
+    $scope.createDiscussion = function () {
+        var newPost = {
+            title:$scope.reply.title,
+            parentId:($routeParams.articleId || null),
+            posts:[
+                {
+                    message:$scope.reply.message
+                }
+            ]
+        };
+
+        $http.post('api/discussions/new', newPost).success(function (data) {
+            if (data.success === true) {
+                url = 'api/discussions/byParent/' + $routeParams.articleId;
+                loadContent();
+            } else {
+                if (data.newId !== false) {
+                    $location.path('/network/discussion/view/' + data.newId);
+                } else {
+                    alert("There was an error.");
+                }
+            }
+        });
+    }
+
+    $rootScope.$on('event:logoutConfirmed', function () {
+        $location.path('/discussion/all');
     });
 }

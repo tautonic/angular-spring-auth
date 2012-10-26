@@ -84,7 +84,7 @@ app.post('/views/:id', function(req, id) {
     };
 
     var exchange = httpclient.request(opts);
-     log.info("VIEWED THING" + exchange.content);
+
     return json(true);
 })
 
@@ -169,7 +169,24 @@ app.post('/article/new', function(req) {
  * Returns a list of discussion topics
  */
 app.get('/discussions/all', function(req, id) {
-    return json(getDiscussionList().content);
+    var discussions = getDiscussionList().content;
+
+    discussions.forEach(function(discussion) {
+        if(discussion.parentId) {
+            var linked = getArticle(discussion.parentId);
+            log.info("LINKED DICSUXSION STUFF: "+JSON.stringify(linked));
+            if(linked) {
+                discussion.linkedItem = linked.content;
+                discussion.linkedItem.exists = true;
+            } else {
+                discussion.linkedItem = { "exists": false };
+            }
+        } else {
+            discussion.linkedItem = { "exists": false };
+        }
+    });
+
+    return json(discussions);
 });
 
 /**

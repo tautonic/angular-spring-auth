@@ -127,6 +127,10 @@ var getArticlesByCategory = function(category) {
 var getArticle = function(id) {
     var result = ajax('http://localhost:9300/myapp/api/resources/' + id);
 
+    if(!result.success) {
+        return false;
+    }
+
     result.content.doctype = getDocType(result.content.mimetype);
 
     return result;

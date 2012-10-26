@@ -140,7 +140,10 @@
 		function initAuth() {
 			roles = [];
 			$rootScope.auth = {
-				isAuthenticated: false
+				isAuthenticated: false,
+                requestLogin: function() {
+                    $rootScope.$broadcast('event:loginRequired');
+                }
 			};
 		}
 		initAuth();
