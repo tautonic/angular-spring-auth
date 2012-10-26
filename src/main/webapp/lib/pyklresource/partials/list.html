@@ -5,10 +5,7 @@
             <div class="articles span9">
                 <div class="article row" ng-repeat="article in articles">
                     <div class="span2">
-                        <img thumbnail
-                             type="content"
-                             text="Preview"
-                             thumb=article />
+                        <div thumbnail thumb=article size="medium" text="Preview" type="content" />
                     </div>
                     <div class="span6 content">
                         <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
