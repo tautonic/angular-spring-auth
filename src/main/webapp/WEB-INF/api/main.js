@@ -174,7 +174,7 @@ app.get('/discussions/all', function(req, id) {
     discussions.forEach(function(discussion) {
         if(discussion.parentId) {
             var linked = getArticle(discussion.parentId);
-            log.info("LINKED DICSUXSION STUFF: "+JSON.stringify(linked));
+
             if(linked) {
                 discussion.linkedItem = linked.content;
                 discussion.linkedItem.exists = true;

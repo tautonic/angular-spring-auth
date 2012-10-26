@@ -30,7 +30,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $locatio
         $http.get(url).success(function (data) {
             if (data !== "false") {
                 $scope.discussion = data;
-                $scope.isLoaded = true;  console.log("discussion results: ", data)
+                $scope.isLoaded = true;
             } else {
                 $log.info("Error loading discussion.");
             }
@@ -39,7 +39,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $locatio
         });
     }
 
-    $scope.hasLinkedObject = function(post) {  console.log("POST IS: ",post);
+    $scope.hasLinkedObject = function(post) {
         return post.linkedItem.exists;
     }
 
@@ -60,6 +60,8 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $locatio
 function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location) {
     var url = 'api/discussions/';
 
+    $scope.hide = ($routeParams.articleId === null);
+
     setupScope();
 
     function setupScope() {
@@ -70,16 +72,6 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
             message:''
         };
         $scope.isLoaded = false;
-
-        $scope.$on('$routeChangeSuccess', function(){
-            if($location.path() === '/content' ){
-                $rootScope.banner = 'curriculum';
-                $rootScope.about = 'curriculum';
-            }else{
-                $rootScope.banner = 'network';
-                $rootScope.about = 'network';
-            }
-        });
 
         if ($routeParams) {
             $scope.pageType = $routeParams.discussionId;
@@ -100,23 +92,14 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
     }
 
     function loadContent() {
-        if ($routeParams.articleId === "none") {
-            $scope.pageType = "none";
-            $scope.isLoaded = true;
-            return;
-        }
         $http.get(url).success(function (data) {
             if (data !== "false") {
-                if ($scope.pageType != "all") {
-                    $scope.discussion = data[0];
-                } else {
-                    $scope.discussion = data;
-                }
+                $scope.discussion = data;
                 $scope.isLoaded = true;
+                $scope.hide = false;
             } else {
-                $scope.pageType = "new";
-                $scope.reply.title = $rootScope.title;
-                $scope.isLoaded = true;
+                $scope.hide = true;
+                $rootScope.$broadcast("event:newDiscussion");
             }
         }).error(function (data, status) {
                 $log.info("ERROR retrieving protected resource: " + data + " status: " + status);
@@ -195,8 +178,9 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
         }
     });
 
+    //fired by the view resource controller after it's loaded, used to load a discussion as part of curriculum content or something
     $rootScope.$on('event:loadDiscussion', function ($event, $args) {
-        $routeParams.articleId = $args.discussionId;
+        $routeParams.discussionId = $args.discussionId;
         url = 'api/discussions/';
         setupScope();
         loadContent();
@@ -204,41 +188,27 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
 }
 
 function NewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location) {
-    var url = 'api/discussions/';
+    var url = 'api/discussions/new';
     $scope.hasContent = false;
-    $scope.$on('$routeChangeSuccess', function(){
-        if($location.path() === '/content' ){
-            $rootScope.banner = 'curriculum';
-            $rootScope.about = 'curriculum';
-        }else{
-            $rootScope.banner = 'network';
-            $rootScope.about = 'network';
-        }
-    });
+    $scope.hide = ($routeParams.articleId === null);
 
-    setupScope();
+    $scope.query = '';
+    $scope.enterReply = "Reply to discussion";
+    $scope.reply = {
+        show:false,
+        message:''
+    };
 
-    function setupScope() {
-        $scope.query = '';
-        $scope.enterReply = "Reply to discussion";
-        $scope.reply = {
-            show:false,
-            message:''
-        };
+    $scope.reply.title = '';
 
-        $scope.reply.title = '';
-        url = url + "new";
-
-        if (("new" === $scope.pageType) && (!$rootScope.auth.isAuthenticated)) {
-            $location.path('/network/all');
-        }
-        //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
+    if (!$rootScope.auth.isAuthenticated) {
+        $location.path('/network/all');
     }
 
 
     $scope.createDiscussion = function () {
         var newPost = {
-            title:$scope.reply.title,
+            title:$scope.reply.title || "Article Discussion",
             parentId:($routeParams.articleId || null),
             posts:[
                 {
@@ -250,10 +220,13 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location)
         $http.post('api/discussions/new', newPost).success(function (data) {
             if (data.success === true) {
                 url = 'api/discussions/byParent/' + $routeParams.articleId;
-                loadContent();
             } else {
                 if (data.newId !== false) {
-                    $location.path('/network/discussion/view/' + data.newId);
+                    if($scope.hasContent) {
+                        $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': data.newId });
+                    } else {
+                        $location.path('/network/discussion/view/' + data.newId);
+                    }
                 } else {
                     alert("There was an error.");
                 }
@@ -261,7 +234,17 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location)
         });
     }
 
+    $rootScope.$on('event:newDiscussion', function () {
+        $scope.hide = false;
+    });
+
     $rootScope.$on('event:logoutConfirmed', function () {
         $location.path('/discussion/all');
+    });
+
+    //fired by the view resource controller after it's loaded, by default this should hide the new reply until it's discovered that the discussion for that object doesn't exist yet
+    $rootScope.$on('event:loadDiscussion', function ($event, $args) {
+        $scope.hide = true;
+        $scope.hasContent = true;
     });
 }

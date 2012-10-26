@@ -1,18 +1,22 @@
-<div class="reply" ng-show="auth.isAuthenticated">
-    <form name="newDiscussionForm" ng-submit="createDiscussion()">
-        <div ng-show="!hasContent">
-            Discussion Title: <input type="text" ng-model="reply.title">
-            <p>Words go here:</p>
+<div id="discussions" class="container" ng-show="!hide">
+    <div class="row">
+        <div class="reply" ng-show="auth.isAuthenticated">
+            <form name="newDiscussionForm" ng-submit="createDiscussion()">
+                <div ng-show="!hasContent">
+                    Discussion Title: <input type="text" ng-model="reply.title">
+                    <p>Words go here:</p>
+                </div>
+                <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
+                </textarea>
+                <br>
+                <input type="submit" value="Start New Discussion">
+                <div ng-show="hasContent">
+                    <input type="button" ng-click="cancel()" value="Cancel">
+                </div>
+            </form>
         </div>
-        <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
-        </textarea>
-        <br>
-        <input type="submit" value="Start New Discussion">
-        <div ng-show="hasContent">
-            <input type="button" ng-click="cancel()" value="Cancel">
+        <div ng-show="!auth.isAuthenticated">
+            <a ng-click="auth.requestLogin()">Login</a> or <a ng-href="#/profile">register</a> to start a discussion.
         </div>
-    </form>
-</div>
-<div ng-show="!auth.isAuthenticated">
-    <a ng-click="auth.requestLogin()">Login</a> or <a ng-href="#/profile">register</a> to start a discussion.
+    </div>
 </div>
