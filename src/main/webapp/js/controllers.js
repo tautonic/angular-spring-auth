@@ -13,6 +13,11 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
         $scope.quote = data.quote;
     });
 
+    $http.get('api/article/all/news').success(function(data) {
+        console.log("ARTICLES RETURNED: ",data);
+        $scope.articles = data;
+    })
+
     var options = {
         data: JSON.stringify({
             filters: "likes comments discussions collaborators ideas companies profiles spMessages"
@@ -32,20 +37,6 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     $scope.isEmpty = function () {
         return (($scope.stream) && ($scope.stream.itemCount === 0));
     };
-
-    /*$rootScope.search_faculty = function(){
-        $location.path('/search/profiles/' + $rootScope.faculty_query);
-    };
-
-
-
-    $rootScope.search_content = function(){
-        $location.path('/search/content/' + $rootScope.content_query);
-    };
-
-    $rootScope.search_discussions = function(){
-        $location.path('/search/discussions/' + $rootScope.discussion_query);
-    };*/
 }
 
 function SiteSearchController($rootScope, $scope, $location){
