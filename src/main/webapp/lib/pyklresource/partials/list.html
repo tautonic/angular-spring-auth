@@ -1,0 +1,67 @@
+<div class="content container">
+    <div id="curriculum-content" ui-tabs="{tab1: {label: 'FEATURED CONTENT'}, tab2: {label: 'MOST RECENT'}, tab3: {label: 'MOST POPULAR'}}">
+
+        <div class="row">
+            <div class="articles span9">
+                <div class="article row" ng-repeat="article in articles">
+                    <div class="span2">
+                        <div thumbnail thumb=article size="medium" text="Preview" type="content" />
+                    </div>
+                    <div class="span6 content">
+                        <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
+                        <p class="article-meta"><span class="doc-type {{article.doctype}}"></span><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
+                        <div class="tags">
+                            <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
+                        </div>
+                        <p class="article-brief">{{article.description}}</p>
+                        <ul class="article-stats">
+                            <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
+                            <li class="muted"><i class="views"></i> {{article.views}} Views</li>
+                            <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
+                        </ul>
+                    </div>
+                </div>
+                <div ng-show="(articles.length == 0)">No articles found.</div>
+            </div>
+
+            <div class="span3">
+                <div class="search-box content">
+                    <div class="header">
+                        <h4>SEARCH THIS SECTION</h4>
+                    </div>
+                    <div class="form-container">
+                        <form ng-submit="search(searchTerm)">
+                            <div class="search-input">
+                                <input type="text" ng-model="searchTerm" placeholder="Search Articles...">
+                                <div class="btn-group-border"></div>
+                                <div class="search-lens read-more gradient">
+                                    <div class="preview-lens"></div>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments()"><label for="documents">Documents ({{count('docs')}})</label>
+                            <div class="sub documents">
+                                <input type="checkbox" id="pdf" ng-model="filters.pdf" ng-change="search(searchTerm)"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{count('pdf')}})</label>
+                                <input type="checkbox" id="word" ng-model="filters.word" ng-change="search(searchTerm)"><label for="word"><span class="doc-type word"></span>Microsoft Word ({{count('word')}})</label>
+                                <input type="checkbox" id="powerpoint" ng-model="filters.powerpoint" ng-change="search(searchTerm)"><label for="powerpoint"><span class="doc-type powerpoint"></span>PowerPoint ({{count('powerpoint')}})</label>
+                                <input type="checkbox" id="excel" ng-model="filters.excel" ng-change="search(searchTerm)"><label for="excel"><span class="doc-type excel"></span>Excel Spreadsheet ({{count('excel')}})</label>
+                                <input type="checkbox" id="text" ng-model="filters.text" ng-change="search(searchTerm)"><label for="text"><span class="doc-type text"></span>Text File ({{count('text')}})</label>
+                                <input type="checkbox" id="rtf" ng-model="filters.rtf" ng-change="search(searchTerm)"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{count('rtf')}})</label>
+                            </div>
+                            <input type="checkbox" id="videos" ng-model="filters.video" ng-change="search(searchTerm)"><label for="videos"><span class="doc-type video"></span>Videos ({{count('videos')}})</label>
+                            <hr>
+                            <input type="checkbox" id="image" ng-model="filters.image" ng-change="search(searchTerm)"><label for="image"><span class="doc-type image"></span>Pictures ({{count('image')}})</label>
+                        </form>
+                        <button ng-show="auth.isUserInRole('ROLE_ADMIN')" ng-click="addNewArticle()" class="btn btn-info">Add Article</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div ng-include="'partials/most-recent-content-template.html'"></div>
+        <div ng-include="'partials/most-popular-content-template.html'"></div>
+    </div>
+</div>

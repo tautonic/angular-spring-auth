@@ -17,18 +17,37 @@
 			templateUrl: 'partials/faculty.html',
             controller: 'facultyFellows'
         } );
-        $routeProvider.when( '/content', {
-			templateUrl: 'lib/pyklresource/index.html'
+        $routeProvider.when( '/content/', {
+			templateUrl: 'lib/pyklresource/partials/list.html',
+            controller: 'ListResources'
 		} );
+        //using the index here because individual content/articles can have discussions attached to them, and this makes that happen
+        //so there can't really be a single controller set here
         $routeProvider.when( '/content/:articleId', {
             templateUrl: 'lib/pyklresource/index.html'
         } );
-        $routeProvider.when( '/network', {
-            templateUrl: 'lib/pykldiscuss/index.html'
+
+        //by default, the network page lists discussions. This is for that
+        $routeProvider.when( '/network/', {
+            templateUrl: 'lib/pykldiscuss/partials/list.html',
+            controller: 'ListDiscussions'
         } );
-        /*$routeProvider.when( '/network/:discussionId', {
-            templateUrl: 'lib/pykldiscuss/index.html'
-        } );*/
+
+        $routeProvider.when( '/network/discussion', {
+            templateUrl: 'lib/pykldiscuss/partials/list.html',
+            controller: 'ListDiscussions'
+        } );
+
+        $routeProvider.when( '/network/discussion/view/:discussionId', {
+            templateUrl: 'lib/pykldiscuss/partials/view.html',
+            controller: 'ViewDiscussion'
+        } );
+
+        $routeProvider.when( '/network/discussion/new', {
+            templateUrl: 'lib/pykldiscuss/partials/new.html',
+            controller: 'NewDiscussion'
+        } );
+
         $routeProvider.when( '/admin', {
             templateUrl: 'lib/pykladmin/index.html'
         });

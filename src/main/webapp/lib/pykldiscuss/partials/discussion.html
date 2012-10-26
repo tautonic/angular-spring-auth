@@ -124,7 +124,7 @@
                     <div discussion-stack comments={{post.commentCount}} class="discussion-item grey-gradient">
                         <a ng-href="#/network/{{post._id}}"><h4>{{post.title}}</h4></a>
                         <h6>By <a ng-href="#/profiles/view/{{post.creator._id}}">{{post.creator.username}}</a>, {{post.dateCreated | asDate: 'fullDate'}}</h6>
-                        <!--<p class="muted"><strong>Document:</strong> <a href="#/content">Document Title</a></p>-->
+                        <p class="muted" ng-show="hasLinkedObject()"><strong>Document:</strong> <a href="#/content/{{post.linkedItem._id}}">{{post.linkedItem.title}}</a></p>
                         <ul class="article-stats">
                             <li class="muted"><i class="likes"></i> {{post.likes}} Likes</li>
                             <li class="muted"><i class="views"></i> {{post.views}} Views</li>
@@ -134,12 +134,14 @@
                     </div>
                 </div>
 
-                <!--<div class="paper-clip"></div>
-                <div class="attached-doc">
-                    <div class="new-picture-frame small content-thumbnail">
-                        <img ng-src ="images/document-default.jpg" alt="">
+                <div ng-show="hasLinkedObject(post)">
+                    <div class="paper-clip"></div>
+                    <div class="attached-doc">
+                        <div class="new-picture-frame small content-thumbnail">
+                            <img ng-src ="images/document-default.jpg" alt="">
+                        </div>
                     </div>
-                </div>-->
+                </div>
             </div>
         </div>
         <div class="span3 offset1">

@@ -23,19 +23,29 @@ function ajax(url) {
 }
 
 var searchAllArticles = function(params) {
-    var query = {
+    var query;
+
+    if(params.term) {
+            query = {
+            "bool": {
+                "should": [
+                    { "field": { "title": params.term } },
+                    { "field": { "content": params.term } },
+                    { "field": { "description": params.term } }
+                ],
+                "minimum_number_should_match": 1
+            }
+        };
+    } else {
+        query = {
+            "match_all": {}
+        }
+    }
+
+    var data = {
         "query": {
             "filtered": {
-                "query":{
-                    "bool": {
-                        "should": [
-                            { "field": { "title": params.term } },
-                            { "field": { "content": params.term } },
-                            { "field": { "description": params.term } }
-                        ],
-                        "minimum_number_should_match": 1
-                    }
-                },
+                "query": query,
                 "filter": {
                     "and": [
                         {
@@ -67,14 +77,14 @@ var searchAllArticles = function(params) {
         {
             mimetypeFilters = mimetypeFilters.concat(getPossibleMimetypes(filters[i]));
         }
-        log.info("query filter?: "+JSON.stringify(mimetypeFilters));
-        query.query.filtered.filter.and.push({ "terms": { "mimetype": mimetypeFilters }});
-    }
 
+        data.query.filtered.filter.and.push({ "terms": { "mimetype": mimetypeFilters }});
+    }
+    log.info("QUERYING? "+JSON.stringify(query));
     var opts = {
         url: 'http://localhost:9300/myapp/api/resources/search',
         method: 'POST',
-        data: JSON.stringify(query),
+        data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', "Content-Type": "application/json" }),
         async: false
     };
@@ -116,6 +126,10 @@ var getArticlesByCategory = function(category) {
 
 var getArticle = function(id) {
     var result = ajax('http://localhost:9300/myapp/api/resources/' + id);
+
+    if(!result.success) {
+        return false;
+    }
 
     result.content.doctype = getDocType(result.content.mimetype);
 

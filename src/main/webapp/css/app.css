@@ -51,33 +51,6 @@
     margin: 10px 0;
 }
 
-/** Article(s) Page Styles **/
-#top-content, #latest-content {
-    margin-right: 210px;
-}
-
-#top-content hr, #latest-content hr {
-    clear: none;
-    margin-right: 20px;
-}
-
-#top-content {
-    border: 3px solid #eee;
-}
-
-.article-list {
-    list-style: none;
-}
-
-.category-sort {
-    float: right;
-    width: 200px;
-}
-
-.category-sort hr {
-    clear: none;
-}
-
 /**** Clearfix ****/
 .clearfix:before, .clearfix:after { content: ""; display: table; }
 .clearfix:after { clear: both; }
@@ -1314,7 +1287,7 @@ li.search-result.members{
 
 .attached-doc{
     position: absolute;
-    top: 14px;
+    top: 1px;
     right: 3em;
 }
 
@@ -1322,7 +1295,7 @@ li.search-result.members{
     position: absolute;
     width: 17px;
     height: 43px;
-    top: 1px;
+    top: -14px;
     right: 4.25em;
     background: url('../images/GCEE_sprite.png') -116px -81px no-repeat;
     z-index: 2;
@@ -1558,5 +1531,42 @@ li.search-result.members{
     background-position: 102px -9px;
 }
 
+
+.search-box.content {
+    border: 1px solid #e8e8e8;
+    border-radius: 2px;
+}
+
+.search-box.content .form-container {
+    background: #f6f6f6;
+}
+
+.search-box.content input[type=checkbox] {
+    float: left;
+    margin: 10px 5px 5px;
+}
+
+.search-box.content label {
+    font-size: 12px;
+    font-weight: normal;
+    padding: 5px 2px;
+}
+
+.search-box.content .sub {
+    background-color: #d3d3d3;
+    margin: 5px -1em;
+    padding: 5px 1em 5px 1.25em;
+    border-top: 2px solid #e8e8e8;
+    border-bottom: 2px solid #e8e8e8;
+}
+
+.search-box.content .search-input {
+    margin-bottom: 10px;
+}
+
+.search-box.content hr {
+    margin: 0 -1em;
+    width: 120%;
+}
 
 
