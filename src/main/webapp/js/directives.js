@@ -996,27 +996,14 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
     }
 }]);
 
-/*
-angular.module('bgc.directives').directive('latestActivity', ['$http', function($http){
-    'use strict';
+angular.module('bgc.directives').directive('reloadTwitterBtns', function(){
+    'use strict'
 
     return {
-        restrict: 'A',
-        templateUrl: 'partials/latestActivityTemplate.html',
-        scope: {},
         link: function(scope, element, attrs){
-            var options = {
-                data: JSON.stringify({
-                    filters: "likes comments discussions collaborators ideas companies profiles spMessages"
-                })
-            };
-
-            attrs.$observe('profileid', function(value){
-                $http.get('api/latestactivity?userId='+value+'&filters=likes comments discussions collaborators ideas companies profiles spMessages', options).success(function(data) {
-                    scope.stream = data;
-                });
+            scope.$on('$routeChangeSuccess', function(){
+                twttr.widgets.load();
             });
         }
     }
-}]);
-*/
+});
