@@ -3,9 +3,7 @@
         <div class="span9">
             <div ng-repeat="profile in profiles">
                 <div class="profile-list-item profile grey-gradient clearfix">
-                    <div class="new-picture-frame profile-thumbnail large counter-clockwise">
-                        <img class="profile-image large" src="images/rosie.jpeg">
-                    </div>
+                    <div thumbnail thumb=profile size="large" rotation="counter-clockwise" type="profile" />
                     <div class="profile-left">
                         <h3>{{profile.name.given}} {{profile.name.surname}}</h3>
                         <h5>{{profile.workHistory[0].title}}</h5>

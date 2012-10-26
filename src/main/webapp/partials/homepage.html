@@ -15,10 +15,10 @@
                 <div class="article">
                     <div class="row">
                         <div class="span3">
-                            <img thumbnail
-                                type="article"
-                                url="#/12345678" />
-
+                            <div thumbnail
+                                 type="article"
+                                 text="Read More"
+                                 thumb=article />
                         </div>
                         <div class="span5">
                             <h3>NEWS ARTICLE NAME</h3>
@@ -46,10 +46,10 @@
                 <div class="article">
                     <div class="row">
                         <div class="span3">
-                            <img thumbnail
-                                    type="article"
-                                    text="Read More"
-                                    image="images/homepage-article-image-one.jpg" />
+                            <div thumbnail
+                                 type="article"
+                                 text="Read More"
+                                 thumb=article />
                         </div>
                         <div class="span5">
                             <h3>NEWS ARTICLE NAME</h3>
@@ -77,10 +77,10 @@
                 <div class="article">
                     <div class="row">
                         <div class="span3">
-                            <img thumbnail
-                                    type="article"
-                                    text="Read Less"
-                                    image="images/row-of-students.jpg" />
+                            <div thumbnail
+                                 type="article"
+                                 text="Read More"
+                                 thumb=article />
                         </div>
                         <div class="span5">
                             <h3>NEWS ARTICLE NAME</h3>
@@ -111,16 +111,11 @@
         <div class="span4" ng-show="auth.isAuthenticated">
             <div class="activity-stream">
                 <div class="activity-stream-header">
-                    <img thumbnail
-                        type="profile"
-                        size="med"
-                        rotation="none"
-                        authUserThumb=true
-                        auth=auth />
+                    <!--<div thumbnail thumb=auth size="medium" rotation="none" type="profile" />-->
 
-                    <!--<div class="new-picture-frame profile-thumbnail med no-rotation">
+                    <div class="new-picture-frame profile-thumbnail medium no-rotation">
                         <img ng-src ="{{auth.principal.thumbnail}}" alt="">
-                    </div>-->
+                    </div>
 
                     <h4>LOGGED IN AS:</h4>
                 </div>

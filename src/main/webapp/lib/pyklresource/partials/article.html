@@ -19,25 +19,27 @@
         <div ng-switch-default>
             <div class="row">
                 <div class="articles span9">
-                    <div class="article row" ng-repeat="article in articles">
-                        <div class="span2">
-                            <img thumbnail
-                                 type="content"
-                                 text="Preview"
-                                 thumb=article />
-                        </div>
-                        <div class="span6 content">
-                            <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
-                            <p class="article-meta"><span class="doc-type {{article.doctype}}"></span><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
-                            <div class="tags">
-                                <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
+                    <div class="row">
+                        <div class="article clearfix" ng-repeat="article in articles">
+                            <div class="span2">
+                                <div thumbnail
+                                     type="content"
+                                     text="Preview"
+                                     thumb=article />
                             </div>
-                            <p class="article-brief">{{article.description}}</p>
-                            <ul class="article-stats">
-                                <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
-                                <li class="muted"><i class="views"></i> {{article.views}} Views</li>
-                                <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
-                            </ul>
+                            <div class="span7 content">
+                                <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
+                                <p class="article-meta"><span class="doc-type {{article.doctype}}"></span><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
+                                <div class="tags">
+                                    <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
+                                </div>
+                                <p class="article-brief">{{article.description}}</p>
+                                <ul class="article-stats">
+                                    <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
+                                    <li class="muted"><i class="views"></i> {{article.views}} Views</li>
+                                    <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div ng-show="(articles.length == 0)">No articles found.</div>
