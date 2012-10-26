@@ -375,7 +375,7 @@ function LoginCtrl( $rootScope, $scope, $log ) {
 
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
-        $rootScope.about = 'none';
+        $rootScope.about = 'signin';
     });
 }
 
