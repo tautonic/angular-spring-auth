@@ -131,6 +131,9 @@
     <div ng-switch-when="home">
         <div ng-include src="'partials/homepage-about.html'"></div>
     </div>
+    <div ng-switch-when="404">
+        <div ng-include src="'partials/404_error_page.html'"></div>
+    </div>
     <div ng-switch-default>
         <div ng-include src="'partials/homepage-about.html'"></div>
     </div>

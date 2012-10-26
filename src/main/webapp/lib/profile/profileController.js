@@ -20,13 +20,19 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         $rootScope.banner = 'none';
     });
 
-    var profile = Profile.get({profileId: $routeParams.profileId}, function(){
-        $scope.profile = profile.content;
+    var profile = Profile.get({profileId: $routeParams.profileId},
+        function(){
+            if(profile.status === 400){
+                $location.path('/error/404');
+            }else{
+                $scope.profile = profile.content;
 
-        if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001' || $scope.profile.thumbnail === null){
-            $scope.profile.thumbnail = "http://dummyimage.com/160"
+                if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001' || $scope.profile.thumbnail === null){
+                    $scope.profile.thumbnail = "http://dummyimage.com/160"
+                }
+            }
         }
-    });
+    );
 
     $scope.reset = function(){
         var data = {

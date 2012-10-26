@@ -985,7 +985,8 @@ span.doc-type.rtf {
 i.likes,
 i.views,
 i.comments,
-i.flag{
+i.flag,
+i.globe{
     background: url('../images/GCEE_sprite.png') 10px 10px no-repeat;
     width: 13px;
     height: 13px;
@@ -1006,6 +1007,15 @@ i.comments{
 
 i.flag{
     background-position: -45px -87px;
+}
+
+i.globe{
+    position: relative;
+    top: 7px;
+    background-position: -173px -93px;
+    height: 25px;
+    width: 25px;
+    margin: 0 1em 0 0;
 }
 
 .article-tweet-button{
@@ -1567,6 +1577,48 @@ li.search-result.members{
 .search-box.content hr {
     margin: 0 -1em;
     width: 120%;
+}
+
+.error-page h2{
+    font-family: "PMN Caecilia", Georgia, serif;
+    font-weight: bold;
+}
+
+.error-page h2{
+    font-size: 40pt;
+    text-transform: none;
+    margin-bottom: 26px;
+}
+
+.error-message{
+    padding: 5em 0;
+}
+
+.error-message p{
+    font-size: 24px;
+    margin-left: 3em;
+}
+
+.error-page .curriculum-about img{
+    right: 5em;
+    top: 3em;
+}
+
+.about-section.error-page{
+    min-height: 0;
+}
+
+.error-page .about-section-mesh{
+    min-height: 0;
+}
+
+.error-help{
+    list-style-type: none;
+}
+
+.explanation a{
+    color: #eeaf00;
+    text-decoration: none;
 }
 
 

@@ -95,6 +95,11 @@
             controller: 'SearchDiscussions'
         } );
 
+        $routeProvider.when( '/error/404', {
+            templateUrl: 'partials/404.html',
+            controller: 'errorController'
+        } );
+
         $routeProvider.when( '/view', {
             templateUrl: 'partials/partial1.html'
         } );

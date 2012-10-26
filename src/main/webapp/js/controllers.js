@@ -68,6 +68,13 @@ function facultyFellows($rootScope, $scope){
     });
 }
 
+function errorController($rootScope, $scope){
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+        $rootScope.about = '404';
+    });
+}
+
 
 function MyCtrl2( $rootScope, $scope, $http, $log ) {
 	$scope.protected = 'Not loaded';
