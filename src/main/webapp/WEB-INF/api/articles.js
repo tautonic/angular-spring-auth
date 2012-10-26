@@ -104,8 +104,8 @@ var searchAllArticles = function(params) {
     return result;
 }
 
-var getAllArticles = function(type) {
-    var result = ajax('http://localhost:9300/myapp/api/resources/' + type);
+var getAllArticles = function(type, max) {
+    var result = ajax('http://localhost:9300/myapp/api/resources/' + type + '/' + max);
 
     result.content.forEach(function(article) {
         article.doctype = getDocType(article.mimetype);

@@ -90,17 +90,21 @@ app.post('/views/:id', function(req, id) {
 
 /********** Articles and resources *********/
 
+app.get('/article/all/news', function(req) {
+    return articles(req, "articles", 3);
+})
+
 /* Attempt to allow for sorting by type. didn't quite work */
-app.get('/article/all/:type', function(req, type) {
+/*app.get('/article/all/:type', function(req, type) {
     return articles(req, type);
-});
+});*/
 
 app.get('/article/all', function(req) {
     return articles(req, 'articles');
 });
 
-function articles(req, type) {
-    var articles = getAllArticles(type);
+function articles(req, type, max) {
+    var articles = getAllArticles(type, max);
 
     if(articles.success) {
         return json(articles.content);
