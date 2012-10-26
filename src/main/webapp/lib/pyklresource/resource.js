@@ -106,9 +106,9 @@ function ViewResource( $rootScope, $scope, $routeParams, $http, $log ) {
         $http.get( url ).success( function (data) {
             console.log("ARTICLE RETURNED: ",data);
             if(data !== "false") {
-                    $scope.article = data;
-                    $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
-                    $http.post("api/views/" + $scope.article._id);
+                $scope.article = data;
+                $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
+                $http.post("api/views/" + $scope.article._id);
             } else {
                 $log.info("ERROR getting article, or resource.");
             }
@@ -127,9 +127,10 @@ function ViewResource( $rootScope, $scope, $routeParams, $http, $log ) {
 
     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
     $rootScope.$on('event:logoutConfirmed', function() { loadContent(); });
+
     $scope.$on('$routeChangeSuccess', function(){
-        $rootScope.banner = 'curriculum';
-        $rootScope.about = 'curriculum';
+        $rootScope.banner = 'none';
+        $rootScope.about = 'none';
     });
 
     loadContent();
