@@ -275,13 +275,14 @@ public class ZociaMapPersistence implements MapPersistence {
 
 
     /**
-     * Loads the value of a given key. If distributed map doesn't contain the value
+     * Loads the values for a given key. If distributed map doesn't contain the value
      * for the given key then Hazelcast will call implementation's load (key) method
      * to obtain the value. Implementation can use any means of loading the given key;
      * such as an O/R mapping tool, simple SQL or reading a file etc.
      *
      * @param key The key to lookup. May contain a locale by using an '@' as delimeter.
-     *            <key>[@<locale>]
+     *            <key>[@<locale>]. If no locale is included, a search for key across
+     *            all locales is performed.
      * @return value of the key
      */
     public Object load(Object key) {
@@ -290,12 +291,11 @@ public class ZociaMapPersistence implements MapPersistence {
                     new Object[]{_index, _type, key});
         }
 
-        //todo: Don't assume default locale is 'en'
         String[] keyParts = ((String) key).split("@");
         String k = keyParts[0];
-        String locale = keyParts.length > 1 ? keyParts[1] : "en";
+        String locale = keyParts.length > 1 ? keyParts[1] : null;
 
-        ContentExchange exchange = new MyExchange(_index, _type, key, _getAddress) {
+        ContentExchange exchange = new MyExchange(_index, _type, k, _getAddress) {
             @Override
             protected void onResponseComplete() throws IOException {
                 if (this.getResponseStatus() % 100 == 2) return;
@@ -308,15 +308,22 @@ public class ZociaMapPersistence implements MapPersistence {
         String uri = String.format(_getAddress, k);
         exchange.setURL(uri);
         exchange.setRequestHeader("x-rt-index", _index);
-        exchange.setRequestHeader("Accept-Language", locale);
 
-        LOG.debug("Establishing connection to " + exchange);
+        if (locale != null)
+            exchange.setRequestHeader("Accept-Language", locale);
+        else
+            exchange.setRequestHeader("x-rt-skip-locale", "true");
+
+        LOG.debug("Establishing connection to {}, locale: {}", exchange, locale);
 
         try {
             _client.send(exchange);
             exchange.waitForDone();
             int status = exchange.getResponseStatus();
             if (status == 200) {
+                LOG.debug("Respon" +
+                        "se for key: {}. headers: {} > {}",
+                        new Object[] {k, exchange.getRequestFields(), exchange.getResponseContent()});
                 return exchange.getResponseContent();
             }
             LOG.warn(String.format("Failed to load with unexpected status, index [%s], type [%s], key [%s], status [%d]",
