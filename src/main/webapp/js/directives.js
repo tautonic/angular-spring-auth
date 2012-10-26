@@ -968,7 +968,7 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
             var zIndex = -1;
             var height = element.height() - element.css('margin-bottom').replace('px', '');
             //var height = element.height();
-            height += 8;
+            height -= 21;
 
             attrs.$observe('comments', function(value){
                 var stacks = value;
