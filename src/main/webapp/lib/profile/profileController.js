@@ -72,6 +72,7 @@ function createProfile($rootScope, $scope, $location, Profile){
     $rootScope.banner = 'none';
     $rootScope.about = 'signup';
 
+    $scope.signupSuccess = false;
     $scope.profile = {};
     $scope.profile.accountEmail = {
         address: ''
@@ -104,7 +105,8 @@ function createProfile($rootScope, $scope, $location, Profile){
             //$scope.profile._id = response.content._id;
             //$scope.profile.thumbnail = response.content.thumbnail;
 
-            $location.path('/network');
+            $scope.signupSuccess = true;
+            //$location.path('/network');
 
             $scope.responseContent = response.content;
         }, function(response){

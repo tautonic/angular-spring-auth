@@ -1,130 +1,151 @@
 <div class="content container signup">
     <div class="row">
-        <div class="span9">
-            <div class="signup-form-container grey-gradient">
-                <h2>SIGN-UP FOR A FREE ACCOUNT</h2>
+        <div ng-switch on=signupSuccess>
+            <div ng-switch-when=true>
+                <div class="span9">
+                    <div class="signup-success grey-gradient">
+                        <h2>Thank you for signing up with us</h2>
+                        <p>
+                            <strong>
+                                Please check your email for a confirmation request with a link that will
+                                confirm your account. Once you click the link you registration will be complete
+                            </strong>
+                        </p>
 
-                <form class="form-horizontal" name="createProfile" novalidate>
-                    <div class="control-group">
-                        <label class="control-label" for="username">Username:</label>
-
-                        <div class="controls">
-                            <input type="text"
-                                   ng-model="profile.username"
-                                   class="input-xlarge"
-                                   id="username"
-                                   name="username"
-                                   username-validator />
-                        </div>
+                        <a class="btn btn-success" ng-href="#/content">Explore Free Content</a>
+                        <a class="btn btn-success" ng-href="#/network">Find Members</a>
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label" for="given-name">First Name:</label>
+                </div>
+            </div>
+            <div ng-switch-default>
+                <div class="span9">
+                    <div class="signup-form-container grey-gradient">
+                        <h2>SIGN-UP FOR A FREE ACCOUNT</h2>
 
-                        <div class="controls">
-                            <input type="text"
-                                   ng-model="profile.name.given"
-                                   class="input-xlarge"
-                                   id="given-name"
-                                   name="given-name"
-                                   ng-minlength="3"
-                                   ng-maxlength="32"
-                                   required
-                                   validation-tooltip
-                                   value="" />
-                        </div>
-                    </div>
+                        <form class="form-horizontal" name="createProfile" novalidate>
+                            <div class="control-group">
+                                <label class="control-label" for="username">Username:</label>
 
-                    <div class="control-group">
-                        <label class="control-label" for="last-name">Last Name:</label>
-
-                        <div class="controls">
-                            <input type="text"
-                                   ng-model="profile.name.surname"
-                                   class="input-xlarge"
-                                   id="last-name"
-                                   name="last-name"
-                                   ng-minlength="3"
-                                   ng-maxlength="32"
-                                   required
-                                   validation-tooltip
-                                   value="" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label" for="password-create">Enter Password:</label>
-
-                        <div class="controls">
-                            <input type="password"
-                                   ng-model="profile.password"
-                                   class="input-xlarge"
-                                   id="password-create"
-                                   name="password-create"
-                                   ng-minlength="6"
-                                   ng-maxlength="16"
-                                   required
-                                   validation-tooltip
-                                   value="" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label" for="repeat-password">Repeat Password:</label>
-
-                        <div class="controls">
-                            <input type="password"
-                                   ng-model="profile.newPassRepeat"
-                                   class="input-xlarge"
-                                   id="repeat-password"
-                                   name="repeat-password"
-                                   password-validator="password-create"
-                                   validation-tooltip />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label" for="email-address">Email:</label>
-
-                        <div class="controls">
-                            <input type="email"
-                                   ng-model="profile.accountEmail.address"
-                                   class="input-xlarge"
-                                   id="email-address"
-                                   name="email-address"
-                                   email-validator  />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label" for="work-institution">Institution:</label>
-
-                        <div class="controls">
-                            <input type="text"
-                                   ng-model="profile.workHistory[0].businessName"
-                                   class="input-xlarge"
-                                   id="work-institution"
-                                   name="work-institution"
-                                   ng-minlength="4"
-                                   ng-maxlength="32"
-                                   />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label"></label>
-
-                        <div class="controls">
-                            <div class="btn-group">
-                                <a ng-href="#/home" class="btn btn-success">Cancel</a>
-                                <button class="btn btn-success" ng-click="save(profile)" ng-disabled="createProfile.$invalid">
-                                    <strong>Submit</strong>
-                                </button>
+                                <div class="controls">
+                                    <input type="text"
+                                           ng-model="profile.username"
+                                           class="input-xlarge"
+                                           id="username"
+                                           name="username"
+                                           username-validator />
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                </form>
+                            <div class="control-group">
+                                <label class="control-label" for="given-name">First Name:</label>
+
+                                <div class="controls">
+                                    <input type="text"
+                                           ng-model="profile.name.given"
+                                           class="input-xlarge"
+                                           id="given-name"
+                                           name="given-name"
+                                           ng-minlength="3"
+                                           ng-maxlength="32"
+                                           required
+                                           validation-tooltip
+                                           value="" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="last-name">Last Name:</label>
+
+                                <div class="controls">
+                                    <input type="text"
+                                           ng-model="profile.name.surname"
+                                           class="input-xlarge"
+                                           id="last-name"
+                                           name="last-name"
+                                           ng-minlength="3"
+                                           ng-maxlength="32"
+                                           required
+                                           validation-tooltip
+                                           value="" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="password-create">Enter Password:</label>
+
+                                <div class="controls">
+                                    <input type="password"
+                                           ng-model="profile.password"
+                                           class="input-xlarge"
+                                           id="password-create"
+                                           name="password-create"
+                                           ng-minlength="6"
+                                           ng-maxlength="16"
+                                           required
+                                           validation-tooltip
+                                           value="" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="repeat-password">Repeat Password:</label>
+
+                                <div class="controls">
+                                    <input type="password"
+                                           ng-model="profile.newPassRepeat"
+                                           class="input-xlarge"
+                                           id="repeat-password"
+                                           name="repeat-password"
+                                           password-validator="password-create"
+                                           validation-tooltip />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="email-address">Email:</label>
+
+                                <div class="controls">
+                                    <input type="email"
+                                           ng-model="profile.accountEmail.address"
+                                           class="input-xlarge"
+                                           id="email-address"
+                                           name="email-address"
+                                           email-validator  />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="work-institution">Institution:</label>
+
+                                <div class="controls">
+                                    <input type="text"
+                                           ng-model="profile.workHistory[0].businessName"
+                                           class="input-xlarge"
+                                           id="work-institution"
+                                           name="work-institution"
+                                           ng-minlength="4"
+                                           ng-maxlength="32"
+                                            />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label"></label>
+
+                                <div class="controls">
+                                    <div class="btn-group">
+                                        <a ng-href="#/home" class="btn btn-success">Cancel</a>
+                                        <button class="btn btn-success" ng-click="save(profile)" ng-disabled="createProfile.$invalid">
+                                            <strong>Submit</strong>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 

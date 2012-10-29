@@ -104,6 +104,11 @@
             controller: 'errorController'
         } );
 
+        $routeProvider.when( '/verify', {
+            templateUrl: 'partials/verify.html',
+            controller: 'verifyController'
+        } );
+
         $routeProvider.when( '/view', {
             templateUrl: 'partials/partial1.html'
         } );

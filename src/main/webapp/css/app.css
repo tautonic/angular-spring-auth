@@ -1648,7 +1648,8 @@ li.search-result.members{
 }
 
 .signin-form-container,
-.signup-form-container{
+.signup-form-container,
+.signup-success{
     margin: 3em 0;
     padding: 1em;
     border: 1px solid #e8e8e8;
@@ -1708,6 +1709,18 @@ li.search-result.members{
 
 .signup img{
     top: -20px;
+}
+
+.signup-success a{
+    text-decoration: none;
+}
+
+.signup-success h2{
+    font-family: "PMN Caecilia", Georgia, serif;
+    font-weight: bold;
+    font-size: 24px;
+    margin-top: 0;
+    text-transform: none;
 }
 
 
