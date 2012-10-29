@@ -389,14 +389,14 @@ var pykl = window.pykl || {};
 
 })(window, window.angular);
 
-function LoginCtrl( $rootScope, $scope, $log ) {
+function LoginCtrl( $rootScope, $scope, $auth, $log ) {
     $scope.username = 'fred';
     $scope.password = 'secret';
 
     $scope.submit = function () {
         $log.info( 'Submitting form', $scope.username, $scope.password );
-        $log.info( 'Broadcasting ', EVENT_SIGNIN_REQUEST , $scope.username, $scope.password );
-        $rootScope.$broadcast( EVENT_SIGNIN_REQUEST, $scope.username, $scope.password );
+        $log.info( 'Broadcasting ', $auth.event.signinRequest , $scope.username, $scope.password );
+        $rootScope.$broadcast( $auth.event.signinRequest, $scope.username, $scope.password );
     };
 
     /*$scope.$on('$routeChangeSuccess', function(){
@@ -410,6 +410,10 @@ function LoginCtrl( $rootScope, $scope, $log ) {
     });
 }
 
-LoginCtrl.$inject = ['$rootScope', '$scope', '$log'];
-//window.LoginCtrl = LoginCtrl;
+$scope.$on('$routeChangeSuccess', function(){
+    $rootScope.banner = 'none';
+    $rootScope.about = 'signin';
+});
+
+LoginCtrl.$inject = ['$rootScope', '$scope', '$auth', '$log'];
 
