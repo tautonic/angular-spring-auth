@@ -1667,4 +1667,14 @@ li.search-result.members{
     text-decoration: none;
 }
 
+.signin-form-container form.form-horizontal input.btn{
+    width: 15%;
+}
+
+.signin-form-container form.form-horizontal input[type=checkbox]{
+    position: relative;
+    top: -3px;
+    width: 20px;
+}
+
 
