@@ -1,6 +1,18 @@
+var pykl = window.pykl || {};
+
 (function(window, angular, undefined) {
 
 	'use strict';
+
+    var EVENT_INTERNAL_SIGNIN_CONFIRMED = 'event:int-signinConfirmed';
+    var EVENT_INTERNAL_SIGNIN_FAILED = 'event:int-signinFailed';
+    var EVENT_INTERNAL_SIGNOUT_CONFIRMED = 'event:int-signoutConfirmed';
+    var EVENT_SIGNIN_REQUIRED = 'event:signinRequired';
+    var EVENT_SIGNIN_REQUEST = 'event:signinRequest';
+    var EVENT_SIGNIN_CONFIRMED = 'event:signinConfirmed';
+    var EVENT_SIGNIN_FAILED = 'event:signinFailed';
+    var EVENT_SIGNOUT_REQUEST = 'event:signoutRequest';
+    var EVENT_SIGNOUT_CONFIRMED = 'event:signoutConfirmed';
 
 	/**
 	* @ngdoc object
@@ -140,7 +152,10 @@
 		function initAuth() {
 			roles = [];
 			$rootScope.auth = {
-				isAuthenticated: false
+				isAuthenticated: false,
+                requestLogin: function() {
+                    $rootScope.$broadcast('event:loginRequired');
+                }
 			};
 		}
 		initAuth();
@@ -167,14 +182,30 @@
 			return false;
 		};
 
-		$rootScope.$on( 'event:loginConfirmed', getAuth);
-		$rootScope.$on( 'event:logoutConfirmed', getAuth);
+		$rootScope.$on( EVENT_INTERNAL_SIGNIN_CONFIRMED, function() {
+            getAuth().then(function() {
+                $rootScope.$broadcast(EVENT_SIGNIN_CONFIRMED, result);
+            });
+        });
+		$rootScope.$on( EVENT_INTERNAL_SIGNOUT_CONFIRMED, function() {
+            getAuth().then(function() {
+                $rootScope.$broadcast(EVENT_SIGNOUT_CONFIRMED, result);
+            });
+        });
 
 		getAuth();
 
 		// Return the service onject for direct invocations
 		var result = {
-			isUserInRole: isUserInRole
+			isUserInRole: isUserInRole,
+            event: {
+                signinRequired: EVENT_SIGNIN_REQUIRED,
+                signinRequest: EVENT_SIGNIN_REQUEST,
+                signinConfirmed: EVENT_SIGNIN_CONFIRMED,
+                signinFailed: EVENT_SIGNIN_FAILED,
+                signoutRequest: EVENT_SIGNOUT_REQUEST,
+                signoutConfirmed: EVENT_SIGNOUT_CONFIRMED
+            }
 		};
 		Object.defineProperty(result, 'isAuthenticated', {
 			get: function() {
@@ -210,7 +241,9 @@
         <span ng-show="!auth.isAuthenticated"><a ng-click="callLoginPage()"><span x-cms="menu_signin">{{cms.content}}</span></a></span> \
         <div ng-show="auth.isAuthenticated" class="dropdown" ng-dropdown> \
             <a data-toggle="dropdown" class="thumb"> \
-                <thumbnail  type="profile" size="small" rotation="clockwise"  image="images/rosie.jpeg"/> \
+                <div class="new-picture-frame profile-thumbnail medium clockwise">\
+                    <img ng-src ="{{auth.principal.thumbnail}}" alt="">\
+                </div>\
             </a> \
         <ul class="dropdown-menu"> \
             <li><span class="gradient"><a ng-href="#/profiles/view/{{auth.principal.id}}">My profile</a></span></li> \
@@ -235,23 +268,22 @@
 
             $scope.callLoginPage = gotoLoginPage;
 
-			$rootScope.$on( 'event:loginConfirmed', function () {
-				$log.info( 'event:loginConfirmed detected.' );
+			$rootScope.$on( EVENT_SIGNIN_CONFIRMED, function () {
+				$log.info( EVENT_SIGNIN_CONFIRMED + ' detected.' );
                 $location.path(referral);
-
 			} );
 
-			$rootScope.$on( 'event:loginRequired', function () {
-				$log.info( $scope.$id, 'event:loginRequired detected.' );
+			$rootScope.$on( EVENT_SIGNIN_REQUIRED, function () {
+				$log.info( $scope.$id, EVENT_SIGNIN_REQUIRED, 'detected.' );
                 gotoLoginPage();
 			} );
 
-			$rootScope.$on( 'event:logoutConfirmed', function () {
+			$rootScope.$on( EVENT_INTERNAL_SIGNOUT_CONFIRMED, function () {
 
 			});
 
 			$scope.signout = function () {
-				$rootScope.$broadcast( 'event:logoutRequest' );
+				$rootScope.$broadcast( EVENT_SIGNOUT_REQUEST );
 			};
 		}]
 	);
@@ -277,7 +309,7 @@
 								deferred: deferred
 							};
 							$rootScope.requests401.push( req );
-							$rootScope.$broadcast( 'event:loginRequired' );
+							$rootScope.$broadcast( EVENT_SIGNIN_REQUIRED );
 							return deferred.promise;
 						}
 
@@ -304,7 +336,7 @@
 			// Holds any all requests that fail because of an authentication error.
 			$rootScope.requests401 = [];
 
-			$rootScope.$on( 'event:loginConfirmed', function () {
+			$rootScope.$on( EVENT_SIGNIN_CONFIRMED, function () {
 
 				function retry( req ) {
 					$http( req.config ).then( function ( response ) {
@@ -318,7 +350,7 @@
 				}
 			} );
 
-			$rootScope.$on( 'event:loginRequest', function ( event, username, password ) {
+			$rootScope.$on( EVENT_SIGNIN_REQUEST, function ( event, username, password ) {
 				var payload = $.param( {
 					j_username: username,
 					j_password: password
@@ -331,9 +363,10 @@
 
 				var success = function ( data ) {
 					if ( data === 'AUTH_SUCCESS' ) {
-						$rootScope.$broadcast( 'event:loginConfirmed' );
+						$rootScope.$broadcast( EVENT_INTERNAL_SIGNIN_CONFIRMED );
 					} else {
-						$rootScope.$broadcast( 'event:loginFailed' );
+                        // todo: Implement something
+						$rootScope.$broadcast( EVENT_INTERNAL_SIGNIN_FAILED );
 					}
 				};
 
@@ -342,9 +375,9 @@
 						.success( success );
 			} );
 
-			$rootScope.$on( 'event:logoutRequest', function () {
+			$rootScope.$on( EVENT_SIGNOUT_REQUEST, function () {
 				function success() {
-					$rootScope.$broadcast( 'event:logoutConfirmed' );
+					$rootScope.$broadcast( EVENT_SIGNOUT_CONFIRMED );
 				}
 
 				$http.put( 'j_spring_security_logout', {} )
@@ -354,24 +387,29 @@
 	);
 
 
+    function LoginCtrl( $rootScope, $scope, $log ) {
+        $scope.username = 'fred';
+        $scope.password = 'secret';
 
+        $scope.submit = function () {
+            $log.info( 'Submitting form', $scope.username, $scope.password );
+            $log.info( 'Broadcasting ', EVENT_SIGNIN_REQUEST , $scope.username, $scope.password );
+            $rootScope.$broadcast( EVENT_SIGNIN_REQUEST, $scope.username, $scope.password );
+        };
 
-})(window, window.angular);
-
-function LoginCtrl( $rootScope, $scope, $log ) {
-    $scope.username = 'fred';
-    $scope.password = 'secret';
-
-    $scope.submit = function () {
-        $log.info( 'Submitting form', $scope.username, $scope.password );
-        $log.info( 'Broadcasting event:loginRequest: ', $scope.username, $scope.password );
-        $rootScope.$broadcast( 'event:loginRequest', $scope.username, $scope.password );
+        $scope.$on('$routeChangeSuccess', function(){
+            $rootScope.banner = 'none';
+            $rootScope.about = 'none';
+        });
     }
 
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
-        $rootScope.about = 'none';
+        $rootScope.about = 'signin';
     });
-}
 
-LoginCtrl.$inject = ['$rootScope', '$scope', '$log'];
+    LoginCtrl.$inject = ['$rootScope', '$scope', '$log'];
+    window.pykl.LoginCtrl = LoginCtrl;
+
+})(window, window.angular);
+

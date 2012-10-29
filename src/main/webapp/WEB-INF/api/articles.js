@@ -22,16 +22,193 @@ function ajax(url) {
     };
 }
 
-var getAllArticles = function(type) {
-    return ajax('http://localhost:9300/myapp/api/resources/' + type);
+var searchAllArticles = function(params) {
+    var query;
+
+    if(params.term) {
+            query = {
+            "bool": {
+                "should": [
+                    { "field": { "title": params.term } },
+                    { "field": { "content": params.term } },
+                    { "field": { "description": params.term } }
+                ],
+                "minimum_number_should_match": 1
+            }
+        };
+    } else {
+        query = {
+            "match_all": {}
+        }
+    }
+
+    var data = {
+        "query": {
+            "filtered": {
+                "query": query,
+                "filter": {
+                    "and": [
+                        {
+                            "terms": {
+                                "locale": [
+                                    "en",
+                                    "en_US"
+                                ]
+                            }
+                        },
+                        {
+                            "term": {
+                                "format": "article"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    };
+
+    if(params.filters) {
+        var mimetypeFilters = [];
+        var filters = params.filters.split(',');
+
+        //currently set up to skip the last filter in the list. this is because an extra comma is added to the filters param, which is interpreted as a blank string
+        //blank strings are otherwise useless in mimetype stuff, so we drop it entirely as it is junk data
+        for(var i = 0; i < filters.length - 1; i++)
+        {
+            mimetypeFilters = mimetypeFilters.concat(getPossibleMimetypes(filters[i]));
+        }
+
+        data.query.filtered.filter.and.push({ "terms": { "mimetype": mimetypeFilters }});
+    }
+    log.info("QUERYING? "+JSON.stringify(query));
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/resources/search',
+        method: 'POST',
+        data: JSON.stringify(data),
+        headers: Headers({ 'x-rt-index': 'gc', "Content-Type": "application/json" }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    var result = JSON.parse(exchange.content);
+
+    if(typeof(result) == "object" ) {
+        result.forEach(function(article) {
+            article.doctype = getDocType(article.mimetype);
+        });
+    } else {
+        result = [];
+    }
+
+    return result;
+}
+
+var getAllArticles = function(type, max) {
+    var result = ajax('http://localhost:9300/myapp/api/resources/' + type + '/' + max);
+
+    result.content.forEach(function(article) {
+        article.doctype = getDocType(article.mimetype);
+    });
+
+    return result;
 }
 
 var getArticlesByCategory = function(category) {
-    return ajax('http://localhost:9300/myapp/api/resources/bycategory/' + category);
+    var result = ajax('http://localhost:9300/myapp/api/resources/bycategory/' + category);
+
+    result.content.forEach(function(article) {
+        article.doctype = getDocType(article.mimetype);
+    });
+
+    return result;
 }
 
 var getArticle = function(id) {
-    return ajax('http://localhost:9300/myapp/api/resources/' + id);
+    var result = ajax('http://localhost:9300/myapp/api/resources/' + id);
+
+    if(!result.success) {
+        return false;
+    }
+
+    result.content.doctype = getDocType(result.content.mimetype);
+
+    return result;
+}
+
+function getDocType(mimetype) {
+    var doctype;
+    switch(mimetype)
+    {
+        case 'application/pdf':
+            doctype = 'pdf';
+            break;
+        case 'application/msword':
+            doctype = 'word';
+            break;
+        case 'application/mspowerpoint':
+        case 'application/powerpoint':
+        case 'application/vnd.ms-powerpoint':
+        case 'application/x-mspowerpoint':
+            doctype = 'powerpoint';
+            break;
+        case 'application/excel':
+        case 'application/vnd.ms-excel':
+        case 'application/x-excel':
+        case 'application/x-msexcel':
+            doctype = 'excel';
+            break;
+        case 'application/rtf':
+        case 'application/x-rtf':
+        case 'text/richtext':
+            doctype = 'rtf';
+            break;
+        default:
+            //this handles video and image cases, and defaults to text if it doesn't know what it is
+            if(mimetype != undefined)
+            {
+                doctype = mimetype.split('/')[0];
+            } else {
+                doctype = "text";
+            }
+            break;
+    }
+
+    return doctype;
+}
+
+function getPossibleMimetypes(doctype) {
+    var mimetypes;
+    switch(doctype)
+    {
+        case 'pdf':
+            mimetypes = ['application/pdf'];
+            break;
+        case 'word':
+            mimetypes = ['application/msword'];
+            break;
+        case 'powerpoint':
+            mimetypes = ['application/mspowerpoint', 'application/powerpoint', 'application/vnd.ms-powerpoint', 'application/x-mspowerpoint'];
+            break;
+        case 'excel':
+            mimetypes = ['application/excel', 'application/vnd.ms-excel', 'application/x-excel', 'application/x-msexcel'];
+            break;
+        case 'rtf':
+            mimetypes = ['application/rtf', 'application/x-rtf', 'text/richtext'];
+            break;
+        case 'video':
+            mimetypes = ['video/x-qtc', 'video/quicktime', 'video/mpeg', 'video/x-mpeg', 'video/x-mpeq2a', 'video/x-mpeg', 'video/x-sgi-movie', 'video/x-motion-jpeg', 'video/avi', 'video/msvideo', 'video/x-msvideo', 'video/x-ms-asf', 'video/x-ms-asf-plugin'];
+            break;
+        case 'image':
+            mimetypes = ['image/png', 'image/tiff', 'image/x-tiff', 'image/x-quicktime', 'image/pict', 'image/x-pict', 'image/x-pcx', 'image/x-jps', 'image/pjpeg', 'image/jpeg', 'image/x-icon', 'image/gif', 'image/x-windows-bmp', 'image/bmp'];
+            break;
+        case 'text':
+        default:
+            mimetypes = ['text/html', 'text/plain', 'text/xml'];
+            break;
+    }
+
+    return mimetypes;
 }
 
 var quotes = [
@@ -101,4 +278,4 @@ function generateBasicAuthorization(user) {
     return 'Basic ' + base64;
 }
 
-export('ajax', 'getAllArticles', 'getArticlesByCategory', 'getArticle', 'linkDiscussionToArticle', 'returnRandomQuote');
+export('ajax', 'searchAllArticles', 'getAllArticles', 'getArticlesByCategory', 'getArticle', 'linkDiscussionToArticle', 'returnRandomQuote');

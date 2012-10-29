@@ -16,8 +16,10 @@ var text = {
     "notifications-activity.c.claims": "${actorLink} put in a claim request for ${directLink}.",
     "notifications-activity.c.comment": "${actorLink} commented on ${aboutLink}",
     "notifications-activity.c.discussions": "${actorLink} created a discussion called ${aboutLink}",
+    "notifications-activity.c.discussions": "${actorLink} created a discussion called ${directLink}",
     "notifications-activity.c.ideas": "${actorLink} created ${directLink}",
-    "notifications-activity.c.themself.profiles": "You created your profile",
+    //"notifications-activity.c.themself.profiles": "You created your profile",
+    "notifications-activity.c.themself.profiles": "${actorLink} created a profile",
     "notifications-activity.c.profiles": "${actorLink} created ${directLink}",
     "notifications-activity.c.ratings": "${actorLink} gave a rating to ${aboutLink}.",
     "notifications-activity.c.reply": "${actorLink} replied to discussion ${aboutLink}",
@@ -70,7 +72,7 @@ function getProfile(id) {
     return result;
 }
 
-exports.ActivityMixin = function(activity, request, baseUrl) {
+exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
     var result = {};
 
     var defAttrs = {
@@ -94,7 +96,7 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
      */
     Object.defineProperty(result, "isOwner", {
         get: function() {
-            return request.authenticatedId === activity.actor._id;
+            return authenticatedId === activity.actor._id;
         }
     }, defAttrs);
 
@@ -104,7 +106,20 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
      */
     Object.defineProperty(result, "thumbnailUrl", {
         get: function() {
-            return baseUrl + "images/190x140.gif";//getThumbnailUrl(activity.actor, 'sml')
+            //return baseUrl + "images/190x140.gif";//getThumbnailUrl(activity.actor, 'sml')
+            return activity.actor.thumbnail;
+        }
+    }, defAttrs);
+
+    Object.defineProperty(result, "fullName", {
+        get: function() {
+            return activity.actor.fullName;
+        }
+    }, defAttrs);
+
+    Object.defineProperty(result, "profileId", {
+        get: function() {
+            return activity.actor._id;
         }
     }, defAttrs);
 
@@ -114,15 +129,15 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
      */
 
     Object.defineProperty(result, "description", {
-        get: function() {
 
-            //log.info(JSON.stringify(activity));
+        get: function() {
 
             var actor = activity.actor,
                 verb = activity.verb,
                 about = activity.about,
                 direct = activity.direct,
                 type;
+
 
             // Try to determine the "type" of the activity
             if (direct && direct.dataType) {
@@ -142,8 +157,12 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
                 }
 
                 // Determine if a post is a "reply" or not - if activity parentId prop resolves, it's a reply
-                var thread = getDiscussion(direct.parentId);
-                if (thread) {
+                //var thread = getDiscussion(direct.parentId);
+                //if (thread) {
+                    //verb = 'r';	// for "reply"
+                //}
+
+                if (direct.parentId !== direct._id) {
                     verb = 'r';	// for "reply"
                 }
             }
@@ -166,7 +185,7 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
             }
 
             // Try to determine if the user is taking action against their own profile
-            if (activity.actor._id === activity.direct._id && request.authenticatedId === activity.direct._id) {
+            if (activity.actor._id === activity.direct._id && authenticatedId === activity.direct._id) {
                 verb += '.self';
             } else if (activity.actor._id === activity.direct._id) {
                 verb += '.themself';
@@ -174,6 +193,7 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
 
             // Look up translation
             var key = String('notifications-activity.' + verb + '.' + type).toLowerCase();
+
             var skinStr = text[key];
             if(skinStr == undefined) {
                 log.info("Error: Notification key not found. Expecting: "+key);
@@ -189,10 +209,16 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
             // Substitute links
 
             // Subject link
-            activity.actorLink = request.authenticatedId == activity.actor._id
-                ? "you"
-                : format('<a href="%s%s/%s">%s</a>', baseUrl, 'users',
-                activity.actor.username, activity.actor.fullName || activity.actor.username);
+
+            if(authenticatedId !== undefined){
+                activity.actorLink = authenticatedId == activity.actor._id
+                    ? "You"
+                    : format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
+                    activity.actor._id, activity.actor.fullName || activity.actor.username);
+            }else{
+                activity.actorLink = format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
+                    activity.actor._id, activity.actor.fullName || activity.actor.username);
+            }
 
             // Indirect object link
             if (about) {
@@ -245,7 +271,12 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
                     case 'posts':
                         linkId = direct._id;
                         linkText = direct.title;
-                        linkType = 'discussions';	// fix the URL
+                        linkType = '#/network';	// fix the URL
+
+                        if(linkText === ''){
+                            var discussion = getDiscussion(direct._id);
+                            linkText = discussion.content[0].title;
+                        }
 
                         // If the "about" object is a venture, this means the discussion is "private"
                         if (about && about.dataType === 'ventures') {
@@ -272,8 +303,10 @@ exports.ActivityMixin = function(activity, request, baseUrl) {
                         linkId = direct.username;
                         linkText = direct.fullName || direct.username;
                         // If showing this message to the same user, use the "you" word
-                        if (request.authenticatedId === direct._id) {
+                        if (authenticatedId === direct._id) {
                             linkText = nativeYou.toLowerCase();
+                        }else{
+                            linkText = direct.fullName;
                         }
                         linkType = 'users';
                         break;

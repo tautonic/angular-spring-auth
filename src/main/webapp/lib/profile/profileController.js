@@ -5,7 +5,7 @@
  * Time: 11:10 AM
  * To change this template use File | Settings | File Templates.
  */
-function listProfiles($rootScope, $scope, Profile){
+function listProfiles($rootScope, $scope, $http, Profile){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'faculty';
     });
@@ -15,18 +15,24 @@ function listProfiles($rootScope, $scope, Profile){
     });
 }
 
-function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, Profile){
+function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $http, Profile){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
     });
 
-    var profile = Profile.get({profileId: $routeParams.profileId}, function(){
-        $scope.profile = profile.content;
+    var profile = Profile.get({profileId: $routeParams.profileId},
+        function(){
+            if(profile.status === 400){
+                $location.path('/error/404');
+            }else{
+                $scope.profile = profile.content;
 
-        if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001' || $scope.profile.thumbnail === null){
-            $scope.profile.thumbnail = "http://dummyimage.com/160"
+                if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001' || $scope.profile.thumbnail === null){
+                    $scope.profile.thumbnail = "http://dummyimage.com/160"
+                }
+            }
         }
-    });
+    );
 
     $scope.reset = function(){
         var data = {
@@ -52,6 +58,12 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, Prof
         }, function(response){
             $scope.responseContent = 'DELETE FAILED WITH AN ERROR OF: ' + response.status;
             console.log('DELETE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
+    }
+
+    $scope.followUser = function(id) {
+        $http.post('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
+            $scope.profile.isUserFollowing = data.success;
         });
     }
 }
@@ -235,4 +247,10 @@ function updateProfile($scope, $routeParams, $location, Profile){
         $scope.profile.websites.splice(index, 1);
     }
 
+}
+
+function searchProfiles($scope, $location){
+    $scope.searchProfiles = function(){
+        $location.path('/search/profiles/' + $scope.profileSearchQuery);
+    };
 }

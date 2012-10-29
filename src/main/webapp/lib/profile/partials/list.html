@@ -1,24 +1,43 @@
-<div class="profile clearfix thumbnail">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
-            <th>Email</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="profile in profiles">
-            <td><a ng-href="#/profiles/view/{{profile._id}}">{{profile._id}}</a></td>
-            <td>{{profile.name.given}}</td>
-            <td>{{profile.name.surname}}</td>
-            <td>{{profile.username}}</td>
-            <td>{{profile.accountEmail.address}}</td>
-        </tr>
-        </tbody>
-    </table>
-    <br>
-    <a class="btn btn-success" ng-click="create()" ng-href="#/profiles/create"><i class="icon-plus icon-white"></i> Create</a>
+<div class="container">
+    <div class="row">
+        <div class="span9">
+            <div ng-repeat="profile in profiles">
+                <div class="profile-list-item profile grey-gradient clearfix">
+                    <div thumbnail thumb=profile size="large" rotation="counter-clockwise" type="profile" />
+                    <div class="profile-left">
+                        <h3>{{profile.name.given}} {{profile.name.surname}}</h3>
+                        <h5>{{profile.workHistory[0].title}}</h5>
+                        <h5 class="muted">{{profile.workHistory[0].businessName}}</h5>
+
+                        <div class="btn-group-border">
+                            <div class="btn-group bgc">
+                                <button class="btn btn-success">Follow</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-right">
+                        <h3 class="sans-serif">LATEST ACTIVITY:</h3>
+                        <p><i ng-bind-html-unsafe=profile.activity.message></i></p>
+                        <p class="muted">about {{profile.activity.dateCreated | timeago}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span3">
+            <div class="search-box members">
+                <div class="header">
+                    <h4>SEARCH MEMBERS</h4>
+                </div>
+                <div class="form-container">
+                    <form ng-controller="searchProfiles" ng-submit="searchProfiles()">
+                        <input type="text" ng-model="profileSearchQuery" placeholder="Search Members...">
+                        <div class="btn-group-border"></div>
+                        <div class="search-lens read-more gradient">
+                            <div class="preview-lens"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

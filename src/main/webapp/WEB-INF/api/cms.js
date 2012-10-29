@@ -21,11 +21,11 @@
  * key - A unique value used to identify the general content block (i.e. intro). The key does not
  *       uniquely identify a single record in the database since a block will have separate records
  *       for each language the content uses.
- * locale - A string representing the language of the content (ie en_GB).
+ * locale - A string representing the language of the content (ie en-GB).
  *
  * When considered together, the <key.locale> composite results in the location of a specific
  * record in the database. Keep in mind that the locale is not always an exact match. For example,
- * if the database has records in 'es', 'en' and 'en_GB', a search for a locale of 'en_ZA' will
+ * if the database has records in 'es', 'en' and 'en-GB', a search for a locale of 'en-ZA' will
  * result in the "downgraded" record for 'en'. In fact, a default locale is configured into the
  * wen server resulting in the default locale being returned whenever a language code cannot be
  * located.
@@ -38,10 +38,11 @@
  *         the appropriate record from the cms. Locale can also be specified as a parameter
  *         which will take precedence over the header value.
  *
- *     Note: The locale is extracted in one of three ways, and in this precedence.
- *       1. The use of a suffix on the key delimited with an @ symbol. (ie /<key>@fr_CA)
- *       2. The use of a 'format' parameter. (ie /<key>?format=fr_CA)
- *       2. The use of the 'Accept-Language' header in the request.
+ *     Note: The locale is extracted in this precedence.
+ *       1. The use of a suffix on the key delimited with an @ symbol. (ie /<key>@fr-CA)
+ *       2. The use of a 'format' parameter. (ie /<key>?format=fr-CA)
+ *       3. If the header 'x-cms-no-locale' is present, no locale is used. (middleware makes sure of this.
+ *       4. The use of the 'Accept-Language' header in the request.
  *
  * POST /api/cms/
  *     [Accept-Language] - The header value is used to determine the locale used to create
@@ -51,8 +52,6 @@
  *
  * PUT /api/cms/:key
  *     :key - a unique id that describes the content.
- *     [Accept-Language] - The header value is used to determine the locale used to update
- *         the appropriate record from the cms.
  *     [Body] - A JSON object representing the CMS content to update. The JSON object need
  *         not include all required attributes of a resource object.
  *
@@ -82,16 +81,16 @@
  * three incoming requests:
  *
  *     GET /api/cms/intro  <Accept-Language = en>
- *     GET /api/cms/intro  <Accept-Language = en_GB>
- *     GET /api/cms/intro  <Accept-Language = en_US>
+ *     GET /api/cms/intro  <Accept-Language = en-GB>
+ *     GET /api/cms/intro  <Accept-Language = en-US>
  *
  *  Suppose the CMS contains only the 'en' locale. All three requests will receive the expected result
  *  for the 'en' locale only, however the cache will store the same CMS record for each composite key.
  *  Therefore there will be the same JSON object stored for each of these keys:
  *
  *      intro/en: {...intro json for en locale...}
- *      intro/en_GB: {...intro json for en locale...}
- *      intro/en_US: {...intro json for en locale...}
+ *      intro/en-GB: {...intro json for en locale...}
+ *      intro/en-US: {...intro json for en locale...}
  *
  *  todo: One way to circumvent this is to store only the key for each content object, and when there
  *  are multiple locales for a single key, they are put into a sub-map. This puts the locale-matching
@@ -130,20 +129,25 @@ var map = store.getMap(INDEX, 'resources');
  *         the appropriate record from the cms. Locale can also be specified as a parameter
  *         which will take precedence over the header value.
  *
- *     Note: The locale is extracted in one of three ways, and in this precedence.
- *       1. The use of a suffix on the key delimited with an @ symbol. (ie /<key>@fr_CA)
- *       2. The use of a 'format' parameter. (ie /<key>?format=fr_CA)
- *       2. The use of the 'Accept-Language' header in the request.
+ *     Note: The locale is extracted in this precedence.
+ *       1. The use of a suffix on the key delimited with an @ symbol. (ie /<key>@fr-CA)
+ *       2. The use of a 'format' parameter. (ie /<key>?format=fr-CA)
+ *       3. If the header 'x-cms-no-locale' is present, no locale is used. (middleware makes sure of this.
+ *       4. The use of the 'Accept-Language' header in the request.
  */
 app.get('/:key', function (req, key) {
-    var locale = req.params.locale || req.locale;
+    var locale = req.params.locale || req.locale || null;
 
     // Locale specified as a suffix to the key takes precedence
     var keyParts = key.split('@');
     if (keyParts > 1) locale = keyParts[1];
 
     var lookup = key;
-    if (locale) key += '@' + locale;
+    if (locale) {
+        lookup += '@' + locale;
+    }
+
+    log.info('Fetching key {} and locale {}: lookup: {}', key, locale, lookup);
     return json(map.get(lookup));
 });
 
@@ -187,7 +191,40 @@ app.post('/', function (req) {
 
 
 /**
+ *
+ * PUT /api/cms/:key
+ *     :key - a unique id that describes the content.
+ *     [Body] - A JSON object representing the CMS content to update. The JSON object need
+ *         not include all required attributes of a resource object.
+ *
+ */
+app.put('/:id', function(req, id) {
+    log.debug('POST /api/cms, locale: {}', req.locale);
+
+    // Get the JSON object holding the payload
+    var resource = req.postParams;
+
+    if (!resource) return json({message: 'Invalid request, must provide JSON resource in body.' }, 400,
+        {"Content-Type": 'text/html'});
+
+    // Resource has several required properties
+    if (!resource.locale) return json({message: 'Invalid request, must provide a locale.' }, 400,
+        {"Content-Type": 'text/html'});
+    if (!resource.key) return json({message: 'Invalid request, must provide a key.' }, 400,
+        {"Content-Type": 'text/html'});
+
+    // Write the new resource into the map using the key/locale as the map key
+    var lookup = resource.key + '@' + resource.locale;
+    var mapResources = store.getMap(INDEX, "resources");
+    mapResources.put(lookup, resource);
+
+    return json(resource, 204, {});
+});
+
+/**
  * Middleware component for Stick to inject a locale property based on the Accept-Language header.
+ *
+ * Note;
  * @return {Function}
  */
 function locale() {
@@ -195,10 +232,10 @@ function locale() {
         return function (req) {
             Object.defineProperty(req, "locale", {
                 get: function () {
-                    if (!!req.headers['x-rt-skip-locale']) return null;
+                    if (!!req.headers['x-cms-no-locale']) return null;
 
                     var locale = req.env.servletRequest.getLocale();
-                    if (!locale) return null;
+                    if (!locale) return 'en';
 
                     return locale;
                 }

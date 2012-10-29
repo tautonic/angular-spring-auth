@@ -4,7 +4,7 @@
 
 
 function HomepageController($rootScope, $scope, $http, $location, $route) {
-    $rootScope.query = '';
+    $rootScope.siteQuery = '';
     $rootScope.faculty_query = '';
     $rootScope.content_query = '';
     $rootScope.discussion_query = '';
@@ -12,6 +12,11 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     $http.get("api/getquote").success(function(data) {
         $scope.quote = data.quote;
     });
+
+    $http.get('api/article/all/news').success(function(data) {
+        console.log("ARTICLES RETURNED: ",data);
+        $scope.articles = data;
+    })
 
     var options = {
         data: JSON.stringify({
@@ -32,28 +37,32 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     $scope.isEmpty = function () {
         return (($scope.stream) && ($scope.stream.itemCount === 0));
     };
+}
 
-    $rootScope.search_faculty = function(){
-        $location.path('/search/profiles/' + $rootScope.faculty_query);
+function SiteSearchController($rootScope, $scope, $location){
+    $scope.searchSite = function(){
+        //console.log('Search Site called');
+        $location.path('/search/site/' + $scope.siteQuery);
     };
+}
 
-    $rootScope.search_site = function(){
-        $location.path('/search/site/' + $rootScope.query);
-    };
-
-    $rootScope.search_content = function(){
-        $location.path('/search/content/' + $rootScope.content_query);
-    };
-
-    $rootScope.search_discussions = function(){
-        $location.path('/search/discussions/' + $rootScope.discussion_query);
-    };
+function searchDiscussionsController($scope, $location){
+    $scope.searchDiscussions = function(){
+        $location.path('/search/discussions/' + $scope.query);
+    }
 }
 
 function facultyFellows($rootScope, $scope){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'faculty';
         $rootScope.about = 'none';
+    });
+}
+
+function errorController($rootScope, $scope){
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+        $rootScope.about = '404';
     });
 }
 

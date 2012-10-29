@@ -17,29 +17,47 @@
 			templateUrl: 'partials/faculty.html',
             controller: 'facultyFellows'
         } );
-        $routeProvider.when( '/content', {
-			templateUrl: 'lib/pyklresource/index.html'
+        $routeProvider.when( '/content/', {
+			templateUrl: 'lib/pyklresource/partials/list.html',
+            controller: 'ListResources'
 		} );
+        //using the index here because individual content/articles can have discussions attached to them, and this makes that happen
+        //so there can't really be a single controller set here
         $routeProvider.when( '/content/:articleId', {
             templateUrl: 'lib/pyklresource/index.html'
         } );
-        $routeProvider.when( '/network/:discussionId', {
-            templateUrl: 'lib/pykldiscuss/index.html'
+
+        //by default, the network page lists discussions. This is for that
+        $routeProvider.when( '/network/', {
+            templateUrl: 'lib/pykldiscuss/partials/list.html',
+            controller: 'ListDiscussions'
         } );
+
+        $routeProvider.when( '/network/discussion', {
+            templateUrl: 'lib/pykldiscuss/partials/list.html',
+            controller: 'ListDiscussions'
+        } );
+
+        $routeProvider.when( '/network/discussion/view/:discussionId', {
+            templateUrl: 'lib/pykldiscuss/partials/view.html',
+            controller: 'ViewDiscussion'
+        } );
+
+        $routeProvider.when( '/network/discussion/new', {
+            templateUrl: 'lib/pykldiscuss/partials/new.html',
+            controller: 'NewDiscussion'
+        } );
+
         $routeProvider.when( '/admin', {
             templateUrl: 'lib/pykladmin/index.html'
         });
 
         $routeProvider.when( '/login', {
             templateUrl: 'lib/pyklsecurity/partials/signin-form.html',
-            controller: 'LoginCtrl'
+            controller: 'pykl.LoginCtrl'
         });
 
         //individual controller pages, some of these might be removed
-        $routeProvider.when( '/profiles', {
-            templateUrl: 'lib/profile/partials/list.html',
-            controller: 'listProfiles'
-        } );
         $routeProvider.when( '/profiles/view/:profileId', {
             templateUrl: 'lib/profile/partials/view.html',
             controller: 'viewProfile'
@@ -56,12 +74,6 @@
         $routeProvider.when('/passwordtoken/:token', {
             templateUrl: 'lib/profile/profile.html'
         });
-        $routeProvider.when( '/both/:articleId', {
-            templateUrl: 'partials/partial2.html'
-        } );
-        $routeProvider.when( '/both/:articleId/:discussionId', {
-            templateUrl: 'partials/partial2.html'
-        } );
 
         $routeProvider.when( '/search/profiles/:query', {
             templateUrl: 'lib/search/partials/searchFacultyResults.html',
@@ -71,7 +83,6 @@
         $routeProvider.when( '/search/site/:query', {
             templateUrl: 'lib/search/partials/searchSiteResults.html',
             controller: 'SearchSite'
-
         } );
 
         $routeProvider.when( '/search/content/:query', {
@@ -84,10 +95,15 @@
             controller: 'SearchDiscussions'
         } );
 
+        $routeProvider.when( '/error/404', {
+            templateUrl: 'partials/404.html',
+            controller: 'errorController'
+        } );
+
         $routeProvider.when( '/view', {
             templateUrl: 'partials/partial1.html'
         } );
-		$routeProvider.otherwise( {redirectTo: '/view'} );
+		$routeProvider.otherwise( {redirectTo: '/home'} );
     }
 
     function locationProvider( $locationProvider ){
@@ -95,8 +111,9 @@
     }
 
 	// Declare app level module which depends on filters, and services
-	var app = angular.module( 'myApp', ['bgc.directives', 'bgc.services', 'ngSanitize', 'ui', 'pykl'] )
-			.config( ['$routeProvider', routeProvider] );
+	var app = angular.module( 'myApp',
+	    ['bgc.directives', 'bgc.services', 'bgc.filters', 'ngSanitize', 'ui', 'pykl', 'pykl.cms'] )
+        .config( ['$routeProvider', routeProvider] );
 
     app.value('ui.config', {
         tinymce: {

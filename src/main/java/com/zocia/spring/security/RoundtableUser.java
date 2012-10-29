@@ -89,6 +89,15 @@ public class RoundtableUser implements UserDetails {
 	}
 
     /**
+     * Returns the username used to authenticate the user. Cannot return <code>null</code>.
+     *
+     * @return the username (never <code>null</code>)
+     */
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    /**
 	 * Returns the 2 letter country code of authenticated user. Cannot return <code>null</code>.
 	 *
 	 * @return the country code (never <code>null</code>)

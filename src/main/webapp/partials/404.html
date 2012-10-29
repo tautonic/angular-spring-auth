@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="row">
+        <div class="span9 explanation">
+            <h4>EXPLANATION</h4>
+            <hr>
+
+            <p>The page you are looking for may have been removed, renamed, or could be temporarily unavailable</p>
+
+            <ul class="error-help">
+                <li><i class="globe"></i> <strong>Retype the URL, and pay close attention to characters and letter case.</strong></li>
+                <li><i class="globe"></i> <strong>Relaunch the <a ng-href="#/home">Homepage</a>, and look for direct links to the information you want.</strong></li>
+                <li><i class="globe"></i> <strong>Click the <span>"Back"</span> button to try another link.</strong></li>
+            </ul>
+
+            <p><i><strong>Or</strong></i></p>
+
+            <p>Search <a ng-href="#/profiles/list">members</a>, <a ng-href="#content">documents</a>, and
+                <a ng-href="#/discussions">discussions.</a></p>
+        </div>
+        <div class="span3">
+            <div class="site search-box">
+                <div class="header">
+                    <h4>SEARCH SITE</h4>
+                </div>
+                <div class="form-container">
+                    <form ng-controller="SiteSearchController" ng-submit="searchSite()">
+                        <input type="text" ng-model="siteQuery" placeholder="Search All...">
+                        <div class="btn-group-border"></div>
+                        <div class="search-lens read-more gradient">
+                            <div class="preview-lens"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

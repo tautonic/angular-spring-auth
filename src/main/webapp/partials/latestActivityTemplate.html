@@ -1,0 +1,12 @@
+<h3 class="sans-serif">LATEST ACTIVITY:</h3>
+<!--<p><i>Posted a new comment to the <a href="#">Business in a Bundle</a> document</i></p>
+<p class="muted">5 hours ago</p>-->
+<p><i ng-bind-html-unsafe=stream.message></i></p>
+<div ng-switch on="stream.isOwner">
+    <div ng-switch-when=true>
+        <p><a class="activity-item-owner" ng-href="#/profiles/view/{{stream.profileId}}">You</a> - <span class="muted">{{stream.dateCreated | timeago}}</span></p>
+    </div>
+    <div ng-switch-default>
+        <p><a class="activity-item-owner" ng-href="#/profiles/view/{{stream.profileId}}">{{stream.fullName}}</a> - <span class="muted">{{stream.dateCreated | timeago}}</span></p>
+    </div>
+</div>

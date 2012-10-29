@@ -13,11 +13,11 @@ body {
     background-color: #fff;
 }
 
-a, a:link {
+.profile a, .profile a:link {
     color: #b4b4b4;
 }
 
-a:hover, a:visited {
+.profile a:hover, .profile a:visited {
     color: #8b8b8b;
     text-decoration: none;
 }
@@ -36,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #005172;
 }
 
-.profile h4 {
+.profile h4, #search-panel h4 {
     font-family: "Trade Gothic W01 Cn 18", "Arial Narrow", sans-serif;
     color: white;
 
@@ -83,7 +83,6 @@ a.btn {
     color: #ffffff;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     background-color: #006644;
-    *background-color: #006644;
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#74bc66), to(#006644));
     background-image: -webkit-linear-gradient(top, #74bc66, #006644);
     background-image: -o-linear-gradient(top, #74bc66, #006644);
@@ -103,7 +102,6 @@ a.btn {
 .btn-babson[disabled] {
     color: #ffffff;
     background-color: #006644;
-    *background-color: #006644;
 }
 
 .btn-babson:active,
@@ -356,6 +354,7 @@ p.text-success {
     position: relative;
     color: #117450;
     font-weight: normal;
+    margin-top: 3em;
 }
 
 .quote p {
@@ -545,12 +544,13 @@ a.btn:visited{
 
 /** discussion list styles **/
 .discussion-item {
-    padding: 10px;
+    padding: 8px 10px 0 10px;
     border: 1px solid #F1EFEF;
 }
 
 .article h4, .discussion-item h4 {
     margin: 5px 0;
+    display: inline;
 }
 
 .article h6, .discussion-item h6 {
@@ -620,38 +620,6 @@ a.btn:visited{
     height: 100px;
 }
 
-/********* Stat numbers, for likes, comments, etc *******/
-.stats {
-    font-size: 12px;
-    color: #8b8b8b;
-}
-
-.stats span {
-    padding-left: 20px;
-    margin-right: 10px;
-    background-image: url('../../images/GCEE_sprite.png');
-}
-
-.stats span.likes {
-    background-position: -42px -27px;
-}
-
-.stats span.views {
-    background-position: -42px -47px;
-}
-
-.stats span.comments {
-    background-position: -42px -67px;
-}
-
-.stats span.flag {
-    background-position: -42px -87px;
-}
-
-.stats span.add {
-    background-position: -42px -7px;
-}
-
 /********** article list styles ********/
 .article .picture-frame {
     float: left;
@@ -671,11 +639,6 @@ a.btn:visited{
     height: 20px;
     background-image: url('../../images/GCEE_sprite.png');
     background-position: -8px -8px;
-}
-
-.article .content {
-    margin-left: 150px;
-    padding: 5px;
 }
 
 .article .content .tags a {
@@ -789,6 +752,8 @@ textarea{
 .edit-profile.profile,
 .profile-list-item.profile{
     line-height: 15px;
+    margin-bottom: 3em;
+    position: relative;
 }
 
 .profile-modal .center h3:nth-child(1),
@@ -823,7 +788,6 @@ textarea{
 
 .profile-list-item{
     border: #c5c5c5 solid 1px;
-    padding-bottom: 0.75em;
 }
 
 .profile-list-item .center,
@@ -858,6 +822,10 @@ textarea{
 }
 .profile-list-item.profile .right h3{
     color: #8b8b8b;
+}
+
+.profile-list-item.profile .profile-left .btn-group-border{
+    margin: 0.5em 0 0 0;
 }
 
 /* These styles added after GCEE UI itself was being built*/
@@ -913,6 +881,7 @@ a:hover .read-more .read-more-arrow{
 a .read-more p{
     font-weight: normal;
     display: inline-block;
+    color: white;
 }
 
 .read-more-arrow{

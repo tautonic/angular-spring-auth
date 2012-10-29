@@ -13,7 +13,7 @@ var {json} = require( 'ringo/jsgi/response' );
 var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
-var {ajax, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle, returnRandomQuote} = require('articles');
+var {ajax, searchAllArticles, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle, returnRandomQuote} = require('articles');
 var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
 var {ActivityMixin} = require('activities');
 
@@ -75,25 +75,48 @@ app.get('/getquote', function(req) {
     return json({ "quote": returnRandomQuote() });
 })
 
+app.post('/views/:id', function(req, id) {
+    var opts = {
+        url: "http://localhost:9300/myapp/api/views/" + id,
+        method: 'POST',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    return json(true);
+})
+
 /********** Articles and resources *********/
 
+app.get('/article/all/news', function(req) {
+    return articles(req, "articles", 3);
+})
+
 /* Attempt to allow for sorting by type. didn't quite work */
-app.get('/article/all/:type', function(req, type) {
+/*app.get('/article/all/:type', function(req, type) {
     return articles(req, type);
-});
+});*/
 
 app.get('/article/all', function(req) {
     return articles(req, 'articles');
 });
 
-function articles(req, type) {
-    var articles = getAllArticles(type);
+function articles(req, type, max) {
+    var articles = getAllArticles(type, max);
 
     if(articles.success) {
         return json(articles.content);
     }
     return json(false);
 }
+
+app.get('/article/search', function(req) {
+    var articles = searchAllArticles(req.params);
+
+    return json(articles);
+})
 
 app.get('/article/all/bycategory/:category', function(req, category) {
     var articles = getArticlesByCategory(category);
@@ -102,7 +125,7 @@ app.get('/article/all/bycategory/:category', function(req, category) {
         return json(articles.content);
     }
     return json(false);
-})
+});
 
 app.get('/article/:id', function(req, id) {
     var article = getArticle(id);
@@ -150,7 +173,24 @@ app.post('/article/new', function(req) {
  * Returns a list of discussion topics
  */
 app.get('/discussions/all', function(req, id) {
-    return json(getDiscussionList().content);
+    var discussions = getDiscussionList().content;
+
+    discussions.forEach(function(discussion) {
+        if(discussion.parentId) {
+            var linked = getArticle(discussion.parentId);
+
+            if(linked) {
+                discussion.linkedItem = linked.content;
+                discussion.linkedItem.exists = true;
+            } else {
+                discussion.linkedItem = { "exists": false };
+            }
+        } else {
+            discussion.linkedItem = { "exists": false };
+        }
+    });
+
+    return json(discussions);
 });
 
 /**
@@ -261,19 +301,24 @@ app.get('/notifications', function(req) {
     // Try to parse the results, wrap each activity in a mixin, then return a response
     try {
         var stream = exchange.content;
-        var activities = [];     log.info("ACITIVITY STREAM IS: "+JSON.stringify(exchange.content));
+
+        //log.info('Activity stream returned from Zocia: {}', JSON.stringify(stream, null, 4));
+
+        var activities = [];
         stream.acts.forEach(function (activity) {
-            activity = new ActivityMixin(activity, req, ctx('/'));
+            activity = new ActivityMixin(activity, req, ctx('/'), profile.principal.id);
 
             if (activity.description !== null) {
 
                 // Assign values from the mixin to a temp object, since the mixin won't be passed via JSON
                 activities.push({
                     'thumbnailUrl': activity.thumbnailUrl,
+                    'fullName': activity.fullName,
                     'username': activity.props.actor.username,
                     'message': activity.description,
                     'dateCreated': activity.props.dateCreated,
-                    'isOwner': activity.isOwner
+                    'isOwner': activity.isOwner,
+                    'profileId': activity.profileId
                 });
             }
         });
@@ -441,16 +486,60 @@ app.get('/profiles/', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
+    var profileExchange = httpclient.request(opts);
 
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
+    var profiles = JSON.parse(profileExchange.content);
+
+    // grab the latest activity for each profile that was done by the user before sending on
+    // to angular
+    profiles.forEach(function(profile){
+        var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
+        var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
+        var allowedActivities = filters.trim().split(' ');
+
+        //remove terms that are not in the active filter list
+        allowedActivities.forEach(function(activity) {
+            filteredActivities = filteredActivities.replace(activity, '');
+        });
+
+        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
+
+        var opts = {
+            url: url,
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc' }),
+            async: false
+        }
+
+        // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
+        var activityExchange = httpclient.request(opts);
+
+        var stream = JSON.parse(activityExchange.content);
+
+        var latestActivity;
+
+        log.info('Activity stream for {}: {}', profile.username, JSON.stringify(stream, null, 4));
+
+        // find the latest activity directly taken by the owner of the profile
+        var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
+
+        latestActivity = {
+            'fullName': activity.fullName,
+            'message': activity.description,
+            'dateCreated': activity.props.dateCreated
+        }
+
+        profile.activity = latestActivity;
     });
 
-    result.status = exchange.status;
+    var result = json({
+        'status': profileExchange.status,
+        'content': profiles,
+        'headers': profileExchange.headers,
+        'success': Math.floor(profileExchange.status / 100) === 2
+    });
+
+    result.status = profileExchange.status;
 
     return result;
 });
@@ -806,18 +895,86 @@ app.post('/search/site/', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
+    var gceeExchange = httpclient.request(opts);
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    // We need to take the discussion and profile objects returned from Zocia and modify
+    // them slightly
+    console.log('EXCHANGE STATUS!!! ', gceeExchange.status);
 
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
+    // filters out threads with empty titles and threads that are tied to an article
+    // this basically leaves us with post parents and no replies
+    var gceeObjects = JSON.parse(gceeExchange.content).filter(function(element) {
+        return !(element.title === "" && element.dataType === 'posts');
     });
 
-    result.status = exchange.status;
+    gceeObjects.forEach(function(object){
+        //log.info('GCEE object returned from Zocia {}', JSON.stringify(object, null, 4));
+        // We have to get last activity information for each profile
+        if(object.dataType === 'profiles'){
+            var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
+            var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
+            var allowedActivities = filters.trim().split(' ');
+
+            //remove terms that are not in the active filter list
+            allowedActivities.forEach(function(activity) {
+                filteredActivities = filteredActivities.replace(activity, '');
+            });
+
+            var url = 'http://localhost:9300/myapp/api/activities/byactor/' + object._id;
+
+            var opts = {
+                url: url,
+                method: 'GET',
+                headers: Headers({ 'x-rt-index': 'gc' }),
+                async: false
+            }
+
+            // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
+            var activityExchange = httpclient.request(opts);
+
+            var stream = JSON.parse(activityExchange.content);
+
+            var latestActivity;
+
+            // find the latest activity directly taken by the owner of the profile
+            var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
+
+            latestActivity = {
+                'fullName': activity.fullName,
+                'message': activity.description,
+                'dateCreated': activity.props.dateCreated
+            }
+
+            object.activity = latestActivity;
+        }
+
+        // We have to get the number of comments for each discussion object
+        if(object.dataType === 'posts'){
+            log.info('Filtered discussion object {}', JSON.stringify(object, null, 4));
+
+            var opts = {
+                url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + object._id + '&types=discussion',
+                method: 'GET',
+                headers: Headers({ 'x-rt-index': 'gc' }),
+                async: false
+            };
+
+            var discussionExchange = httpclient.request(opts);
+
+            var comment = JSON.parse(discussionExchange.content);
+
+            object.commentCount = comment.count;
+        }
+    });
+
+    var result = json({
+        'status': gceeExchange.status,
+        'content': gceeObjects,
+        'headers': gceeExchange.headers,
+        'success': Math.floor(gceeExchange.status / 100) === 2
+    });
+
+    result.status = gceeExchange.status;
 
     return result;
 });
@@ -843,18 +1000,60 @@ app.post('/search/faculty/', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
+    var profileExchange = httpclient.request(opts);
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    var profiles = JSON.parse(profileExchange.content);
 
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
+    // grab the latest activity for each profile that was done by the user before sending on
+    // to angular
+    profiles.forEach(function(profile){
+        var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
+        var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
+        var allowedActivities = filters.trim().split(' ');
+
+        //remove terms that are not in the active filter list
+        allowedActivities.forEach(function(activity) {
+            filteredActivities = filteredActivities.replace(activity, '');
+        });
+
+        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
+
+        var opts = {
+            url: url,
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc' }),
+            async: false
+        }
+
+        // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
+        var activityExchange = httpclient.request(opts);
+
+        var stream = JSON.parse(activityExchange.content);
+
+        var latestActivity;
+
+        log.info('Activity stream for {}: {}', profile.username, JSON.stringify(stream, null, 4));
+
+        // find the latest activity directly taken by the owner of the profile
+        var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
+
+        latestActivity = {
+            'fullName': activity.fullName,
+            'message': activity.description,
+            'dateCreated': activity.props.dateCreated
+        }
+
+        profile.activity = latestActivity;
     });
 
-    result.status = exchange.status;
+    var result = json({
+        'status': profileExchange.status,
+        'content': profiles,
+        'headers': profileExchange.headers,
+        'success': Math.floor(profileExchange.status / 100) === 2
+    });
+
+    result.status = profileExchange.status;
 
     return result;
 });
@@ -910,6 +1109,8 @@ app.post('/search/discussions/', function(req){
 
     url += '?' + queryParams.join('&');
 
+    log.info('Search discussions url {}', url);
+
     var opts = {
         url: url,
         method: 'GET',
@@ -919,11 +1120,33 @@ app.post('/search/discussions/', function(req){
 
     var exchange = httpclient.request(opts);
 
+    //filters out threads with empty titles and threads that are tied to an article
+    var threads = JSON.parse(exchange.content).filter(function(element) {
+        return !(element.title === "");
+    });
+
+    //loop through each thread and add an attribute that contains the
+    //number of replies/comments
+    threads.forEach(function(thread){
+        opts = {
+            url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread._id + '&types=discussion',
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc' }),
+            async: false
+        };
+
+        exchange = httpclient.request(opts);
+
+        var comment = JSON.parse(exchange.content);
+
+        thread.commentCount = comment.count;
+    });
+
     console.log('EXCHANGE STATUS!!! ', exchange.status);
 
     var result = json({
         'status': exchange.status,
-        'content': JSON.parse(exchange.content),
+        'content': threads,
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
@@ -1025,6 +1248,7 @@ function getUserDetails() {
     // principal can be a simple string or a spring security user object
     //todo setup so that auth.principal doesn't fail if it ever happens to be a string (test to see if it's ever a string)
     var principal = (typeof auth.principal === 'string') ? auth.principal : auth.principal;
+
     var result = {
         principal: {
             id: principal.id,
@@ -1045,6 +1269,11 @@ function getUserDetails() {
     while ( authorities.hasNext() ) {
         var authority = authorities.next();
         result.roles.push( authority.toString().toLowerCase() );
+    }
+
+    if(result.principal.thumbnail === 'profiles-0000-0000-0000-000000000001' ||
+        result.principal.thumbnail === ''){
+        result.principal.thumbnail = 'images/GCEE_image_profileMale_135x135.jpeg';
     }
 
     return result;

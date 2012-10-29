@@ -49,66 +49,54 @@
   */
 angular.module( 'bgc.directives', [] )
     .directive('thumbnail', function(){
-        
+
         return{
-            restrict: 'E',
+            restrict: 'A',
             templateUrl: 'partials/thumbnail-template.html',
-            scope: {},
+            scope: {
+                auth: '=',
+                thumb: '='
+            },
             link: function(scope, elm, attr){
                 scope.thumbnail = {
-                    image: 'images/GCEE_image_profileMale_135x135.jpeg',
+                    image: 'images/GCEE_image_profileFemale_135x135.jpeg',
                     text: 'Read More',
-                    url: '',
-                    type: 'profile-thumbnail large counter-clockwise',
-                    anchor: false,
-                    size: 'large',
-                    facultyFellow: false,
-                    decoration: 'none'
+                    style: 'profile-thumbnail large counter-clockwise',
+                    facultyFellow: false
                 }
 
-                if(attr.type === 'profile'){
+                if(attr.type === 'profile' || !attr.type){
+                    scope.thumbnail.type = attr.type;
+
                     if(attr.size && attr.rotation){
-                        if(attr.rotation === 'none') attr.rotation = 'no-rotation';
-                        scope.thumbnail.type = 'profile-thumbnail ' + attr.size + ' ' + attr.rotation;
+                        scope.thumbnail.style = 'profile-thumbnail ' + attr.size + ' ' + attr.rotation;
+                        return;
                     }
 
-                    if(attr.image){
-                        scope.thumbnail.image = attr.image;
+                    if(attr.size){
+                        scope.thumbnail.style = 'profile-thumbnail ' + attr.size + ' counter-clockwise';
+                        return;
+                    }
+
+                    if(attr.rotation){
+                        scope.thumbnail.style = 'profile-thumbnail large ' + attr.rotation;
+                        return;
                     }
 
                     return;
                 }
 
                 if(attr.type === 'article' || attr.type === 'content'){
-                    var defaultImage = 'images/document-default.jpg';
-                    var thumbnailType = 'content-thumbnail';
-                    var thumbnailUrl = '#/content';
-
-                    scope.thumbnail.anchor = true;
-                    scope.thumbnail.decoration = 'lens';
-                    scope.thumbnail.url = '#/content';
+                    scope.thumbnail.type = 'content';
+                    scope.thumbnail.style = 'content-thumbnail no-rotation';
 
                     if(attr.type === 'article'){
-                        defaultImage = 'images/row-of-columns.jpg';
-                        thumbnailType = 'article-thumbnail';
-                        thumbnailUrl = '#/article';
-                        scope.thumbnail.decoration = 'arrow';
-                    }
-
-                    scope.thumbnail.image = defaultImage;
-                    scope.thumbnail.type = thumbnailType;
-                    scope.thumbnail.url = thumbnailUrl;
-
-                    if(attr.image){
-                        scope.thumbnail.image = attr.image;
+                        scope.thumbnail.type = 'article';
+                        scope.thumbnail.style = 'article-thumbnail no-rotation';
                     }
 
                     if(attr.text){
                         scope.thumbnail.text = attr.text;
-                    }
-
-                    if(attr.url){
-                        scope.thumbnail.url = attr.url;
                     }
 
                     return;
@@ -151,7 +139,7 @@ angular.module('bgc.directives')
         return{
             restrict: 'A',
             link: function(scope, elm, attr){
-                jQuery('.read-more').hover(
+                jQuery(elm).hover(
                     function(){
                         $(this).stop().animate({
                             left: '0'
@@ -747,116 +735,159 @@ angular.module('bgc.directives')
 
 /**
  * @ngdoc directive
- * @name bgc.directives:cms
+ * @name bgc.directives:stream-item
  *
  * @description
- * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
- * resulting content within the element it is associated. Any content within the associated element
- * will be replaced so content is not strictly necessary, however it can be helpful to include
- * placeholder content for documentation and static web development tools.
  *
- * The 'at' symbol (@) can't be used as part of the key value because it is dedicated as a separator
- * character which the CMS property uses to differentiate the key from the locale.
- * ( ie x-cms="<key>@<locale>" )
  *
- * @element ANY
- * @param {expression} Evaluates to the string key used to identify the CMS value. The
- *   expression can also be followed with '@<locale>' in order to force a locale-specific
- *   version of CMS content. If a locale is not supplied, the client's Accept-Language
- *   header will be used.
+ * @element ELEMENT
+ * @param {String}  type            Will accept "profile", "article" or "content"
+ * @param {String}  size            Will accept "large", "med", or "small". Used with profile type                                  corner of a profile thumbnail. Used with profile type
+ *
+ * If no parameters are given, the directive will generate a profile thumbnail with a generic
+ * image that's 135px square rotated 10 degrees clockwise. Some parameters will be ignored
+ * depending on the type of thumbnail you intend to generate. For example, if you want to generate
+ * a profile thumbnail and include text and url attributes, they will be ignored since a profile
+ * thumbnail does not use any of those attributes. If you list a size attribute for an article
+ * thumbnail it will be ignored because article thumbnails have one size.
  *
  * @example
- <example>
- <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
- <p x-cms="notfound">Testing a not found case.</p>
- <blockquote x-cms="title/fr_CA">Forcing the French-Canadian version of the content.</blockquote>
- <th x-cms="name-title"/>
- </example>
+
  */
-/*
-angular.module('bgc.directives').directive('cms', ['$http',
-    function ($http) {
-        return {
-            // Is applied as an element's attribute
+angular.module('bgc.directives').directive('streamItem', ['$http',
+    function($http){
+        return{
             restrict: 'A',
-            // Current content will be replaced
             replace: true,
-            transclude: true,
-            link: function (scope, element, attrs) {
-                // Read the initial content of the element, and if none exists add something
-                var initialContent = element.html() || 'CMS Problem';
-                // Wipe out any existing content
-                element.html('');
-                // The cms property contains the lookup key
-                var key = attrs.cms;
-                // Create the URL to use in order to return the CMS content and the locale if forced
-                var parts = key.split('@');
-                var url = 'api/cms/' + parts[0];
-                if (parts.length > 1) url = url + '?locale=' + parts[1];
-                // Make a GET request to the server in order to perform the CMS lookup
-                $http({method: 'GET', url: url})
-                        .success(function (data, status, headers, config) {
-                            // If the HTTP response is an array and the first element contains a content
-                            // property, then we found what we were looking for.
-                            var contentFound = data.length && data[0] && data[0].content;
-                            if (contentFound) {
-                                // Populate the HTML element with content
-                                element.html(data[0].content);
-                            } else {
-                                // If no content was found, put the original content back in place
-                                element.html(initialContent);
-                                // And set a CSS class @todo: How pervasive is addClass()?
-                                element.addClass('cms-missing');
-                            }
-                        })
-                        .error(function (data, status, headers, config) {
-                            // In case of an error, add in the initial content and the status code of error
-                            element.html(initialContent + '<span> (' + status + ')</span>');
-                            // And set a CSS class to indicate the error.
-                            element[0].addClass('cms-error');
-                        });
+            scope: {
+                item: '=',
+                auth: '='
+            },
+            //transclude: 'element',
+            templateUrl: 'partials/activityStreamItem.html',
+            link: function(scope, elm, attrs){
+                //console.log(attrs.ngModel);
             }
         }
     }
 ]);
-*/
-angular.module('bgc.directives').directive('cms', ['$http',
-    function ($http) {
-        return {
-            // Is applied as an element's attribute
-            restrict: 'A',
-            // Current content will be replaced
-            replace: true,
-            scope: {},
-            compile: function (tElement, tAttrs, transclude) {
-                return function(scope, element, attrs) {
 
-                    // The cms property contains the lookup key
-                    var key = attrs.cms;
+/**
+ * Adds a twitter bootstrap tab for all direct child elements.
+ *
+ * @param [options] {mixed} Can be an object with multiple options, or a string with the animation class
+ *    class {string} the CSS class(es) to use. For example, 'ui-hide' might be an excellent alternative class.
+ * @example <li ui-tabs="{tab1:{label:'This is the first tab'}, tab2:{label: 'this is the second tab'}}">
+ * <div>content of tab1</div>
+ * <div>content of tab2</div>
+ * </li>
+ */
+angular.module('bgc.directives').directive('uiTabs', ['$compile', function ($compile) {
 
-                    // Create the URL to use in order to return the CMS content and the locale if forced
-                    var parts = key.split('@');
-                    var url = 'api/cms/' + parts[0];
-                    if (parts.length > 1) url = url + '?locale=' + parts[1];
+    'use strict';
 
-                    // Make a GET request to the server in order to perform the CMS lookup
-                    $http({method: 'GET', url: url})
-                            .success(function (data, status, headers, config) {
-                                // If the HTTP response is an array and the first element contains a content
-                                // property, then we found what we were looking for.
-                                var contentFound = data.length && data[0] && data[0].content;
-                                if (contentFound) {
-                                    // Populate the HTML element with content
-                                    scope.cms = data[0];
-                                } else {
-                                    scope.cms = 'CMS CONTENT NOT FOUND!';
-                                }
-                            })
-                            .error(function (data, status, headers, config) {
-                                scope.cms = 'CMS CONTENT NOT FOUND!';
-                            });
+    var getTabDefinitions = function (scope, attrs) {
+        var tabs = scope.$eval(attrs.uiTabs);
+
+        if (!tabs)
+            throw new Error("The ui-tabs directive requires an initialization object in the form of ui-tabs=\"{ tab1 : {label:'label text 1'}, tab2: {label:'label text 1'} }\". Did you forget to set the attributes value?");
+
+        return tabs;
+    };
+
+    return {
+        link: function (scope, element, attrs, controller) {
+
+            var tabs = getTabDefinitions(scope, attrs);
+            var children = $('> *', element);
+
+            var html = "";
+            var tabArray = [];
+            var index = 0;
+            var currentTab = null;
+            $.each(tabs, function (prop, tab) {
+                tab.activate = function () {
+                    var _this = this;
+                    $.each(tabs, function (p, val) {
+                        if (val.active = (val === _this)) {
+                            currentTab = val;
+                            val.element.show();
+                        }
+                        else
+                            val.element.hide();
+                    });
+                };
+                tabArray.push(prop);
+                tab.element = $(children[index++]);
+                html += "<li ng-class='{active:tabs." + prop + ".active}'><a ng-click='tabs." + prop + ".activate()'>{{tabs." + prop + ".label}}</a></li>";
+            });
+
+            if (tabArray.length !== children.length) throw new Error("The uiTabs attribute declared " + tabArray.length + " tabs, but contains " + children.length + " child elements.");
+            var activeCount = $.grep(tabArray, function (v) { return tabs[v].active; }).length;
+
+            if (activeCount > 1) {
+                throw new Error('Can only activate one tab at a time. Tab definitions indicate ' + activeCount + ' active tabs.');
+            }
+            else if (activeCount === 1){
+                tabs[$.grep(tabArray, function (v) { return tabs[v].active; })[0]].activate();
+            }
+            else {
+                $.each(tabArray, function (i, v) {
+                    if (i === 0) tabs[v].activate();
+                });
+            }
+
+            scope.tabs = tabs;
+            element.prepend($compile("<ul class='nav nav-tabs'>" + html + "</ul>")(scope));
+        }
+    };
+}]);
+
+angular.module('bgc.directives').directive('discussionStack', ['$compile', function($compile){
+    'use strict';
+    return {
+        link: function(scope, element, attrs){
+            var top = 4;
+            var left = 5;
+            var zIndex = -1;
+            var height = element.height() - element.css('margin-bottom').replace('px', '');
+            //var height = element.height();
+            height -= 21;
+
+            attrs.$observe('comments', function(value){
+                var stacks = value;
+
+                for(var i=0; i < stacks; i++){
+                    var div = document.createElement('div');
+                    div = jQuery(div);
+                    div.addClass('discussion-item discussion-stack-div grey-gradient');
+                    div.css({
+                        'width': element.css('width'),
+                        'height': height,
+                        'top': top,
+                        'left': left,
+                        'z-index': zIndex
+                    });
+
+                    element.parent('.discussion-stack-container').append($compile(div)(scope));
+
+                    top += 4;
+                    left += 4;
+                    zIndex -= 1;
                 }
-            }
+            });
         }
     }
-]);
+}]);
+
+angular.module('bgc.directives').directive('reloadTwitterBtns', function(){
+    'use strict'
+
+    return {
+        link: function(scope, element, attrs){
+            scope.$on('$routeChangeSuccess', function(){
+                twttr.widgets.load();
+            });
+        }
+    }
+});
