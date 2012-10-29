@@ -1647,4 +1647,24 @@ li.search-result.members{
     text-decoration: none;
 }
 
+.signin-form-container{
+    margin: 3em 0;
+    padding: 1em;
+    border: 1px solid #e8e8e8;
+}
+
+.signin-form-container h2{
+    margin: 0 0 1em 0;
+    font-weight: bold;
+}
+
+.signin .site.search-box{
+    margin-top: 3em;
+}
+
+.signin-form-container span.help-inline a{
+    color: #eeaf00;
+    text-decoration: none;
+}
+
 
