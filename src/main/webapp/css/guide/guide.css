@@ -900,3 +900,13 @@ a .read-more p{
 .signin-form-container form.form-horizontal input{
     width: 50%;
 }
+
+.new-picture-frame .premium {
+    position: absolute;
+    right: 9px;
+    top: 10px;
+    width: 30px;
+    height: 29px;
+    background-image: url('../../images/GCEE_sprite.png');
+    background-position: -140px -92px;
+}
