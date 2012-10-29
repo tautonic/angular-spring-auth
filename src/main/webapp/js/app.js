@@ -104,9 +104,14 @@
             controller: 'errorController'
         } );
 
-        $routeProvider.when( '/verify', {
-            templateUrl: 'partials/verify.html',
-            controller: 'verifyController'
+        $routeProvider.when( '/error/500', {
+            templateUrl: 'partials/500.html',
+            controller: 'error500Controller'
+        } );
+
+        $routeProvider.when( '/verifyemail/:token', {
+            templateUrl: 'partials/emailverified.html',
+            controller: 'verifyEmailController'
         } );
 
         $routeProvider.when( '/view', {

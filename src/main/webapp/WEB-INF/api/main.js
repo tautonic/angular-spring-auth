@@ -417,7 +417,7 @@ app.post('/profiles/', function(req){
         "thumbnail": req.postParams.thumbnail
     };
 
-    data.source = 'test';
+    data.source = 'GC';
     data.accountEmail.status = 'unverified';
 
     var opts = {
@@ -897,6 +897,30 @@ app.post('/utility/verifyprofile', function(req){
 
     return result;
 
+});
+
+app.get('/utility/verifyemail/:token', function(req, token){
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/email/verifyprofile/' + token,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    console.log('EXCHANGE STATUS!!! ', exchange.status);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
 });
 
 // GCEE global search

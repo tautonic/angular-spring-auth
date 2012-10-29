@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="span9 explanation">
+            <h4>EXPLANATION</h4>
+            <hr>
+
+            <p>There was an internal server error. In the meantime:</p>
+
+            <ul class="error-help">
+                <li><i class="globe"></i> <strong>Click the <span>"Back"</span> button to try another link.</strong></li>
+                <li><i class="globe"></i> <strong>If the problem persists contact us at <a ng-href="mailto:support@babson.com">support@babson.com</a>.</strong></li>
+            </ul>
+        </div>
+        <div class="span3">
+            <div class="site search-box">
+                <div class="header">
+                    <h4>SEARCH SITE</h4>
+                </div>
+                <div class="form-container">
+                    <form ng-controller="SiteSearchController" ng-submit="searchSite()">
+                        <input type="text" ng-model="siteQuery" placeholder="Search All...">
+                        <div class="btn-group-border"></div>
+                        <div class="search-lens read-more gradient">
+                            <div class="preview-lens"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

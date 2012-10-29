@@ -66,6 +66,26 @@ function errorController($rootScope, $scope){
     });
 }
 
+function error500Controller($rootScope, $scope){
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+        $rootScope.about = '500';
+    });
+}
+
+function verifyEmailController($rootScope, $scope, $routeParams, $http){
+    $rootScope.banner = 'none';
+    $rootScope.about = 'signup';
+
+    $http.get('api/utility/verifyemail/' + $routeParams.token)
+        .success(function(data, status, headers, config){
+
+        })
+        .error(function(data, status, headers, config){
+            console.log('TOKEN VERIFICATION ERROR!!!');
+        });
+}
+
 
 function MyCtrl2( $rootScope, $scope, $http, $log ) {
 	$scope.protected = 'Not loaded';
