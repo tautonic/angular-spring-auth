@@ -54,7 +54,7 @@
 
         $routeProvider.when( '/login', {
             templateUrl: 'lib/pyklsecurity/partials/signin-form.html',
-            controller: 'pykl.LoginCtrl'
+            controller: 'LoginCtrl'
         });
 
         //individual controller pages, some of these might be removed
