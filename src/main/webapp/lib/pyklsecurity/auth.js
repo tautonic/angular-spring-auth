@@ -386,34 +386,24 @@ var pykl = window.pykl || {};
 		} ]
 	);
 
+    function LoginCtrl( $rootScope, $scope, $auth, $log ) {
+        $scope.username = 'fred';
+        $scope.password = 'secret';
+
+        $scope.submit = function () {
+            $log.info( 'Submitting form', $scope.username, $scope.password );
+            $log.info( 'Broadcasting ', $auth.event.signinRequest , $scope.username, $scope.password );
+            $rootScope.$broadcast( $auth.event.signinRequest, $scope.username, $scope.password );
+        };
+
+        $scope.$on('$routeChangeSuccess', function(){
+            $rootScope.banner = 'none';
+            $rootScope.about = 'signin';
+        });
+    }
+
+    LoginCtrl.$inject = ['$rootScope', '$scope', '$auth', '$log'];
+    window.pykl.LoginCtrl = LoginCtrl;
 
 })(window, window.angular);
-
-function LoginCtrl( $rootScope, $scope, $auth, $log ) {
-    $scope.username = 'fred';
-    $scope.password = 'secret';
-
-    $scope.submit = function () {
-        $log.info( 'Submitting form', $scope.username, $scope.password );
-        $log.info( 'Broadcasting ', $auth.event.signinRequest , $scope.username, $scope.password );
-        $rootScope.$broadcast( $auth.event.signinRequest, $scope.username, $scope.password );
-    };
-
-    /*$scope.$on('$routeChangeSuccess', function(){
-        $rootScope.banner = 'none';
-        $rootScope.about = 'none';
-    });*/
-
-    $scope.$on('$routeChangeSuccess', function(){
-        $rootScope.banner = 'none';
-        $rootScope.about = 'signin';
-    });
-}
-
-$scope.$on('$routeChangeSuccess', function(){
-    $rootScope.banner = 'none';
-    $rootScope.about = 'signin';
-});
-
-LoginCtrl.$inject = ['$rootScope', '$scope', '$auth', '$log'];
 
