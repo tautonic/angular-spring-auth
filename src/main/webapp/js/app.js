@@ -66,7 +66,11 @@
             templateUrl: 'lib/profile/partials/update.html',
             controller: 'updateProfile'
         } );
-        $routeProvider.when( '/profiles/create', {
+        /*$routeProvider.when( '/profiles/create', {
+            templateUrl: 'lib/profile/partials/create.html',
+            controller: 'createProfile'
+        } );*/
+        $routeProvider.when( '/signup', {
             templateUrl: 'lib/profile/partials/create.html',
             controller: 'createProfile'
         } );

@@ -413,9 +413,7 @@ app.post('/profiles/', function(req){
         "accountEmail" : {
             "address"  : req.postParams.accountEmail.address
         },
-        "websites" : req.postParams.websites,
         "workHistory" : req.postParams.workHistory,
-        "educationHistory" : req.postParams.educationHistory,
         "thumbnail": req.postParams.thumbnail
     };
 

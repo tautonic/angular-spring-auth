@@ -68,8 +68,14 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     }
 }
 
-function createProfile($scope, $location, Profile){
+function createProfile($rootScope, $scope, $location, Profile){
+    $rootScope.banner = 'none';
+    $rootScope.about = 'signup';
+
     $scope.profile = {};
+    $scope.profile.accountEmail = {
+        address: ''
+    };
 
     $scope.profile.workHistory = [
         {
@@ -90,88 +96,21 @@ function createProfile($scope, $location, Profile){
         }
     ];
 
-    $scope.profile.educationHistory = [
-        {
-            "schoolName" : '',
-            "degree" : '',
-            "fieldOfStudy" : '',
-            "country" : "",
-            "yearFrom": {
-                "hijri": "",
-                "gregorian": "",
-                "preference": "gregorian"
-            },
-            "yearTo": {
-                "hijri": "",
-                "gregorian": "",
-                "preference": "gregorian"
-            },
-            "edNotes": ""
-        }
-    ];
-
-    $scope.profile.websites = [
-        {
-            "title" : '',
-            "url" : ''
-        }
-    ];
-
     $scope.save = function(profile){
         $scope.newProfile = new Profile(profile);
-
-        if($scope.thumbnailURI !== ''){
-            $scope.newProfile.thumbnail = $scope.thumbnailURI;
-        }
+        $scope.newProfile.thumbnail = 'images/GCEE_image_profileMale_135x135.jpeg';
 
         $scope.newProfile.$save(function(response){
-            $scope.profile._id = response.content._id;
-            $scope.profile.thumbnail = response.content.thumbnail;
+            //$scope.profile._id = response.content._id;
+            //$scope.profile.thumbnail = response.content.thumbnail;
 
-            $location.path('/profiles/view/' + $scope.profile._id);
+            $location.path('/network');
 
             $scope.responseContent = response.content;
         }, function(response){
             console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
-    }
-
-    $scope.addEdRow = function(){
-        $scope.profile.educationHistory.push({
-            "schoolName" : '',
-            "degree" : '',
-            "fieldOfStudy" : '',
-            "country" : "",
-            "yearFrom": {
-                "hijri": "",
-                "gregorian": "",
-                "preference": "gregorian"
-            },
-            "yearTo": {
-                "hijri": "",
-                "gregorian": "",
-                "preference": "gregorian"
-            },
-            "edNotes": ""
-        });
-    }
-
-    $scope.removeEdRow = function(index){
-        $scope.profile.educationHistory.splice(index, 1);
-    }
-
-    $scope.addContactRow = function(){
-        $scope.profile.websites.push(
-            {
-                "title" : '',
-                "url" : ''
-            }
-        );
-    }
-
-    $scope.removeContactRow = function(index){
-        $scope.profile.websites.splice(index, 1);
-    }
+    };
 
 }
 
