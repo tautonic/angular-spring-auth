@@ -15,7 +15,7 @@ function ListResources( $rootScope, $scope, $auth, $http, $log ) {
             if(data !== "false") {
                 $scope.articles = data;
                 if($scope.articles.length === 0) {
-                    $log.info("No articles found.");
+                    $scope.paging.more = false;
                 }
             } else {
                 $log.info("ERROR getting article, or resource.");
