@@ -896,3 +896,7 @@ a .read-more p{
     _border-color: #000000 #000000 #000000 #ffffff;
     _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
 }
+
+.signin-form-container form.form-horizontal input{
+    width: 50%;
+}

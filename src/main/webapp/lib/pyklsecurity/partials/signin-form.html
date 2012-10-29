@@ -1,17 +1,35 @@
-<div class="content container">
+<div class="content container signin">
     <div class="row">
-        <div class="span9"><h2>Login</h2>
-            <form name="login" ng-submit="submit()">
-                <p>
-                    <label for="username">Username:</label>
-                    <input id="username" type="text" ng-model="username" required/>
-                </p>
-                <p>
-                    <label for="password">Password:</label>
-                    <input id="password" type="password" ng-model="password" required/>
-                </p>
-                <p><input class="btn btn-success" type="submit" value="Submit"/></p>
-            </form></div>
+        <div class="span9">
+            <div class="signin-form-container grey-gradient">
+                <h2>Sign-In</h2>
+
+                <form class="form-horizontal" name="login" ng-submit="submit()">
+                    <div class="control-group">
+                        <label class="control-label" for="username">Username:</label>
+                        <div class="controls">
+                            <input id="username" type="text" ng-model="username" required/>
+                            <span class="help-inline"><strong>Forgot your <a ng-href="">username</a>?</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="password">Password:</label>
+                        <div class="controls">
+                            <input id="password" type="password" ng-model="password" required/>
+                            <span class="help-inline"><strong>Forgot your <a ng-href="">password</a>?</strong></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="password"></label>
+                        <div class="controls">
+                            <input class="btn btn-success" type="submit" value="Sign In"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="span3">
             <div class="site search-box">
                 <div class="header">
