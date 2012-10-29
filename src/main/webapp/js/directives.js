@@ -488,7 +488,7 @@ angular.module('bgc.directives')
                     }
 
                     if(value !== undefined){
-                        if((value.length > 2 && value.length < 17) || value.length === ''){
+                        if((value.length > 2 && value.length < 32) || value.length === ''){
                             $http.get('api/profiles/byprimaryemail/' + value).success(function(data){
                                 if(data.status === 404){
                                     valid = true;
@@ -507,8 +507,8 @@ angular.module('bgc.directives')
                             ctrl.$setValidity('emailValidator', false);
                             if(value.length < 3){
                                 message = 'Your email address must be at least 3 characters';
-                            }else if(value.length > 16){
-                                message = 'Your email address cannot be more than 16 characters';
+                            }else if(value.length > 31){
+                                message = 'Your email address cannot be more than 32 characters';
                             }else{
                                 message = 'An email address is required';
                             }

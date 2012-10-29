@@ -871,6 +871,34 @@ app.post('/utility/resetpassword/', function(req){
     return result;
 });
 
+app.post('/utility/verifyprofile', function(req){
+    var params = req.postParams;
+    log.info('Profile id {}', params.profileId);
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/email/resendverifyprofile/' + params.profileId,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    console.log('EXCHANGE STATUS!!! ', exchange.status);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
+
+});
+
 // GCEE global search
 app.post('/search/site/', function(req){
     var url = 'http://localhost:9300/myapp/api/search/';

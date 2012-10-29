@@ -68,7 +68,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     }
 }
 
-function createProfile($rootScope, $scope, $location, Profile){
+function createProfile($rootScope, $scope, $location, $http, Profile){
     $rootScope.banner = 'none';
     $rootScope.about = 'signup';
 
@@ -105,9 +105,20 @@ function createProfile($rootScope, $scope, $location, Profile){
             //$scope.profile._id = response.content._id;
             //$scope.profile.thumbnail = response.content.thumbnail;
 
-            $scope.signupSuccess = true;
-            //$location.path('/network');
+            var data = {
+                profileId: response.content._id
+            }
 
+            $http.post('/gc/api/utility/verifyprofile/', data)
+                .success(function(data, status, headers, config){
+                    //$scope.showResetForm = false;
+                    //$scope.showSuccess = true;
+                    $scope.signupSuccess = true;
+                })
+                .error(function(data, status, headers, config){
+                    console.log('POST VERIFY PROFILE ERROR!!!');
+                });
+            //$location.path('/network');
             $scope.responseContent = response.content;
         }, function(response){
             console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
