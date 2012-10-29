@@ -399,16 +399,16 @@ function LoginCtrl( $rootScope, $scope, $log ) {
         $rootScope.$broadcast( EVENT_SIGNIN_REQUEST, $scope.username, $scope.password );
     };
 
-    $scope.$on('$routeChangeSuccess', function(){
+    /*$scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
         $rootScope.about = 'none';
+    });*/
+
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+        $rootScope.about = 'signin';
     });
 }
-
-$scope.$on('$routeChangeSuccess', function(){
-    $rootScope.banner = 'none';
-    $rootScope.about = 'signin';
-});
 
 LoginCtrl.$inject = ['$rootScope', '$scope', '$log'];
 //window.LoginCtrl = LoginCtrl;
