@@ -34,8 +34,10 @@
     <bean id="zociaMapStore" scope="prototype" class="com.pykl.hazelcast.ZociaMapPersistence">
         <property name="getAddress" value="${zociaUrl}/resources/bykey/%s" />
         <property name="postAddress" value="${zociaUrl}/resources/" />
-        <property name="putAddress" value="${zociaUrl}/resources/" />
-        <property name="deleteAddress" value="${zociaUrl}/resources/bykey/%s" />
+        <property name="putAddress" value="${zociaUrl}/resources/%s" />
+        <property name="deleteAddress" value="${zociaUrl}/resources/%s" />
+        <property name="username" value="backdoor" />
+        <property name="password" value="Backd00r" />
     </bean>
 
 

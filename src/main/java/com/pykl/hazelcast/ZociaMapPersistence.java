@@ -7,16 +7,19 @@ import com.hazelcast.core.HazelcastInstance;
 import com.zocia.platform.hazelcast.persistence.MapPersistence;
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.security.BasicAuthentication;
+import org.eclipse.jetty.client.security.Realm;
 import org.eclipse.jetty.io.ByteArrayBuffer;
 import org.eclipse.jetty.util.ajax.JSON;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 
 import java.io.IOException;
 import java.util.*;
 
-public class ZociaMapPersistence implements MapPersistence {
+public class ZociaMapPersistence implements MapPersistence, InitializingBean {
 
     // Constants -------------------------------------------------------------------
 
@@ -32,6 +35,9 @@ public class ZociaMapPersistence implements MapPersistence {
     protected String _deleteAddress;
     protected String _index;
     protected String _type;
+    protected String _username;
+    protected String _password;
+    protected Realm _realm;
 
     // Constructors ----------------------------------------------------------------
 
@@ -47,6 +53,29 @@ public class ZociaMapPersistence implements MapPersistence {
         } catch (Exception e) {
             LOG.error("Failed to establish HTTP connection client to Zocia.", e);
         }
+    }
+
+
+    // Implementing InitializingBean -----------------------------------------------
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        _realm = new Realm() {
+            @Override
+            public String getId() {
+                return "Babson GLobal Consortium Web Client";
+            }
+
+            @Override
+            public String getPrincipal() {
+                return _username;
+            }
+
+            @Override
+            public String getCredentials() {
+                return _password;
+            }
+        };
     }
 
 
@@ -81,6 +110,14 @@ public class ZociaMapPersistence implements MapPersistence {
 
     public void setDeleteAddress(String deleteAddress) {
         _deleteAddress = deleteAddress;
+    }
+
+    public void setUsername(String username) {
+        _username = username;
+    }
+
+    public void setPassword(String password) {
+        _password = password;
     }
 
     // MapLoaderLifecycleSupport ---------------------------------------------------
@@ -161,6 +198,11 @@ public class ZociaMapPersistence implements MapPersistence {
         };
         exchange.setMethod("DELETE");
         exchange.setURL(_deleteAddress);
+        try {
+            new BasicAuthentication(_realm).setCredentials(exchange);
+        } catch (IOException e) {
+            LOG.error("Failed to set credentials on HttpExchange.", e);
+        }
 
         try {
             _client.send(exchange);
@@ -252,7 +294,11 @@ public class ZociaMapPersistence implements MapPersistence {
             exchange.setMethod("PUT");
             String url = String.format(_putAddress, ((Map) curValue).get("_id"));
             exchange.setURL(url);
-
+            try {
+                new BasicAuthentication(_realm).setCredentials(exchange);
+            } catch (IOException e) {
+                LOG.error("Failed to set credentials on HttpExchange.", e);
+            }
         } else {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Inserting new document, index [{}], type [{}], key [{}]",
