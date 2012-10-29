@@ -1,7 +1,8 @@
 'use strict';
 
+// todo: Need to add .inject() function for all controllers
 
-function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $location) {
+function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $auth, $location) {
     var url = 'api/discussions/all';
 
     setupScope();
@@ -35,21 +36,21 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $locatio
                 $log.info("Error loading discussion.");
             }
         }).error(function (data, status) {
-            $log.info("ERROR retrieving protected resource: " + data + " status: " + status);
-        });
+                $log.info("ERROR retrieving protected resource: " + data + " status: " + status);
+            });
     }
 
     $scope.hasLinkedObject = function(post) {
         return post.linkedItem.exists;
-    }
+    };
 
     $scope.noDiscussions = function () {
         return (($scope.discussion) && ($scope.discussion.length === 0));
-    }
+    };
 
     loadContent();
 
-    $rootScope.$on('event:logoutConfirmed', function () {
+    $rootScope.$on($auth.event.signoutConfirmed, function () {
         if ($scope.$scope.pageType == "new") {
             $location.path('/discussion/all');
         }
@@ -57,7 +58,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $locatio
 }
 
 
-function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location) {
+function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $location) {
     var url = 'api/discussions/';
 
     $scope.hide = ($routeParams.articleId === null);
@@ -108,7 +109,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
 
     $scope.replyTo = function (original) {
         if (!$rootScope.auth.isAuthenticated) {
-            $rootScope.$broadcast("event:loginRequired");
+            $rootScope.$broadcast($auth.event.signinRequired);
             return;
         }
         $scope.reply.show = true;
@@ -118,7 +119,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
         } else {
             $scope.reply.message = '';
         }
-    }
+    };
 
     $scope.submitReply = function () {
         if ($scope.reply.message != '') {
@@ -132,11 +133,11 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
         } else {
             alert("enter a reply");
         }
-    }
+    };
 
     $scope.cancel = function () {
         $scope.reply.show = false;
-    }
+    };
 
     $scope.canEdit = function (post) {
         if (post === undefined) {
@@ -144,17 +145,17 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
         }
 
         return (post.creator.username == $rootScope.auth.principal);
-    }
+    };
 
     $scope.edit = function (post) {
         post.edited = post.message;
         post.edit = true;
-    }
+    };
 
     $scope.cancelEdit = function (post) {
         post.edit = false;
         delete post.edited;
-    }
+    };
 
     $scope.editPost = function (post) {
         post.message = post.edited;
@@ -163,7 +164,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
         $http.put(url + "/" + post._id, post).success(function (data) {
             console.log("edit saved successfully to server, url: " + url + "/" + post._id);
         });
-    }
+    };
 
     /*
      $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
@@ -172,7 +173,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
         loadContent();
     }
 
-    $rootScope.$on('event:logoutConfirmed', function () {
+    $rootScope.$on($auth.event.signoutConfirmed, function () {
         if ($scope.$scope.pageType == "new") {
             $location.path('/discussion/all');
         }
@@ -187,7 +188,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location
     });
 }
 
-function NewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location) {
+function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location) {
     var url = 'api/discussions/new';
     $scope.hasContent = false;
     $scope.hide = ($routeParams.articleId === null);
@@ -232,13 +233,13 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $log, $location)
                 }
             }
         });
-    }
+    };
 
     $rootScope.$on('event:newDiscussion', function () {
         $scope.hide = false;
     });
 
-    $rootScope.$on('event:logoutConfirmed', function () {
+    $rootScope.$on($auth.event.signoutConfirmed, function () {
         $location.path('/discussion/all');
     });
 

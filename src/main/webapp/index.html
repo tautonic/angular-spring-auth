@@ -37,7 +37,81 @@
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </head>
 <body>
+<div ui-modal class="modal fade" ng-controller="pykl.cmsCtrl" ng-model="modalShown">
+    <div class="modal-header">
+        <h2>CMS Editor</h2>
+    </div>
+    <div class="modal-body">
+        <form name="editCMS" class="form-horizontal" novalidate>
+            <fieldset ng-repeat="resource in resources">
+                <label class="control-label" for="cms-{{resource.locale}}-title">Title</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="resource.title"
+                           class="input-xlarge"
+                           id="cms-{{resource.locale}}-title"
+                           name="cms-{{resource.locale}}-title"
+                           validation-tooltip />
+                </div>
 
+                <br />
+
+                <label class="control-label" for="cms-{{resource.locale}}-body">Body</label>
+                <div class="controls">
+                    <textarea
+                            rows="10"
+                            cols="100"
+                            ng-model="resource.content"
+                            class="input-xlarge"
+                            id="cms-{{resource.locale}}-body"
+                            name="cms-{{resource.locale}}-body"
+                            validation-tooltip
+                            required
+                            ui-tinymce>
+                    </textarea>
+                </div>
+
+                <br />
+
+                <label class="control-label" for="cms-{{resource.locale}}-thumbnail">Image</label>
+                <div id="cms-{{resource.locale}}-thumbnail" ppykl-upload="{dropTarget:'cms-{{resource.locale}}-drop-target'}">
+                    <img src="{{resource.thumbnail}}" id="cms-{{resource.locale}}-drop-target" />
+                </div>
+
+                <div class="modal hide fade">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>Crop your image</h3>
+                    </div>
+                    <div class="modal-body">
+                        <img id="{{resource.locale}}-image-crop" src="" alt="">
+                    </div>
+                    <div class="modal-footer">
+                        <button id="{{resource.locale}}-cancel-crop" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+                        <button id="{{resource.locale}}-save-crop" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
+                    </div>
+                </div>
+
+                <div id="{{resource.locale}}-container">
+                    <br />
+                    <div id="{{resource.locale}}-filelist"></div>
+                    <br />
+                    <button class="btn btn-primary" id="{{resource.locale}}-choose-files"><i class="icon-folder-open icon-white"></i> Browse</button>
+                    <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a ng-click="cancel()" class="btn btn-warning">
+            <i class="icon-ban-circle icon-white"></i> Cancel
+        </a>
+
+        <button ng-click="submit()" ng-disabled="false" class="btn btn-success" >
+            <i class="icon-pencil icon-white"></i> Update
+        </button>
+    </div>
+</div>
 <div class="header">
     <div class="container">
         <div id="outside-logo"><img src="images/GCEE_image_BabsonGlobal_light.png"></div>
@@ -176,8 +250,8 @@
 
 <script src="js/directives.js"></script>
 <script src="js/filters.js"></script>
-<script src="js/app.js"></script>
 <script src="js/controllers.js"></script>
+<script src="lib/pyklcms/cms.js"></script>
 <script src="lib/pyklsecurity/auth.js"></script>
 <script src="lib/pykladmin/adminCtrl.js"></script>
 <script src="lib/pyklresource/resource.js"></script>
@@ -185,6 +259,7 @@
 <script src="js/services.js"></script>
 <script src="lib/profile/profileController.js"></script>
 <script src="lib/search/searchController.js"></script>
+<script src="js/app.js"></script>
 <script src="lib/bootstrap/js/bootstrap-modal.js"></script>
 <script src="lib/bootstrap/js/bootstrap-alert.js"></script>
 <script src="lib/bootstrap/js/bootstrap-tooltip.js"></script>

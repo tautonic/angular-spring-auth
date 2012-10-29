@@ -43,9 +43,7 @@ public class ScheduleUtil {
 
 
     public ScheduleUtil() {
-        LOG.info("Obtaining Hazelcast map for name: " + MAP_NAME);
         map = Hazelcast.getMap(MAP_NAME);
-        LOG.info("Obtaining Hazelcast map for name: " + MAP_NAME);
     }
 
     // Publics ---------------------------------------------------------------------
@@ -126,7 +124,7 @@ public class ScheduleUtil {
             }
         }
 
-        LOG.info(String.format("Checking if we are responsible for handling scheduled task. " +
+        LOG.debug(String.format("Checking if we are responsible for handling scheduled task. " +
                 "TaskType: %s, TimeKey: %s, First: %s", taskType, timeKey, first));
 
         return first;

@@ -1,6 +1,6 @@
 'use strict';
 
-function ListResources( $rootScope, $scope, $routeParams, $http, $log ) {
+function ListResources( $rootScope, $scope, $auth, $http, $log ) {
     var url = "api/article/search/";
     $scope.filters = {};
 
@@ -16,35 +16,35 @@ function ListResources( $rootScope, $scope, $routeParams, $http, $log ) {
                 $log.info("ERROR getting article, or resource.");
             }
         }).error(function(data, status) {
-            $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
-        });
+                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+            });
     }
     //this is likely not going to be used anymore, the filtering will take care of it from here on out
     $scope.byType = function(type) {
         url = 'api/article/all/' + type;
         loadContent();
-    }
+    };
 
     $scope.byCategory = function(category) {
         url = 'api/article/all/bycategory/' + category;
         loadContent();
-    }
+    };
     /*
-    perhaps this should be moved to the admin panel, instead of being part of the resource page itself?
-    $scope.addNewArticle = function() {
-        $scope.pageType = "add";
-        $scope.article = {
-            title: '',
-            description: '',
-            content: ''
-        }
-    }
+     perhaps this should be moved to the admin panel, instead of being part of the resource page itself?
+     $scope.addNewArticle = function() {
+     $scope.pageType = "add";
+     $scope.article = {
+     title: '',
+     description: '',
+     content: ''
+     }
+     }
 
-    $scope.saveNewArticle = function() {
-        $http.post("api/article/new", $scope.article).success(function(data) {
-            alert("article inserted successfully");
-        });
-    }*/
+     $scope.saveNewArticle = function() {
+     $http.post("api/article/new", $scope.article).success(function(data) {
+     alert("article inserted successfully");
+     });
+     }*/
 
     function buildFilters() {
         var result = "";
@@ -65,14 +65,14 @@ function ListResources( $rootScope, $scope, $routeParams, $http, $log ) {
         $scope.filters.excel = $scope.filters.documents;
         $scope.filters.text = $scope.filters.documents;
         $scope.filters.rtf = $scope.filters.documents;
-    }
+    };
 
     $scope.search = function(term) {
         term = term || "";
         url = "api/article/search/?term=" + term + "&filters=" + buildFilters();
 
         loadContent();
-    }
+    };
 
     $scope.count = function(what) {
         if(typeof($scope.articles) === "undefined")
@@ -85,10 +85,10 @@ function ListResources( $rootScope, $scope, $routeParams, $http, $log ) {
         });
 
         return result.length;
-    }
+    };
 
-    $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
-    $rootScope.$on('event:logoutConfirmed', function() { loadContent(); });
+    $rootScope.$on(auth.event.signinConfirmed, function() { loadContent(); });
+    $rootScope.$on(auth.event.signoutConfirmed, function() { loadContent(); });
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'curriculum';
         $rootScope.about = 'curriculum';
@@ -98,7 +98,7 @@ function ListResources( $rootScope, $scope, $routeParams, $http, $log ) {
 }
 
 
-function ViewResource( $rootScope, $scope, $routeParams, $http, $log ) {
+function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     var url = 'api/article/' + $routeParams.articleId;
     $scope.filters = {};
 
@@ -123,10 +123,10 @@ function ViewResource( $rootScope, $scope, $routeParams, $http, $log ) {
             return false;
         }
         return (typeof($scope.article.content) === "undefined");
-    }
+    };
 
-    $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
-    $rootScope.$on('event:logoutConfirmed', function() { loadContent(); });
+    $rootScope.$on(auth.event.signinConfirmed, function() { loadContent(); });
+    $rootScope.$on(auth.event.signoutConfirmed, function() { loadContent(); });
 
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
@@ -136,5 +136,5 @@ function ViewResource( $rootScope, $scope, $routeParams, $http, $log ) {
     loadContent();
 }
 
-ListResources.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log'];
-ViewResource.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log'];
+ListResources.$inject = ['$rootScope', '$scope', 'auth', '$http', '$log'];
+ViewResource.$inject = ['$rootScope', '$scope', '$routeParams', '$auth', '$http', '$log'];
