@@ -2,7 +2,7 @@
     <div id="curriculum-content" ui-tabs="{tab1: {label: 'FEATURED CONTENT'}, tab2: {label: 'MOST RECENT'}, tab3: {label: 'MOST POPULAR'}}">
 
         <div class="row">
-            <div class="articles span9">
+            <div class="articles span9" when-scrolled="loadMore(searchTerm)">
                 <div class="article row" ng-repeat="article in articles">
                     <div class="span2">
                         <div thumbnail thumb=article size="medium" text="Preview" type="content" />
@@ -22,6 +22,8 @@
                     </div>
                 </div>
                 <div ng-show="(articles.length == 0)">No articles found.</div>
+                <div ng-show="(paging.more)">Loading...</div>
+                <div ng-show="(!paging.more)">No more articles found.</div>
             </div>
 
             <div class="span3">

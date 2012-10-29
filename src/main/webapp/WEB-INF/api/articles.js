@@ -24,6 +24,8 @@ function ajax(url) {
 
 var searchAllArticles = function(params) {
     var query;
+    var from = params.from || 0;
+    var size = params.size || 10;
 
     if(params.term) {
             query = {
@@ -64,7 +66,10 @@ var searchAllArticles = function(params) {
                     ]
                 }
             }
-        }
+            //"sort": [ { "views": "desc" }],
+        },
+        "from": from,
+        "size": size
     };
 
     if(params.filters) {
@@ -80,7 +85,7 @@ var searchAllArticles = function(params) {
 
         data.query.filtered.filter.and.push({ "terms": { "mimetype": mimetypeFilters }});
     }
-    log.info("QUERYING? "+JSON.stringify(query));
+    log.info("QUERYING? "+JSON.stringify(data));
     var opts = {
         url: 'http://localhost:9300/myapp/api/resources/search',
         method: 'POST',
