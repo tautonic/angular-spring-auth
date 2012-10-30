@@ -3,22 +3,7 @@
         <div class="span9">
             <div ng-switch on=resultLength>
                 <div ng-switch-when=0>
-                    <h1>SEARCH RESULTS</h1> <p class="muted"> 0 results found</p>
-
-                    <hr>
-
-                    <p>Your search - <strong>{{query}}</strong> - did not match any documents</p>
-
-                    <ul class="error-help">
-                        <li><i class="globe"></i> <strong>Make sure all words are spelled correctly.</strong></li>
-                        <li><i class="globe"></i> <strong>Try different keywords</strong></li>
-                        <li><i class="globe"></i> <strong>Try more general keywords.</strong></li>
-                    </ul>
-
-                    <p><i><strong>Or</strong></i></p>
-                    <br>
-                    <p>Search <a ng-href="#/profiles/list">members</a>, <a ng-href="#content">documents</a>, and
-                        <a ng-href="#/discussions">discussions.</a></p>
+                    <div ng-include='"lib/search/partials/emptyResults.html"'></div>
                 </div>
                 <div ng-switch-default>
                     <h1>Site Search Results</h1> <p class="muted"> 10 of {{(results | filter:lengthFilter).length}} results</p>

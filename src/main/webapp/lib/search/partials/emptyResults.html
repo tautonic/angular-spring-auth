@@ -1,39 +1,16 @@
-<div id="discussions" class="content container search-results">
-    <div class="row">
-        <div class="span8">
+<h1>SEARCH RESULTS</h1> <p class="muted"> 0 results found</p>
 
-            <h1>SEARCH RESULTS</h1> <p class="muted"> 0 results found</p>
+<hr>
 
-            <hr>
+<p>Your search - <strong>{{query}}</strong> - did not match any documents</p>
 
-            <p>Your search - <strong>dsagsdgffdsgsdg</strong> did not match any documents</p>
+<ul class="error-help">
+    <li><i class="globe"></i> <strong>Make sure all words are spelled correctly.</strong></li>
+    <li><i class="globe"></i> <strong>Try different keywords</strong></li>
+    <li><i class="globe"></i> <strong>Try more general keywords.</strong></li>
+</ul>
 
-            <ul class="error-help">
-                <li><i class="globe"></i> <strong>Make sure all words are spelled correctly.</strong></li>
-                <li><i class="globe"></i> <strong>Try different keywords</strong></li>
-                <li><i class="globe"></i> <strong>Try more general keywords.</strong></li>
-            </ul>
-
-            <p><i><strong>Or</strong></i></p>
-
-            <p>Search <a ng-href="#/profiles/list">members</a>, <a ng-href="#content">documents</a>, and
-                <a ng-href="#/discussions">discussions.</a></p>
-        </div>
-        <div class="span3">
-            <div class="site search-box">
-                <div class="header">
-                    <h4>SEARCH SITE</h4>
-                </div>
-                <div class="form-container">
-                    <form ng-controller="SiteSearchController" ng-submit="searchSite()">
-                        <input type="text" ng-model="siteQuery" placeholder="Search All...">
-                        <div class="btn-group-border"></div>
-                        <div class="search-lens read-more gradient">
-                            <div class="preview-lens"></div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<p><i><strong>Or</strong></i></p>
+<br>
+<p>Search <a ng-href="#/profiles/list">members</a>, <a ng-href="#content">documents</a>, and
+    <a ng-href="#/discussions">discussions.</a></p>
