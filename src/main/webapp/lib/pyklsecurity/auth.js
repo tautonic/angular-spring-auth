@@ -154,8 +154,9 @@ var pykl = window.pykl || {};
 			$rootScope.auth = {
 				isAuthenticated: false,
                 requestLogin: function() {
-                    $rootScope.$broadcast('event:loginRequired');
-                }
+                    $rootScope.$broadcast(EVENT_SIGNIN_REQUIRED);
+                },
+                id: 0
 			};
 		}
 		initAuth();
@@ -166,6 +167,7 @@ var pykl = window.pykl || {};
 						$rootScope.auth.isAuthenticated =
 								(data && (data.username != null) && (data.username != 'anonymousUser'));
 						roles = data.roles;
+                        $rootScope.auth.id = data._id;
 						$log.info('Received successful auth response:', data);
 					} )
 					.error( function ( data, status, headers, config ) {
