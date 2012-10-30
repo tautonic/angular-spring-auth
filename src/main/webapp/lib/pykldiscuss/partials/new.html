@@ -2,17 +2,19 @@
     <div class="row">
         <div class="reply" ng-show="auth.isAuthenticated">
             <form name="newDiscussionForm" ng-submit="createDiscussion()">
-                <div ng-show="!hasContent">
-                    Discussion Title: <input type="text" ng-model="reply.title">
-                    <p>Words go here:</p>
-                </div>
-                <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
-                </textarea>
-                <br>
-                <input type="submit" value="Start New Discussion">
-                <div ng-show="hasContent">
-                    <input type="button" ng-click="cancel()" value="Cancel">
-                </div>
+                <fieldset class="control-group">
+                    <div ng-show="!hasContent">
+                        Discussion Title: <input type="text" ng-model="reply.title" class="input-xlarge" required validation-tooltip>
+                        <p>Words go here:</p>
+                    </div>
+                    <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce>
+                    </textarea>
+                    <br>
+                    <input type="submit" value="Start New Discussion" class="btn" ng-disabled="newDiscussionForm.$invalid">
+                    <div ng-show="hasContent">
+                        <input type="button" ng-click="cancel()" value="Cancel" class="btn">
+                    </div>
+                </fieldset>
             </form>
         </div>
         <div ng-show="!auth.isAuthenticated">

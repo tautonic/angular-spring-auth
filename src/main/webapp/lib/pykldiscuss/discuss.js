@@ -1,7 +1,5 @@
 'use strict';
 
-// todo: Need to add .inject() function for all controllers
-
 function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $auth, $location) {
     var url = 'api/discussions/all';
 
@@ -69,8 +67,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
         $scope.query = '';
         $scope.enterReply = "Reply to discussion";
         $scope.reply = {
-            show:false,
-            message:''
+            show:false
         };
         $scope.isLoaded = false;
 
@@ -88,6 +85,11 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
 
             url = url + $scope.pageType;
             $scope.pageType = "single";
+
+            $scope.$on('$routeChangeSuccess', function(){
+                $rootScope.banner = 'none';
+                $rootScope.about = 'none';
+            });
         }
         //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
     }
@@ -95,7 +97,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
     function loadContent() {
         $http.get(url).success(function (data) {
             if (data !== "false") {
-                $scope.discussion = data;
+                $scope.discussion = data[0];
                 $scope.isLoaded = true;
                 $scope.hide = false;
             } else {
@@ -117,12 +119,12 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
             var content = "<p><blockquote>" + original + "</blockquote></p>" + "<p></p>";
             $scope.reply.message = content;
         } else {
-            $scope.reply.message = '';
+            $scope.reply.message = null;
         }
     };
 
     $scope.submitReply = function () {
-        if ($scope.reply.message != '') {
+        //if ($scope.reply.message != '') {
             var reply = $scope.reply.message;
             var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
             $http.post(replyUrl, { reply:reply }).success(function (data) {
@@ -130,9 +132,9 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
                 $scope.reply.message = '';
                 $scope.discussion.children.unshift(data);
             });
-        } else {
+        /*} else {
             alert("enter a reply");
-        }
+        } */
     };
 
     $scope.cancel = function () {
@@ -143,8 +145,8 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
         if (post === undefined) {
             return false;
         }
-
-        return (post.creator.username == $rootScope.auth.principal);
+         console.log("POST INFO",post);
+        return (post.creator._id == $rootScope.auth.id);
     };
 
     $scope.edit = function (post) {
@@ -206,6 +208,11 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location
         $location.path('/network/all');
     }
 
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+        $rootScope.about = 'none';
+    });
+
 
     $scope.createDiscussion = function () {
         var newPost = {
@@ -249,3 +256,7 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location
         $scope.hasContent = true;
     });
 }
+
+ListDiscussions.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$auth', '$location'];
+ViewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$auth', '$location'];
+NewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$auth', '$location'];
