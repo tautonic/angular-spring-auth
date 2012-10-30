@@ -1,136 +1,142 @@
 <div class="content container search-results">
     <div class="row">
         <div class="span9">
-            <h1>Site Search Results</h1> <p class="muted"> 10 of {{(results | filter:lengthFilter).length}} results</p>
+            <div ng-switch on=resultLength>
+                <div ng-switch-when=0>
+                    <div ng-include='"lib/search/partials/emptyResults.html"'></div>
+                </div>
+                <div ng-switch-default>
+                    <h1>Site Search Results</h1> <p class="muted"> 10 of {{(results | filter:lengthFilter).length}} results</p>
 
-            <hr>
+                    <hr>
 
-            <ul class="search-results-list">
-                <li class="search-result" ng-repeat="result in results">
-                    <div ng-switch on="result._type">
+                    <ul class="search-results-list">
+                        <li class="search-result" ng-repeat="result in results">
+                            <div ng-switch on="result._type">
 
-                        <div ng-switch-when="profiles">
-                            <div class="profile-list-item profile grey-gradient clearfix">
-                                <!--<div class="new-picture-frame profile-thumbnail large counter-clockwise">
-                                    <img class="profile-image large" src="images/rosie.jpeg">
-                                </div>-->
-                                <div thumbnail thumb=result size="large" rotation="counter-clockwise" type="profile" />
-                                <div class="profile-left">
-                                    <h3>{{result.name.given}} {{result.name.surname}}</h3>
-                                    <h5>{{result.workHistory[0].title}}</h5>
-                                    <h5 class="muted">{{result.workHistory[0].businessName}}</h5>
-                                </div>
-                                <div class="profile-right">
-                                    <h3 class="sans-serif">LATEST ACTIVITY:</h3>
-                                    <p><i ng-bind-html-unsafe=result.activity.message></i></p>
-                                    <p class="muted">about {{result.activity.dateCreated | timeago}}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div ng-switch-when="posts">
-
-                            <div class="row">
-                                <div class="span8">
-                                    <div id="discussions" class="site discussion-stack-container">
-                                        <div discussion-stack comments={{result.commentCount}} class="discussion-item grey-gradient">
-                                            <a ng-href="#/network/{{result._id}}"><h4>{{result.title}}</h4></a>
-                                            <h6>By <a ng-href="#/profiles/view/{{result.creator._id}}">{{result.creator.username}}</a>, {{result.dateCreated | asDate: 'fullDate'}}</h6>
-                                            <!--<p class="muted"><strong>Document:</strong> <a href="#/content">Document Title</a></p>-->
-                                            <ul class="article-stats">
-                                                <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
-                                                <li class="muted"><i class="views"></i> {{result.views}} Views</li>
-                                                <li class="muted"><i class="comments"></i> {{result.commentCount}} Comments</li>
-                                                <li ng-click="flag({{result._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
-                                            </ul>
+                                <div ng-switch-when="profiles">
+                                    <div class="profile-list-item profile grey-gradient clearfix">
+                                        <!--<div class="new-picture-frame profile-thumbnail large counter-clockwise">
+                                            <img class="profile-image large" src="images/rosie.jpeg">
+                                        </div>-->
+                                        <div thumbnail thumb=result size="large" rotation="counter-clockwise" type="profile" />
+                                        <div class="profile-left">
+                                            <h3>{{result.name.given}} {{result.name.surname}}</h3>
+                                            <h5>{{result.workHistory[0].title}}</h5>
+                                            <h5 class="muted">{{result.workHistory[0].businessName}}</h5>
+                                        </div>
+                                        <div class="profile-right">
+                                            <h3 class="sans-serif">LATEST ACTIVITY:</h3>
+                                            <p><i ng-bind-html-unsafe=result.activity.message></i></p>
+                                            <p class="muted">about {{result.activity.dateCreated | timeago}}</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div ng-switch-when="resources">
-                            <div ng-switch on="result.format">
-                                <div ng-switch-when="document">
-                                    <div class="article clearfix">
-                                        <div class="new-picture-frame content-thumbnail">
-                                            <!--<img ng-src ="images/document-default.jpg" alt="">-->
-                                            <div thumbnail
-                                                 type="content"
-                                                 text="Preview"
-                                                 thumb=result />
-                                            <a ng-href="#/content">
-                                                <div read-more-hover class="read-more gradient">
-                                                    <p>Preview</p>
-                                                    <div class="preview-lens"></div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <div class="content document">
-                                            <h4>{{result.title}}</h4>
-                                            <div class="doc-type-thumbnail word"></div><h6>by {{result.author}}, {{result.dateCreated | asDate: 'MM/dd/yyyy'}}</h6>
-                                            <div class="tags">
-                                                <div ng-repeat="tag in result.taggable">
-                                                    <a href="#">{{tag}}</a>
+                                <div ng-switch-when="posts">
+
+                                    <div class="row">
+                                        <div class="span8">
+                                            <div id="discussions" class="site discussion-stack-container">
+                                                <div discussion-stack comments={{result.commentCount}} class="discussion-item grey-gradient">
+                                                    <a ng-href="#/network/{{result._id}}"><h4>{{result.title}}</h4></a>
+                                                    <h6>By <a ng-href="#/profiles/view/{{result.creator._id}}">{{result.creator.username}}</a>, {{result.dateCreated | asDate: 'fullDate'}}</h6>
+                                                    <!--<p class="muted"><strong>Document:</strong> <a href="#/content">Document Title</a></p>-->
+                                                    <ul class="article-stats">
+                                                        <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
+                                                        <li class="muted"><i class="views"></i> {{result.views}} Views</li>
+                                                        <li class="muted"><i class="comments"></i> {{result.commentCount}} Comments</li>
+                                                        <li ng-click="flag({{result._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
+                                                    </ul>
                                                 </div>
                                             </div>
-                                            <p>{{result.description}}</p>
-                                            <ul class="article-stats">
-                                                <li>
-                                                    <div class="article-tweet-button">
-                                                        <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
-                                                    </div>
-                                                </li>
-                                                <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
-                                                <li class="muted"><i class="views"></i> {{result.views}} Views</li>
-                                                <li class="muted"><i class="comments"></i> {{result.comments}} Comments</li>
-                                            </ul>
                                         </div>
                                     </div>
                                 </div>
-                                <div ng-switch-when="article">
-                                    <div class="article clearfix">
-                                        <div class="new-picture-frame article-thumbnail">
-                                            <!--<img ng-src ="images/row-of-students.jpg" alt="">-->
-                                            <div thumbnail
-                                                 type="article"
-                                                 text="Read More"
-                                                 thumb=result />
-                                            <a ng-href="#/article">
-                                                <div read-more-hover class="read-more gradient">
-                                                    <p>Read More</p>
-                                                    <div class="read-more-arrow"></div>
+
+                                <div ng-switch-when="resources">
+                                    <div ng-switch on="result.format">
+                                        <div ng-switch-when="document">
+                                            <div class="article clearfix">
+                                                <div class="new-picture-frame content-thumbnail">
+                                                    <!--<img ng-src ="images/document-default.jpg" alt="">-->
+                                                    <div thumbnail
+                                                         type="content"
+                                                         text="Preview"
+                                                         thumb=result />
+                                                    <a ng-href="#/content">
+                                                        <div read-more-hover class="read-more gradient">
+                                                            <p>Preview</p>
+                                                            <div class="preview-lens"></div>
+                                                        </div>
+                                                    </a>
                                                 </div>
-                                            </a>
-                                        </div>
-                                        <div class="content">
-                                            <h4>{{result.title}}</h4>
-                                            <h6>by {{result.author}}, {{result.dateCreated | asDate: 'MM/dd/yyyy'}}</h6>
-                                            <div class="tags">
-                                                <div ng-repeat="tag in result.taggable">
-                                                    <a href="#">{{tag}}</a>
+                                                <div class="content document">
+                                                    <h4>{{result.title}}</h4>
+                                                    <div class="doc-type-thumbnail word"></div><h6>by {{result.author}}, {{result.dateCreated | asDate: 'MM/dd/yyyy'}}</h6>
+                                                    <div class="tags">
+                                                        <div ng-repeat="tag in result.taggable">
+                                                            <a href="#">{{tag}}</a>
+                                                        </div>
+                                                    </div>
+                                                    <p>{{result.description}}</p>
+                                                    <ul class="article-stats">
+                                                        <li>
+                                                            <div class="article-tweet-button">
+                                                                <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
+                                                            </div>
+                                                        </li>
+                                                        <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
+                                                        <li class="muted"><i class="views"></i> {{result.views}} Views</li>
+                                                        <li class="muted"><i class="comments"></i> {{result.comments}} Comments</li>
+                                                    </ul>
                                                 </div>
                                             </div>
-                                            <p>{{result.description}}</p>
-                                            <ul class="article-stats">
-                                                <li>
-                                                    <div class="article-tweet-button">
-                                                        <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
+                                        </div>
+                                        <div ng-switch-when="article">
+                                            <div class="article clearfix">
+                                                <div class="new-picture-frame article-thumbnail">
+                                                    <!--<img ng-src ="images/row-of-students.jpg" alt="">-->
+                                                    <div thumbnail
+                                                         type="article"
+                                                         text="Read More"
+                                                         thumb=result />
+                                                    <a ng-href="#/article">
+                                                        <div read-more-hover class="read-more gradient">
+                                                            <p>Read More</p>
+                                                            <div class="read-more-arrow"></div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                <div class="content">
+                                                    <h4>{{result.title}}</h4>
+                                                    <h6>by {{result.author}}, {{result.dateCreated | asDate: 'MM/dd/yyyy'}}</h6>
+                                                    <div class="tags">
+                                                        <div ng-repeat="tag in result.taggable">
+                                                            <a href="#">{{tag}}</a>
+                                                        </div>
                                                     </div>
-                                                </li>
-                                                <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
-                                                <li class="muted"><i class="views"></i> {{result.views}} Views</li>
-                                                <li class="muted"><i class="comments"></i> {{result.comments}} Comments</li>
-                                            </ul>
+                                                    <p>{{result.description}}</p>
+                                                    <ul class="article-stats">
+                                                        <li>
+                                                            <div class="article-tweet-button">
+                                                                <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
+                                                            </div>
+                                                        </li>
+                                                        <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
+                                                        <li class="muted"><i class="views"></i> {{result.views}} Views</li>
+                                                        <li class="muted"><i class="comments"></i> {{result.comments}} Comments</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                    </div>
-                </li>
-            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="span3">
             <div class="site search-box">

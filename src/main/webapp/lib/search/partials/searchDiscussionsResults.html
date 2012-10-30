@@ -1,32 +1,31 @@
 <div id="discussions" class="content container search-results">
     <div class="row">
         <div class="span8">
+            <div ng-switch on=resultLength>
+                <div ng-switch-when=0>
+                    <div ng-include='"lib/search/partials/emptyResults.html"'></div>
+                </div>
+                <div ng-switch-default>
+                    <h1>Discussion Search Results</h1> <p class="muted"> 10 of {{(results | filter:lengthFilter).length}} results</p>
 
-            <h1>Discussion Search Results</h1> <p class="muted"> 10 of {{(results | filter:lengthFilter).length}} results</p>
+                    <hr>
 
-            <hr>
-
-            <div ng-repeat="result in results">
-                <div class="discussion-stack-container">
-                    <div discussion-stack comments={{result.commentCount}} class="discussion-item grey-gradient">
-                        <a ng-href="#/network/{{result._id}}"><h4>{{result.title}}</h4></a>
-                        <h6>By <a ng-href="#/profiles/view/{{result.creator._id}}">{{result.creator.username}}</a>, {{result.dateCreated | asDate: 'fullDate'}}</h6>
-                        <!--<p class="muted"><strong>Document:</strong> <a href="#/content">Document Title</a></p>-->
-                        <ul class="article-stats">
-                            <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
-                            <li class="muted"><i class="views"></i> {{result.views}} Views</li>
-                            <li class="muted"><i class="comments"></i> {{result.commentCount}} Comments</li>
-                            <li ng-click="flag({{result._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
-                        </ul>
+                    <div ng-repeat="result in results">
+                        <div class="discussion-stack-container">
+                            <div discussion-stack comments={{result.commentCount}} class="discussion-item grey-gradient">
+                                <a ng-href="#/network/{{result._id}}"><h4>{{result.title}}</h4></a>
+                                <h6>By <a ng-href="#/profiles/view/{{result.creator._id}}">{{result.creator.username}}</a>, {{result.dateCreated | asDate: 'fullDate'}}</h6>
+                                <!--<p class="muted"><strong>Document:</strong> <a href="#/content">Document Title</a></p>-->
+                                <ul class="article-stats">
+                                    <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
+                                    <li class="muted"><i class="views"></i> {{result.views}} Views</li>
+                                    <li class="muted"><i class="comments"></i> {{result.commentCount}} Comments</li>
+                                    <li ng-click="flag({{result._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!--<div class="paper-clip"></div>
-                <div class="attached-doc">
-                    <div class="new-picture-frame small content-thumbnail">
-                        <img ng-src ="images/document-default.jpg" alt="">
-                    </div>
-                </div>-->
             </div>
         </div>
         <div class="span3 offset1">

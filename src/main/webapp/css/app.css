@@ -1723,4 +1723,9 @@ li.search-result.members{
     text-transform: none;
 }
 
+.search-results p a{
+    text-decoration: none;
+    color: #eeaf00;
+}
+
 

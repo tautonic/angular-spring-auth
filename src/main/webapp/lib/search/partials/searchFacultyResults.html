@@ -1,30 +1,37 @@
 <div class="content container search-results">
     <div class="row">
         <div class="span9">
-            <h1>Member Search Results</h1> <p class="muted"> 10 of {{(results | filter:lengthFilter).length}} results</p>
+            <div ng-switch on=resultLength>
+                <div ng-switch-when=0>
+                    <div ng-include='"lib/search/partials/emptyResults.html"'></div>
+                </div>
+                <div ng-switch-default>
+                    <h1>Member Search Results</h1> <p class="muted"> 10 of {{(results | filter:lengthFilter).length}} results</p>
 
-            <hr>
+                    <hr>
 
-            <ul class="search-results-list">
-                <li class="search-result members" ng-repeat="result in results">
-                    <div class="profile-list-item profile grey-gradient clearfix">
-                        <!--<div class="new-picture-frame profile-thumbnail large counter-clockwise">
-                            <img class="profile-image large" src="images/rosie.jpeg">
-                        </div>-->
-                        <div thumbnail thumb=result size="large" rotation="counter-clockwise" type="profile" />
-                        <div class="profile-left">
-                            <h3>{{result.name.given}} {{result.name.surname}}</h3>
-                            <h5>{{result.workHistory[0].title}}</h5>
-                            <h5 class="muted">{{result.workHistory[0].businessName}}</h5>                            
-                        </div>
-                        <div class="profile-right">
-                            <h3 class="sans-serif">LATEST ACTIVITY:</h3>
-                            <p><i ng-bind-html-unsafe=result.activity.message></i></p>
-                            <p class="muted">about {{result.activity.dateCreated | timeago}}</p>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+                    <ul class="search-results-list">
+                        <li class="search-result members" ng-repeat="result in results">
+                            <div class="profile-list-item profile grey-gradient clearfix">
+                                <!--<div class="new-picture-frame profile-thumbnail large counter-clockwise">
+                                    <img class="profile-image large" src="images/rosie.jpeg">
+                                </div>-->
+                                <div thumbnail thumb=result size="large" rotation="counter-clockwise" type="profile" />
+                                <div class="profile-left">
+                                    <h3>{{result.name.given}} {{result.name.surname}}</h3>
+                                    <h5>{{result.workHistory[0].title}}</h5>
+                                    <h5 class="muted">{{result.workHistory[0].businessName}}</h5>
+                                </div>
+                                <div class="profile-right">
+                                    <h3 class="sans-serif">LATEST ACTIVITY:</h3>
+                                    <p><i ng-bind-html-unsafe=result.activity.message></i></p>
+                                    <p class="muted">about {{result.activity.dateCreated | timeago}}</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="span3">
             <div class="search-box members">
