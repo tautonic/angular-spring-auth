@@ -133,7 +133,7 @@
         $routeProvider.when( '/view', {
             templateUrl: 'partials/partial1.html'
         } );
-		$routeProvider.otherwise( {redirectTo: '/home'} );
+		$routeProvider.otherwise( {redirectTo: '/error/500'} );
     }
 
     function locationProvider( $locationProvider ){

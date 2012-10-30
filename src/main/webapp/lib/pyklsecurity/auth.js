@@ -289,8 +289,8 @@ var pykl = window.pykl || {};
 	);
 
     pyklSecurity.config( ['$httpProvider',
-		function ( $httpProvider, $rootScope, $q, $log ) {
-			var authInterceptor = ['$rootScope', '$q', '$log',
+		function ( $httpProvider, $rootScope, $q, $location, $log ) {
+			var authInterceptor = ['$rootScope', '$q', '$location', '$log',
 				function ( $rootScope, $q, $log ) {
 					function success( response ) {
 						//$log.info( 'Successful response: ' + JSON.stringify( response ) );
@@ -312,6 +312,12 @@ var pykl = window.pykl || {};
 							$rootScope.$broadcast( EVENT_SIGNIN_REQUIRED );
 							return deferred.promise;
 						}
+                        if( status === 404 ) {
+                            $location.path("error/404");
+                        }
+                        if( status === 500 ) {
+                            $location.path("error/500");
+                        }
 
 						return $q.reject( response );
 					}
