@@ -906,3 +906,16 @@ angular.module('bgc.directives').directive('whenScrolled', function() {
         });
     };
 });
+
+angular.module('bgc.directives').directive('profileModal', function(){
+    return {
+        scope: {
+            profile: '='
+        },
+        link: function(scope, element, attrs){
+            element.bind('click', function(){
+                console.log('Profile name was clicked');
+            });
+        }
+    }
+});

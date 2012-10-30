@@ -5,7 +5,7 @@
                 <div class="profile-list-item profile grey-gradient clearfix">
                     <div thumbnail thumb=profile size="large" rotation="counter-clockwise" type="profile" />
                     <div class="profile-left">
-                        <h3>{{profile.name.given}} {{profile.name.surname}}</h3>
+                        <h3 profile-modal profile=profile>{{profile.name.given}} {{profile.name.surname}}</h3>
                         <h5>{{profile.workHistory[0].title}}</h5>
                         <h5 class="muted">{{profile.workHistory[0].businessName}}</h5>
 

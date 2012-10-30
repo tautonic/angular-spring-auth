@@ -301,7 +301,7 @@ ul.menu li:last-child a {
 }
 
 ul.menu li.dropdown a {
-    margin-top: 5px;
+    margin-top: 8px;
 }
 
 ul.menu li div.dropdown {
@@ -1219,6 +1219,8 @@ li.search-result.members{
     font-weight: bold;
     margin-bottom: 0;
     line-height: 28px;
+    cursor: pointer;
+    display: inline-block;
 }
 
 .profile-left h5{
