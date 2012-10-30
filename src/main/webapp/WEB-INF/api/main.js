@@ -460,6 +460,9 @@ app.get('/profiles/:id', function(req, id){
     result.status = exchange.status;
 
     result.content.isUserFollowing = isUserFollowing(result.content._id);
+    result.content.facultyFellow = result.content.roles.some(function(role) {
+        return role == "ROLE_PREMIUM";
+    });
 
     return json(result);
 });
@@ -528,6 +531,10 @@ app.get('/profiles/', function(req){
         }
 
         profile.activity = latestActivity;
+
+        profile.facultyFellow = profile.roles.some(function(role) {
+            return role == "ROLE_PREMIUM";
+        });
     });
 
     var result = json({
@@ -625,6 +632,10 @@ app.get('/profiles/byprimaryemail/:email', function(req, email){
 
     var exchange = httpclient.request(opts);
 
+    result.content.facultyFellow = result.content.roles.some(function(role) {
+        return role == "ROLE_PREMIUM";
+    });
+
     var result = json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
@@ -644,6 +655,10 @@ app.get('/profiles/byusername/:username', function(req, username){
     };
 
     var exchange = httpclient.request(opts);
+
+    result.content.facultyFellow = result.content.roles.some(function(role) {
+        return role == "ROLE_PREMIUM";
+    });
 
     var result = json({
         'status': exchange.status,
@@ -1020,6 +1035,10 @@ app.post('/search/site/', function(req){
             }
 
             object.activity = latestActivity;
+
+            object.facultyFellow = object.roles.some(function(role) {
+                return role == "ROLE_PREMIUM";
+            });
         }
 
         // We have to get the number of comments for each discussion object
@@ -1121,6 +1140,10 @@ app.post('/search/faculty/', function(req){
         }
 
         profile.activity = latestActivity;
+
+        profile.facultyFellow = profile.roles.some(function(role) {
+            return role == "ROLE_PREMIUM";
+        });
     });
 
     var result = json({

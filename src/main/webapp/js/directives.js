@@ -61,9 +61,7 @@ angular.module( 'bgc.directives', [] )
                 scope.thumbnail = {
                     image: 'images/GCEE_image_profileFemale_135x135.jpeg',
                     text: 'Read More',
-                    style: 'profile-thumbnail large counter-clockwise',
-                    facultyFellow: false,
-                    premium: false
+                    style: 'profile-thumbnail large counter-clockwise'
                 }
 
                 if(attr.type === 'profile' || !attr.type){
