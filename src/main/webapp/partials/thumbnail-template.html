@@ -34,9 +34,11 @@
             <div ng-switch on=thumb.thumbnail>
                 <div ng-switch-when="profiles-0000-0000-0000-000000000001">
                     <img class="profile-image {{thumbnail.size}}" ng-src="images/GCEE_image_profileMale_135x135.jpeg" alt="">
+                    <div class="premium" ng-show="thumb.facultyFellow"></div>
                 </div>
                 <div ng-switch-default>
                     <img class="profile-image {{thumbnail.size}}" ng-src="{{thumb.thumbnail}}" alt="">
+                    <div class="premium" ng-show="thumb.facultyFellow"></div>
                 </div>
             </div>
         </div>
