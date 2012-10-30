@@ -132,7 +132,7 @@ app.get('/article/:id', function(req, id) {
 
     if(article.success) {
         var servletRequest = req.env.servletRequest;
-        if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+        if( (article.content.premium) && (!servletRequest.isUserInRole('ROLE_ADMIN')) )
         {
             log.info("User does not have access to full article content.");
             delete article.content.content;
@@ -1014,6 +1014,9 @@ app.post('/search/site/', function(req){
             var comment = JSON.parse(discussionExchange.content);
 
             object.commentCount = comment.count;
+        }
+        if(object.dataType === 'resources') {
+            object.premium = (object.roles.some(function(element) { return element == "ROLE_PREMIUM"; }));
         }
     });
 

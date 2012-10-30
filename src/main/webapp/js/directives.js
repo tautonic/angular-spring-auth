@@ -62,7 +62,8 @@ angular.module( 'bgc.directives', [] )
                     image: 'images/GCEE_image_profileFemale_135x135.jpeg',
                     text: 'Read More',
                     style: 'profile-thumbnail large counter-clockwise',
-                    facultyFellow: false
+                    facultyFellow: false,
+                    premium: false
                 }
 
                 if(attr.type === 'profile' || !attr.type){
