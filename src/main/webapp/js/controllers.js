@@ -86,6 +86,26 @@ function verifyEmailController($rootScope, $scope, $routeParams, $http){
         });
 }
 
+function forgotUsernameController($rootScope, $scope, $location, $http){
+    $rootScope.banner = 'none';
+    $rootScope.about = 'signup';
+
+    $scope.send = function(){
+        $http.post('api/utility/sendusername/' + $scope.email)
+            .success(function(data, status, headers, config){
+                $location.path('/usernamesendsuccess');
+            })
+            .error(function(data, status, headers, config){
+                console.log('SEND USERNAME ERROR!');
+            });
+    }
+}
+
+function forgotPasswordController($rootScope, $scope, $http){
+    $rootScope.banner = 'none';
+    $rootScope.about = 'signup';
+}
+
 
 function MyCtrl2( $rootScope, $scope, $http, $log ) {
 	$scope.protected = 'Not loaded';

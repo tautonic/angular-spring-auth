@@ -114,6 +114,22 @@
             controller: 'verifyEmailController'
         } );
 
+        $routeProvider.when( '/forgotusername', {
+            templateUrl: 'partials/forgotusername.html',
+            controller: 'forgotUsernameController'
+        } );
+
+        $routeProvider.when( '/usernamesendsuccess', {
+            templateUrl: 'partials/usernamesendsuccess.html',
+            controller: 'forgotUsernameController'
+        } );
+
+
+        $routeProvider.when( '/forgotpassword', {
+            templateUrl: 'partials/forgotpassword.html',
+            controller: 'forgotPasswordController'
+        } );
+
         $routeProvider.when( '/view', {
             templateUrl: 'partials/partial1.html'
         } );
