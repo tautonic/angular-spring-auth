@@ -207,8 +207,8 @@ input, button, select, textarea {
 }
 
 .profile-modal{
-    width: 900px;
-    height: 800px;
+    width: 800px;
+    height: 600px;
 }
 
 .profile-modal .left,
@@ -218,7 +218,7 @@ input, button, select, textarea {
 }
 
 .profile-modal .left{
-    width: 22%;
+    width: 15%;
     float: left;
 }
 
