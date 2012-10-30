@@ -923,6 +923,30 @@ app.get('/utility/verifyemail/:token', function(req, token){
     return result;
 });
 
+app.post('/utility/sendusername/:email', function(req, email){
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/email/sendusername/' + email,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    console.log('EXCHANGE STATUS!!! ', exchange.status);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
+});
+
 // GCEE global search
 app.post('/search/site/', function(req){
     var url = 'http://localhost:9300/myapp/api/search/';
