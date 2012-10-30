@@ -1,12 +1,15 @@
 'use strict';
-function ListResources( $rootScope, $scope, $auth, $http, $log ) {
+function ListResources( $rootScope, $scope, $auth, $http, $log, $routeParams ) {
     var url = "api/article/search/";
     $scope.filters = {};
     $scope.paging = {
         size: 10
     };
+
     loadContent();
     //resetPaging();
+
+    $rootScope.service = 'curriculum';
 
     function loadContent() {
         resetPaging();

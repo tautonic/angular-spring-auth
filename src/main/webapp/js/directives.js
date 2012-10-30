@@ -907,3 +907,14 @@ angular.module('bgc.directives').directive('whenScrolled', function() {
         });
     };
 });
+
+angular.module('bgc.directives').directive('secondaryNav', ['$compile', function($compile){
+    return {
+        link: function(scope, element, attr){
+            element.bind('click', function(){
+                element.children('a').addClass('active-secondary');
+                $compile(element)(scope);
+            });
+        }
+    }
+}]);

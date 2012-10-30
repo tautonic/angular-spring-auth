@@ -106,6 +106,34 @@ function forgotPasswordController($rootScope, $scope, $http){
     $rootScope.about = 'signup';
 }
 
+function servicesProgramsController($rootScope, $scope, $routeParams){
+    $rootScope.about = 'service';
+    $rootScope.service = $routeParams.service;
+
+    //$rootScope.serviceTitle = 'Access To Babson Curriculum';
+
+    switch($routeParams.service){
+        case 'access':
+            $rootScope.serviceTitle = 'Access To Babson Curriculum';
+            break;
+        case 'facultydev':
+            $rootScope.serviceTitle = 'Faculty Development';
+            break;
+        case 'nextopp':
+            $rootScope.serviceTitle = 'Next Opportunity';
+            break;
+        case 'handbook':
+            $rootScope.serviceTitle = 'Handbook';
+            break;
+        case 'entrepreneurship':
+            $rootScope.serviceTitle = 'Entrepreneurship Center Development';
+            break;
+        case 'gceemsce':
+            $rootScope.serviceTitle = 'GCEE MSCE';
+            break;
+    }
+}
+
 
 function MyCtrl2( $rootScope, $scope, $http, $log ) {
 	$scope.protected = 'Not loaded';

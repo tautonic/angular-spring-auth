@@ -12,7 +12,7 @@
         //babson college pages
         $routeProvider.when( '/msce', {
 			templateUrl: 'partials/msce.html'
-		} );
+        } );
         $routeProvider.when( '/faculty', {
 			templateUrl: 'partials/faculty.html',
             controller: 'facultyFellows'
@@ -21,6 +21,11 @@
 			templateUrl: 'lib/pyklresource/partials/list.html',
             controller: 'ListResources'
 		} );
+
+        $routeProvider.when( '/content/service/:service', {
+            templateUrl: 'lib/pyklresource/partials/list.html',
+            controller: 'servicesProgramsController'
+        } );
         //using the index here because individual content/articles can have discussions attached to them, and this makes that happen
         //so there can't really be a single controller set here
         $routeProvider.when( '/content/:articleId', {
@@ -133,7 +138,7 @@
         $routeProvider.when( '/view', {
             templateUrl: 'partials/partial1.html'
         } );
-		$routeProvider.otherwise( {redirectTo: '/error/500'} );
+		$routeProvider.otherwise( {redirectTo: '/error/404'} );
     }
 
     function locationProvider( $locationProvider ){
