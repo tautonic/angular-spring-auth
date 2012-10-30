@@ -793,7 +793,7 @@ ul.dropdown-menu li:last-child a {
 .profile-thumbnail{
     display: inline-block;
     position: absolute;
-    z-index: 2000;
+    z-index: 1025;
 }
 
 .profile-list-item .profile-thumbnail{
@@ -1728,6 +1728,10 @@ li.search-result.members{
 .search-results p a{
     text-decoration: none;
     color: #eeaf00;
+}
+
+.modal{
+    width: 900px;
 }
 
 
