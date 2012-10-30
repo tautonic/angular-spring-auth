@@ -145,8 +145,8 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
         if (post === undefined) {
             return false;
         }
-         console.log("POST INFO",post);
-        return (post.creator._id == $rootScope.auth.id);
+
+        return (post.creator._id == $auth.id);
     };
 
     $scope.edit = function (post) {
@@ -167,6 +167,10 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
             console.log("edit saved successfully to server, url: " + url + "/" + post._id);
         });
     };
+
+    $scope.editFormInvalid = function(scope) {
+        return scope.editForm.$invalid;
+    }
 
     /*
      $rootScope.$on('event:loginConfirmed', function() { loadContent(); });

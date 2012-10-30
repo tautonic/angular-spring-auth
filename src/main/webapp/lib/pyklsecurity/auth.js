@@ -167,7 +167,7 @@ var pykl = window.pykl || {};
 						$rootScope.auth.isAuthenticated =
 								(data && (data.username != null) && (data.username != 'anonymousUser'));
 						roles = data.roles;
-                        $rootScope.auth.id = data._id;
+                        $rootScope.auth.id = data.principal.id;
 						$log.info('Received successful auth response:', data);
 					} )
 					.error( function ( data, status, headers, config ) {
@@ -219,6 +219,11 @@ var pykl = window.pykl || {};
 				return $rootScope.auth.username;
 			}
 		});
+        Object.defineProperty(result, 'id', {
+            get: function() {
+                return $rootScope.auth.id;
+            }
+        });
 		return result;
 	}] );
 
