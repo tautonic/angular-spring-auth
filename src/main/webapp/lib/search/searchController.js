@@ -17,6 +17,8 @@ function SearchSite($rootScope, $scope, $routeParams, $location, Search) {
 
     var results = Search.site({type: 'site'}, data, function(response){
         $scope.results = response.content;
+        $scope.resultLength = response.content.length;
+        $scope.query = $routeParams.query;
     }, function(response){
         console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
@@ -31,6 +33,8 @@ function SearchContent($scope, $routeParams, $location, Search) {
 
     var results = Search.content({type: 'content'}, data, function(response){
         $scope.results = response.content;
+        $scope.resultLength = response.content.length;
+        $scope.query = $routeParams.query;
     }, function(response){
         console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
@@ -48,6 +52,8 @@ function SearchDiscussions($rootScope, $scope, $routeParams, $location, Search) 
 
     var results = Search.discussions({type: 'discussions'}, data, function(response){
         $scope.results = response.content;
+        $scope.resultLength = response.content.length;
+        $scope.query = $routeParams.query;
     }, function(response){
         console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
@@ -65,6 +71,8 @@ function SearchProfiles($rootScope, $scope, $routeParams, $location, Search) {
 
     var results = Search.faculty({type: 'faculty'}, data, function(response){
         $scope.results = response.content;
+        $scope.resultLength = response.content.length;
+        $scope.query = $routeParams.query;
     }, function(response){
         console.log('Faculty search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
