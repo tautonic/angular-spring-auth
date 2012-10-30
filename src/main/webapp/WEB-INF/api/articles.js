@@ -131,7 +131,7 @@ var getArticle = function(id) {
     }
 
     result.content.doctype = getDocType(result.content.mimetype);
-    result.premium = (result.roles.some(function(element) { return element == "ROLE_PREMIUM"; }));
+    result.content.premium = (result.content.roles.some(function(element) { return element == "ROLE_PREMIUM"; }));
 
     return result;
 }
