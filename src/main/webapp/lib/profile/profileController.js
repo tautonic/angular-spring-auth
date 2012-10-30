@@ -10,6 +10,55 @@ function listProfiles($rootScope, $scope, $http, Profile){
         $rootScope.banner = 'faculty';
     });
 
+    $scope.showModal = false;
+
+    $scope.profileModal = {
+        name: '',
+        title: '',
+        email: '',
+        institution: '',
+        location: '',
+        thumbnail: '',
+        education: {},
+        notes: '',
+        activity: {}
+    }
+
+    $scope.showProfileModal = function(profile){
+        $scope.showModal = true;
+
+        var thumbnail = profile.thumbnail === 'profiles-0000-0000-0000-000000000001' ?  'images/GCEE_image_profileMale_135x135.jpeg' : profile.thumbnail;
+        var yearFinished = profile.workHistory[0].yearFinished.gregorian === '' ? 'present' : profile.workHistory[0].yearFinished.gregorian;
+
+        $scope.profileModal = {
+            name: profile.name.fullName,
+            title: profile.workHistory[0].title,
+            contact: {
+                email: profile.accountEmail.address,
+                website: {
+                    title: profile.websites[0].title,
+                    url: profile.websites[0].url
+                }
+            },
+            institution: {
+                name: profile.workHistory[0].businessName,
+                location: profile.workHistory[0].location,
+                yearStarted: profile.workHistory[0].yearStarted.gregorian,
+                yearFinished: yearFinished
+            },
+            thumbnail: thumbnail,
+            education: {
+                name: profile.educationHistory[0].schoolName,
+                fieldOfStudy: profile.educationHistory[0].fieldOfStudy,
+                country: profile.educationHistory[0].country,
+                yearFrom: profile.educationHistory[0].yearFrom.gregorian,
+                yearTo: profile.educationHistory[0].yearTo.gregorian
+            },
+            notes: profile.about,
+            activity: profile.activity
+        }
+    }
+
     Profile.query(function(profiles){
         $scope.profiles = profiles.content;
     });
