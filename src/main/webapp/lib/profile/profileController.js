@@ -10,7 +10,7 @@ function listProfiles($rootScope, $scope, $http, Profile){
         $rootScope.banner = 'faculty';
     });
 
-    $scope.modalShown = false
+    $scope.showModal = false;
 
     $scope.profileModal = {
         name: '',
@@ -25,7 +25,7 @@ function listProfiles($rootScope, $scope, $http, Profile){
     }
 
     $scope.showProfileModal = function(profile){
-        $scope.modalShown = true;
+        $scope.showModal = true;
 
         var thumbnail = profile.thumbnail === 'profiles-0000-0000-0000-000000000001' ?  'images/GCEE_image_profileMale_135x135.jpeg' : profile.thumbnail;
         var yearFinished = profile.workHistory[0].yearFinished.gregorian === '' ? 'present' : profile.workHistory[0].yearFinished.gregorian;
