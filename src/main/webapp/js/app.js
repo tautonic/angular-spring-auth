@@ -21,15 +21,15 @@
 			templateUrl: 'lib/pyklresource/partials/list.html',
             controller: 'ListResources'
 		} );
-
-        $routeProvider.when( '/content/service/:service', {
-            templateUrl: 'lib/pyklresource/partials/list.html',
-            controller: 'servicesProgramsController'
-        } );
         //using the index here because individual content/articles can have discussions attached to them, and this makes that happen
         //so there can't really be a single controller set here
         $routeProvider.when( '/content/:articleId', {
             templateUrl: 'lib/pyklresource/index.html'
+        } );
+
+        $routeProvider.when( '/content/service/:service', {
+            templateUrl: 'lib/pyklresource/partials/list.html',
+            controller: 'servicesProgramsController'
         } );
 
         //by default, the network page lists discussions. This is for that
