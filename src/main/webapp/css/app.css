@@ -1747,12 +1747,11 @@ li.search-result.members{
 
 .profile-summary.modal{
     width: 800px;
-    top: 0;
     margin-left: -400px;
 }
 
 .profile-summary.modal.fade.in{
-    top: 25%;
+    top: 50%;
 }
 
 .services-secondary-nav{

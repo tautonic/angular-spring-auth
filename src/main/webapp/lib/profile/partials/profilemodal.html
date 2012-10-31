@@ -1,0 +1,49 @@
+<div class="hide profile-summary" ng-model="showModal">
+    <div class="profile-modal profile">
+        <div class="left clearfix">
+            <div class="new-picture-frame profile-thumbnail large counter-clockwise">
+                <img class="profile-image large" ng-src="{{profileModal.thumbnail}}" alt="">
+            </div>
+        </div>
+        <div class="center clearfix">
+            <h3>{{profile.fullName}}</h3>
+            <h5>{{profileModal.title}}</h5>
+            <h5 class="muted">{{profileModal.institution.name}}</h5>
+
+            <div class="btn-group-border">
+                <div class="btn-group bgc">
+                    <button class="btn btn-success">Follow</button>
+                    <a class="btn btn-success" ng-href="">Full Profile</a>
+                </div>
+            </div>
+
+            <h3 class="sans-serif">CONTACT</h3>
+            <p><strong>Email: </strong>{{profileModal.contact.email}}</p>
+            <p><strong>Website: </strong><a ng-href="{{profileModal.contact.website.url}}">{{profileModal.contact.website.title}}</a></p>
+
+            <h3 class="sans-serif">INSTITUTION</h3>
+            <p><strong>Title: </strong>{{profileModal.institution.name}}</p>
+            <p><strong>Location: </strong>{{profileModal.institution.location}}</p>
+            <p><strong>{{profileModal.institution.yearStarted}} - {{profileModal.institution.yearFinished}}</strong></p>
+
+            <h3 class="sans-serif">EDUCATION</h3>
+            <p><strong>Institution Name: </strong>{{profileModal.education.name}}</p>
+            <p><strong>Field of Study: </strong>{{profileModal.education.fieldOfStudy}}</p>
+            <p><strong>Country: </strong>{{profileModal.education.country}}</p>
+            <p><strong>{{profileModal.education.yearFrom}} - {{profileModal.education.yearTo}}</strong></p>
+
+            <p class="notes"><strong>Notes: </strong><i>{{profileModal.notes}}</i></p>
+
+        </div>
+        <div class="right clearfix">
+            <div class="close-modal"></div>
+            <h3 class="sans-serif">RECENT ACTIVITY</h3>
+            <ul class="activity-list">
+                <li class="update">
+                    <p><i ng-bind-html-unsafe=profileModal.activity.message></i></p>
+                    <p class="muted">about {{profileModal.activity.dateCreated | timeago}}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
