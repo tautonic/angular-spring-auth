@@ -5,7 +5,7 @@
  * Time: 11:10 AM
  * To change this template use File | Settings | File Templates.
  */
-function listProfiles($rootScope, $scope, $http, Profile, $window){
+function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'faculty';
     });
@@ -31,8 +31,9 @@ function listProfiles($rootScope, $scope, $http, Profile, $window){
         var yearFinished = profile.workHistory[0].yearFinished.gregorian === '' ? 'present' : profile.workHistory[0].yearFinished.gregorian;
 
         $scope.profileModal = {
+            id: profile._id,
             name: profile.name.fullName,
-            title: profile.workHistory[0].title,
+            title: profile.workHistory[0].title || '',
             contact: {
                 email: profile.accountEmail.address,
                 website: {
@@ -55,8 +56,26 @@ function listProfiles($rootScope, $scope, $http, Profile, $window){
                 yearTo: profile.educationHistory[0].yearTo.gregorian
             },
             notes: profile.about,
-            activity: profile.activity
+            activity: profile.activity,
+            isUserFollowing: profile.isUserFollowing
         }
+    }
+
+    $scope.closeProfileModal = function(path) {
+        $scope.showModal = false;
+        if(path !== undefined) {
+            $location.path(path + $scope.profileModal.id);
+        }
+    }
+
+    $scope.followUser = function(id) {
+        $http.post('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
+            $scope.profileModal.isUserFollowing = data.success;
+        });
+    }
+
+    $scope.canEditProfile = function() {
+        return ( ($rootScope.auth.id == $scope.profileModal.id) || ($rootScope.auth.isUserInRole("ROLE_ADMIN")) );
     }
 
     Profile.query(function(profiles){
