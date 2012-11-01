@@ -10,6 +10,8 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
         $rootScope.banner = 'faculty';
     });
 
+    //$rootScope.showModal = false;
+
     $scope.showModal = false;
 
     $scope.profileModal = {
@@ -24,15 +26,59 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
         activity: {}
     }
 
+    $scope.$on('hideModal', function(event){
+        event.currentScope.showModal = false;
+    });
+
     $scope.showProfileModal = function(profile){
         $scope.showModal = true;
 
         var thumbnail = profile.thumbnail === 'profiles-0000-0000-0000-000000000001' ?  'images/GCEE_image_profileMale_135x135.jpeg' : profile.thumbnail;
+
+        var website = {
+            title: '',
+            url: ''
+        };
+
+        if(!profile.websites){
+            profile.websites = [{
+                title: '',
+                url: ''
+            }];
+        }
+
+        if(!profile.educationHistory){
+            profile.educationHistory = [{
+                schoolName: '',
+                fieldOfStudy: '',
+                country: '',
+                yearFrom: {
+                    gregorian: ''
+                },
+                yearTo: {
+                    gregorian: ''
+                }
+            }];
+        }
+
+        if(!profile.workHistory){
+            profile.workHistory = [{
+                businessName: '',
+                location: '',
+                yearStarted: {
+                    gregorian: ''
+                },
+                yearFinished: {
+                    gregorian: ''
+                }
+            }];
+        }
+
         var yearFinished = profile.workHistory[0].yearFinished.gregorian === '' ? 'present' : profile.workHistory[0].yearFinished.gregorian;
 
         $scope.profileModal = {
             id: profile._id,
-            name: profile.name.fullName,
+            name: profile.name.given + ' ' + profile.name.surname,
             title: profile.workHistory[0].title || '',
             contact: {
                 email: profile.accountEmail.address,

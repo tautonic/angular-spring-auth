@@ -627,6 +627,7 @@ angular.module('ui.directives')
     restrict: 'EAC',
     require: 'ngModel',
     link: function(scope, elm, attrs, model) {
+      var scope = scope;
       //helper so you don't have to type class="modal hide"
       elm.addClass('modal hide');
       scope.$watch(attrs.ngModel, function(value) {
@@ -639,7 +640,8 @@ angular.module('ui.directives')
       });
       elm.on('hide.ui', function() {
         $timeout(function() {
-          model.$setViewValue(false);
+          //model.$setViewValue(false);
+            scope.$emit('hideModal');
         });
       });
     }

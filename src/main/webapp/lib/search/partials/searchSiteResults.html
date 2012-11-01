@@ -22,7 +22,7 @@
                                         </div>-->
                                         <div thumbnail thumb=result._source size="large" rotation="counter-clockwise" type="profile" />
                                         <div class="profile-left">
-                                            <h3>{{result._source.name.fullName}}</h3>
+                                            <h3>{{result._source.name.given}} {{result._source.name.surname}}</h3>
                                             <h5>{{result._source.workHistory[0].title}}</h5>
                                             <h5 class="muted">{{result._source.workHistory[0].businessName}}</h5>
                                         </div>

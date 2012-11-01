@@ -12,7 +12,7 @@
                 <div class="info contact">
                     <h3 class="sans-serif">
                         CONTACT
-                        <div ng-switch on=profile.isProfileOwner>
+                        <div ng-switch on=profile.userCanEdit>
                             <div ng-switch-when=true>
                                 <div ng-click="$parent.showHideContact=!showHideContact" class="edit"><i class="icon-pencil"></i> Edit Section</div>
                             </div>
@@ -22,7 +22,7 @@
                     <p><strong>Website: </strong><a ng-href="{{profile.websites[0].url}}">{{profile.websites[0].title}}</a></p>
                 </div>
 
-                <div ng-switch on=profile.isProfileOwner>
+                <div ng-switch on=profile.userCanEdit>
                     <div ng-switch-when=true>
                         <form ui-toggle="showHideContact" name="editContact" class="form-horizontal" novalidate>
                             <h3 class="sans-serif">EDIT CONTACT INFO</h3>
@@ -63,7 +63,7 @@
 
                 <div class="info institution">
                     <h3 class="sans-serif">INSTITUTION
-                        <div ng-switch on=profile.isProfileOwner>
+                        <div ng-switch on=profile.userCanEdit>
                             <div ng-switch-when=true>
                                 <div ng-click="$parent.showHideInstitution=!showHideInstitution" class="edit"><i class="icon-pencil"></i> Edit Section</div>
                             </div>
@@ -74,7 +74,7 @@
                     <p><strong>{{profile.workHistory[0].yearStarted.gregorian}} - {{profile.workHistory[0].yearFinished.gregorian}}</strong></p>
                 </div>
 
-                <div ng-switch on=profile.isProfileOwner>
+                <div ng-switch on=profile.userCanEdit>
                     <div ng-switch-when=true>
                         <form ui-toggle="showHideInstitution" name="editInstitution" class="form-horizontal" novalidate>
                             <h3 class="sans-serif">EDIT INSTITUTION INFO</h3>
@@ -122,7 +122,7 @@
 
                 <div class="info education">
                     <h3 class="sans-serif">EDUCATION
-                        <div ng-switch on=profile.isProfileOwner>
+                        <div ng-switch on=profile.userCanEdit>
                             <div ng-switch-when=true>
                                 <div ng-click="$parent.showHideEducation=!showHideEducation" class="edit"><i class="icon-pencil"></i> Edit Section</div>
                             </div>
@@ -134,7 +134,7 @@
                     <p><strong>{{profile.educationHistory[0].yearFrom.gregorian}} - {{profile.educationHistory[0].yearTo.gregorian}}</strong></p>
                 </div>
 
-                <div ng-switch on=profile.isProfileOwner>
+                <div ng-switch on=profile.userCanEdit>
                     <div ng-switch-when=true>
                         <form ui-toggle="showHideEducation" name="editEducation" class="form-horizontal" novalidate>
                             <h3 class="sans-serif">EDIT EDUCATION INFO</h3>
@@ -185,7 +185,7 @@
                     </div>
                 </div>
 
-                <div ng-switch on=profile.isProfileOwner>
+                <div ng-switch on=profile.userCanEdit>
                     <div ng-switch-when=true>
                         <h3 class="sans-serif"><div style="padding-right: 1em;" ng-click="$parent.showHideNotes=!showHideNotes" class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
                     </div>
@@ -193,7 +193,7 @@
                 <br>
                 <p class="notes"><strong>Notes: </strong><i>{{profile.about}}</i></p>
 
-                <div ng-switch on=profile.isProfileOwner>
+                <div ng-switch on=profile.userCanEdit>
                     <div ng-switch-when=true>
                         <form ui-toggle="showHideNotes" name="editNotes" class="form-horizontal" novalidate>
                             <h3 class="sans-serif">EDIT NOTES</h3>

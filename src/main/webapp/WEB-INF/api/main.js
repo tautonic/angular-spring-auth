@@ -454,16 +454,16 @@ app.post('/profiles/', function(req){
 
 app.get('/profiles/:id', function(req, id){
     var user = getUserDetails();
-    var isProfileOwner;
+    var userCanEdit;
 
     log.info('Current user details {}', JSON.stringify(user, null, 4));
 
     if(user.roles[0] === "role_anonymous"){
-        isProfileOwner = false;
+        userCanEdit = false;
     }
 
     if(user.principal.id === id){
-        isProfileOwner = true;
+        userCanEdit = true;
     }
 
     var opts = {
@@ -484,7 +484,7 @@ app.get('/profiles/:id', function(req, id){
 
     result.status = exchange.status;
 
-    result.content.isProfileOwner = isProfileOwner;
+    result.content.userCanEdit = userCanEdit;
     result.content.isUserFollowing = isUserFollowing(result.content._id);
     result.content.facultyFellow = result.content.roles.some(function(role) {
         return role == "ROLE_PREMIUM";
