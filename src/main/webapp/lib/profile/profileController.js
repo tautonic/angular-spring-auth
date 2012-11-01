@@ -87,7 +87,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
     });
-    $scope.recoveryAddress = "dill@pykl.com";
+
     var profile = Profile.get({profileId: $routeParams.profileId},
         function(){
             if(profile.status === 400){
@@ -101,21 +101,6 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             }
         }
     );
-
-    $scope.reset = function(){
-        var data = {
-            profileEmail: $scope.recoveryAddress
-        }
-
-        $http.post('/gc/api/utility/resettoken/', data)
-            .success(function(data, status, headers, config){
-                $scope.showResetForm = false;
-                $scope.showSuccess = true;
-            }
-        ).error(function(data, status, headers, config){
-                $scope.showError = true;
-            });
-    }
 
     $scope.delete = function(profile){
         Profile.delete({profileId: profile._id}, function(){

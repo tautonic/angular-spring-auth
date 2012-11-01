@@ -80,9 +80,6 @@
             controller: 'createProfile'
         } );
 
-        $routeProvider.when('/passwordtoken/:token', {
-            templateUrl: 'lib/profile/profile.html'
-        });
 
         $routeProvider.when( '/search/profiles/:query', {
             templateUrl: 'lib/search/partials/searchFacultyResults.html',
@@ -134,6 +131,14 @@
             templateUrl: 'partials/forgotpassword.html',
             controller: 'forgotPasswordController'
         } );
+        $routeProvider.when( '/passswordsendsuccess', {
+            templateUrl: 'partials/passwordsendsuccess.html',
+            controller: 'forgotPasswordController'
+        } );
+        $routeProvider.when('/passwordtoken/:token', {
+            templateUrl: 'partials/passwordtoken.html',
+            controller: 'resetPasswordController'
+        });
 
         $routeProvider.when( '/view', {
             templateUrl: 'partials/partial1.html'
