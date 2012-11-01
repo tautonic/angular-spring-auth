@@ -441,6 +441,19 @@ app.post('/profiles/', function(req){
 });
 
 app.get('/profiles/:id', function(req, id){
+    var user = getUserDetails();
+    var isProfileOwner;
+
+    log.info('Current user details {}', JSON.stringify(user, null, 4));
+
+    if(user.roles[0] === "role_anonymous"){
+        isProfileOwner = false;
+    }
+
+    if(user.principal.id === id){
+        isProfileOwner = true;
+    }
+
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
         method: 'GET',
@@ -459,6 +472,7 @@ app.get('/profiles/:id', function(req, id){
 
     result.status = exchange.status;
 
+    result.content.isProfileOwner = isProfileOwner;
     result.content.isUserFollowing = isUserFollowing(result.content._id);
     result.content.facultyFellow = result.content.roles.some(function(role) {
         return role == "ROLE_PREMIUM";
@@ -567,7 +581,8 @@ app.put('/profiles/:id', function(req, id){
         "educationHistory" : req.postParams.educationHistory,
         "websites" : req.postParams.websites,
         "workHistory" : req.postParams.workHistory,
-        "thumbnail": req.postParams.thumbnail
+        "thumbnail": req.postParams.thumbnail,
+        "about": req.postParams.about
     };
 
     if(req.postParams.newPass !== ''){

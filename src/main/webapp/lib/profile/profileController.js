@@ -84,6 +84,9 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
 }
 
 function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $http, Profile){
+    $scope.profile = {};
+    $scope.master = {};
+
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
         $rootScope.about = 'none';
@@ -94,40 +97,82 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             if(profile.status === 400){
                 $location.path('/error/404');
             }else{
+                $scope.showHideContact = false;
+                $scope.showHideInstitution = false;
+                $scope.showHideEducation = false;
+                $scope.showHideNotes = false;
                 $scope.profile = profile.content;
-
-                /*if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001' || $scope.profile.thumbnail === null){
-                    $scope.profile.thumbnail = "http://dummyimage.com/160"
-                }*/
+                $scope.master = angular.copy($scope.profile);
             }
         }
     );
 
-    $scope.reset = function(){
-        var data = {
-            profileEmail: $scope.recoveryAddress
-        }
+    $scope.updateContactInfo = function(profile){
+        Profile.update({profileId: profile._id}, profile, function(response){
+            $scope.showHideContact = false;
+            $scope.profile = response;
+            $scope.responseContent = response;
+            $scope.master = angular.copy($scope.profile);
+        }, function(response){
+            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
+            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
+    };
 
-        $http.post('/gc/api/utility/resettoken/', data)
-            .success(function(data, status, headers, config){
-                $scope.showResetForm = false;
-                $scope.showSuccess = true;
-            }
-        ).error(function(data, status, headers, config){
-                $scope.showError = true;
-            });
+    $scope.cancelContactInfoUpdate = function(){
+        $scope.showHideContact = false;
+        $scope.profile = $scope.master;
+    };
+
+    $scope.updateInstitutionInfo = function(profile){
+        Profile.update({profileId: profile._id}, profile, function(response){
+            $scope.showHideInstitution = false;
+            $scope.profile = response;
+            $scope.responseContent = response;
+            $scope.master = angular.copy($scope.profile);
+        }, function(response){
+            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
+            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
     }
 
-    $scope.delete = function(profile){
-        Profile.delete({profileId: profile._id}, function(){
-            $timeout(function(){
-                $location.path('/profiles/');
-            }, 1000);
+    $scope.cancelInstitutionInfoUpdate = function(){
+        $scope.showHideInstitution = false;
+        $scope.profile = $scope.master;
+    }
 
+    $scope.updateEducationInfo = function(profile){
+        Profile.update({profileId: profile._id}, profile, function(response){
+            $scope.showHideEducation = false;
+            $scope.profile = response;
+            $scope.responseContent = response;
+            $scope.master = angular.copy($scope.profile);
         }, function(response){
-            $scope.responseContent = 'DELETE FAILED WITH AN ERROR OF: ' + response.status;
-            console.log('DELETE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
+            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
+    }
+
+    $scope.cancelEducationInfoUpdate = function(){
+        $scope.showHideEducation = false;
+        $scope.profile = $scope.master;
+    }
+
+    $scope.updateNotes = function(profile){
+        Profile.update({profileId: profile._id}, profile, function(response){
+            $scope.showHideNotes = false;
+            $scope.profile = response;
+            $scope.responseContent = response;
+            $scope.master = angular.copy($scope.profile);
+        }, function(response){
+            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
+            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
+    };
+
+    $scope.cancelNotesUpdate = function(){
+        $scope.showHideNotes = false;
+        $scope.profile = $scope.master;
     }
 
     $scope.followUser = function(id) {

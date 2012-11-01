@@ -1846,7 +1846,7 @@ li.search-result.members{
 .profile-full{
     position: relative;
     border: 1px solid #E8E8E8;
-    margin: 2em 0;
+    margin: 3em 0;
     padding-bottom: 1em;
 }
 
@@ -1855,13 +1855,18 @@ li.search-result.members{
 }
 
 .profile-full .profile-thumbnail{
-    top: -10px;
-    left: -10px;
+    top: -27px;
+    left: 3px;
 }
 
 .profile-full .info,
 .profile-full p.notes{
     padding: 0 1em;
+}
+
+.profile .info a{
+    text-decoration: none;
+    color: #eeaf00;
 }
 
 .profile-full .info p{
@@ -1897,6 +1902,10 @@ li.search-result.members{
     color: #c0c0c0;
     font-size: 12px;
     cursor: pointer;
+}
+
+.profile.search-box{
+    margin-top: 3em;
 }
 
 .profile-full form{
