@@ -10,12 +10,12 @@
                 </div>
 
                 <div class="info contact">
-                    <h3 class="sans-serif">CONTACT <div class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
+                    <h3 class="sans-serif">CONTACT <div ng-click="showHideContact=!showHideContact" class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
                     <p><strong>Email: </strong>{{profile.accountEmail.address}}</p>
                     <p><strong>Website: </strong><a ng-href="{{profile.websites[0].url}}">{{profile.websites[0].title}}</a></p>
                 </div>
 
-                <form name="editContact" class="form-horizontal" novalidate>
+                <form ui-toggle="showHideContact" name="editContact" class="form-horizontal" novalidate>
                     <h3 class="sans-serif">EDIT CONTACT INFO</h3>
                     <div class="control-group">
                         <label class="control-label" for="email">Email:</label>
@@ -36,27 +36,149 @@
                             <input type="text" id="website-url" value={{profile.websites[0].url}} placeholder="Website">
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            <div class="btn-group-border">
+                                <div class="btn-group bgc">
+                                    <button class="btn btn-success">Save</button>
+                                    <button class="btn btn-success">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
 
                 <div class="info institution">
-                    <h3 class="sans-serif">INSTITUTION <div class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
+                    <h3 class="sans-serif">INSTITUTION <div ng-click="showHideInstitution=!showHideInstitution" class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
                     <p><strong>Title: </strong>{{profile.workHistory[0].businessName}}</p>
                     <p><strong>Location: </strong>{{profile.workHistory[0].location}}</p>
                     <p><strong>{{profile.workHistory[0].yearStarted.gregorian}} - {{profile.workHistory[0].yearFinished.gregorian}}</strong></p>
-
                 </div>
+
+                <form ui-toggle="showHideInstitution" name="editInstitution" class="form-horizontal" novalidate>
+                    <h3 class="sans-serif">EDIT INSTITUTION INFO</h3>
+                    <div class="control-group">
+                        <label class="control-label" for="institution-title">Title:</label>
+                        <div class="controls">
+                            <input type="text" id="institution-title" value={{profile.workHistory[0].businessName}} placeholder="Institution">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="institution-location">Location:</label>
+                        <div class="controls">
+                            <input type="text" id="institution-location" value={{profile.workHistory[0].location}} placeholder="Location">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="institution-year-started">Year Started:</label>
+                        <div class="controls">
+                            <input type="text" id="institution-year-started" value={{profile.workHistory[0].yearStarted.gregorian}} placeholder="Started">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="institution-year-finished">Year Finished:</label>
+                        <div class="controls">
+                            <input type="text" id="institution-year-finished" value={{profile.workHistory[0].yearFinished.gregorian}} placeholder="Ended">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            <div class="btn-group-border">
+                                <div class="btn-group bgc">
+                                    <button class="btn btn-success">Save</button>
+                                    <button class="btn btn-success">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
 
                 <div class="info education">
-                    <h2><h3 class="sans-serif">EDUCATION <div class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
-                        <p><strong>Institution Name: </strong>{{profile.educationHistory[0].schoolName}}</p>
-                        <p><strong>Field of Study: </strong>{{profile.educationHistory[0].fieldOfStudy}}</p>
-                        <p><strong>Country: </strong>{{profile.educationHistory[0].country}}</p>
-                        <p><strong>{{profile.educationHistory[0].yearFrom.gregorian}} - {{profile.educationHistory[0].yearTo.gregorian}}</strong></p>
-                    </h2>
+                    <h3 class="sans-serif">EDUCATION <div ng-click="showHideEducation=!showHideEducation" class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
+                    <p><strong>Institution Name: </strong>{{profile.educationHistory[0].schoolName}}</p>
+                    <p><strong>Field of Study: </strong>{{profile.educationHistory[0].fieldOfStudy}}</p>
+                    <p><strong>Country: </strong>{{profile.educationHistory[0].country}}</p>
+                    <p><strong>{{profile.educationHistory[0].yearFrom.gregorian}} - {{profile.educationHistory[0].yearTo.gregorian}}</strong></p>
                 </div>
 
+                <form ui-toggle="showHideEducation" name="editEducation" class="form-horizontal" novalidate>
+                    <h3 class="sans-serif">EDIT EDUCATION INFO</h3>
+                    <div class="control-group">
+                        <label class="control-label" for="education-name">Institution Name:</label>
+                        <div class="controls">
+                            <input type="text" id="education-name" value={{profile.educationHistory[0].schoolName}} placeholder="Institution Name:">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="education-location">Field of Study:</label>
+                        <div class="controls">
+                            <input type="text" id="education-location" value={{profile.educationHistory[0].fieldOfStudy}} placeholder="Field of Study">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="education-country">Country:</label>
+                        <div class="controls">
+                            <input type="text" id="education-country" value={{profile.educationHistory[0].country}} placeholder="Country">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="education-year-started">Year Started:</label>
+                        <div class="controls">
+                            <input type="text" id="education-year-started" value={{profile.educationHistory[0].yearFrom.gregorian}} placeholder="Started">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="education-year-finished">Year Finished:</label>
+                        <div class="controls">
+                            <input type="text" id="education-year-finished" value={{profile.educationHistory[0].yearTo.gregorian}} placeholder="Finished">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            <div class="btn-group-border">
+                                <div class="btn-group bgc">
+                                    <button class="btn btn-success">Save</button>
+                                    <button class="btn btn-success">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <h3 class="sans-serif"><div style="padding-right: 1em;" ng-click="showHideNotes=!showHideNotes" class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
+                <br>
                 <p class="notes"><strong>Notes: </strong><i>{{profile.about}}</i></p>
 
+                <form ui-toggle="showHideNotes" name="editNotes" class="form-horizontal" novalidate>
+                    <h3 class="sans-serif">EDIT NOTES</h3>
+                    <div class="control-group">
+                        <label class="control-label" for="email">Notes:</label>
+                        <div class="controls">
+                            <textarea name="notes" id="notes" cols="30" rows="10">{{profile.about}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            <div class="btn-group-border">
+                                <div class="btn-group bgc">
+                                    <button class="btn btn-success">Save</button>
+                                    <button class="btn btn-success">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <div class="span3">
