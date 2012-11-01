@@ -62,6 +62,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
     $scope.hide = ($routeParams.articleId === null);
 
     setupScope();
+    loadContent();
 
     function setupScope() {
         $scope.query = '';
@@ -124,17 +125,13 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
     };
 
     $scope.submitReply = function () {
-        //if ($scope.reply.message != '') {
-            var reply = $scope.reply.message;
-            var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
-            $http.post(replyUrl, { reply:reply }).success(function (data) {
-                $scope.reply.show = false;
-                $scope.reply.message = '';
-                $scope.discussion.children.unshift(data);
-            });
-        /*} else {
-            alert("enter a reply");
-        } */
+        var reply = $scope.reply.message;
+        var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
+        $http.post(replyUrl, { reply:reply }).success(function (data) {
+            $scope.reply.show = false;
+            $scope.reply.message = '';
+            $scope.discussion.children.unshift(data);
+        });
     };
 
     $scope.cancel = function () {
@@ -172,13 +169,6 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
         return scope.editForm.$invalid;
     }
 
-    /*
-     $rootScope.$on('event:loginConfirmed', function() { loadContent(); });
-     */
-    if ($scope.pageType != "none") {
-        loadContent();
-    }
-
     $rootScope.$on($auth.event.signoutConfirmed, function () {
         if ($scope.$scope.pageType == "new") {
             $location.path('/discussion/all');
@@ -207,10 +197,6 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location
     };
 
     $scope.reply.title = '';
-
-    if (!$rootScope.auth.isAuthenticated) {
-        $location.path('/network/all');
-    }
 
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
