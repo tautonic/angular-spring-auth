@@ -17,16 +17,16 @@
                                 <!--<div class="new-picture-frame profile-thumbnail large counter-clockwise">
                                     <img class="profile-image large" src="images/rosie.jpeg">
                                 </div>-->
-                                <div thumbnail thumb=result size="large" rotation="counter-clockwise" type="profile" />
+                                <div thumbnail thumb=result._source size="large" rotation="counter-clockwise" type="profile" />
                                 <div class="profile-left">
-                                    <h3>{{result.name.given}} {{result.name.surname}}</h3>
-                                    <h5>{{result.workHistory[0].title}}</h5>
-                                    <h5 class="muted">{{result.workHistory[0].businessName}}</h5>
+                                    <h3>{{result._source.name.given}} {{result._source.name.surname}}</h3>
+                                    <h5>{{result._source.workHistory[0].title}}</h5>
+                                    <h5 class="muted">{{result._source.workHistory[0].businessName}}</h5>
                                 </div>
                                 <div class="profile-right">
                                     <h3 class="sans-serif">LATEST ACTIVITY:</h3>
-                                    <p><i ng-bind-html-unsafe=result.activity.message></i></p>
-                                    <p class="muted">about {{result.activity.dateCreated | timeago}}</p>
+                                    <p><i ng-bind-html-unsafe=result._source.activity.message></i></p>
+                                    <p class="muted">about {{result._source.activity.dateCreated | timeago}}</p>
                                 </div>
                             </div>
                         </li>

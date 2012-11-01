@@ -101,9 +101,57 @@ function forgotUsernameController($rootScope, $scope, $location, $http){
     }
 }
 
-function forgotPasswordController($rootScope, $scope, $http){
+/**
+ * Allows the user to input their email address and get an email which will (eventually) reset their passwords
+ * @param $rootScope
+ * @param $scope
+ * @param $location
+ * @param $http
+ */
+function forgotPasswordController($rootScope, $scope, $location, $http){
     $rootScope.banner = 'none';
     $rootScope.about = 'signup';
+
+    $scope.send = function(){
+        var data = {
+            profileEmail: $scope.email
+        }
+
+        $http.post('/gc/api/utility/resettoken/', data)
+            .success(function(data, status, headers, config){
+                if(data.success) {
+                    $location.path('/passswordsendsuccess');
+                } else {
+                    $scope.showError = true;
+                }
+            });
+    }
+}
+
+/**
+ * After receiving an email to reset their passwords, users go to the link here and this will actually reset their passwords, provided the token is still valid
+ * @param $rootScope
+ * @param $scope
+ * @param $location
+ * @param $http
+ */
+function resetPasswordController($rootScope, $scope, $routeParams, $http){
+    $rootScope.banner = 'none';
+    $rootScope.about = 'signup';
+    $scope.resetStatus = "waiting";
+
+    var data = {
+        token: $routeParams.token
+    }
+
+    $http.post('/gc/api/utility/resetpassword/', data)
+        .success(function(data, status, headers, config){
+            if(data.success) {
+                $scope.resetStatus = "success";
+            } else {
+                $scope.resetStatus = "error";
+            }
+        });
 }
 
 function servicesProgramsController($rootScope, $scope, $routeParams){

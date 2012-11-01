@@ -146,7 +146,11 @@ app.get('/article/:id', function(req, id) {
 
         return json(article.content);
     } else {
-        return json(false);
+        return {
+            status:404,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
     }
 });
 
@@ -200,7 +204,11 @@ app.get('/discussions/:id', function(req, id) {
     var result = getDiscussion(id);
 
     if(!result.success) {
-        return json(false);
+        return {
+            status:404,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
     }
 
     return json(result.content);
@@ -259,7 +267,11 @@ app.post('/discussions/:id', function(req, id) {
     var servletRequest = req.env.servletRequest;
     if(servletRequest.isUserInRole('ROLE_ANONYMOUS'))
     {
-        return json(false);
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
     }
 
     return json(addReply(id, req.params.reply, getUserDetails()));
@@ -417,9 +429,9 @@ app.post('/profiles/', function(req){
         "thumbnail": req.postParams.thumbnail
     };
 
+
     data.source = 'GC';
     data.accountEmail.status = 'unverified';
-
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/',
         method: 'POST',
@@ -649,10 +661,6 @@ app.get('/profiles/byprimaryemail/:email', function(req, email){
 
     var exchange = httpclient.request(opts);
 
-    result.content.facultyFellow = result.content.roles.some(function(role) {
-        return role == "ROLE_PREMIUM";
-    });
-
     var result = json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
@@ -672,10 +680,6 @@ app.get('/profiles/byusername/:username', function(req, username){
     };
 
     var exchange = httpclient.request(opts);
-
-    result.content.facultyFellow = result.content.roles.some(function(role) {
-        return role == "ROLE_PREMIUM";
-    });
 
     var result = json({
         'status': exchange.status,
@@ -846,6 +850,9 @@ app.get('/profiles/images/', function(req, id){
     }
 });
 
+/**
+ * Requires an email address, and passes that to zocia. If the email address is valid/in use, it will send the user an email giving them a link to reset their password using the token that's generated
+ */
 app.post('/utility/resettoken/', function(req){
     var data = req.postParams;
     data.callback = 'http://localhost:9300/myapp/api/';
@@ -871,11 +878,12 @@ app.post('/utility/resettoken/', function(req){
         'success': Math.floor(exchange.status / 100) === 2
     });
 
-    result.status = exchange.status;
-
     return result;
 });
 
+/**
+ * This actually performs the action of resetting the password, given the token from the previous function. Generates a new password, sending it via email, that the user can then use to login
+ */
 app.post('/utility/resetpassword/', function(req){
     var data = req.postParams;
 
@@ -897,8 +905,6 @@ app.post('/utility/resetpassword/', function(req){
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    result.status = exchange.status;
 
     return result;
 });
@@ -1132,8 +1138,8 @@ app.post('/search/faculty/', function(req){
 
     var profileExchange = httpclient.request(opts);
 
-    var profiles = JSON.parse(profileExchange.content);
-
+    var profiles = JSON.parse(profileExchange.content).hits.hits;
+    log.info("PROFILES? "+JSON.stringify(profiles._source));
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
     profiles.forEach(function(profile){
@@ -1146,7 +1152,7 @@ app.post('/search/faculty/', function(req){
             filteredActivities = filteredActivities.replace(activity, '');
         });
 
-        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
+        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._source._id;
 
         var opts = {
             url: url,
@@ -1162,7 +1168,7 @@ app.post('/search/faculty/', function(req){
 
         var latestActivity;
 
-        log.info('Activity stream for {}: {}', profile.username, JSON.stringify(stream, null, 4));
+        log.info('Activity stream for {}: {}', profile._source.username, JSON.stringify(stream, null, 4));
 
         // find the latest activity directly taken by the owner of the profile
         var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
@@ -1173,9 +1179,9 @@ app.post('/search/faculty/', function(req){
             'dateCreated': activity.props.dateCreated
         }
 
-        profile.activity = latestActivity;
+        profile._source.activity = latestActivity;
 
-        profile.facultyFellow = profile.roles.some(function(role) {
+        profile._source.facultyFellow = profile._source.roles.some(function(role) {
             return role == "ROLE_PREMIUM";
         });
     });
