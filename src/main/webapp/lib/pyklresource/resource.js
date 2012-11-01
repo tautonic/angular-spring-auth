@@ -118,13 +118,9 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     function loadContent() {
         $http.get( url ).success( function (data) {
             console.log("ARTICLE RETURNED: ",data);
-            if(data !== "false") {
-                $scope.article = data;
-                $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
-                $http.post("api/views/" + $scope.article._id);
-            } else {
-                $log.info("ERROR getting article, or resource.");
-            }
+            $scope.article = data;
+            $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
+            $http.post("api/views/" + $scope.article._id);
         }).error(function(data, status) {
                 $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
             });

@@ -87,7 +87,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
     });
-
+    $scope.recoveryAddress = "dill@pykl.com";
     var profile = Profile.get({profileId: $routeParams.profileId},
         function(){
             if(profile.status === 400){

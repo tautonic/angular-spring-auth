@@ -5,43 +5,48 @@
         <div class="caption">
             <!--<p>{{profile.bio}}</p>-->
             <p>
-                <a class="btn btn-warning" ng-href="#/profiles/update/{{profile._id}}"><i class="icon-edit icon-white"></i> Update</a>
-                <button class="btn btn-danger" ng-click="delete(profile)"><i class="icon-trash icon-white"></i> Delete</button>
                 <br><br>
                 <a class="btn btn-success" ng-href="#/profiles/"><i class="icon-list icon-white"></i> View All Profiles</a>
                 <br><br>
+                <div ng-switch on="(auth.id == profile._id)">
+                    <div ng-switch-when=true>
+                        <a class="btn btn-warning" ng-href="#/profiles/update/{{profile._id}}"><i class="icon-edit icon-white"></i> Update</a>
+                        <button class="btn btn-danger" ng-click="delete(profile)"><i class="icon-trash icon-white"></i> Delete</button>
+                        <form name="resetPassword" class="form" novalidate>
+                            <div class="control-group">
+                                <label class="control-label" for="pass-reset">Email</label>
+                                <div class="controls">
+                                    <input type="email"
+                                           ng-model="recoveryAddress"
+                                           class="input-xlarge"
+                                           id="pass-reset"
+                                           name="pass-reset"
+                                           ng-minlength="3"
+                                           required>
+                                </div>
+                                <br>
+                            </div>
 
-            <form name="resetPassword" class="form" novalidate>
-                <div class="control-group">
-                    <label class="control-label" for="pass-reset">Email</label>
-                    <div class="controls">
-                        <input type="email"
-                               ng-model="recoveryAddress"
-                               class="input-xlarge"
-                               id="pass-reset"
-                               name="pass-reset"
-                               ng-minlength="3"
-                               required
-                               value="">
+                            <button class="btn btn-warning" ng-click="reset()" ng-disabled="resetPassword.$invalid">
+                                <i class="icon-envelope icon-white"></i> Reset My Password</button>
+                        </form>
+
+                        <div class="alert alert-success alert-block" ng-show="showSuccess">
+                            <button type="button" class="close" ui-event="{ closed: 'closeSuccessAlert()' }" data-dismiss="alert">&times;</button>
+                            <h4>Success!</h4>
+                            Check your email account for a new password
+                        </div>
+
+                        <div class="alert alert-error alert-block" ng-show="showError">
+                            <button type="button" class="close" ui-event="{ closed: 'closeErrorAlert()' }" data-dismiss="alert">&times;</button>
+                            <h4>Error!</h4>
+                            There was an error while processing your request
+                        </div>
                     </div>
-                    <br>
+                    <div ng-switch-default>
+                    </div>
                 </div>
 
-                <button class="btn btn-warning" ng-click="reset()">
-                    <i class="icon-envelope icon-white"></i> Reset My Password</button>
-            </form>
-
-            <div class="alert alert-success alert-block" ng-show="showSuccess">
-                <button type="button" class="close" ui-event="{ closed: 'closeSuccessAlert()' }" data-dismiss="alert">&times;</button>
-                <h4>Success!</h4>
-                Check your email account for a new password
-            </div>
-
-            <div class="alert alert-error alert-block" ng-show="showError">
-                <button type="button" class="close" ui-event="{ closed: 'closeErrorAlert()' }" data-dismiss="alert">&times;</button>
-                <h4>Error!</h4>
-                There was an error while processing your request
-            </div>
             </p>
         </div>
     </div>

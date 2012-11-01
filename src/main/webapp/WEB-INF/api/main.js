@@ -146,7 +146,7 @@ app.get('/article/:id', function(req, id) {
 
         return json(article.content);
     } else {
-        return json(false);
+        return article;
     }
 });
 
@@ -200,7 +200,7 @@ app.get('/discussions/:id', function(req, id) {
     var result = getDiscussion(id);
 
     if(!result.success) {
-        return json(false);
+        return result;
     }
 
     return json(result.content);
