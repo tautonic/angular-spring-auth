@@ -966,13 +966,20 @@ app.post('/utility/sendusername/:email', function(req, email){
 app.post('/search/site/', function(req){
     var url = 'http://localhost:9300/myapp/api/search/';
 
+    log.info('Request params {}', JSON.stringify(req.postParams, null, 4));
+    var dataType = 'posts,resources,profiles';
+
+    if(req.postParams.dataType){
+        dataType = req.postParams.dataType;
+    }
+
     var queryParams = [
         'q=' + encodeURIComponent(req.postParams.q),
         'from=' + 0,
         'size=' + 30,
         'sort=' + 'desc',
         'sortField=' + 'dateCreated',
-        'dataType=' + 'posts,resources,profiles'
+        'dataType=' + dataType
     ];
 
     url += '?' + queryParams.join('&');
@@ -984,22 +991,31 @@ app.post('/search/site/', function(req){
         async: false
     };
 
+    // this request will return raw elasticsearch query results, so we'll need to run
+    // it through a little logic to get what we want
     var gceeExchange = httpclient.request(opts);
 
-    // We need to take the discussion and profile objects returned from Zocia and modify
-    // them slightly
-    console.log('EXCHANGE STATUS!!! ', gceeExchange.status);
+    var gceeObjects = JSON.parse(gceeExchange.content);
+
+    // we'll be using  the raw elasticsearch result facets
+    var facets = gceeObjects.facets;
+
+    // we're really only interested in the hits property of the hits object returned from
+    // the query
+    gceeObjects = gceeObjects.hits.hits;
 
     // filters out threads with empty titles and threads that are tied to an article
     // this basically leaves us with post parents and no replies
-    var gceeObjects = JSON.parse(gceeExchange.content).filter(function(element) {
-        return !(element.title === "" && element.dataType === 'posts');
+    gceeObjects = gceeObjects.filter(function(object) {
+        return !(object._source.title === "" && object._source.dataType === 'posts');
     });
 
+    // We need to take the discussion and profile objects returned from Zocia and modify
+    // them slightly
     gceeObjects.forEach(function(object){
         //log.info('GCEE object returned from Zocia {}', JSON.stringify(object, null, 4));
         // We have to get last activity information for each profile
-        if(object.dataType === 'profiles'){
+        if(object._source.dataType === 'profiles'){
             var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
             var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
             var allowedActivities = filters.trim().split(' ');
@@ -1034,16 +1050,16 @@ app.post('/search/site/', function(req){
                 'dateCreated': activity.props.dateCreated
             }
 
-            object.activity = latestActivity;
+            object._source.activity = latestActivity;
 
-            object.facultyFellow = object.roles.some(function(role) {
+            object._source.facultyFellow = object._source.roles.some(function(role) {
                 return role == "ROLE_PREMIUM";
             });
         }
 
         // We have to get the number of comments for each discussion object
-        if(object.dataType === 'posts'){
-            log.info('Filtered discussion object {}', JSON.stringify(object, null, 4));
+        if(object._source.dataType === 'posts'){
+            log.info('Filtered discussion object {}', JSON.stringify(object._source, null, 4));
 
             var opts = {
                 url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + object._id + '&types=discussion',
@@ -1056,16 +1072,17 @@ app.post('/search/site/', function(req){
 
             var comment = JSON.parse(discussionExchange.content);
 
-            object.commentCount = comment.count;
+            object._source.commentCount = comment.count;
         }
-        if(object.dataType === 'resources') {
-            object.premium = (object.roles.some(function(element) { return element == "ROLE_PREMIUM"; }));
+        if(object._source.dataType === 'resources') {
+            object.premium = (object._source.roles.some(function(element) { return element == "ROLE_PREMIUM"; }));
         }
     });
 
     var result = json({
         'status': gceeExchange.status,
         'content': gceeObjects,
+        'facets': facets.dataTypes.terms,
         'headers': gceeExchange.headers,
         'success': Math.floor(gceeExchange.status / 100) === 2
     });

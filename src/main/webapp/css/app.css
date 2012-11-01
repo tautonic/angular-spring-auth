@@ -1803,4 +1803,13 @@ li.search-result.members{
     background-image: linear-gradient(to bottom, #51a463, #127551);
 }
 
+.site.search-box.content label{
+    font-size: 20px;
+    text-transform: capitalize;
+}
+
+.search-results p strong{
+    color: #000;
+}
+
 

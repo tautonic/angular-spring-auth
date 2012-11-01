@@ -5,11 +5,20 @@
  * Time: 5:20 PM
  * To change this template use File | Settings | File Templates.
  */
-function SearchSite($rootScope, $scope, $routeParams, $location, Search) {
+function SearchSite($rootScope, $scope, $routeParams, $location, Search, $http) {
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 
+    $scope.filter = {
+
+    };
+
+    $scope.allTypes;
+
+    $scope.facets;
+
     $scope.results;
+    $scope.query;
 
     var data = {
         q: $routeParams.query
@@ -17,11 +26,77 @@ function SearchSite($rootScope, $scope, $routeParams, $location, Search) {
 
     var results = Search.site({type: 'site'}, data, function(response){
         $scope.results = response.content;
+        $scope.facets = response.facets;
+
+        $scope.allTypes = true;
+
+        // create a scope object for each facet term
+        for(var facet in $scope.facets){
+            //var term =
+            $scope.facets[facet].selected = false;
+        }
+
         $scope.resultLength = response.content.length;
         $scope.query = $routeParams.query;
     }, function(response){
         console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
+
+    $scope.filteredSearch = function(checked, id){
+        var dataType = [];
+
+        $scope.allTypes = false;
+        console.log('search ' + id + ' is ' + checked);
+
+        for(var facet in $scope.facets){
+            if($scope.facets[facet].selected === true){
+                dataType.push($scope.facets[facet].term);
+            }
+        }
+
+        dataType = dataType.join(',');
+
+        var data = {
+            q: $scope.query,
+            dataType: dataType
+        };
+
+        //dataType = [];
+        $http.post('api/search/site/', data)
+            .success(function(response){
+                console.log('Success! Search request was successful');
+                $scope.results = response.content;
+            })
+            .error(function(){
+                console.log('Error! Search request was successful');
+            });
+    }
+
+    $scope.searchAll = function(){
+        if($scope.allTypes === false){
+            var data = {
+                q: $scope.query
+            };
+
+            //dataType = [];
+            $http.post('api/search/site/', data)
+                .success(function(response){
+                    $scope.results = response.content;
+                    console.log('Success! Search request was successful');
+                })
+                .error(function(){
+                    console.log('Error! Search request was successful');
+                });
+
+            $scope.allTypes = true;
+        }else{
+            $scope.allTypes = false;
+        }
+
+        for(var facet in $scope.facets){
+            $scope.facets[facet].selected = false;
+        }
+    }
 }
 
 function SearchContent($scope, $routeParams, $location, Search) {

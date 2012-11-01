@@ -6,7 +6,8 @@
                     <div ng-include='"lib/search/partials/emptyResults.html"'></div>
                 </div>
                 <div ng-switch-default>
-                    <h1>Discussion Search Results</h1> <p class="muted"> 10 of {{(results | filter:lengthFilter).length}} results</p>
+                    <h1>Discussion Search Results</h1> <p class="muted"> {{(results | filter:lengthFilter).length}} results for
+                    <strong>{{query}}</strong></p>
 
                     <hr>
 
