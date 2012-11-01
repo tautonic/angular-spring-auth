@@ -1123,8 +1123,8 @@ app.post('/search/faculty/', function(req){
 
     var profileExchange = httpclient.request(opts);
 
-    var profiles = JSON.parse(profileExchange.content);
-
+    var profiles = JSON.parse(profileExchange.content).hits.hits;
+    log.info("PROFILES? "+JSON.stringify(profiles._source));
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
     profiles.forEach(function(profile){
@@ -1137,7 +1137,7 @@ app.post('/search/faculty/', function(req){
             filteredActivities = filteredActivities.replace(activity, '');
         });
 
-        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
+        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._source._id;
 
         var opts = {
             url: url,
@@ -1153,7 +1153,7 @@ app.post('/search/faculty/', function(req){
 
         var latestActivity;
 
-        log.info('Activity stream for {}: {}', profile.username, JSON.stringify(stream, null, 4));
+        log.info('Activity stream for {}: {}', profile._source.username, JSON.stringify(stream, null, 4));
 
         // find the latest activity directly taken by the owner of the profile
         var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
@@ -1164,9 +1164,9 @@ app.post('/search/faculty/', function(req){
             'dateCreated': activity.props.dateCreated
         }
 
-        profile.activity = latestActivity;
+        profile._source.activity = latestActivity;
 
-        profile.facultyFellow = profile.roles.some(function(role) {
+        profile._source.facultyFellow = profile._source.roles.some(function(role) {
             return role == "ROLE_PREMIUM";
         });
     });
