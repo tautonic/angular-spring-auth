@@ -86,6 +86,7 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
 function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $http, Profile){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
+        $rootScope.about = 'none';
     });
 
     var profile = Profile.get({profileId: $routeParams.profileId},
@@ -95,9 +96,9 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             }else{
                 $scope.profile = profile.content;
 
-                if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001' || $scope.profile.thumbnail === null){
+                /*if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001' || $scope.profile.thumbnail === null){
                     $scope.profile.thumbnail = "http://dummyimage.com/160"
-                }
+                }*/
             }
         }
     );

@@ -1,57 +1,79 @@
-<div class="profile clearfix thumbnail">
-    <div class="profile-left">
-        <img ng-src="{{profile.thumbnail}}" alt="">
-
-        <div class="caption">
-            <!--<p>{{profile.bio}}</p>-->
-            <p>
-                <a class="btn btn-warning" ng-href="#/profiles/update/{{profile._id}}"><i class="icon-edit icon-white"></i> Update</a>
-                <button class="btn btn-danger" ng-click="delete(profile)"><i class="icon-trash icon-white"></i> Delete</button>
-                <br><br>
-                <a class="btn btn-success" ng-href="#/profiles/"><i class="icon-list icon-white"></i> View All Profiles</a>
-                <br><br>
-
-            <form name="resetPassword" class="form" novalidate>
-                <div class="control-group">
-                    <label class="control-label" for="pass-reset">Email</label>
-                    <div class="controls">
-                        <input type="email"
-                               ng-model="recoveryAddress"
-                               class="input-xlarge"
-                               id="pass-reset"
-                               name="pass-reset"
-                               ng-minlength="3"
-                               required
-                               value="">
-                    </div>
-                    <br>
+<div class="container content">
+    <div class="row">
+        <div class="span9">
+            <div class="profile profile-full grey-gradient">
+                <div thumbnail thumb=profile size="large" rotation="counter-clockwise" type="profile" />
+                <div class="name-title">
+                    <h3>{{profile.name.fullName}}</h3>
+                    <h5>{{profile.workHistory[0].title}}</h5>
+                    <h5 class="muted">{{profile.workHistory[0].businessName}}</h5>
                 </div>
 
-                <button class="btn btn-warning" ng-click="reset()">
-                    <i class="icon-envelope icon-white"></i> Reset My Password</button>
-            </form>
+                <div class="info contact">
+                    <h3 class="sans-serif">CONTACT <div class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
+                    <p><strong>Email: </strong>{{profile.accountEmail.address}}</p>
+                    <p><strong>Website: </strong><a ng-href="{{profile.websites[0].url}}">{{profile.websites[0].title}}</a></p>
+                </div>
 
-            <div class="alert alert-success alert-block" ng-show="showSuccess">
-                <button type="button" class="close" ui-event="{ closed: 'closeSuccessAlert()' }" data-dismiss="alert">&times;</button>
-                <h4>Success!</h4>
-                Check your email account for a new password
-            </div>
+                <form name="editContact" class="form-horizontal" novalidate>
+                    <h3 class="sans-serif">EDIT CONTACT INFO</h3>
+                    <div class="control-group">
+                        <label class="control-label" for="email">Email:</label>
+                        <div class="controls">
+                            <input type="text" id="email" value={{profile.accountEmail.address}} placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="website-title">Website Title:</label>
+                        <div class="controls">
+                            <input type="text" id="website-title" value={{profile.websites[0].title}} placeholder="Website">
+                        </div>
+                    </div>
 
-            <div class="alert alert-error alert-block" ng-show="showError">
-                <button type="button" class="close" ui-event="{ closed: 'closeErrorAlert()' }" data-dismiss="alert">&times;</button>
-                <h4>Error!</h4>
-                There was an error while processing your request
+                    <div class="control-group">
+                        <label class="control-label" for="website-url">Website Url:</label>
+                        <div class="controls">
+                            <input type="text" id="website-url" value={{profile.websites[0].url}} placeholder="Website">
+                        </div>
+                    </div>
+                </form>
+
+                <div class="info institution">
+                    <h3 class="sans-serif">INSTITUTION <div class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
+                    <p><strong>Title: </strong>{{profile.workHistory[0].businessName}}</p>
+                    <p><strong>Location: </strong>{{profile.workHistory[0].location}}</p>
+                    <p><strong>{{profile.workHistory[0].yearStarted.gregorian}} - {{profile.workHistory[0].yearFinished.gregorian}}</strong></p>
+
+                </div>
+
+                <div class="info education">
+                    <h2><h3 class="sans-serif">EDUCATION <div class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
+                        <p><strong>Institution Name: </strong>{{profile.educationHistory[0].schoolName}}</p>
+                        <p><strong>Field of Study: </strong>{{profile.educationHistory[0].fieldOfStudy}}</p>
+                        <p><strong>Country: </strong>{{profile.educationHistory[0].country}}</p>
+                        <p><strong>{{profile.educationHistory[0].yearFrom.gregorian}} - {{profile.educationHistory[0].yearTo.gregorian}}</strong></p>
+                    </h2>
+                </div>
+
+                <p class="notes"><strong>Notes: </strong><i>{{profile.about}}</i></p>
+
             </div>
-            </p>
         </div>
-    </div>
-
-    <div class="profile-right">
-        <h6>{{profile._id}}</h6>
-        <h2><strong>{{profile.name.given}} {{profile.name.surname}}</strong></h2>
-        <h2>{{profile.username}}</h2>
-        <h6>Email</h6> {{profile.accountEmail.address}} <br>
-        <span ng-show="auth.isAuthenticated"><a ng-click="followUser(profile._id)" ng-show="!profile.isUserFollowing">Follow {{profile.username}}</a>
-        <span ng-show="profile.isUserFollowing">You are currently following {{profile.username}}.</span></span>
+        <div class="span3">
+            <div class="site search-box content">
+                <div class="header">
+                    <h4>FOLLOWERS (3)</h4>
+                </div>
+                <div class="form-container">
+                    <form ng-controller="SiteSearchController" ng-submit="searchSite()">
+                        <input type="text" ng-model="siteQuery" placeholder="Search Members...">
+                        <div class="btn-group-border"></div>
+                        <div class="search-lens read-more gradient">
+                            <div class="preview-lens"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
