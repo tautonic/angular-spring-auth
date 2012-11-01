@@ -15,8 +15,12 @@
 
                         <div class="btn-group-border">
                             <div class="btn-group bgc">
-                                <button class="btn btn-success">Follow</button>
-                                <a class="btn btn-success" ng-href="">Full Profile</a>
+                                <button class="btn btn-success" ng-click="followUser(profileModal.id)"><span ng-show="!profileModal.isUserFollowing">Follow</span><span ng-show="profileModal.isUserFollowing">Unfollow</span></button>
+                                <ng-switch on=canEditProfile()>
+                                    <button ng-switch-when=true class="btn btn-success" ng-click="closeProfileModal('profiles/update/')">Edit Profile</button>
+                                </ng-switch>
+
+                                <button class="btn btn-success" ng-click="closeProfileModal('profiles/view/')">Full Profile</button>
                             </div>
                         </div>
 
@@ -39,7 +43,7 @@
 
                     </div>
                     <div class="right clearfix">
-                        <div class="close-modal"></div>
+                        <div class="close-modal" ng-click="closeProfileModal()"></div>
                         <h3 class="sans-serif">RECENT ACTIVITY</h3>
                         <ul class="activity-list">
                             <li class="update">
@@ -61,7 +65,7 @@
 
                         <div class="btn-group-border">
                             <div class="btn-group bgc">
-                                <button class="btn btn-success">Follow</button>
+                                <button class="btn btn-success" ng-click="followUser(profile._id)"><span ng-show="!profile.isUserFollowing">Follow</span><span ng-show="profile.isUserFollowing">Unfollow</span></button>
                             </div>
                         </div>
                     </div>

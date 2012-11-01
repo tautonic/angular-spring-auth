@@ -113,6 +113,7 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $routeParams ) {
 function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     var url = 'api/article/' + $routeParams.articleId;
     $scope.filters = {};
+    $scope.showModal = false;
 
     function loadContent() {
         $http.get( url ).success( function (data) {
@@ -127,6 +128,19 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
         }).error(function(data, status) {
                 $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
             });
+    }
+
+    $scope.toggleModal = function(value) {
+        $scope.showModal = value;
+        $scope.modal = {
+            document: {
+                title: $scope.article.title,
+                url: "https://docs.google.com/a/pykl.com/document/d/1KgIuo9dcZ6ggAp4Qe8C_jE4ULb5RzwQAiEtukRyphWc/?embedd=true",
+                doctype: "pdf",
+                author: $scope.article.author,
+                dateCreated: $scope.article.dateCreated
+            }
+        }
     }
 
     $scope.abstractVisible = function () {

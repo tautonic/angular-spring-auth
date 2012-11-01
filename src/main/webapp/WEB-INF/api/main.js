@@ -532,6 +532,8 @@ app.get('/profiles/', function(req){
 
         profile.activity = latestActivity;
 
+        profile.isUserFollowing = isUserFollowing(profile._id);
+
         profile.facultyFellow = profile.roles.some(function(role) {
             return role == "ROLE_PREMIUM";
         });

@@ -1,3 +1,41 @@
+<div ui-modal class="fade profile-summary" ng-model="showModal">
+    <div class="article">
+        <div class="row top-row">
+            <div class="span8">
+                <h3>{{modal.document.title}}</h3>
+                <p class="article-meta"><span class="doc-type {{modal.document.doctype}}"></span><strong>by {{modal.document.author}}, {{modal.document.dateCreated | asDate}}</strong></p>
+            </div>
+            <div class="span2">
+                <div class="btn-group-border">
+                    <div class="btn-group bgc">
+                        <button class="btn btn-success">Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span9">
+                <doc-viewer url="{{modal.document.url}}"></doc-viewer>
+            </div>
+        </div>
+
+        <div class="row bottom-row">
+            <div class="offset8 span2">
+                <div class="btn-group-border">
+                    <div class="btn-group bgc paging">
+                        <button class="btn btn-success"><div class="read-more-arrow read-less-arrow"></div></button>
+                        <button class="btn btn-success"><div class="read-more-arrow"></div></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="close-modal" ng-click="toggleModal(false)"></div>
+    </div>
+</div>
+
 <h1>{{article.title}}</h1>
+<a ng-click="toggleModal(true)">Preview Document</a>
 <p ng-bind-html="article.description" ng-show="abstractVisible()"></p>
 <p ng-bind-html="article.content"></p>

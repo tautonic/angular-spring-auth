@@ -1768,7 +1768,7 @@ li.search-result.members{
 }
 
 .profile-summary.modal.fade.in{
-    top: 25%;
+    top: 50%;
 }
 
 .services-secondary-nav{
@@ -1820,6 +1820,7 @@ li.search-result.members{
     background-image: linear-gradient(to bottom, #51a463, #127551);
 }
 
+<<<<<<< HEAD
 .site.search-box.content label{
     font-size: 20px;
     text-transform: capitalize;
@@ -1830,9 +1831,11 @@ li.search-result.members{
 }
 
 
+=======
 .modal .top-row {
     padding: 20px 0 0 20px;
 }
 .modal .bottom-row {
     padding: 10px 0 20px 0;
 }
+>>>>>>> origin/develop
