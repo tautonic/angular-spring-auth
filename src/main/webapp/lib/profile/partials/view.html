@@ -1,57 +1,241 @@
-<div class="profile clearfix thumbnail">
-    <div class="profile-left">
-        <img ng-src="{{profile.thumbnail}}" alt="">
-
-        <div class="caption">
-            <!--<p>{{profile.bio}}</p>-->
-            <p>
-                <a class="btn btn-warning" ng-href="#/profiles/update/{{profile._id}}"><i class="icon-edit icon-white"></i> Update</a>
-                <button class="btn btn-danger" ng-click="delete(profile)"><i class="icon-trash icon-white"></i> Delete</button>
-                <br><br>
-                <a class="btn btn-success" ng-href="#/profiles/"><i class="icon-list icon-white"></i> View All Profiles</a>
-                <br><br>
-
-            <form name="resetPassword" class="form" novalidate>
-                <div class="control-group">
-                    <label class="control-label" for="pass-reset">Email</label>
-                    <div class="controls">
-                        <input type="email"
-                               ng-model="recoveryAddress"
-                               class="input-xlarge"
-                               id="pass-reset"
-                               name="pass-reset"
-                               ng-minlength="3"
-                               required
-                               value="">
-                    </div>
-                    <br>
+<div class="container content">
+    <div class="row">
+        <div class="span9">
+            <div class="profile profile-full grey-gradient">
+                <div thumbnail thumb=profile size="large" rotation="counter-clockwise" type="profile" />
+                <div class="name-title">
+                    <h3>{{profile.name.given}} {{profile.name.surname}}</h3>
+                    <h5>{{profile.workHistory[0].title}}</h5>
+                    <h5 class="muted">{{profile.workHistory[0].businessName}}</h5>
                 </div>
 
-                <button class="btn btn-warning" ng-click="reset()">
-                    <i class="icon-envelope icon-white"></i> Reset My Password</button>
-            </form>
+                <div class="info contact">
+                    <h3 class="sans-serif">
+                        CONTACT
+                        <div ng-switch on=profile.isProfileOwner>
+                            <div ng-switch-when=true>
+                                <div ng-click="$parent.showHideContact=!showHideContact" class="edit"><i class="icon-pencil"></i> Edit Section</div>
+                            </div>
+                        </div>
+                    </h3>
+                    <p><strong>Email: </strong>{{profile.accountEmail.address}}</p>
+                    <p><strong>Website: </strong><a ng-href="{{profile.websites[0].url}}">{{profile.websites[0].title}}</a></p>
+                </div>
 
-            <div class="alert alert-success alert-block" ng-show="showSuccess">
-                <button type="button" class="close" ui-event="{ closed: 'closeSuccessAlert()' }" data-dismiss="alert">&times;</button>
-                <h4>Success!</h4>
-                Check your email account for a new password
-            </div>
+                <div ng-switch on=profile.isProfileOwner>
+                    <div ng-switch-when=true>
+                        <form ui-toggle="showHideContact" name="editContact" class="form-horizontal" novalidate>
+                            <h3 class="sans-serif">EDIT CONTACT INFO</h3>
+                            <div class="control-group">
+                                <label class="control-label" for="email">Email:</label>
+                                <div class="controls">
+                                    <input type="text" id="email" ng-model="profile.accountEmail.address" placeholder="Email" />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="website-title">Website Title:</label>
+                                <div class="controls">
+                                    <input type="text" id="website-title" ng-model="profile.websites[0].title" placeholder="Website">
+                                </div>
+                            </div>
 
-            <div class="alert alert-error alert-block" ng-show="showError">
-                <button type="button" class="close" ui-event="{ closed: 'closeErrorAlert()' }" data-dismiss="alert">&times;</button>
-                <h4>Error!</h4>
-                There was an error while processing your request
+                            <div class="control-group">
+                                <label class="control-label" for="website-url">Website Url:</label>
+                                <div class="controls">
+                                    <input type="text" id="website-url" ng-model="profile.websites[0].url" placeholder="Website">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label"></label>
+                                <div class="controls">
+                                    <div class="btn-group-border">
+                                        <div class="btn-group bgc">
+                                            <button ng-click="updateContactInfo(profile)" class="btn btn-success">Save</button>
+                                            <button ng-click="cancelContactInfoUpdate()" class="btn btn-success">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="info institution">
+                    <h3 class="sans-serif">INSTITUTION
+                        <div ng-switch on=profile.isProfileOwner>
+                            <div ng-switch-when=true>
+                                <div ng-click="$parent.showHideInstitution=!showHideInstitution" class="edit"><i class="icon-pencil"></i> Edit Section</div>
+                            </div>
+                        </div>
+                    </h3>
+                    <p><strong>Title: </strong>{{profile.workHistory[0].businessName}}</p>
+                    <p><strong>Location: </strong>{{profile.workHistory[0].location}}</p>
+                    <p><strong>{{profile.workHistory[0].yearStarted.gregorian}} - {{profile.workHistory[0].yearFinished.gregorian}}</strong></p>
+                </div>
+
+                <div ng-switch on=profile.isProfileOwner>
+                    <div ng-switch-when=true>
+                        <form ui-toggle="showHideInstitution" name="editInstitution" class="form-horizontal" novalidate>
+                            <h3 class="sans-serif">EDIT INSTITUTION INFO</h3>
+                            <div class="control-group">
+                                <label class="control-label" for="institution-title">Title:</label>
+                                <div class="controls">
+                                    <input type="text" id="institution-title" ng-model="profile.workHistory[0].businessName" placeholder="Institution">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="institution-location">Location:</label>
+                                <div class="controls">
+                                    <input type="text" id="institution-location" ng-model="profile.workHistory[0].location" placeholder="Location">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="institution-year-started">Year Started:</label>
+                                <div class="controls">
+                                    <input type="text" id="institution-year-started" ng-model="profile.workHistory[0].yearStarted.gregorian" placeholder="Started">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="institution-year-finished">Year Finished:</label>
+                                <div class="controls">
+                                    <input type="text" id="institution-year-finished" ng-model="profile.workHistory[0].yearFinished.gregorian" placeholder="Ended">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label"></label>
+                                <div class="controls">
+                                    <div class="btn-group-border">
+                                        <div class="btn-group bgc">
+                                            <button ng-click="updateInstitutionInfo(profile)" class="btn btn-success">Save</button>
+                                            <button ng-click="cancelInstitutionInfoUpdate()" class="btn btn-success">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="info education">
+                    <h3 class="sans-serif">EDUCATION
+                        <div ng-switch on=profile.isProfileOwner>
+                            <div ng-switch-when=true>
+                                <div ng-click="$parent.showHideEducation=!showHideEducation" class="edit"><i class="icon-pencil"></i> Edit Section</div>
+                            </div>
+                        </div>
+                    </h3>
+                    <p><strong>Institution Name: </strong>{{profile.educationHistory[0].schoolName}}</p>
+                    <p><strong>Field of Study: </strong>{{profile.educationHistory[0].fieldOfStudy}}</p>
+                    <p><strong>Country: </strong>{{profile.educationHistory[0].country}}</p>
+                    <p><strong>{{profile.educationHistory[0].yearFrom.gregorian}} - {{profile.educationHistory[0].yearTo.gregorian}}</strong></p>
+                </div>
+
+                <div ng-switch on=profile.isProfileOwner>
+                    <div ng-switch-when=true>
+                        <form ui-toggle="showHideEducation" name="editEducation" class="form-horizontal" novalidate>
+                            <h3 class="sans-serif">EDIT EDUCATION INFO</h3>
+                            <div class="control-group">
+                                <label class="control-label" for="education-name">Institution Name:</label>
+                                <div class="controls">
+                                    <input type="text" id="education-name" ng-model="profile.educationHistory[0].schoolName" placeholder="Institution Name:">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="education-location">Field of Study:</label>
+                                <div class="controls">
+                                    <input type="text" id="education-location" ng-model="profile.educationHistory[0].fieldOfStudy" placeholder="Field of Study">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="education-country">Country:</label>
+                                <div class="controls">
+                                    <input type="text" id="education-country" ng-model="profile.educationHistory[0].country" placeholder="Country">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="education-year-started">Year Started:</label>
+                                <div class="controls">
+                                    <input type="text" id="education-year-started" ng-model="profile.educationHistory[0].yearFrom.gregorian" placeholder="Started">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label" for="education-year-finished">Year Finished:</label>
+                                <div class="controls">
+                                    <input type="text" id="education-year-finished" ng-model="profile.educationHistory[0].yearTo.gregorian" placeholder="Finished">
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label"></label>
+                                <div class="controls">
+                                    <div class="btn-group-border">
+                                        <div class="btn-group bgc">
+                                            <button ng-click="updateEducationInfo(profile)" class="btn btn-success">Save</button>
+                                            <button ng-click="cancelEducationInfoUpdate()" class="btn btn-success">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div ng-switch on=profile.isProfileOwner>
+                    <div ng-switch-when=true>
+                        <h3 class="sans-serif"><div style="padding-right: 1em;" ng-click="$parent.showHideNotes=!showHideNotes" class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
+                    </div>
+                </div>
+                <br>
+                <p class="notes"><strong>Notes: </strong><i>{{profile.about}}</i></p>
+
+                <div ng-switch on=profile.isProfileOwner>
+                    <div ng-switch-when=true>
+                        <form ui-toggle="showHideNotes" name="editNotes" class="form-horizontal" novalidate>
+                            <h3 class="sans-serif">EDIT NOTES</h3>
+                            <div class="control-group">
+                                <label class="control-label" for="email">Notes:</label>
+                                <div class="controls">
+                                    <textarea name="notes" id="notes" ng-model="profile.about" cols="30" rows="10">{{profile.about}}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label"></label>
+                                <div class="controls">
+                                    <div class="btn-group-border">
+                                        <div class="btn-group bgc">
+                                            <button ng-click="updateNotes(profile)" class="btn btn-success">Save</button>
+                                            <button ng-click="cancelNotesUpdate()" class="btn btn-success">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            </p>
         </div>
-    </div>
 
-    <div class="profile-right">
-        <h6>{{profile._id}}</h6>
-        <h2><strong>{{profile.name.given}} {{profile.name.surname}}</strong></h2>
-        <h2>{{profile.username}}</h2>
-        <h6>Email</h6> {{profile.accountEmail.address}} <br>
-        <span ng-show="auth.isAuthenticated"><a ng-click="followUser(profile._id)" ng-show="!profile.isUserFollowing">Follow {{profile.username}}</a>
-        <span ng-show="profile.isUserFollowing">You are currently following {{profile.username}}.</span></span>
+        <div class="span3">
+            <div class="profile search-box members">
+                <div class="header">
+                    <h4>SEARCH MEMBERS</h4>
+                </div>
+                <div class="form-container">
+                    <form ng-controller="searchProfiles" ng-submit="searchProfiles()">
+                        <input type="text" ng-model="profileSearchQuery" placeholder="Search Members...">
+                        <div class="btn-group-border"></div>
+                        <div class="search-lens read-more gradient">
+                            <div class="preview-lens"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
