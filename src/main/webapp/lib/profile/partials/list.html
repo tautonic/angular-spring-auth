@@ -16,10 +16,6 @@
                         <div class="btn-group-border">
                             <div class="btn-group bgc">
                                 <button class="btn btn-success" ng-click="followUser(profileModal.id)"><span ng-show="!profileModal.isUserFollowing">Follow</span><span ng-show="profileModal.isUserFollowing">Unfollow</span></button>
-                                <ng-switch on=canEditProfile()>
-                                    <button ng-switch-when=true class="btn btn-success" ng-click="closeProfileModal('profiles/update/')">Edit Profile</button>
-                                </ng-switch>
-
                                 <button class="btn btn-success" ng-click="closeProfileModal('profiles/view/')">Full Profile</button>
                             </div>
                         </div>
