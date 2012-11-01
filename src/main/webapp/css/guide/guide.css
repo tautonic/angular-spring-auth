@@ -330,8 +330,14 @@ address{
 }
 
 p.muted,
-h5.muted{
+h5.muted,
+a.muted{
     color: #999999;
+}
+
+a.muted {
+    text-decoration: none;
+    padding-left: 10px;
 }
 
 p.text-warning {
@@ -641,8 +647,11 @@ a.btn:visited{
     background-position: -8px -8px;
 }
 
-.article .content .tags a {
+.article .content .tags a,
+.single-article .activity-stream .tags a {
     color: #cbb766;
+    font-size: 18px;
+    font-weight: normal;
 }
 
 .btn-group > .btn:first-child{
@@ -943,12 +952,30 @@ a .read-more p{
     width: 50%;
 }
 
-.new-picture-frame .premium {
-    position: absolute;
-    right: 9px;
-    top: 10px;
+.premium {
     width: 30px;
     height: 29px;
     background-image: url('../../images/GCEE_sprite.png');
     background-position: -140px -92px;
+}
+
+.new-picture-frame .premium {
+    position: absolute;
+    right: 9px;
+    top: 10px;
+}
+
+.article-meta .premium {
+    float: left;
+}
+
+.single-article .activity-stream .author {
+    padding: 10px 5px 0 90px;
+    color: #0a4d6c;
+    font-weight: bold;
+}
+
+.single-article .activity-stream .tags,
+.single-article .activity-stream .btn-group-border {
+    margin: 5px 10px;
 }

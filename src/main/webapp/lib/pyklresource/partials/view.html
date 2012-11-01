@@ -35,7 +35,45 @@
     </div>
 </div>
 
-<h1>{{article.title}}</h1>
-<a ng-click="toggleModal(true)">Preview Document</a>
-<p ng-bind-html="article.description" ng-show="abstractVisible()"></p>
-<p ng-bind-html="article.content"></p>
+<div class="row single-article">
+    <div class="span9">
+        <h3>{{article.title}}</h3>
+        <p class="article-meta">
+            <span class="doc-type {{article.doctype}}"></span>
+            <span class="premium" ng-show="article.premium"></span>
+            <div class="article-tweet-button">
+                <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
+            </div>
+            <a ng-click="like()" class="muted"><i class="likes"></i> Like This ({{article.likes}})</a></span>
+        </p>
+        <p ng-bind-html="article.description" ng-show="abstractVisible()"></p>
+        <p ng-bind-html="article.content"></p>
+    </div>
+    <div class="span3">
+        <div class="activity-stream">
+            <div class="activity-stream-header">
+                <!--<div thumbnail thumb=auth size="medium" rotation="none" type="profile" />-->
+
+                <div class="new-picture-frame profile-thumbnail medium no-rotation">
+                    <img ng-src ="{{auth.principal.thumbnail}}" alt="">
+                </div>
+
+                <h4>UPLOADED BY:</h4>
+            </div>
+            <div class="activity-stream-content">
+                <p class="author">by {{article.author}}, {{article.dateCreated | asDate}}</p>
+                <hr>
+                <div class="tags">
+                    <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
+                </div>
+                <div class="btn-group-border">
+                    <div class="btn-group bgc">
+                        <button class="btn btn-success">Download</button>
+                        <button class="btn btn-success" ng-click="toggleModal(true)">Preview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
