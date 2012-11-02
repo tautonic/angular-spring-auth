@@ -574,10 +574,18 @@ a.btn:visited{
     border: 1px solid #F1EFEF;
     margin-left: 100px;
     position: relative;
-    border-radius: 3px;
+    border-radius: 3px 3px 0 0;
 }
 
-.discussion-first-post .picture-frame{
+.discussion-first-post-stats {
+    padding: 10px 10px 5px;
+    margin-left: 150px;
+    border: 1px solid #F1EFEF;
+    position: relative;
+    border-radius: 0 0 3px 3px;
+}
+
+.discussion-first-post .new-picture-frame{
     position: absolute;
     top: 0;
     left: -88px;
@@ -603,10 +611,11 @@ a.btn:visited{
     padding-left: 70px;
     border: 1px solid #F1EFEF;
     position: relative;
-    border-radius: 3px;
+    border-radius: 3px 3px 0 0;
+    margin-top: 20px;
 }
 
-.discussion-post .picture-frame{
+.discussion-post .new-picture-frame{
     position: absolute;
     top: 0;
     left: -5px;
@@ -620,10 +629,48 @@ a.btn:visited{
     margin: 2px 0;
     line-height: 16px;
 }
+
+.discussion-post-stats {
+    padding: 10px;
+    padding-left: 20px;
+    border: 1px solid #F1EFEF;
+    position: relative;
+    border-radius: 0 0 3px 3px;
+}
+
+.discussion-post-stats .reply-form {
+    padding-left: 80px;
+}
+
 /** discussion reply **/
 .discussion-post textarea {
     width: 90%;
     height: 100px;
+}
+
+.discussion-post hr {
+    margin-left: -70px;
+    width: 110%;
+}
+
+.discussion-post form,
+.discussion-post .control-group {
+    margin-bottom: 0;
+}
+
+.discussion-post blockquote {
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f9f8f6));
+    background-image: -webkit-linear-gradient(top, #ffffff, #f9f8f6);
+    background-image: -moz-linear-gradient(top, #ffffff, #f9f8f6);
+    background-image: -o-linear-gradient(top, #ffffff, #f9f8f6);
+    background-image: linear-gradient(to bottom, #ffffff, #f9f8f6);
+    padding: 5px 5px 5px 15px;
+    border: 1px solid #F1EFEF;
+}
+
+.discussion-post blockquote p {
+    color: #999;
+    font-style: italic;
 }
 
 /********** article list styles ********/

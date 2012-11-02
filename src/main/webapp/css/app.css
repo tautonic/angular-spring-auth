@@ -73,9 +73,10 @@
     margin-left: 40px;
 }
 
-.post .user {
+.post .user, .reply .user {
     float: left;
     padding-left: 5px;
+    margin: 10px 0 0 -5px;;
 }
 
 .post .user p {
@@ -1009,7 +1010,8 @@ i.likes,
 i.views,
 i.comments,
 i.flag,
-i.globe{
+i.globe,
+i.add{
     background: url('../images/GCEE_sprite.png') 10px 10px no-repeat;
     width: 13px;
     height: 13px;
@@ -1030,6 +1032,10 @@ i.comments{
 
 i.flag{
     background-position: -45px -87px;
+}
+
+i.add{
+    background-position: -45px -7px;
 }
 
 i.globe{

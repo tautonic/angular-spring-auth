@@ -855,7 +855,7 @@ app.post('/utility/view/:id', function(req, id) {
 
     var exchange = httpclient.request(opts);
 
-    return json(exchange.content);
+    return json(JSON.parse(exchange.content));
 })
 
 app.post('/utility/like/:id', function(req, id) {

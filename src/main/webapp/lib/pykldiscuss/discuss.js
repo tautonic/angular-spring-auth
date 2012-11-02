@@ -101,6 +101,9 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
                 $scope.discussion = data[0];
                 $scope.isLoaded = true;
                 $scope.hide = false;
+                $http.post("api/utility/view/" + $scope.discussion._id).success(function(data) {
+                    $scope.discussion.views = data.views;
+                });
             } else {
                 $scope.hide = true;
                 $rootScope.$broadcast("event:newDiscussion");
@@ -110,21 +113,27 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
             });
     }
 
-    $scope.replyTo = function (original) {
+    $scope.replyTo = function (post, quoting) {
+        quoting = quoting || false;
         if (!$rootScope.auth.isAuthenticated) {
             $rootScope.$broadcast($auth.event.signinRequired);
             return;
         }
-        $scope.reply.show = true;
-        if (original != null) {
-            var content = "<p><blockquote>" + original + "</blockquote></p>" + "<p></p>";
-            $scope.reply.message = content;
+        post.reply = {
+            show: true
+        }
+        if (quoting) {
+            var content = "<p><blockquote>" + post.message + "</blockquote></p>" + "<p></p>";
+            post.reply.message = content;
         } else {
-            $scope.reply.message = null;
+            post.reply.message = null;
         }
     };
 
-    $scope.submitReply = function () {
+    $scope.submitReply = function (post) {
+        if(post !== null) {
+            $scope.reply = post.reply;
+        }
         var reply = $scope.reply.message;
         var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
         $http.post(replyUrl, { reply:reply }).success(function (data) {
@@ -134,8 +143,8 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
         });
     };
 
-    $scope.cancel = function () {
-        $scope.reply.show = false;
+    $scope.cancelReply = function (post) {
+        post.reply.show = false;
     };
 
     $scope.canEdit = function (post) {
