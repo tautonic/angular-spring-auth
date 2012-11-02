@@ -120,7 +120,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             console.log("ARTICLE RETURNED: ",data);
             $scope.article = data;
             $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
-            $http.post("api/views/" + $scope.article._id);
+            $http.post("api/utility/view/" + $scope.article._id);
         }).error(function(data, status) {
                 $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
             });
@@ -145,6 +145,12 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             return false;
         }
         return (typeof($scope.article.content) === "undefined");
+    }
+
+    $scope.like = function() {
+        $http.post("api/utility/like/" + $scope.article._id).success(function(data) {
+            $scope.article.likes = data.likes;
+        });
     }
 
     $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });

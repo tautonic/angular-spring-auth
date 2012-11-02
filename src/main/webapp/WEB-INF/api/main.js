@@ -71,23 +71,6 @@ app.get( '/index.html', function ( req ) {
 	return homepage( req );
 } );
 
-app.get('/getquote', function(req) {
-    return json({ "quote": returnRandomQuote() });
-})
-
-app.post('/views/:id', function(req, id) {
-    var opts = {
-        url: "http://localhost:9300/myapp/api/views/" + id,
-        method: 'POST',
-        headers: Headers({ 'x-rt-index': 'gc' }),
-        async: false
-    };
-
-    var exchange = httpclient.request(opts);
-
-    return json(true);
-})
-
 /********** Articles and resources *********/
 
 app.get('/article/all/news', function(req) {
@@ -849,6 +832,46 @@ app.get('/profiles/images/', function(req, id){
         body:[]
     }
 });
+
+/***********************
+ *
+ * Utility Functions
+ *
+ ***********************/
+
+// gets a random quote, used on the homepage. quotes are currently placeholders
+app.get('/utility/getquote', function(req) {
+    return json({ "quote": returnRandomQuote() });
+})
+
+// incriments view count for an object
+app.post('/utility/view/:id', function(req, id) {
+    var opts = {
+        url: "http://localhost:9300/myapp/api/views/" + id,
+        method: 'POST',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    return json(exchange.content);
+})
+
+app.post('/utility/like/:id', function(req, id) {
+    var user = getUserDetails();
+
+    var opts = {
+        url: "http://localhost:9300/myapp/api/likes/" + user.principal.id + "/" + id,
+        method: 'POST',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    return json(JSON.parse(exchange.content));
+})
 
 /**
  * Requires an email address, and passes that to zocia. If the email address is valid/in use, it will send the user an email giving them a link to reset their password using the token that's generated

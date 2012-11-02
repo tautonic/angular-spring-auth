@@ -9,12 +9,11 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     $rootScope.content_query = '';
     $rootScope.discussion_query = '';
 
-    $http.get("api/getquote").success(function(data) {
+    $http.get("api/utility/getquote").success(function(data) {
         $scope.quote = data.quote;
     });
 
     $http.get('api/article/all/news').success(function(data) {
-        console.log("ARTICLES RETURNED: ",data);
         $scope.articles = data;
     })
 
@@ -25,7 +24,6 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     };
 
     $http.get('api/notifications?filters=likes comments discussions collaborators ideas companies profiles spMessages', options).success(function(data) {
-        console.log("DATA IS: ",data);
         $scope.stream = data;
     });
 
