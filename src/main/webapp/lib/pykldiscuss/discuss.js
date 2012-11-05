@@ -129,21 +129,23 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
 
     $scope.submitReply = function (post) {
         var reply;
-        if(post !== null) {
+        if(post !== undefined) {
             reply = post.reply.message;
         } else {
             reply = $scope.reply.message;
         }
         var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
         $http.post(replyUrl, { reply:reply }).success(function (data) {
-            if(post !== null) {
+            if(post !== undefined) {
                 post.reply.show = false;
                 post.reply.message = '';
             } else {
                 $scope.reply.show = false;
                 $scope.reply.message = '';
+                $scope.reply.title = '';
             }
             $scope.discussion.children.unshift(data);
+            $scope.discussion.commentCount++;
         });
     };
 
