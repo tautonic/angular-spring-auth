@@ -1011,7 +1011,7 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
             height -= 21;
 
             attrs.$observe('comments', function(value){
-                var stacks = value;
+                var stacks = Math.floor(value/5);
 
                 for(var i=0; i < stacks; i++){
                     var div = document.createElement('div');
