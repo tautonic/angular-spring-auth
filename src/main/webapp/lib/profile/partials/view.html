@@ -231,7 +231,7 @@
                                 <div class="edit-profile-thumb" thumbnail thumb=profile size="large" rotation="none" type="profile" />
 
                                 <div class="image-upload">
-                                    <div class="clearfix" id="update" pykl-upload="{dropTarget:'profile-thumb-drop-target'}">
+                                    <div class="clearfix" id="update" pykl-profile-image-upload="{dropTarget:'profile-thumb-drop-target'}">
                                         <!--<img src="{{profile.thumbnail}}" id="drop-target" />-->
                                         <div id="profile-thumb-drop-target">
                                             <h2>Drag and drop an image file here</h2>
@@ -246,25 +246,9 @@
                                 </div>
                             </div>
 
-                            <div class="modal hide fade">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h3>Crop your image</h3>
-                                </div>
-                                <div class="modal-body">
-                                    <img id="image-crop" src="" alt="">
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="cancel-crop" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</button>
-                                    <button id="save-crop" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
-                                </div>
-                            </div>
-
-                            <div id="container">
-                                <br>
-                                <div id="filelist"></div>
-                                <br />
-                                <!--<button class="btn btn-primary" id="choose-files"><i class="icon-folder-open icon-white"></i> Browse</button>-->
+                            <div class="profile-crop-preview clearfix">
+                                <div class="full-size"></div>
+                                <div class="preview"></div>
                             </div>
                         </div>
                     </div>
