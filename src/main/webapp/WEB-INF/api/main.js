@@ -404,7 +404,7 @@ app.post('/profiles/', function(req){
             "pre": req.postParams.name.pre,
             "surname": req.postParams.name.surname
         },
-        "password" : req.postParams.password,
+        "password" : digest(req.postParams.password).toLowerCase(),
         "accountEmail" : {
             "address"  : req.postParams.accountEmail.address
         },
@@ -581,7 +581,7 @@ app.put('/profiles/:id', function(req, id){
     };
 
     if(req.postParams.newPass !== ''){
-        data.password = req.postParams.newPass;
+        data.password = digest(req.postParams.newPass).toLowerCase();
     }
 
     delete data.newPass;

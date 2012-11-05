@@ -78,10 +78,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
             //this check is needed to handle things like discussions connected with articles
             if ($routeParams.articleId) {
                 $scope.pageType = "byParent/" + $routeParams.articleId;
-                $scope.hasContent = false;
                 $scope.reply.title = '';
-            } else {
-                $scope.hasContent = true;
             }
 
             url = url + $scope.pageType;
@@ -131,14 +128,21 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
     };
 
     $scope.submitReply = function (post) {
+        var reply;
         if(post !== null) {
-            $scope.reply = post.reply;
+            reply = post.reply.message;
+        } else {
+            reply = $scope.reply.message;
         }
-        var reply = $scope.reply.message;
         var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
         $http.post(replyUrl, { reply:reply }).success(function (data) {
-            $scope.reply.show = false;
-            $scope.reply.message = '';
+            if(post !== null) {
+                post.reply.show = false;
+                post.reply.message = '';
+            } else {
+                $scope.reply.show = false;
+                $scope.reply.message = '';
+            }
             $scope.discussion.children.unshift(data);
         });
     };
@@ -179,7 +183,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
     }
 
     $rootScope.$on($auth.event.signoutConfirmed, function () {
-        if ($scope.$scope.pageType == "new") {
+        if ($scope.pageType == "new") {
             $location.path('/discussion/all');
         }
     });
@@ -195,7 +199,6 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
 
 function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location) {
     var url = 'api/discussions/new';
-    $scope.hasContent = false;
     $scope.hide = ($routeParams.articleId === null);
 
     $scope.query = '';
@@ -252,7 +255,6 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location
     //fired by the view resource controller after it's loaded, by default this should hide the new reply until it's discovered that the discussion for that object doesn't exist yet
     $rootScope.$on('event:loadDiscussion', function ($event, $args) {
         $scope.hide = true;
-        $scope.hasContent = true;
     });
 }
 
