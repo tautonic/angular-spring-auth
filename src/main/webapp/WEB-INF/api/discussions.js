@@ -21,9 +21,33 @@ var getDiscussion = function(id) {
 
     var exchange = httpclient.request(opts);
 
+    if(Math.floor(exchange.status / 100) !== 2) {
+        return {
+            'status': 404,
+            'content': JSON.parse(exchange.status),
+            'headers': exchange.headers,
+            'success': Math.floor(exchange.status / 100) === 2
+        }
+    }
+
+    var thread = JSON.parse(exchange.content);
+
+    opts = {
+        url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread[0]._id + '&types=discussion',
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    exchange = httpclient.request(opts);
+
+    var comment = JSON.parse(exchange.content);
+
+    thread[0].commentCount = comment.count;
+
     return {
         'status': exchange.status,
-        'content': JSON.parse(exchange.content),
+        'content': thread,
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     };
@@ -75,6 +99,7 @@ var getDiscussionList = function() {
     var exchange = httpclient.request(opts);
 
     //filters out threads with empty titles and threads that are tied to an article
+    //todo: at this point, all threads tied to an article will likely have a title, so this might not be needed anymore.
     var threads = JSON.parse(exchange.content).filter(function(element) {
         return !(element.title === "");
     });

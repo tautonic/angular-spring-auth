@@ -1,7 +1,7 @@
 <div id="discussions" class="container" ng-show="!hide">
     <div class="row">
         <div class="discussion-heading">
-            <h3 ng-show="hasContent">{{discussion.title}}</h3>
+            <h3>{{discussion.title}}</h3>
             <ul class="article-stats">
                 <li class="muted"><i class="likes"></i> {{discussion.likes}} Likes</li>
                 <li class="muted"><i class="views"></i> {{discussion.views}} Views</li>
@@ -35,6 +35,7 @@
             </ul>
         </div>
 
+
         <div class="grey-gradient" ng-show="auth.isAuthenticated">
             <div class="user">
                 <div class="new-picture-frame profile-thumbnail medium clockwise">
@@ -44,16 +45,13 @@
             <div class="discussion-post">
                 <form name="newDiscussionForm" ng-submit="createDiscussion()">
                     <fieldset class="control-group">
-                        <div ng-show="!hasContent">
-                            <input type="text" ng-model="reply.title" class="input-xlarge" required validation-tooltip placeholder="Discussion Title">
-                        </div>
+                        <input type="text" ng-model="reply.title" class="input-xlarge" required validation-tooltip placeholder="Discussion Title">
                         <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce placeholder="Subject">
                         </textarea>
                         <br>
                         <div class="btn-group-border">
                             <div class="btn-group bgc">
                                 <input type="submit" value="Post" class="btn btn-success" ng-disabled="newDiscussionForm.$invalid">
-                                <!-- <input ng-show="hasContent" type="button" ng-click="cancel()" value="Cancel" class="btn">-->
                             </div>
                         </div>
                         <span class="muted"><i class="add"></i> Add Image</span>
@@ -92,22 +90,22 @@
                 </span>
                 <span class="muted"><i class="likes"></i> Like This</span>
                 <span ng-click="flag({{post._id}})" class="muted"><i class="flag"></i> Flag for Spam</span>
-
             </div>
+
             <div class="discussion-post-stats grey-gradient" ng-show="post.reply.show">
                 <div class="user">
                     <div class="new-picture-frame profile-thumbnail medium clockwise">
                         <img ng-src="{{auth.principal.thumbnail}}" alt="">
                     </div>
                 </div>
-                <form class="reply-form" name="replyForm" ng-submit="submitReply(post)">
+                <form class="reply-form" name="replyForm">
                     <fieldset class="control-group">
                         <textarea rows="10" cols="100" ng-model="post.reply.message" required ui-tinymce placeholder="Subject"></textarea>
 
                         <br>
                         <div class="btn-group-border">
                             <div class="btn-group bgc">
-                                <input type="submit" value="Post" class="btn btn-success" ng-disabled="replyForm.$invalid">
+                                <input type="submit" value="Post" class="btn btn-success" ng-disabled="replyForm.$invalid" ng-click="submitReply(post)">
                                 <button class="btn btn-success" ng-click="cancelReply(post)">Cancel</button>
                             </div>
                         </div>
@@ -116,44 +114,6 @@
                 </form>
             </div>
         </div>
-        <!-- old stuff
-        <div class="post">
-            <div class="user">
-                <p><a ng-href="#/profile/{{discussion.creator._id}}">{{discussion.creator.username}}</a></p>
-                <img ng-src="{{discussion.creator.thumbnail}}">
-            </div>
-            <p class="content" ng-bind-html="discussion.message">{{discussion.message}}</p>
-            <div class="content" ng-show="discussion.edit">
-                <form name="editForm" ng-submit="editPost(discussion)">
-                    <fieldset class="control-group">
-                        <textarea style="width: 100%; height: 50px;" ng-model="discussion.edited" ui-tinymce required></textarea>
-                        <input type="submit" value="Save" class="btn" ng-disabled="editFormInvalid(this)">
-                        <input type="button" ng-click="cancelEdit(discussion)" value="Cancel" class="btn">
-                    </fieldset>
-                </form>
-            </div>
-            <div class="buttons clear"><button ng-click="replyTo()" class="btn">Reply</button><button ng-click="replyTo(discussion.message)" class="btn">Quote</button><button ng-click="edit(discussion)" ng-show="canEdit(discussion)" class="btn">Edit</button></div>
-        </div>
-
-        <div class="post threaded">
-            <div class="user">
-                <p><a ng-href="#/profile/{{post.creator._id}}">{{post.creator.username}}</a></p>
-                <img ng-src="{{post.creator.thumbnail}}">
-            </div>
-            <p class="content" ng-bind-html="post.message" ng-show="!post.edit">{{post.message}}</p>
-            <div class="content" ng-show="post.edit">
-                <form name="editForm" ng-submit="editPost(post)">
-                    <fieldset class="control-group">
-                        <textarea rows="10" ng-model="post.edited" ui-tinymce required></textarea>
-                        <input type="submit" value="Save" class="btn" ng-disabled="editFormInvalid(this)">
-                        <input type="button" ng-click="cancelEdit(post)" value="Cancel" class="btn">
-                    </fieldset>
-                </form>
-            </div>
-            <div class="buttons clear"><button ng-click="replyTo()" class="btn">Reply</button><button ng-click="replyTo(post.message)" class="btn">Quote</button><button ng-click="edit(post)" ng-show="canEdit(post)" class="btn">Edit</button></div>
-
-        </div>
-        <button ng-click="replyTo()" class="btn">Reply</button>-->
 
     </div>
 </div>
