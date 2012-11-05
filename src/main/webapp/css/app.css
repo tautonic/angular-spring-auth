@@ -1970,19 +1970,21 @@ li.search-result.members{
 }
 
 .profile-crop-preview{
-    margin-top: 1em;
+    display: none;
+    margin: 1em 0;
 }
 
 .profile-crop-preview .full-size{
-    width: 72%;
+    /*width: 72%;
     height: 200px;
-    background-color: #bbbbbb;
+    background-color: #bbbbbb;*/
     float: left;
+    margin-bottom: 1em;
 }
 .profile-crop-preview .preview{
-    width: 25%;
-    height: 200px;
-    background-color: #bbbbbb;
+    width: 135px;
+    height: 135px;
+    overflow: hidden;
     float: left;
     margin-left: 1em;
 }

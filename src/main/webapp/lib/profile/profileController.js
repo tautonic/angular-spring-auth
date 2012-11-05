@@ -224,6 +224,17 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     $scope.cancelNotesUpdate = function(){
         $scope.showHideNotes = false;
         $scope.profile = $scope.master;
+    };
+
+    $scope.updateThumbnailUri = function(profile){
+        Profile.update({profileId: profile._id}, profile, function(response){
+            $scope.profile = response;
+            $scope.responseContent = response;
+            $scope.master = angular.copy($scope.profile);
+        }, function(response){
+            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
+            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
     }
 
     $scope.followUser = function(id) {

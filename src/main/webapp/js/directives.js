@@ -448,7 +448,7 @@ angular.module('bgc.directives')
             var cancelCropBtn;
             var saveCropBtn;
 
-            options = scope.$eval(attrs.pyklUpload);
+            options = scope.$eval(attrs.pyklProfileImageUpload);
 
             var config = {
                 scope: scope,
@@ -466,7 +466,7 @@ angular.module('bgc.directives')
                 ]
             };
 
-            if (attrs.pyklUpload) {
+            if (attrs.pyklProfileImageUpload) {
                 if (options.dropTarget) {
                     config.drop_element = options.dropTarget;
                 }
@@ -501,36 +501,39 @@ angular.module('bgc.directives')
 
             var url;
 
-            function fileUploaded(uploader, file, response) {
+            uploader.bind('FileUploaded', function(uploader, file, response){
                 url = response.response;
-            }
-
-            uploader.bind('FileUploaded', fileUploaded);
+            });
 
             var jcropApi;
+            var height;
+            var width;
 
             uploader.bind('UploadComplete', function(uploader, file){
-                $('#image-crop').attr('src', url);
+                //$('#image-crop').attr('src', url);
 
-                $('.modal.hide.fade').modal('show');
+                $('.profile-crop-preview').show();
 
                 cancelCropBtn = angular.element('#cancel-crop');
                 saveCropBtn = angular.element('#save-crop');
 
                 $('.jcrop-holder img').attr('src', url);
+
+                $('#image-crop').attr('src', url);
+
                 $('#crop-preview').attr('src', url);
 
                 $('#image-crop').Jcrop({
                     bgColor: '#fff',
                     onChange: showPreview,
                     onSelect: showPreview,
-                    aspectRatio: 0.83333333333333
+                    aspectRatio: 1
                 }, function(){
                     jcropApi = this;
                 });
 
                 cancelCropBtn.bind('click', function(){
-                    $('.modal.hide.fade').modal('hide');
+                    $('.profile-crop-preview').hide();
                 });
 
                 saveCropBtn.bind('click', function(){
@@ -552,26 +555,31 @@ angular.module('bgc.directives')
                     };
 
                     var scope = config.scope;
+                    var profile = scope.$parent.profile;
 
                     $http.post('/gc/api/profiles/images/crop/', data).success(
                         function(data, status, headers, config){
                             var uri = data.response.uri;
                             uri = uri.replace(/http:/, '');
-                            scope.thumbnailURI = uri;
-                            $('#drop-target').attr('src', uri);
+                            profile.thumbnail = uri;
+                            scope.$parent.updateThumbnailUri(profile);
+                            $('.new-picture-frame.profile-thumbnail img').attr('src', uri);
                         }
                     );
 
-                    $('.modal.hide.fade').modal('hide');
+                    height = $('#image-crop').height();
+                    width = $('#image-crop').width();
+
+                    $('.profile-crop-preview').hide();
                 });
 
                 function showPreview(coords){
-                    var rx = 250 / coords.w;
-                    var ry = 300 / coords.h;
+                    var rx = 100 / coords.w;
+                    var ry = 100 / coords.h;
 
                     $('#crop-preview').css({
-                        width: Math.round(rx * 300) + 'px',
-                        height: Math.round(ry * 360) + 'px',
+                        width: Math.round(rx * width) + 'px',
+                        height: Math.round(ry * height) + 'px',
                         marginLeft: '-' + Math.round(rx * coords.x) + 'px',
                         marginTop: '-' + Math.round(ry * coords.y) + 'px'
                     });
