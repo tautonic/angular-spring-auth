@@ -1,20 +1,20 @@
 'use strict';
-function ListResources( $rootScope, $scope, $auth, $http, $log, $routeParams ) {
-    var url = "api/article/search/";
+function ListResources( $rootScope, $scope, $auth, $http, $log ) {
+    var sortBy = 'featured';
+    var url = "api/article/search?sort=" + sortBy;
     $scope.filters = {};
     $scope.paging = {
         size: 10
     };
 
+    resetPaging();
     loadContent();
-    //resetPaging();
 
     $rootScope.service = 'curriculum';
 
     function loadContent() {
-        resetPaging();
         $http.get( url ).success( function (data) {
-            console.log("ARTICLE RETURNED: ",data);
+            console.log("URL WAS: " + url + " ARTICLE RETURNED: ",data);
             if(data !== "false") {
                 $scope.articles = data;
                 if($scope.articles.length === 0) {
@@ -26,6 +26,16 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $routeParams ) {
         }).error(function(data, status) {
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
+    }
+
+    $scope.sortBy = function(param) {
+        if(sortBy === param)
+        {
+            return;
+        }
+        sortBy = param;
+
+        $scope.search($scope.searchTerm);
     }
 
     function buildFilters() {
@@ -51,7 +61,9 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $routeParams ) {
 
     $scope.search = function(term) {
         term = term || "";
-        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from;
+        resetPaging();
+
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy;
 
         loadContent();
     }
@@ -62,9 +74,9 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $routeParams ) {
             return;
         }
         term = term || "";
-        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size;
-
         $scope.paging.from += $scope.paging.size;
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size + "&sort=" + sortBy;
+
 
         $http.get( url ).success( function (data) {
             console.log("new RETURNED: ",data);
@@ -103,9 +115,8 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $routeParams ) {
     });
 
     function resetPaging() {
-        $scope.paging.from = $scope.paging.size;
+        $scope.paging.from = 0;
         $scope.paging.more = true;
-        console.log("paging results: ",$scope.paging);
     }
 }
 

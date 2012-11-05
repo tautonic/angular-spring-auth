@@ -26,6 +26,20 @@ var searchAllArticles = function(params) {
     var query;
     var from = params.from || 0;
     var size = params.size || 10;
+    var sorting = [ "_score" ];
+
+    switch(params.sort) {
+        case "recent":
+            sorting = [ { "dateCreated": "desc"}, "_score" ];
+            break;
+        case "popular":
+            sorting = [ { "views": "desc"}, {"likes": "desc"}, "_score" ];
+            break;
+        case "featured":
+            sorting = [ { "dateCreated": "desc"}, "_score" ];
+            break;
+        default:
+    }
 
     if(params.term) {
             query = {
@@ -66,10 +80,10 @@ var searchAllArticles = function(params) {
                     ]
                 }
             }
-            //"sort": [ { "views": "desc" }],
         },
         "from": from,
-        "size": size
+        "size": size,
+        "sort": sorting
     };
 
     if(params.filters) {
