@@ -290,7 +290,7 @@ var pykl = window.pykl || {};
 
             });
 
-            $scope.signout = function () {
+            $scope.signout = function () {   console.log("SIGNING OUT");
                 $rootScope.$broadcast(EVENT_SIGNOUT_REQUEST);
             };
         }]
@@ -391,7 +391,7 @@ var pykl = window.pykl || {};
 
             $rootScope.$on(EVENT_SIGNOUT_REQUEST, function () {
                 function success() {
-                    $rootScope.$broadcast(EVENT_SIGNOUT_CONFIRMED);
+                    $rootScope.$broadcast(EVENT_INTERNAL_SIGNOUT_CONFIRMED);
                 }
 
                 $http.put('j_spring_security_logout', {})
