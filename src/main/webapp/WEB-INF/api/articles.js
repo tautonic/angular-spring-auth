@@ -242,7 +242,6 @@ var quotes = [
     "If everything seems under control, you’re just not going fast enough. – Mario Andretti",
     "If what you are doing is not moving you towards your goals, then it’s moving you away from your goals. – Brian Tracy",
     "The entrepreneur builds an enterprise; the technician builds a job. – Michael Gerber",
-    "As long as you’re going to be thinking anyway, think big. – Donald Trump",
     "Don’t make friends who are comfortable to be with. Make friends who will force you to lever yourself up. – Thomas J. Watson",
     "The link between my experience as an entrepreneur and that of a politician is all in one word: freedom. – Silvio Berlusconi",
     "Success is walking from failure to failure with no loss of enthusiasm. – Winston Churchill",
