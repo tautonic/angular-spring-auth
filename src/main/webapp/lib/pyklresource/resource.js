@@ -143,7 +143,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             document: {
                 title: $scope.article.title,
                 url: "https://docs.google.com/a/pykl.com/document/d/1KgIuo9dcZ6ggAp4Qe8C_jE4ULb5RzwQAiEtukRyphWc/?embedd=true",
-                doctype: "pdf",
+                doctype: $scope.article.doctype,
                 author: $scope.article.author,
                 dateCreated: $scope.article.dateCreated
             }

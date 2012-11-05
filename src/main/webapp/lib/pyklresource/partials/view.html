@@ -46,8 +46,8 @@
             </div>
             <a ng-click="like()" class="muted"><i class="likes"></i> Like This ({{article.likes}})</a></span>
         </p>
-        <p ng-bind-html="article.description" ng-show="abstractVisible()"></p>
-        <p ng-bind-html="article.content"></p>
+        <div class="formatted" ng-bind-html-unsafe="article.description" ng-show="abstractVisible()"></div>
+        <div class="formatted" ng-bind-html-unsafe="article.content"></div>
     </div>
     <div class="span3">
         <div class="activity-stream">

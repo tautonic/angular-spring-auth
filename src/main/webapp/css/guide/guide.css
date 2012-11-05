@@ -701,6 +701,14 @@ a.btn:visited{
     font-weight: normal;
 }
 
+.single-article .formatted {
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap; /* ancient Opera */
+    white-space: -o-pre-wrap; /* newer Opera */
+    white-space: pre-wrap; /* Chrome; W3C standard */
+    word-wrap: break-word; /* IE */
+}
+
 .btn-group > .btn:first-child{
     -webkit-border-bottom-left-radius: 20px;
     border-bottom-left-radius: 20px;
