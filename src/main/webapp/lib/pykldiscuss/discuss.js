@@ -183,7 +183,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
     }
 
     $rootScope.$on($auth.event.signoutConfirmed, function () {
-        if ($scope.$scope.pageType == "new") {
+        if ($scope.pageType == "new") {
             $location.path('/discussion/all');
         }
     });
