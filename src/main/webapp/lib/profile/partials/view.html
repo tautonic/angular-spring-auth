@@ -14,7 +14,7 @@
                         CONTACT
                         <div ng-switch on=profile.userCanEdit>
                             <div ng-switch-when=true>
-                                <div ng-click="$parent.showHideContact=!showHideContact" class="edit"><i class="icon-pencil"></i> Edit Section</div>
+                                <div ng-click="$parent.showHideContact=!showHideContact" class="edit"><i class="icon-pencil"></i> Edit Contact Info</div>
                             </div>
                         </div>
                     </h3>
@@ -65,7 +65,7 @@
                     <h3 class="sans-serif">INSTITUTION
                         <div ng-switch on=profile.userCanEdit>
                             <div ng-switch-when=true>
-                                <div ng-click="$parent.showHideInstitution=!showHideInstitution" class="edit"><i class="icon-pencil"></i> Edit Section</div>
+                                <div ng-click="$parent.showHideInstitution=!showHideInstitution" class="edit"><i class="icon-pencil"></i> Edit Institution Info</div>
                             </div>
                         </div>
                     </h3>
@@ -124,7 +124,7 @@
                     <h3 class="sans-serif">EDUCATION
                         <div ng-switch on=profile.userCanEdit>
                             <div ng-switch-when=true>
-                                <div ng-click="$parent.showHideEducation=!showHideEducation" class="edit"><i class="icon-pencil"></i> Edit Section</div>
+                                <div ng-click="$parent.showHideEducation=!showHideEducation" class="edit"><i class="icon-pencil"></i> Edit Education Info</div>
                             </div>
                         </div>
                     </h3>
@@ -187,7 +187,7 @@
 
                 <div ng-switch on=profile.userCanEdit>
                     <div ng-switch-when=true>
-                        <h3 class="sans-serif"><div style="padding-right: 1em;" ng-click="$parent.showHideNotes=!showHideNotes" class="edit"><i class="icon-pencil"></i> Edit Section</div></h3>
+                        <h3 class="sans-serif"><div style="padding-right: 1em;" ng-click="$parent.showHideNotes=!showHideNotes" class="edit"><i class="icon-pencil"></i> Edit Notes</div></h3>
                     </div>
                 </div>
                 <br>
@@ -217,6 +217,19 @@
                             </div>
                         </form>
                     </div>
+                </div>
+
+                <div class="info image">
+                    <h3 class="sans-serif">
+                        PROFILE IMAGE
+                        <div ng-switch on=profile.userCanEdit>
+                            <div ng-switch-when=true>
+                                <div ng-click="$parent.showHideContact=!showHideContact" class="edit"><i class="icon-pencil"></i> Edit Profile Image</div>
+                            </div>
+                        </div>
+                    </h3>
+                    <p><strong>Email: </strong>{{profile.accountEmail.address}}</p>
+                    <p><strong>Website: </strong><a ng-href="{{profile.websites[0].url}}">{{profile.websites[0].title}}</a></p>
                 </div>
             </div>
         </div>

@@ -30,6 +30,11 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
         event.currentScope.showModal = false;
     });
 
+    $scope.$on('$routeChangeStart', function(event){
+        event.currentScope.showModal = false;
+        //console.log('Route change start event fired!!!');
+    });
+
     $scope.showProfileModal = function(profile){
         $scope.showModal = true;
 

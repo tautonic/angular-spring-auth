@@ -1254,7 +1254,7 @@ li.search-result.members{
 }
 
 .name-title h3{
-    cursor: none;
+    cursor: auto;
 }
 
 .profile-left h5,
@@ -1879,6 +1879,10 @@ li.search-result.members{
     margin-bottom: 0;
 }
 
+.profile-full .image{
+    margin-top: 1em;
+}
+
 .profile-full h3.sans-serif{
     font-size: 20px;
     line-height: 10px;
@@ -1936,4 +1940,12 @@ li.search-result.members{
     opacity: 0;
     transition: all 0.5s ease;
     display: none;
+}
+
+.edit-profile-image{
+    margin-top: 1em;
+}
+
+.profile-image-upload{
+    margin-top: 1em;
 }
