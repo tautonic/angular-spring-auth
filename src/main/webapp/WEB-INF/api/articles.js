@@ -99,7 +99,7 @@ var searchAllArticles = function(params) {
 
         data.query.filtered.filter.and.push({ "terms": { "mimetype": mimetypeFilters }});
     }
-    log.info("QUERYING? "+JSON.stringify(data));
+
     var opts = {
         url: 'http://localhost:9300/myapp/api/resources/search',
         method: 'POST',
@@ -278,8 +278,9 @@ var quotes = [
     "Act enthusiastic and you will be enthusiastic. – Dale Carnegie"
 ];
 
+//originally (max - min + 1), which works well, but not when passing in array.length as the max argument.
 function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 
 var returnRandomQuote = function() {
