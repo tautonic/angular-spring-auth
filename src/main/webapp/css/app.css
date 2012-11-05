@@ -1958,12 +1958,16 @@ li.search-result.members{
 }
 
 #profile-thumb-drop-target{
-    padding: 4em 6em;
+    padding: 4em 4em;
     background-color: #dbdbdb;
     margin-bottom: 1em;
     border: dashed 13px #bbbbbb;
     -webkit-border-radius: 30px;
     border-radius: 30px;
+}
+
+#profile-thumb-drop-target h2{
+    font-weight: bold;
 }
 
 .edit-profile-thumb{
