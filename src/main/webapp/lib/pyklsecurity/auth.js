@@ -299,7 +299,7 @@ var pykl = window.pykl || {};
     pyklSecurity.config(['$httpProvider',
         function ($httpProvider, $rootScope, $q, $location, $log) {
             var authInterceptor = ['$rootScope', '$q', '$location', '$log',
-                function ($rootScope, $q, $log) {
+                function ($rootScope, $q, $location, $log) {
                     function success(response) {
                         //$log.info( 'Successful response: ' + JSON.stringify( response ) );
                         return response;
