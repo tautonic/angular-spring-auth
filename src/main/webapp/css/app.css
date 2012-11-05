@@ -1914,6 +1914,16 @@ li.search-result.members{
     cursor: pointer;
 }
 
+.profile-full .info.image{
+    position: relative;
+}
+
+.profile-full .info.image .profile-thumbnail{
+    top: 0;
+    left: 10px;
+    position: relative;
+}
+
 .profile.search-box{
     margin-top: 3em;
 }
@@ -1942,10 +1952,19 @@ li.search-result.members{
     display: none;
 }
 
-.edit-profile-image{
-    margin-top: 1em;
+#profile-thumb-drop-target{
+    padding: 4em 6em;
+    background-color: #dbdbdb;
+    margin-bottom: 1em;
+    border: dashed 13px #d6d6d6;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
 }
 
-.profile-image-upload{
-    margin-top: 1em;
+.edit-profile-thumb{
+    float: left;
+}
+
+.image-upload{
+    float: right;
 }

@@ -219,18 +219,57 @@
                     </div>
                 </div>
 
-                <div class="info image">
-                    <h3 class="sans-serif">
-                        PROFILE IMAGE
-                        <div ng-switch on=profile.userCanEdit>
-                            <div ng-switch-when=true>
-                                <div ng-click="$parent.showHideContact=!showHideContact" class="edit"><i class="icon-pencil"></i> Edit Profile Image</div>
+                <div ng-switch on=profile.userCanEdit>
+                    <div ng-switch-when=true>
+                        <div class="info image">
+                            <h3 class="sans-serif">
+                                PROFILE IMAGE
+                                <div class="edit"><i class="icon-pencil"></i> Edit Profile Image</div>
+                            </h3>
+
+                            <div class="clearfix">
+                                <div class="edit-profile-thumb" thumbnail thumb=profile size="large" rotation="none" type="profile" />
+
+                                <div class="image-upload">
+                                    <div class="clearfix" id="update" pykl-upload="{dropTarget:'profile-thumb-drop-target'}">
+                                        <!--<img src="{{profile.thumbnail}}" id="drop-target" />-->
+                                        <div id="profile-thumb-drop-target">
+                                            <h2>Drag and drop an image file here</h2>
+                                        </div>
+                                    </div>
+
+                                    <div class="btn-group-border">
+                                        <div class="btn-group bgc">
+                                            <button id="choose-files" class="btn btn-success"><i class="icon-folder-open icon-white"></i> Browse Files</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal hide fade">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h3>Crop your image</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <img id="image-crop" src="" alt="">
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="cancel-crop" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+                                    <button id="save-crop" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
+                                </div>
+                            </div>
+
+                            <div id="container">
+                                <br>
+                                <div id="filelist"></div>
+                                <br />
+                                <!--<button class="btn btn-primary" id="choose-files"><i class="icon-folder-open icon-white"></i> Browse</button>-->
                             </div>
                         </div>
-                    </h3>
-                    <p><strong>Email: </strong>{{profile.accountEmail.address}}</p>
-                    <p><strong>Website: </strong><a ng-href="{{profile.websites[0].url}}">{{profile.websites[0].title}}</a></p>
+                    </div>
                 </div>
+
             </div>
         </div>
 
