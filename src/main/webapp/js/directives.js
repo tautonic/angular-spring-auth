@@ -559,13 +559,17 @@ angular.module('bgc.directives')
 
                     $http.post('/gc/api/profiles/images/crop/', data).success(
                         function(data, status, headers, config){
-                            var uri = data.response.uri;
+                            var uri = data.content.uri;
                             uri = uri.replace(/http:/, '');
                             profile.thumbnail = uri;
                             scope.$parent.updateThumbnailUri(profile);
                             $('.new-picture-frame.profile-thumbnail img').attr('src', uri);
+                        }).error(
+                        function(){
+                            console.log('Image crop error!');
                         }
                     );
+
 
                     height = $('#image-crop').height();
                     width = $('#image-crop').width();

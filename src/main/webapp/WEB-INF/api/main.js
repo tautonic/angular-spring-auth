@@ -580,7 +580,7 @@ app.put('/profiles/:id', function(req, id){
         "about": req.postParams.about
     };
 
-    if(req.postParams.newPass !== ''){
+    if(req.postParams.newPass && req.postParams.newPass !== ''){
         data.password = digest(req.postParams.newPass).toLowerCase();
     }
 
@@ -682,8 +682,6 @@ app.get('/profiles/byusername/:username', function(req, username){
  * @returns {JsgiResponse} An HTML <div> containing a JSON string with upload results
  */
 app.post('/profiles/images/upload/', function (req) {
-    log.info('!!!REQ OBJECT!!! {}', JSON.stringify(req.params, null, 4));
-
     var contentType = req.env.servletRequest.getContentType();
 
     if ((req.method === "POST" || req.method === "PUT") && fileUpload.isFileUpload(contentType)) {
@@ -708,7 +706,7 @@ app.post('/profiles/images/upload/', function (req) {
                     'Authorization': auth,
                     'x-rt-upload-name': params.file.filename,
                     'x-rt-upload-content-type': params.file.contentType,
-                    'x-rt-upload-size': params.size
+                    //'x-rt-upload-size': params.size
                     //'x-rt-upload-title': ''	// This param was never set in "old" NEP
                 },
                 "data": params.file.value,
@@ -775,7 +773,16 @@ app.post('/profiles/images/crop/', function (req) {
 
     log.info('IMAGE CROP RESPONSE: ', JSON.stringify(exchange.content, null, 4));
 
-    return json({ response: JSON.parse(exchange.content) });
+    //return json({ response: JSON.parse(exchange.content) });
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    return result
 });
 
 app.get('/profiles/images/', function(req, id){
