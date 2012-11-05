@@ -35,29 +35,31 @@
             </ul>
         </div>
 
-
-        <div class="grey-gradient" ng-show="auth.isAuthenticated">
-            <div class="user">
-                <div class="new-picture-frame profile-thumbnail medium clockwise">
-                    <img ng-src ="{{auth.principal.thumbnail}}" alt="">
-                </div>
-            </div>
-            <div class="discussion-post">
-                <form name="newDiscussionForm" ng-submit="createDiscussion()">
-                    <fieldset class="control-group">
-                        <input type="text" ng-model="reply.title" class="input-xlarge" required validation-tooltip placeholder="Discussion Title">
-                        <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce placeholder="Subject">
-                        </textarea>
-                        <br>
+        <div ng-show="auth.isAuthenticated">
+            <form name="mainReplyForm">
+                <fieldset class="control-group">
+                    <div class="grey-gradient">
+                        <div class="user">
+                            <div class="new-picture-frame profile-thumbnail medium clockwise">
+                                <img ng-src ="{{auth.principal.thumbnail}}" alt="">
+                            </div>
+                        </div>
+                        <div class="discussion-post">
+                            <input type="text" ng-model="reply.title" class="input-xlarge" required validation-tooltip placeholder="Discussion Title">
+                            <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce placeholder="Subject">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="grey-gradient discussion-post-stats">
                         <div class="btn-group-border">
                             <div class="btn-group bgc">
-                                <input type="submit" value="Post" class="btn btn-success" ng-disabled="newDiscussionForm.$invalid">
+                                <input type="submit" value="Post" class="btn btn-success" ng-disabled="mainReplyForm.$invalid" ng-click="submitReply()">
                             </div>
                         </div>
                         <span class="muted"><i class="add"></i> Add Image</span>
-                    </fieldset>
-                </form>
-            </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
 
         <div ng-repeat="post in discussion.children">

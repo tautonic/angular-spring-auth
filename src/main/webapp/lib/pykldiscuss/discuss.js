@@ -47,12 +47,6 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $auth, $
     };
 
     loadContent();
-
-    $rootScope.$on($auth.event.signoutConfirmed, function () {
-        if ($scope.$scope.pageType == "new") {
-            $location.path('/discussion/all');
-        }
-    });
 }
 
 
@@ -129,21 +123,23 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
 
     $scope.submitReply = function (post) {
         var reply;
-        if(post !== null) {
+        if(post !== undefined) {
             reply = post.reply.message;
         } else {
             reply = $scope.reply.message;
         }
         var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
         $http.post(replyUrl, { reply:reply }).success(function (data) {
-            if(post !== null) {
+            if(post !== undefined) {
                 post.reply.show = false;
                 post.reply.message = '';
             } else {
                 $scope.reply.show = false;
                 $scope.reply.message = '';
+                $scope.reply.title = '';
             }
             $scope.discussion.children.unshift(data);
+            $scope.discussion.commentCount++;
         });
     };
 
@@ -181,12 +177,6 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
     $scope.editFormInvalid = function(scope) {
         return scope.editForm.$invalid;
     }
-
-    $rootScope.$on($auth.event.signoutConfirmed, function () {
-        if ($scope.pageType == "new") {
-            $location.path('/discussion/all');
-        }
-    });
 
     //fired by the view resource controller after it's loaded, used to load a discussion as part of curriculum content or something
     $rootScope.$on('event:loadDiscussion', function ($event, $args) {
@@ -248,9 +238,10 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location
         $scope.hide = false;
     });
 
+    /* originally used to prevent signed in users from seeing the new discussion page. not really needed anymore, as there's text for "sign in to start a discussion" now. which works with some other elements.
     $rootScope.$on($auth.event.signoutConfirmed, function () {
         $location.path('/discussion/all');
-    });
+    });*/
 
     //fired by the view resource controller after it's loaded, by default this should hide the new reply until it's discovered that the discussion for that object doesn't exist yet
     $rootScope.$on('event:loadDiscussion', function ($event, $args) {
