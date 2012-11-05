@@ -832,6 +832,10 @@ angular.module('bgc.directives').directive('streamItem', ['$http',
  *
  * @param [options] {mixed} Can be an object with multiple options, or a string with the animation class
  *    class {string} the CSS class(es) to use. For example, 'ui-hide' might be an excellent alternative class.
+ *
+ *    Additionally, it's possible to pass in "sortBy: {string}, sortFunction: {function}" as arguments to the tab, which will cause the tab to call the sortFunction instead of simply changing content.
+ *    This is mostly used for Most Recent and Most Popular tabs, where the content views would be exactly the same.
+ *
  * @example <li ui-tabs="{tab1:{label:'This is the first tab'}, tab2:{label: 'this is the second tab'}}">
  * <div>content of tab1</div>
  * <div>content of tab2</div>
@@ -866,10 +870,17 @@ angular.module('bgc.directives').directive('uiTabs', ['$compile', function ($com
                     $.each(tabs, function (p, val) {
                         if (val.active = (val === _this)) {
                             currentTab = val;
-                            val.element.show();
+                            if(currentTab.sortBy) {
+                                currentTab.sortFunction(currentTab.sortBy);
+                            } else {
+                                val.element.show();
+                            }
                         }
-                        else
-                            val.element.hide();
+                        else {
+                            if(!currentTab.sortBy) {
+                                val.element.hide();
+                            }
+                        }
                     });
                 };
                 tabArray.push(prop);

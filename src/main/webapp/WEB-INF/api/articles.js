@@ -26,6 +26,20 @@ var searchAllArticles = function(params) {
     var query;
     var from = params.from || 0;
     var size = params.size || 10;
+    var sorting = [ "_score" ];
+
+    switch(params.sort) {
+        case "recent":
+            sorting = [ { "dateCreated": "desc"}, "_score" ];
+            break;
+        case "popular":
+            sorting = [ { "views": "desc"}, {"likes": "desc"}, "_score" ];
+            break;
+        case "featured":
+            sorting = [ { "dateCreated": "desc"}, "_score" ];
+            break;
+        default:
+    }
 
     if(params.term) {
             query = {
@@ -66,10 +80,10 @@ var searchAllArticles = function(params) {
                     ]
                 }
             }
-            //"sort": [ { "views": "desc" }],
         },
         "from": from,
-        "size": size
+        "size": size,
+        "sort": sorting
     };
 
     if(params.filters) {
@@ -85,7 +99,7 @@ var searchAllArticles = function(params) {
 
         data.query.filtered.filter.and.push({ "terms": { "mimetype": mimetypeFilters }});
     }
-    log.info("QUERYING? "+JSON.stringify(data));
+
     var opts = {
         url: 'http://localhost:9300/myapp/api/resources/search',
         method: 'POST',
@@ -228,7 +242,6 @@ var quotes = [
     "If everything seems under control, you’re just not going fast enough. – Mario Andretti",
     "If what you are doing is not moving you towards your goals, then it’s moving you away from your goals. – Brian Tracy",
     "The entrepreneur builds an enterprise; the technician builds a job. – Michael Gerber",
-    "As long as you’re going to be thinking anyway, think big. – Donald Trump",
     "Don’t make friends who are comfortable to be with. Make friends who will force you to lever yourself up. – Thomas J. Watson",
     "The link between my experience as an entrepreneur and that of a politician is all in one word: freedom. – Silvio Berlusconi",
     "Success is walking from failure to failure with no loss of enthusiasm. – Winston Churchill",
@@ -264,8 +277,9 @@ var quotes = [
     "Act enthusiastic and you will be enthusiastic. – Dale Carnegie"
 ];
 
+//originally (max - min + 1), which works well, but not when passing in array.length as the max argument.
 function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 
 var returnRandomQuote = function() {

@@ -24,7 +24,7 @@
                     <div ng-include="'lib/pyklresource/partials/contactinfo.html'"></div>
                 </div>
                 <div ng-switch-when="curriculum">
-                    <div id="curriculum-content" ui-tabs="{tab1: {label: 'FEATURED CONTENT'}, tab2: {label: 'MOST RECENT'}, tab3: {label: 'MOST POPULAR'}}">
+                    <div id="curriculum-content" ui-tabs="{tab1: {label: 'FEATURED CONTENT', sortBy: 'featured', sortFunction: sortBy }, tab2: {label: 'MOST RECENT', sortBy: 'recent', sortFunction: sortBy }, tab3: {label: 'MOST POPULAR', sortBy: 'popular', sortFunction: sortBy }}">
                         <div when-scrolled="loadMore(searchTerm)">
                             <div class="article row" ng-repeat="article in articles">
                                 <div class="span2">
@@ -49,8 +49,9 @@
                             <div ng-show="((!paging.more) && (articles.length != 0))">No more articles found.</div>
                         </div>
 
-                        <div ng-include="'partials/most-recent-content-template.html'"></div>
-                        <div ng-include="'partials/most-popular-content-template.html'"></div>
+                        <!-- dummy elements because the ui-tabs directive needs them -->
+                        <div></div>
+                        <div></div>
                     </div>
                 </div>
             </div>
