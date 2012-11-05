@@ -829,6 +829,11 @@ ul.dropdown-menu li:last-child a {
     color: #eeaf00;
 }
 
+.profile-list-item a.btn.btn-success{
+    text-decoration: none;
+    font-weight: normal;
+}
+
 .counter-clockwise{
     transform: rotate(-10deg);
     -ms-transform: rotate(-10deg); /* IE 9 */
@@ -1897,7 +1902,7 @@ li.search-result.members{
 }
 
 .profile-full .info.contact{
-    margin-top: 7em;
+    margin-top: 4em;
 }
 
 .profile-full .info.education{
@@ -1956,7 +1961,7 @@ li.search-result.members{
     padding: 4em 6em;
     background-color: #dbdbdb;
     margin-bottom: 1em;
-    border: dashed 13px #d6d6d6;
+    border: dashed 13px #bbbbbb;
     -webkit-border-radius: 30px;
     border-radius: 30px;
 }

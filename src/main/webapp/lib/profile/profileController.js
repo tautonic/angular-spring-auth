@@ -153,6 +153,41 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
                 $scope.showHideEducation = false;
                 $scope.showHideNotes = false;
                 $scope.profile = profile.content;
+
+                if(!$scope.profile.websites){
+                    $scope.profile.websites = [{
+                        title: '',
+                        url: ''
+                    }];
+                }
+
+                if(!$scope.profile.educationHistory){
+                    $scope.profile.educationHistory = [{
+                        schoolName: '',
+                        fieldOfStudy: '',
+                        country: '',
+                        yearFrom: {
+                            gregorian: ''
+                        },
+                        yearTo: {
+                            gregorian: ''
+                        }
+                    }];
+                }
+
+                if(!$scope.profile.workHistory){
+                    $scope.profile.workHistory = [{
+                        businessName: '',
+                        location: '',
+                        yearStarted: {
+                            gregorian: ''
+                        },
+                        yearFinished: {
+                            gregorian: ''
+                        }
+                    }];
+                }
+
                 $scope.master = angular.copy($scope.profile);
             }
         }
