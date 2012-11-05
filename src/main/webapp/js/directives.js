@@ -106,31 +106,16 @@ angular.module( 'bgc.directives', [] )
 
 /**
  * @ngdoc directive
- * @name bgc.directives:cms
+ * @name bgc.directives:readMoreHover
  *
- * @description
- * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
- * resulting content within the element it is associated. Any content within the associated element
- * will be replaced so content is not strictly necessary, however it can be helpful to include
- * placeholder content for documentation and static web development tools.
+ * @description Makes the "Read More" and "Preview" links pop out on mouseover.
  *
- * The 'at' symbol (@) can't be used as part of the key value because it is dedicated as a separator
- * character which the CMS property uses to differentiate the key from the locale.
- * ( ie x-cms="<key>@<locale>" )
+ * @element Attribute
  *
- * @element ANY
- * @param {expression} Evaluates to the string key used to identify the CMS value. The
- *   expression can also be followed with '@<locale>' in order to force a locale-specific
- *   version of CMS content. If a locale is not supplied, the client's Accept-Language
- *   header will be used.
- *
- * @example
- <example>
- <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
- <p x-cms="notfound">Testing a not found case.</p>
- <blockquote x-cms="title/fr_CA">Forcing the French-Canadian version of the content.</blockquote>
- <th x-cms="name-title"/>
- </example>
+ * @example <div read-more-hover>
+ <p>Read More</p>
+ <div class="read-more-arrow"></div>
+ </div>
  */
 angular.module('bgc.directives')
     .directive('readMoreHover', function(){
@@ -156,31 +141,15 @@ angular.module('bgc.directives')
 
 /**
  * @ngdoc directive
- * @name bgc.directives:cms
+ * @name bgc.directives:docViewer
  *
- * @description
- * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
- * resulting content within the element it is associated. Any content within the associated element
- * will be replaced so content is not strictly necessary, however it can be helpful to include
- * placeholder content for documentation and static web development tools.
+ * @description Creates an iframe that contains an embedded GoogleDoc
  *
- * The 'at' symbol (@) can't be used as part of the key value because it is dedicated as a separator
- * character which the CMS property uses to differentiate the key from the locale.
- * ( ie x-cms="<key>@<locale>" )
+ * @element Element
+ * @param {boolean} googleDoc
+ * {string} url A URL where the document can be found. Can either be an actual GoogleDoc URL, or can simply be http://example.com/document.doc. The directive assumes the latter
  *
- * @element ANY
- * @param {expression} Evaluates to the string key used to identify the CMS value. The
- *   expression can also be followed with '@<locale>' in order to force a locale-specific
- *   version of CMS content. If a locale is not supplied, the client's Accept-Language
- *   header will be used.
- *
- * @example
- <example>
- <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
- <p x-cms="notfound">Testing a not found case.</p>
- <blockquote x-cms="title/fr_CA">Forcing the French-Canadian version of the content.</blockquote>
- <th x-cms="name-title"/>
- </example>
+ * @example  <doc-viewer url="http://example.com/document.doc"></doc-viewer>
  */
 angular.module('bgc.directives')
     .directive('docViewer', function (){
@@ -192,7 +161,7 @@ angular.module('bgc.directives')
                 var isGoogleDoc = false;
 
                 if(attrs.googleDoc){
-                    isGoogleDoc = attrs.googleDoc == 'true' ? true : false;
+                    isGoogleDoc = (attrs.googleDoc == 'true') ? true : false;
                 }
 
                 if(isGoogleDoc){
@@ -206,31 +175,14 @@ angular.module('bgc.directives')
 
 /**
  * @ngdoc directive
- * @name bgc.directives:cms
+ * @name bgc.directives:passwordValidator
  *
  * @description
- * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
- * resulting content within the element it is associated. Any content within the associated element
- * will be replaced so content is not strictly necessary, however it can be helpful to include
- * placeholder content for documentation and static web development tools.
  *
- * The 'at' symbol (@) can't be used as part of the key value because it is dedicated as a separator
- * character which the CMS property uses to differentiate the key from the locale.
- * ( ie x-cms="<key>@<locale>" )
- *
- * @element ANY
- * @param {expression} Evaluates to the string key used to identify the CMS value. The
- *   expression can also be followed with '@<locale>' in order to force a locale-specific
- *   version of CMS content. If a locale is not supplied, the client's Accept-Language
- *   header will be used.
+ * @element
+ * @param
  *
  * @example
- <example>
- <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
- <p x-cms="notfound">Testing a not found case.</p>
- <blockquote x-cms="title/fr_CA">Forcing the French-Canadian version of the content.</blockquote>
- <th x-cms="name-title"/>
- </example>
  */
 angular.module('bgc.directives')
     .directive('passwordValidator', function(){
@@ -259,31 +211,14 @@ angular.module('bgc.directives')
 
 /**
  * @ngdoc directive
- * @name bgc.directives:cms
+ * @name bgc.directives:profileUpload
  *
  * @description
- * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
- * resulting content within the element it is associated. Any content within the associated element
- * will be replaced so content is not strictly necessary, however it can be helpful to include
- * placeholder content for documentation and static web development tools.
  *
- * The 'at' symbol (@) can't be used as part of the key value because it is dedicated as a separator
- * character which the CMS property uses to differentiate the key from the locale.
- * ( ie x-cms="<key>@<locale>" )
- *
- * @element ANY
- * @param {expression} Evaluates to the string key used to identify the CMS value. The
- *   expression can also be followed with '@<locale>' in order to force a locale-specific
- *   version of CMS content. If a locale is not supplied, the client's Accept-Language
- *   header will be used.
+ * @element
+ * @param
  *
  * @example
- <example>
- <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
- <p x-cms="notfound">Testing a not found case.</p>
- <blockquote x-cms="title/fr_CA">Forcing the French-Canadian version of the content.</blockquote>
- <th x-cms="name-title"/>
- </example>
  */
 angular.module('bgc.directives')
     .directive('pyklUpload', ['$http', function($http){
@@ -593,31 +528,14 @@ angular.module('bgc.directives')
 
 /**
  * @ngdoc directive
- * @name bgc.directives:cms
+ * @name bgc.directives:emailValidator
  *
  * @description
- * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
- * resulting content within the element it is associated. Any content within the associated element
- * will be replaced so content is not strictly necessary, however it can be helpful to include
- * placeholder content for documentation and static web development tools.
  *
- * The 'at' symbol (@) can't be used as part of the key value because it is dedicated as a separator
- * character which the CMS property uses to differentiate the key from the locale.
- * ( ie x-cms="<key>@<locale>" )
- *
- * @element ANY
- * @param {expression} Evaluates to the string key used to identify the CMS value. The
- *   expression can also be followed with '@<locale>' in order to force a locale-specific
- *   version of CMS content. If a locale is not supplied, the client's Accept-Language
- *   header will be used.
+ * @element
+ * @param
  *
  * @example
- <example>
- <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
- <p x-cms="notfound">Testing a not found case.</p>
- <blockquote x-cms="title/fr_CA">Forcing the French-Canadian version of the content.</blockquote>
- <th x-cms="name-title"/>
- </example>
  */
 angular.module('bgc.directives')
     .directive('emailValidator', ['$http', function($http){
@@ -703,31 +621,14 @@ angular.module('bgc.directives')
 
 /**
  * @ngdoc directive
- * @name bgc.directives:cms
+ * @name bgc.directives:usernameValidator
  *
  * @description
- * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
- * resulting content within the element it is associated. Any content within the associated element
- * will be replaced so content is not strictly necessary, however it can be helpful to include
- * placeholder content for documentation and static web development tools.
  *
- * The 'at' symbol (@) can't be used as part of the key value because it is dedicated as a separator
- * character which the CMS property uses to differentiate the key from the locale.
- * ( ie x-cms="<key>@<locale>" )
- *
- * @element ANY
- * @param {expression} Evaluates to the string key used to identify the CMS value. The
- *   expression can also be followed with '@<locale>' in order to force a locale-specific
- *   version of CMS content. If a locale is not supplied, the client's Accept-Language
- *   header will be used.
+ * @element
+ * @param
  *
  * @example
- <example>
- <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
- <p x-cms="notfound">Testing a not found case.</p>
- <blockquote x-cms="title/fr_CA">Forcing the French-Canadian version of the content.</blockquote>
- <th x-cms="name-title"/>
- </example>
  */
 angular.module('bgc.directives')
     .directive('usernameValidator', ['$http', '$timeout', function($http, $timeout){
@@ -804,31 +705,14 @@ angular.module('bgc.directives')
 
 /**
  * @ngdoc directive
- * @name bgc.directives:cms
+ * @name bgc.directives:validationTooltip
  *
  * @description
- * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
- * resulting content within the element it is associated. Any content within the associated element
- * will be replaced so content is not strictly necessary, however it can be helpful to include
- * placeholder content for documentation and static web development tools.
  *
- * The 'at' symbol (@) can't be used as part of the key value because it is dedicated as a separator
- * character which the CMS property uses to differentiate the key from the locale.
- * ( ie x-cms="<key>@<locale>" )
- *
- * @element ANY
- * @param {expression} Evaluates to the string key used to identify the CMS value. The
- *   expression can also be followed with '@<locale>' in order to force a locale-specific
- *   version of CMS content. If a locale is not supplied, the client's Accept-Language
- *   header will be used.
+ * @element
+ * @param
  *
  * @example
- <example>
- <h2><span x-cms="aside-1234">Faculty Stuff</span></h2>
- <p x-cms="notfound">Testing a not found case.</p>
- <blockquote x-cms="title/fr_CA">Forcing the French-Canadian version of the content.</blockquote>
- <th x-cms="name-title"/>
- </example>
  */
 angular.module('bgc.directives')
     .directive('validationTooltip', function(){
@@ -878,6 +762,17 @@ angular.module('bgc.directives')
         }
     });
 
+/**
+ * Converts a link into a dropdown menu.
+ *
+ * @example <div class="dropdown" ng-dropdown>
+ *               <a data-toggle="dropdown" class="thumb">LINK TEXT</a>
+ *               <ul class="dropdown-menu">
+ *                   <li>ITEM 1</li>
+ *                   <li>ITEM 2</li>
+ *               </ul>
+ *          </div>
+ */
 angular.module('bgc.directives')
     .directive('dropdown', function(){
         return {
@@ -1048,6 +943,12 @@ angular.module('bgc.directives').directive('reloadTwitterBtns', function(){
     }
 });
 
+/**
+ * Runs a function when the user reaches the bottom of the page. The individual function that is run is passed in as an argument.
+ *
+ * @param [options] {function} This should be a function that is passed into the directive. The function would then load more objects and add them to the list
+ * @example <div when-scrolled="loadMore()">
+ */
 angular.module('bgc.directives').directive('whenScrolled', function() {
     return function(scope, elm, attr) {
         var raw = elm[0];
