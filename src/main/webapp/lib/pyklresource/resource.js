@@ -158,10 +158,8 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
         return (typeof($scope.article.content) === "undefined");
     }
 
-    $scope.like = function() {
-        $http.post("api/utility/like/" + $scope.article._id).success(function(data) {
-            $scope.article.likes = data.likes;
-        });
+    $scope.increaseLikes = function(likes) {
+        $scope.article.likes = likes;
     }
 
     $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });

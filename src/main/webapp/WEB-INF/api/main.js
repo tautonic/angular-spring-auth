@@ -862,7 +862,7 @@ app.get('/utility/getquote', function(req) {
     return json({ "quote": returnRandomQuote() });
 })
 
-// incriments view count for an object
+// increments view count for an object
 app.post('/utility/view/:id', function(req, id) {
     var opts = {
         url: "http://localhost:9300/myapp/api/views/" + id,
@@ -876,6 +876,7 @@ app.post('/utility/view/:id', function(req, id) {
     return json(JSON.parse(exchange.content));
 })
 
+//likes a specific object. todo: can anonymous users like something?
 app.post('/utility/like/:id', function(req, id) {
     var user = getUserDetails();
 
@@ -888,6 +889,43 @@ app.post('/utility/like/:id', function(req, id) {
 
     var exchange = httpclient.request(opts);
 
+    return json(JSON.parse(exchange.content));
+})
+
+//checks to see if a user has already liked this particular object, if so, returns true, otherwise, returns false
+app.get('/utility/like/:id', function(req, id) {
+    var user = getUserDetails();
+
+    var opts = {
+        url: "http://localhost:9300/myapp/api/likes/" + user.principal.id + "/" + id,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    if(exchange.status === 404) {
+        return json(false);
+    } else {
+        return json(true);
+    }
+})
+
+//deletes a like relationship, effectively decreasing total likes by one
+app.post('/utility/unlike/:id', function(req, id) {
+    var user = getUserDetails();
+    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+
+    var opts = {
+        url: "http://localhost:9300/myapp/api/likes/" + user.principal.id + "/" + id,
+        method: 'DELETE',
+        headers: Headers({ 'x-rt-index': 'gc', 'Authorization': auth }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+     log.info("DELETING LIKE: "+exchange.status);
     return json(JSON.parse(exchange.content));
 })
 

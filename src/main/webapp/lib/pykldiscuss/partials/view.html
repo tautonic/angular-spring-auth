@@ -30,7 +30,7 @@
         </div>
         <div class="discussion-first-post-stats grey-gradient">
             <ul class="article-stats">
-                <li class="muted"><i class="likes"></i> Like This</li>
+                <li class="muted"><like id="{{discussion._id}}"></like></li>
                 <li ng-click="flag({{post._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
             </ul>
         </div>
@@ -45,7 +45,7 @@
                             </div>
                         </div>
                         <div class="discussion-post">
-                            <input type="text" ng-model="reply.title" class="input-xlarge" required validation-tooltip placeholder="Discussion Title">
+                            <!--<input type="text" ng-model="reply.title" class="input-xlarge" required validation-tooltip placeholder="Discussion Title">-->
                             <textarea rows="10" cols="100" ng-model="reply.message" required ui-tinymce placeholder="Subject">
                             </textarea>
                         </div>
@@ -90,7 +90,7 @@
                         <input type="submit" value="Quote" class="btn btn-success" ng-click="replyTo(post, true)">
                     </div>
                 </span>
-                <span class="muted"><i class="likes"></i> Like This</span>
+                <span class="muted"><like id="{{post._id}}"></like></span>
                 <span ng-click="flag({{post._id}})" class="muted"><i class="flag"></i> Flag for Spam</span>
             </div>
 

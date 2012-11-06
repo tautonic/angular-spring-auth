@@ -44,7 +44,7 @@
             <div class="article-tweet-button">
                 <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
             </div>
-            <a ng-click="like()" class="muted"><i class="likes"></i> Like This ({{article.likes}})</a></span>
+            <span class="muted"><like id="{{article._id}}"></like> ({{article.likes}})</span>
         </p>
         <div class="formatted" ng-bind-html-unsafe="article.description" ng-show="abstractVisible()"></div>
         <div class="formatted" ng-bind-html-unsafe="article.content"></div>
