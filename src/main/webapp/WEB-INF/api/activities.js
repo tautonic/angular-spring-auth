@@ -305,7 +305,8 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         linkText = direct.fullName || direct.username;
                         // If showing this message to the same user, use the "you" word
                         if (authenticatedId === direct._id) {
-                            linkText = nativeYou.toLowerCase();
+                            //linkText = nativeYou.toLowerCase();
+                            linkText = 'you';
                         }else{
                             linkText = direct.fullName;
                         }

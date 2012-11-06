@@ -1923,6 +1923,10 @@ li.search-result.members{
     position: relative;
 }
 
+.profile-full .info.image h3 .edit{
+    cursor: text;
+}
+
 .profile-full .info.image .profile-thumbnail{
     top: 0;
     left: 10px;
