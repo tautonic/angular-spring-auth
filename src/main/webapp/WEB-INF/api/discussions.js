@@ -45,6 +45,10 @@ var getDiscussion = function(id) {
 
     thread[0].commentCount = comment.count;
 
+    thread[0].children.forEach(function(comment) {
+        comment.hidden = (comment.spam >= 3);
+    });
+
     return {
         'status': exchange.status,
         'content': thread,

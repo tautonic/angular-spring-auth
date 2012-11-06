@@ -32,6 +32,8 @@ var text = {
     "notifications-activity.l.resources": "${actorLink} liked ${aboutLink}",
     "notifications-activity.m.message": "${actorLink} sent you a private message.",
     "notifications-activity.m.reply": "${actorLink} replied to your comment.",
+    "notifications-activity.ds.spams": "${actorLink} removed the spam flag on ${aboutLink}.",
+    "notifications-activity.ms.spams": "${actorLink} flagged ${aboutLink} as spam.",
     "notifications-activity.no.results": "No recent activity results.",
     "notifications-activity.r.discussions": "${actorLink} replied to a discussion titled ${directLink}.",
     "notifications-activity.recent-activity": "Recent Activity",

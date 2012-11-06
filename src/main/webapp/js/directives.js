@@ -1064,6 +1064,9 @@ angular.module('bgc.directives').directive('spam', ['$http', '$rootScope', funct
                         var result = JSON.parse(data);
                         if(result) {
                             scope.spamText = "Remove Spam Flag";
+                            if(scope.hidePost !== undefined) {
+                                scope.hidePost(object_id);
+                            }
                         }
                         scope.alreadyMarked = result;
                     });
@@ -1078,17 +1081,17 @@ angular.module('bgc.directives').directive('spam', ['$http', '$rootScope', funct
                     $http.post("api/utility/unspam/" + attrs.objectid).success(function(data) {
                         scope.spamText = "Flag for Spam";
                         scope.alreadyMarked = false;
-                        /*if(scope.increaseLikes !== undefined) {
-                            scope.increaseLikes(data.spam);
-                        } */
+                        if(scope.hidePost !== undefined) {
+                            scope.hidePost(attrs.objectid, "dec");
+                        }
                     });
                 } else {
                     $http.post("api/utility/spam/" + attrs.objectid).success(function(data) {
                         scope.spamText = "Remove Spam Flag";
                         scope.alreadyMarked = true;
-                        /*if(scope.increaseLikes !== undefined) {
-                            scope.increaseLikes(data.spam);
-                        }*/
+                        if(scope.hidePost !== undefined) {
+                            scope.hidePost(attrs.objectid, "inc");
+                        }
                     });
                 }
             }
