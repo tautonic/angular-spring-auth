@@ -479,7 +479,7 @@ app.get('/profiles/:id', function(req, id){
 app.get('/profiles/', function(req){
     log.info('REQUEST PARAMS: ', JSON.stringify(req.params, null, 4));
 
-    var url;
+    /*var url;
 
     if(req.params.email){
         url = 'http://localhost:9300/myapp/api/profiles/byprimaryemail/' + req.params.email;
@@ -487,10 +487,20 @@ app.get('/profiles/', function(req){
         url = 'http://localhost:9300/myapp/api/profiles/byusername/' + req.params.username;
     }else{
         url = 'http://localhost:9300/myapp/api/profiles/';
-    }
+    }*/
+
+    var user = getUserDetails();
+    /*if(user.principal.id === undefined) {
+        log.info("User not found or not logged in. Exiting");
+        return json({
+            itemCount: 0,
+            currentPage: 0,
+            items: []
+        });
+    }*/
 
     var opts = {
-        url: url,
+        url: 'http://localhost:9300/myapp/api/profiles/',
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -532,7 +542,7 @@ app.get('/profiles/', function(req){
 
         // find the latest activity directly taken by the owner of the profile
         // the latest activity is the last activity in the array
-        var activity = new ActivityMixin(stream.pop(), req, ctx('/'), undefined);
+        var activity = new ActivityMixin(stream.pop(), req, ctx('/'), user.principal.id);
 
         latestActivity = {
             'fullName': activity.fullName,

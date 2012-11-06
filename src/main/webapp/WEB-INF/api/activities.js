@@ -43,7 +43,7 @@ var text = {
     "notifications-activity.u.me.profiles": "${actorLink} updated your profile",
     "notifications-activity.u.profiles": "${actorLink} updated ${directLink}",
     "notifications-activity.u.self.profiles": "You updated your profile",
-    "notifications-activity.u.themself.profiles": "You updated your profile",
+    "notifications-activity.u.themself.profiles": "${actorLink} updated their profile",
     "notifications-activity.u.services": "${actorLink} updated the information for ${directLink}",
     "notifications-activity.uco.me.profiles": "${actorLink} promoted you to be an owner of ${aboutLink}",
     "notifications-activity.uco.profiles": "${actorLink} promoted ${directLink} to be an owner of ${aboutLink}",
@@ -306,6 +306,7 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         // If showing this message to the same user, use the "you" word
                         if (authenticatedId === direct._id) {
                             //linkText = nativeYou.toLowerCase();
+
                             linkText = 'you';
                         }else{
                             linkText = direct.fullName;
