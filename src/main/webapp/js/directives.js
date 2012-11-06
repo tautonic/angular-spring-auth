@@ -996,15 +996,38 @@ angular.module('bgc.directives')
         restrict: 'E',
         template: '<a ng-click="like()"><i class="likes"></i> {{text}}</a>',
         replace: true,
-        link: function(scope, elm, attrs, ctrl){
+        link: function(scope, elm, attrs){
             scope.text = "Like This";
+            scope.alreadyLiked = true;
+
+            attrs.$observe('id', function(id) {
+                if(id !== '') {
+                    $http.get("api/utility/like/" + id).success(function(data) {
+                        console.log("RESULT FROM LIKING CHECK IS: ",data);
+                        if(data === "true") {
+                            scope.text = "Unlike";
+                        }
+                        scope.alreadyLiked = data;
+                    });
+                }
+            });
+
             scope.like = function() {
-                $http.post("api/utility/like/" + attrs.id).success(function(data) {
-                    scope.text = "Unlike";
-                    if(scope.increaseLikes !== undefined) {
-                        scope.increaseLikes(data.likes);
-                    }
-                });
+                if(scope.alreadyLiked) {
+                    $http.post("api/utility/unlike/" + attrs.id).success(function(data) {
+                        scope.text = "Like This";
+                        if(scope.increaseLikes !== undefined) {
+                            scope.increaseLikes(data.likes);
+                        }
+                    });
+                } else {
+                    $http.post("api/utility/like/" + attrs.id).success(function(data) {
+                        scope.text = "Unlike";
+                        if(scope.increaseLikes !== undefined) {
+                            scope.increaseLikes(data.likes);
+                        }
+                    });
+                }
             }
         }
     }
