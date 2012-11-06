@@ -990,41 +990,105 @@ angular.module('bgc.directives').directive('secondaryNav', ['$compile', function
     }
 }]);
 
-angular.module('bgc.directives')
-    .directive('like', ['$http', '$auth', function($http, $auth){
+/**
+ * Used for liking, and unliking and object
+ *
+ * @param [id] {string} The ID of the object to be liked
+ * @example <like id="{{id}}"></like>
+ */
+angular.module('bgc.directives').directive('like', ['$http', '$rootScope', function($http, $rootScope){
     return {
         restrict: 'E',
-        template: '<a ng-click="like()"><i class="likes"></i> {{text}}</a>',
+        template: '<a ng-click="like()"><i class="likes"></i> {{likeText}}</a>',
         replace: true,
         link: function(scope, elm, attrs){
-            scope.text = "Like This";
+            scope.likeText = "Like This";
             scope.alreadyLiked = true;
 
-            attrs.$observe('id', function(id) {
-                if( ($auth.isAuthenticated) && (id !== '') ) {
-                    $http.get("api/utility/like/" + id).success(function(data) {
-                        if(data === "true") {
-                            scope.text = "Unlike";
+            attrs.$observe('objectid', function(object_id) {
+                if(object_id !== '') {
+                    $http.get("api/utility/like/" + object_id).success(function(data) {
+                        var result = JSON.parse(data);
+                        if(result) {
+                            scope.likeText = "Unlike";
                         }
-                        scope.alreadyLiked = data;
+                        scope.alreadyLiked = result;
                     });
                 }
             });
 
             scope.like = function() {
-                if( ($auth.isAuthenticated) && (scope.alreadyLiked)) {
-                    $http.post("api/utility/unlike/" + attrs.id).success(function(data) {
-                        scope.text = "Like This";
+                if(!$rootScope.auth.isAuthenticated) {
+                    return;
+                }
+                if(scope.alreadyLiked) {
+                    $http.post("api/utility/unlike/" + attrs.objectid).success(function(data) {
+                        scope.likeText = "Like This";
+                        scope.alreadyLiked = false;
                         if(scope.increaseLikes !== undefined) {
                             scope.increaseLikes(data.likes);
                         }
                     });
                 } else {
-                    $http.post("api/utility/like/" + attrs.id).success(function(data) {
-                        scope.text = "Unlike";
+                    $http.post("api/utility/like/" + attrs.objectid).success(function(data) {
+                        scope.likeText = "Unlike";
+                        scope.alreadyLiked = true;
                         if(scope.increaseLikes !== undefined) {
                             scope.increaseLikes(data.likes);
                         }
+                    });
+                }
+            }
+        }
+    }
+}]);
+
+/**
+ * Used for marking an object (mostly a discussion) as spam
+ *
+ * @param [id] {string} The ID of the object to be marked as spam
+ * @example <like id="{{id}}"></like>
+ */
+angular.module('bgc.directives').directive('spam', ['$http', '$rootScope', function($http, $rootScope){
+    return {
+        restrict: 'E',
+        template: '<a ng-click="markAsSpam()"><i class="flag"></i> {{spamText}}</a>',
+        replace: true,
+        link: function(scope, elm, attrs){
+            scope.spamText = "Flag for Spam";
+            scope.alreadyMarked = true;
+
+            attrs.$observe('objectid', function(object_id) {
+                if(object_id !== '') {
+                    $http.get("api/utility/spam/" + object_id).success(function(data) {
+                        var result = JSON.parse(data);
+                        if(result) {
+                            scope.spamText = "Remove Spam Flag";
+                        }
+                        scope.alreadyMarked = result;
+                    });
+                }
+            });
+
+            scope.markAsSpam = function() {
+                if(!$rootScope.auth.isAuthenticated) {
+                    return;
+                }
+                if(scope.alreadyMarked) {
+                    $http.post("api/utility/unspam/" + attrs.objectid).success(function(data) {
+                        scope.spamText = "Flag for Spam";
+                        scope.alreadyMarked = false;
+                        /*if(scope.increaseLikes !== undefined) {
+                            scope.increaseLikes(data.spam);
+                        } */
+                    });
+                } else {
+                    $http.post("api/utility/spam/" + attrs.objectid).success(function(data) {
+                        scope.spamText = "Remove Spam Flag";
+                        scope.alreadyMarked = true;
+                        /*if(scope.increaseLikes !== undefined) {
+                            scope.increaseLikes(data.spam);
+                        }*/
                     });
                 }
             }

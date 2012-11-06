@@ -30,7 +30,7 @@
         </div>
         <div class="discussion-first-post-stats grey-gradient">
             <ul class="article-stats">
-                <li class="muted"><like id="{{discussion._id}}"></like></li>
+                <li class="muted"><like objectid="{{discussion._id}}"></like></li>
                 <li ng-click="flag({{post._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
             </ul>
         </div>
@@ -90,8 +90,8 @@
                         <input type="submit" value="Quote" class="btn btn-success" ng-click="replyTo(post, true)">
                     </div>
                 </span>
-                <span class="muted"><like id="{{post._id}}"></like></span>
-                <span ng-click="flag({{post._id}})" class="muted"><i class="flag"></i> Flag for Spam</span>
+                <span class="muted"><like objectid="{{post._id}}"></like></span>
+                <span class="muted"><spam objectid="{{post._id}}"></spam></span>
             </div>
 
             <div class="discussion-post-stats grey-gradient" ng-show="post.reply.show">
