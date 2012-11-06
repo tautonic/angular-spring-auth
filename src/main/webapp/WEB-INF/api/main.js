@@ -409,9 +409,9 @@ app.post('/profiles/', function(req){
             "address"  : req.postParams.accountEmail.address
         },
         "workHistory" : req.postParams.workHistory,
+        "educationHistory" : req.postParams.educationHistory,
         "thumbnail": req.postParams.thumbnail
     };
-
 
     data.source = 'GC';
     data.accountEmail.status = 'unverified';
@@ -445,7 +445,7 @@ app.get('/profiles/:id', function(req, id){
         userCanEdit = false;
     }
 
-    if(user.principal.id === id){
+    if(user.principal.id === id || user.roles.indexOf('role_admin') !== -1){
         userCanEdit = true;
     }
 
@@ -472,6 +472,7 @@ app.get('/profiles/:id', function(req, id){
     result.content.facultyFellow = result.content.roles.some(function(role) {
         return role == "ROLE_PREMIUM";
     });
+    result.content.isAdmin = true ? user.roles.indexOf('role_admin') !== -1 : false;
 
     return json(result);
 });

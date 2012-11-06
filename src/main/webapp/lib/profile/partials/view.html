@@ -292,6 +292,18 @@
         </div>
 
         <div class="span3">
+            <div ui-if=profile.isAdmin>
+                <div class="admin services-secondary-nav search-box content">
+                    <div class="header">
+                        <h4>GCEE ADMINISTRATION</h4>
+                    </div>
+                    <ul class="secondary-nav-options">
+                        <li class="nav-option"><a ng-href="#/admin/users">Users</a></li>
+                        <li class="nav-option"><a ng-href="#/admin/articles">Articles</a></li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="profile search-box members">
                 <div class="header">
                     <h4>SEARCH MEMBERS</h4>

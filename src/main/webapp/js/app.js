@@ -53,8 +53,19 @@
             controller: 'NewDiscussion'
         } );
 
-        $routeProvider.when( '/admin', {
-            templateUrl: 'lib/pykladmin/index.html'
+        $routeProvider.when( '/admin/users', {
+            templateUrl: 'lib/pykladmin/partials/users.html',
+            controller: 'adminUsersList'
+        });
+
+        $routeProvider.when( '/admin/articles', {
+            templateUrl: 'lib/pykladmin/partials/articles.html',
+            controller: 'adminArticlesList'
+        });
+
+        $routeProvider.when( '/admin/users/new', {
+            templateUrl: 'lib/pykladmin/partials/newuser.html',
+            controller: 'adminUsersNew'
         });
 
         $routeProvider.when( '/login', {

@@ -1,7 +1,7 @@
 'use strict';
 
-function AdminCtrl($rootScope, $scope, $routeParams, $http, $log, $location) {
-    var url = 'api/admin/users';
+function AdminCtrl($rootScope, $scope, $routeParams, $http, $log, $location, Profile) {
+    /*var url = 'api/admin/users';
     var backup = {};
 
     setupScope();
@@ -53,5 +53,114 @@ function AdminCtrl($rootScope, $scope, $routeParams, $http, $log, $location) {
         if(confirm("Are you sure you want to ban "+user.name.fullName+"?")) {
             alert("User is banned");
         }
+    }*/
+}
+
+function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location, Profile){
+    $scope.adminUsers = true;
+    $scope.adminArticles = false;
+
+    $rootScope.banner = 'none';
+    $rootScope.about = 'none';
+
+    Profile.query(function(profiles){
+        $scope.profiles = profiles.content;
+    });
+}
+
+function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location, Profile){
+    $scope.adminUsers = false;
+    $scope.adminArticles = false;
+
+    $rootScope.banner = 'none';
+    $rootScope.about = 'none';
+
+    $scope.profile = {};
+
+    $scope.profile.name = {
+        given: '',
+        surname: ''
+    }
+
+    $scope.userCanEdit = true;
+    //$scope.profile.status = 'verified';
+    $scope.profile.thumbnail = 'images/GCEE_image_profileMale_135x135.jpeg';
+    $scope.profile.accountEmail = {
+        address: ''
+    };
+
+    $scope.profile.websites = [{
+        title: '',
+        url: ''
+    }];
+
+    $scope.profile.educationHistory = [{
+        schoolName: '',
+        fieldOfStudy: '',
+        country: '',
+        degree: '',
+        edNotes: '',
+        yearFrom: {
+            hijri: '',
+            preference: 'gregorian',
+            gregorian: ''
+        },
+        yearTo: {
+            hijri: '',
+            preference: 'gregorian',
+            gregorian: ''
+        }
+    }];
+
+    $scope.profile.workHistory = [{
+        title: '',
+        businessName: '',
+        location: '',
+        workNotes: '',
+        yearStarted: {
+            hijri: '',
+            preference: 'gregorian',
+            gregorian: ''
+        },
+        yearFinished: {
+            hijri: '',
+            preference: 'gregorian',
+            gregorian: ''
+        }
+    }];
+
+    $scope.save = function(profile){
+        $scope.newProfile = new Profile(profile);
+
+        $scope.newProfile.$save(function(response){
+            var data = {
+                profileId: response.content._id
+            }
+
+            $http.post('/gc/api/utility/verifyprofile/', data)
+                .success(function(data, status, headers, config){
+
+                })
+                .error(function(data, status, headers, config){
+                    console.log('POST VERIFY PROFILE ERROR!!!');
+                });
+
+            $location.path('/profiles/view/' + response.content._id);
+        }, function(response){
+            console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
+    };
+
+    $scope.cancel = function(){
+        $location.path('/admin/users');
     }
 }
+
+function adminArticlesList($rootScope, $scope, $routeParams, $http, $log, $location){
+    $scope.adminUsers = false;
+    $scope.adminArticles = true;
+
+    $rootScope.banner = 'none';
+    $rootScope.about = 'none';
+}
+

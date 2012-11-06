@@ -1,0 +1,72 @@
+<div id="gcee-network" class="admin content container">
+    <div class="row">
+        <div class="span12">
+            <div class="row">
+                <div class="span9">
+                    <ul class="search-results-list">
+                        <li class="search-result members" ng-repeat="profile in profiles">
+                            <div class="profile-list-item profile grey-gradient clearfix">
+                                <div thumbnail thumb=profile size="large" rotation="counter-clockwise" type="profile" />
+                                <div class="profile-left">
+                                    <a ng-href="#/profiles/view/{{profile._id}}"><h3>{{profile.name.given}} {{profile.name.surname}}</h3></a>
+                                    <h5>{{profile.workHistory[0].title}}</h5>
+                                    <h5 class="muted">{{profile.workHistory[0].businessName}}</h5>
+
+                                    <div class="btn-group-border">
+                                        <div class="btn-group bgc">
+                                            <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}"><i class="icon-pencil icon-white"></i> Update</a>
+                                            <button class="btn btn-danger" ng-click="closeProfileModal('profiles/view/')"><i class="icon-trash icon-white"></i> Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="profile-right">
+                                    <h3 class="sans-serif">LATEST ACTIVITY:</h3>
+                                    <p><i ng-bind-html-unsafe=profile.activity.message></i></p>
+                                    <p class="muted">about {{profile.activity.dateCreated | timeago}}</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="span3">
+                    <div class="admin services-secondary-nav search-box content">
+                        <div class="header">
+                            <h4>GCEE ADMINISTRATION</h4>
+                        </div>
+                        <ul class="secondary-nav-options">
+                            <li class="nav-option"><a ng-href="#/admin/users">Users</a></li>
+                            <li class="nav-option"><a ng-href="#/admin/articles">Articles</a></li>
+                        </ul>
+                    </div>
+
+                    <br>
+
+                    <div ui-if=adminUsers class="btn-group-border">
+                        <div class="btn-group bgc">
+                            <a class="btn btn-success" ng-href="#/admin/users/new"><i class="icon-user icon-white"></i> Create a new user</a>
+                        </div>
+                    </div>
+
+                    <div ui-if=adminUsers class="site search-box content">
+                        <div class="header">
+                            <h4>FILTER</h4>
+                        </div>
+                        <div class="form-container">
+                            <form ng-controller="SiteSearchController" ng-submit="searchSite()">
+                                <p>Filter users by type</p>
+
+                                <div class="sub documents">
+                                    <div ng-repeat="facet in facets">
+                                        <input type="checkbox" ng-model=facet.selected ng-click="filteredSearch($event.target.checked, facet.term)" id="{{facet.term}}"><label for="{{facet.term}}"></span>{{facet.term}} ({{facet.count}})</label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -256,7 +256,7 @@ var pykl = window.pykl || {};
         <ul class="dropdown-menu"> \
             <li><span class="gradient"><a ng-href="#/profiles/view/{{auth.principal.id}}">My profile</a></span></li> \
             <li><span class="gradient"><a ng-href="#/profiles/update/{{auth.principal.id}}">Change Picture</a></span></li> \
-        <li ng-show="auth.isUserInRole(\'ROLE_ADMIN\')"><span class="gradient"><a ng-href="#/admin/">Admin Panel</a></span></li> \
+        <li ng-show="auth.isUserInRole(\'ROLE_ADMIN\')"><span class="gradient"><a ng-href="#/admin/users">Admin Panel</a></span></li> \
             <li><span class="gradient"><a ng-click="signout()">Logout</a></span></li> \
         </ul> \
         </div> \
