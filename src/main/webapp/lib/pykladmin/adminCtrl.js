@@ -66,6 +66,12 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
     Profile.query(function(profiles){
         $scope.profiles = profiles.content;
     });
+
+    $scope.delete = function(id){
+        var profile = Profile.delete({profileId:id}, function(){
+            console.log(profile);
+        });
+    }
 }
 
 function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location, Profile){
@@ -83,7 +89,6 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
     }
 
     $scope.userCanEdit = true;
-    //$scope.profile.status = 'verified';
     $scope.profile.thumbnail = 'images/GCEE_image_profileMale_135x135.jpeg';
     $scope.profile.accountEmail = {
         address: ''
