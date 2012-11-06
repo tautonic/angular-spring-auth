@@ -1001,9 +1001,8 @@ angular.module('bgc.directives')
             scope.alreadyLiked = true;
 
             attrs.$observe('id', function(id) {
-                if(id !== '') {
+                if( ($auth.isAuthenticated) && (id !== '') ) {
                     $http.get("api/utility/like/" + id).success(function(data) {
-                        console.log("RESULT FROM LIKING CHECK IS: ",data);
                         if(data === "true") {
                             scope.text = "Unlike";
                         }
@@ -1013,7 +1012,7 @@ angular.module('bgc.directives')
             });
 
             scope.like = function() {
-                if(scope.alreadyLiked) {
+                if( ($auth.isAuthenticated) && (scope.alreadyLiked)) {
                     $http.post("api/utility/unlike/" + attrs.id).success(function(data) {
                         scope.text = "Like This";
                         if(scope.increaseLikes !== undefined) {
