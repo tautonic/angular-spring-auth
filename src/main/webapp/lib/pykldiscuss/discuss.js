@@ -189,6 +189,31 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
     $scope.increaseLikes = function(likes) {
         $scope.discussion.likes = likes;
     }
+
+    //hides posts that have been marked as spam by the user
+    $scope.hidePost = function(id, action) {
+        //either increase or decrease the spam counter
+        var change = 0;
+        switch(action) {
+            case "inc":
+                change = 1;
+                break;
+            case "dec":
+                change = -1;
+                break;
+        }
+        if($scope.discussion._id == id) {
+            $scope.discussion.spam += change;
+            return;
+        }
+
+        $scope.discussion.children.forEach(function(post) {
+            if(post._id === id) {
+                post.spam += change;
+                post.hidden = (change > -1);
+            }
+        });
+    }
 }
 
 function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location) {

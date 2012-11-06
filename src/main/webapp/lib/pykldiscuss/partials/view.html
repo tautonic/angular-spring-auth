@@ -6,7 +6,7 @@
                 <li class="muted"><i class="likes"></i> {{discussion.likes}} Likes</li>
                 <li class="muted"><i class="views"></i> {{discussion.views}} Views</li>
                 <li class="muted"><i class="comments"></i> {{discussion.commentCount}} Comments</li>
-                <li ng-click="flag({{post._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
+                <li class="muted"><spam objectid="{{discussion._id}}"></spam></li>
             </ul>
         </div>
 
@@ -30,8 +30,8 @@
         </div>
         <div class="discussion-first-post-stats grey-gradient">
             <ul class="article-stats">
-                <li class="muted"><like id="{{discussion._id}}"></like></li>
-                <li ng-click="flag({{post._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
+                <li class="muted"><like objectid="{{discussion._id}}"></like></li>
+                <li class="muted"><spam objectid="{{discussion._id}}"></spam></li>
             </ul>
         </div>
 
@@ -63,7 +63,7 @@
         </div>
 
         <div ng-repeat="post in discussion.children">
-            <div class="discussion-post grey-gradient">
+            <div class="discussion-post grey-gradient" ng-hide="post.hidden">
                 <div class="user">
                     <div thumbnail thumb=post.creator size="medium" rotation="counter-clockwise" type="profile" />
                 </div>
@@ -82,16 +82,19 @@
                     </form>
                 </div>
             </div>
+            <div class="discussion-post grey-gradient" ng-show="post.hidden">
+                 <p class="spammed">This post has been flagged as spam.</p>
+            </div>
             <div class="discussion-post-stats grey-gradient" ng-show="!post.reply.show">
-                <span class="btn-group-border">
+                <span class="btn-group-border" ng-hide="post.hidden">
                     <div class="btn-group bgc">
                         <input type="submit" value="Reply" class="btn btn-success" ng-click="replyTo(post)">
                         <input type="submit" value="Edit" class="btn btn-success" ng-click="edit(post)" ng-show="canEdit(post)">
                         <input type="submit" value="Quote" class="btn btn-success" ng-click="replyTo(post, true)">
                     </div>
                 </span>
-                <span class="muted"><like id="{{post._id}}"></like></span>
-                <span ng-click="flag({{post._id}})" class="muted"><i class="flag"></i> Flag for Spam</span>
+                <span class="muted" ng-hide="post.hidden"><like objectid="{{post._id}}"></like></span>
+                <span class="muted"><spam objectid="{{post._id}}"></spam></span>
             </div>
 
             <div class="discussion-post-stats grey-gradient" ng-show="post.reply.show">

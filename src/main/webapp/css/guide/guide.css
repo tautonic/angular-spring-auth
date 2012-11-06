@@ -664,7 +664,8 @@ a.btn:visited{
     border: 1px solid #F1EFEF;
 }
 
-.discussion-post blockquote p {
+.discussion-post blockquote p,
+.discussion-post p.spammed {
     color: #999;
     font-style: italic;
 }

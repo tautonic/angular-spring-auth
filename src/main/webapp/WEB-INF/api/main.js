@@ -926,7 +926,61 @@ app.post('/utility/unlike/:id', function(req, id) {
     };
 
     var exchange = httpclient.request(opts);
-     log.info("DELETING LIKE: "+exchange.status);
+    log.info("unliked: "+exchange.content);
+    return json(JSON.parse(exchange.content));
+})
+
+//marks a specific object (namely, discussion posts) as spam. todo: can anonymous users mark something as spam?
+app.post('/utility/spam/:id', function(req, id) {
+    var user = getUserDetails();
+
+    var opts = {
+        url: "http://localhost:9300/myapp/api/spams/" + user.principal.id + "/" + id,
+        method: 'POST',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    return json(JSON.parse(exchange.content));
+})
+
+//checks to see if a user has already marked this particular object as spam, if so, returns true, otherwise, returns false
+app.get('/utility/spam/:id', function(req, id) {
+    var user = getUserDetails();
+    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+
+    var opts = {
+        url: "http://localhost:9300/myapp/api/spams/" + user.principal.id + "/" + id,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Authorization': auth }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    if(exchange.status === 404) {
+        return json(false);
+    } else {
+        return json(true);
+    }
+})
+
+//deletes a spam relationship, effectively decreasing total spam count by one
+app.post('/utility/unspam/:id', function(req, id) {
+    var user = getUserDetails();
+    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+
+    var opts = {
+        url: "http://localhost:9300/myapp/api/spams/" + user.principal.id + "/" + id,
+        method: 'DELETE',
+        headers: Headers({ 'x-rt-index': 'gc', 'Authorization': auth }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
     return json(JSON.parse(exchange.content));
 })
 
