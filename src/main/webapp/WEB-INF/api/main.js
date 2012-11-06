@@ -531,7 +531,8 @@ app.get('/profiles/', function(req){
         log.info('Activity stream for {}: {}', profile.username, JSON.stringify(stream, null, 4));
 
         // find the latest activity directly taken by the owner of the profile
-        var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
+        // the latest activity is the last activity in the array
+        var activity = new ActivityMixin(stream.pop(), req, ctx('/'), undefined);
 
         latestActivity = {
             'fullName': activity.fullName,
