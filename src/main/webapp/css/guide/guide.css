@@ -326,13 +326,14 @@ address{
 
 p.muted,
 h5.muted,
-a.muted{
+.muted a{
     color: #999999;
 }
 
-a.muted {
+.muted a {
     text-decoration: none;
     padding-left: 10px;
+    font-weight: normal;
 }
 
 p.text-warning {

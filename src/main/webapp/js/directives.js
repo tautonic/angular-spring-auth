@@ -989,3 +989,23 @@ angular.module('bgc.directives').directive('secondaryNav', ['$compile', function
         }
     }
 }]);
+
+angular.module('bgc.directives')
+    .directive('like', ['$http', '$auth', function($http, $auth){
+    return {
+        restrict: 'E',
+        template: '<a ng-click="like()"><i class="likes"></i> {{text}}</a>',
+        replace: true,
+        link: function(scope, elm, attrs, ctrl){
+            scope.text = "Like This";
+            scope.like = function() {
+                $http.post("api/utility/like/" + attrs.id).success(function(data) {
+                    scope.text = "Unlike";
+                    if(scope.increaseLikes !== undefined) {
+                        scope.increaseLikes(data.likes);
+                    }
+                });
+            }
+        }
+    }
+}]);

@@ -852,7 +852,7 @@ app.get('/utility/getquote', function(req) {
     return json({ "quote": returnRandomQuote() });
 })
 
-// incriments view count for an object
+// increments view count for an object
 app.post('/utility/view/:id', function(req, id) {
     var opts = {
         url: "http://localhost:9300/myapp/api/views/" + id,
@@ -866,6 +866,7 @@ app.post('/utility/view/:id', function(req, id) {
     return json(JSON.parse(exchange.content));
 })
 
+//likes a specific object. todo: can anonymous users like something?
 app.post('/utility/like/:id', function(req, id) {
     var user = getUserDetails();
 

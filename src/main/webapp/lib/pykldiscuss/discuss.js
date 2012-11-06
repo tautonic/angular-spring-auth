@@ -185,6 +185,10 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
         setupScope();
         loadContent();
     });
+
+    $scope.increaseLikes = function(likes) {
+        $scope.discussion.likes = likes;
+    }
 }
 
 function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location) {
