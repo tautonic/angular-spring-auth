@@ -63,17 +63,55 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 
-    Profile.query(function(profiles){
+    /*Profile.query(function(profiles){
         $scope.profiles = profiles.content;
-    });
+    });*/
 
-/*
-    $scope.delete = function(id){
-        var profile = Profile.delete({profileId:id}, function(){
-            console.log(profile);
+    $http.get('/gc/api/profiles/admin').
+        success(function(data, status, headers, config){
+            console.log(data);
+            $scope.profiles = data.content;
+            $scope.facets = data.facets;
+
+            // create a scope object for each facet term
+            for(var facet in $scope.facets){
+                //var term =
+                $scope.facets[facet].selected = false;
+            }
+        }).
+        error(function(data, status, headers, config){
+
         });
-    }
-*/
+
+    $scope.filtered = function(checked, id){
+        var dataType = [];
+
+        $scope.allTypes = false;
+        console.log('search ' + id + ' is ' + checked);
+
+        for(var facet in $scope.facets){
+            if($scope.facets[facet].selected === true){
+                dataType.push($scope.facets[facet].term);
+            }
+        }
+
+        dataType = dataType.join(',');
+
+        var data = {
+            q: $scope.query,
+            dataType: dataType
+        };
+
+        //dataType = [];
+        $http.post('api/search/site/', data)
+            .success(function(response){
+                console.log('Success! Search request was successful');
+                $scope.results = response.content;
+            })
+            .error(function(){
+                console.log('Error! Search request was successful');
+            });
+    };
 }
 
 function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location, Profile){
