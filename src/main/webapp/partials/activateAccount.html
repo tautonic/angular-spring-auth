@@ -1,0 +1,80 @@
+<div class="content container signin">
+    <div class="row">
+        <div class="span9">
+            <div class="signin-form-container grey-gradient">
+                <h2>Activate Your Account</h2>
+                It appears your account hasn't been activated yet. Check your email for a link to activate it, or input the verification code your recieved here
+
+                <form class="form-horizontal" name="activateCode" ng-submit="activate()">
+                    <div class="control-group">
+                        <label class="control-label" for="code">Code:</label>
+                        <div class="controls">
+                            <input id="code" type="text" ng-model="code" required/>
+                            <span class="help-inline"><strong>We'll activate your account with this code.</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            <input class="btn btn-success" type="submit" value="Activate" ng-disabled="activateCode.$invalid"/>
+                        </div>
+                    </div>
+                </form>
+
+                Misplace your email with the activation code?
+                <form class="form-horizontal" name="resendCode" ng-submit="resend()">
+                    <div class="control-group">
+                        <label class="control-label" for="email">Email:</label>
+                        <div class="controls">
+                            <input id="email" type="text" ng-model="email" required/>
+                            <span class="help-inline"><strong>We'll resend your code to your email address.</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            <input class="btn btn-success" type="submit" value="Resend" ng-disabled="resendCode.$invalid"/>
+                        </div>
+                    </div>
+
+                    <div ng-switch on=resetStatus>
+                        <div ng-switch-when="error">
+                            <div class="alert alert-error alert-block">
+                                <h4>Error!</h4>
+                                There was an error while processing your request. Most likely, the email you used has isn't in our system.
+                            </div>
+
+                        </div>
+                        <div ng-switch-when="success">
+                            <h2>Check your email for a new validation token.</h2>
+                            <p>
+                                <strong>
+                                    Then use that token to activate your account.
+                                </strong>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="span3">
+            <div class="site search-box">
+                <div class="header">
+                    <h4>SEARCH SITE</h4>
+                </div>
+                <div class="form-container">
+                    <form ng-controller="SiteSearchController" ng-submit="searchSite()">
+                        <input type="text" ng-model="siteQuery" placeholder="Search All...">
+                        <div class="btn-group-border"></div>
+                        <div class="search-lens read-more gradient">
+                            <div class="preview-lens"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

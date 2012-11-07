@@ -345,8 +345,8 @@ var pykl = window.pykl || {};
         }]
     );
 
-    pyklSecurity.run(['$rootScope', '$http', '$log',
-        function run($rootScope, $http, $log) {
+    pyklSecurity.run(['$rootScope', '$http', '$location', '$log',
+        function run($rootScope, $http, $location, $log) {
             // Holds any all requests that fail because of an authentication error.
             $rootScope.requests401 = [];
 
@@ -380,7 +380,7 @@ var pykl = window.pykl || {};
                         $rootScope.$broadcast(EVENT_INTERNAL_SIGNIN_CONFIRMED);
                     } else {
                         // todo: Implement something
-                        $rootScope.$broadcast(EVENT_INTERNAL_SIGNIN_FAILED);
+                        $rootScope.$broadcast(EVENT_INTERNAL_SIGNIN_FAILED, data);
                     }
                 };
 
@@ -397,6 +397,12 @@ var pykl = window.pykl || {};
                 $http.put('j_spring_security_logout', {})
                     .success(success);
             });
+
+            //todo: sign in only provides an error on failure, it does not provide a reason for the failure
+            $rootScope.$on(EVENT_INTERNAL_SIGNIN_FAILED, function(event, reason) {
+                $log.info("ERROR logging in: Login attempt returned: "+reason);
+                $location.path('activateAccount');
+            })
         } ]
     );
 

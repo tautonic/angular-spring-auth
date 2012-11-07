@@ -151,9 +151,11 @@
             controller: 'resetPasswordController'
         });
 
-        $routeProvider.when( '/view', {
-            templateUrl: 'partials/partial1.html'
-        } );
+        $routeProvider.when('/activateAccount', {
+            templateUrl: 'partials/activateAccount.html',
+            controller: 'activateAccountController'
+        });
+
 		$routeProvider.otherwise( {redirectTo: '/error/404'} );
     }
 
