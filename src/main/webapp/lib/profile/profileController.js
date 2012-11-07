@@ -462,3 +462,50 @@ function searchProfiles($scope, $location){
         $location.path('/search/profiles/' + $scope.profileSearchQuery);
     };
 }
+
+function viewActivities($scope, $http, $log) {
+    $scope.paging = {
+        size: 15
+    };
+
+    resetPaging();
+
+    var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
+    var url = 'api/notifications?filters=' + filters + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size;
+
+    $http.get(url).success(function(data) {
+        $scope.stream = data;
+    });
+
+    $scope.loadMore = function() {
+        //if there's no more pages to load
+        if(!$scope.paging.more) {
+            return;
+        }
+
+        $scope.paging.from += $scope.paging.size;
+
+        url = 'api/notifications?filters=' + filters + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size;
+
+        $http.get( url ).success( function (data) {
+            if(data !== "false") {
+                if(data.items.length === 0) {
+                    $scope.paging.more = false;
+                } else {
+                    $scope.stream.items = $scope.stream.items.concat(data.items);
+                }
+            } else {
+                $log.info("ERROR getting article, or resource.");
+            }
+        }).error(function(data, status) {
+                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+            });
+    }
+
+    function resetPaging() {
+        $scope.paging.from = 0;
+        $scope.paging.more = true;
+    }
+}
+
+viewActivities.$inject = ['$scope', '$http', '$log'];

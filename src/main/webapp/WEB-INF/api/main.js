@@ -305,9 +305,8 @@ app.get('/notifications', function(req) {
         });
     }
     // Get info for paginated results
-    var page = isNaN(params.page) ? '1' : params.page;
-    var size = isNaN(params.pageSize) ? '10' : params.pageSize;
-    var from = (page - 1) * size;
+    var from = isNaN(params.from) ? '1' : params.from;
+    var size = isNaN(params.size) ? '10' : params.size;
 
     // Due to the way "filtering" was set up server side, we have to invert what the front end gives us (unless we want to re-write the front end, which I don't at this point)
     var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
@@ -350,14 +349,12 @@ app.get('/notifications', function(req) {
 
         return json({
             itemCount: stream.total,
-            currentPage: page,
             items: activities
         });
     } catch (e) {
         log.info("Error parsing activity stream: " + e.message);
         return json({
             itemCount: 0,
-            currentPage: 0,
             items: []
         });
     }

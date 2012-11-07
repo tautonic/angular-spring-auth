@@ -935,7 +935,7 @@ ul.dropdown-menu li:last-child a {
 }
 
 .articles{
-    margin-bottom: 3em;
+    margin-bottom: 50px;
 }
 
 .articles .article{
@@ -1123,6 +1123,10 @@ i.globe{
 .activity-item-content .left{
     width: 20%;
     float: left;
+}
+
+.profile .activity-item-content .left {
+    width: 12%;
 }
 
 .activity-item-content .right{

@@ -85,7 +85,6 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
 
 
         $http.get( url ).success( function (data) {
-            console.log("new RETURNED: ",data);
             if(data !== "false") {
                 if(data.length === 0) {
                     $scope.paging.more = false;
@@ -96,8 +95,8 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
                 $log.info("ERROR getting article, or resource.");
             }
         }).error(function(data, status) {
-                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
-            });
+            $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+        });
     }
 
     $scope.count = function(what) {
@@ -184,23 +183,3 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
 
 ListResources.$inject = ['$rootScope', '$scope', '$auth', '$http', '$log', '$location'];
 ViewResource.$inject = ['$rootScope', '$scope', '$routeParams', '$auth', '$http', '$log'];
-
-
-/*
- add new article functions. not supported anymore at the moment, this will either change entirely, or be put into the admin panel
- it never really worked anyway
- perhaps this should be moved to the admin panel, instead of being part of the resource page itself?
- $scope.addNewArticle = function() {
- $scope.pageType = "add";
- $scope.article = {
- title: '',
- description: '',
- content: ''
- }
- }
-
- $scope.saveNewArticle = function() {
- $http.post("api/article/new", $scope.article).success(function(data) {
- alert("article inserted successfully");
- });
- }*/

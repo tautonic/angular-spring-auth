@@ -3,7 +3,7 @@
         <div class="span9">
             <div ui-if="auth.isUser(profile._id)" ui-tabs="{tab1: {label: 'MY PROFILE'}, tab2: {label: 'ACTIVITY STREAM'}}">
                 <div ng-include="'lib/profile/partials/view.html'" ng-controller="viewProfile"></div>
-                <div ng-include="'lib/profile/partials/activities.html'" ng-controller="listProfiles"></div>
+                <div ng-include="'lib/profile/partials/activities.html'" ng-controller="viewActivities"></div>
             </div>
             <div ui-if="!auth.isUser(profile._id)">
                 <div ng-include="'lib/profile/partials/view.html'" ng-controller="viewProfile"></div>

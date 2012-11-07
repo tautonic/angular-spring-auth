@@ -1,1 +1,11 @@
-THIS IS AN ACTIVITY STREAM
+<div when-scrolled="loadMore()">
+    <ul class="activity-stream-items">
+        <li class="activity-stream-item" ng-repeat="item in stream.items">
+            <div stream-item item=item auth=auth id="{{auth.principal.id}}" thumbsize="medium"></div>
+        </li>
+    </ul>
+
+    <div ng-show="(stream.items.length == 0)">No activities found.</div>
+    <div ng-show="(paging.more)">Loading...</div>
+    <div ng-show="((!paging.more) && (stream.items.length != 0))">No more activities found.</div>
+</div>
