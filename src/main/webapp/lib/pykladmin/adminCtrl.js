@@ -84,29 +84,28 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
         });
 
     $scope.filtered = function(checked, id){
-        var dataType = [];
+        var status = [];
 
         $scope.allTypes = false;
         console.log('search ' + id + ' is ' + checked);
 
         for(var facet in $scope.facets){
             if($scope.facets[facet].selected === true){
-                dataType.push($scope.facets[facet].term);
+                status.push($scope.facets[facet].term);
             }
         }
 
-        dataType = dataType.join(',');
+        status = status.join(' ');
 
         var data = {
-            q: $scope.query,
-            dataType: dataType
+            status: status
         };
 
         //dataType = [];
-        $http.post('api/search/site/', data)
+        $http.post('api/profiles/admin/status/', data)
             .success(function(response){
                 console.log('Success! Search request was successful');
-                $scope.results = response.content;
+                $scope.profiles = response.content;
             })
             .error(function(){
                 console.log('Error! Search request was successful');

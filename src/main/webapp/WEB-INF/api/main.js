@@ -565,6 +565,89 @@ app.get('/profiles/admin', function(req){
     return result;
 });
 
+app.post('/profiles/admin/status', function(req){
+    var user = getUserDetails();
+    var data = req.postParams;
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/gc/admin/status',
+        data: JSON.stringify(data),
+        method: 'POST',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    // this request will return raw elasticsearch query results, so we'll need to run
+    // it through a little logic to get what we want
+    var profileExchange = httpclient.request(opts);
+
+    var profiles = JSON.parse(profileExchange.content);
+
+    // we're really only interested in the hits property of the hits object returned from
+    // the query
+    profiles = profiles.hits.hits;
+
+    // grab the latest activity for each profile that was done by the user before sending on
+    // to angular
+    profiles.forEach(function(profile){
+        var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
+        var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
+        var allowedActivities = filters.trim().split(' ');
+
+        //remove terms that are not in the active filter list
+        allowedActivities.forEach(function(activity) {
+            filteredActivities = filteredActivities.replace(activity, '');
+        });
+
+        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
+
+        var opts = {
+            url: url,
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc' }),
+            async: false
+        }
+
+        // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
+        var activityExchange = httpclient.request(opts);
+
+        var stream = JSON.parse(activityExchange.content);
+
+        var latestActivity;
+
+        log.info('Activity stream for {}: {}', profile._source.username, JSON.stringify(stream, null, 4));
+
+        // find the latest activity directly taken by the owner of the profile
+        // the latest activity is the last activity in the array
+        var activity = new ActivityMixin(stream.pop(), req, ctx('/'), user.principal.id);
+
+        latestActivity = {
+            'fullName': activity.fullName,
+            'message': activity.description,
+            'dateCreated': activity.props.dateCreated
+        }
+
+        profile.activity = latestActivity;
+
+        profile.isUserFollowing = isUserFollowing(profile._id);
+
+        profile.facultyFellow = profile._source.roles.some(function(role) {
+            return role == "ROLE_PREMIUM";
+        });
+    });
+
+    var result = json({
+        'status': profileExchange.status,
+        'content': profiles,
+        'headers': profileExchange.headers,
+        'success': Math.floor(profileExchange.status / 100) === 2
+    });
+
+    result.status = profileExchange.status;
+
+    return result;
+});
+
 app.get('/profiles/', function(req){
     var user = getUserDetails();
 
