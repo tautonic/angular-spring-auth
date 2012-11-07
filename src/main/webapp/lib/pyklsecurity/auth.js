@@ -185,6 +185,10 @@ var pykl = window.pykl || {};
             return false;
         };
 
+        var isUser = $rootScope.auth.isUser = function(id) {
+            return ($rootScope.auth.id === id);
+        }
+
         $rootScope.$on(EVENT_INTERNAL_SIGNIN_CONFIRMED, function () {
             getAuth().then(function () {
                 $rootScope.$broadcast(EVENT_SIGNIN_CONFIRMED, result);
@@ -256,7 +260,7 @@ var pykl = window.pykl || {};
         <ul class="dropdown-menu"> \
             <li><span class="gradient"><a ng-href="#/profiles/view/{{auth.principal.id}}">My profile</a></span></li> \
             <li><span class="gradient"><a ng-href="#/profiles/update/{{auth.principal.id}}">Change Picture</a></span></li> \
-        <li ng-show="auth.isUserInRole(\'ROLE_ADMIN\')"><span class="gradient"><a ng-href="#/admin/users">Admin Panel</a></span></li> \
+        <li ui-if="auth.isUserInRole(\'ROLE_ADMIN\')"><span class="gradient"><a ng-href="#/admin/users">Admin Panel</a></span></li> \
             <li><span class="gradient"><a ng-click="signout()">Logout</a></span></li> \
         </ul> \
         </div> \
@@ -345,8 +349,8 @@ var pykl = window.pykl || {};
         }]
     );
 
-    pyklSecurity.run(['$rootScope', '$http', '$log',
-        function run($rootScope, $http, $log) {
+    pyklSecurity.run(['$rootScope', '$http', '$location', '$log',
+        function run($rootScope, $http, $location, $log) {
             // Holds any all requests that fail because of an authentication error.
             $rootScope.requests401 = [];
 
@@ -380,7 +384,7 @@ var pykl = window.pykl || {};
                         $rootScope.$broadcast(EVENT_INTERNAL_SIGNIN_CONFIRMED);
                     } else {
                         // todo: Implement something
-                        $rootScope.$broadcast(EVENT_INTERNAL_SIGNIN_FAILED);
+                        $rootScope.$broadcast(EVENT_INTERNAL_SIGNIN_FAILED, data);
                     }
                 };
 
@@ -397,6 +401,12 @@ var pykl = window.pykl || {};
                 $http.put('j_spring_security_logout', {})
                     .success(success);
             });
+
+            //todo: sign in only provides an error on failure, it does not provide a reason for the failure
+            $rootScope.$on(EVENT_INTERNAL_SIGNIN_FAILED, function(event, reason) {
+                $log.info("ERROR logging in: Login attempt returned: "+reason);
+                $location.path('activateAccount');
+            })
         } ]
     );
 

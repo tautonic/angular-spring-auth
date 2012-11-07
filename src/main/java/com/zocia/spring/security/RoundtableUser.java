@@ -27,6 +27,7 @@ public class RoundtableUser implements UserDetails {
 	private String profileType;
     private String accountType;
     private String thumbnail;
+    private String status;
 
 
     public RoundtableUser(Map user) {
@@ -38,6 +39,7 @@ public class RoundtableUser implements UserDetails {
 		this.profileType = (String) user.get("profileType");
         this.accountType = (String) user.get("accountType");
         this.thumbnail = (String) user.get("thumbnail");
+        this.status = (String) user.get("status");
 
 		if (user.get("name") != null) {
 			this.name = (String) ((Map) user.get("name")).get("fullName");
@@ -142,7 +144,7 @@ public class RoundtableUser implements UserDetails {
 	 * @return <code>true</code> if the user is enabled, <code>false</code> otherwise
 	 */
 	public boolean isEnabled() {
-		return true;
+		return true;//(status == "verified");
 	}
 
 	public String getEmail() {

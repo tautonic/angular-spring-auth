@@ -152,6 +152,34 @@ function resetPasswordController($rootScope, $scope, $routeParams, $http){
         });
 }
 
+/**
+ * Show the form for activating account, or resending the verification email.
+ * @param $rootScope
+ * @param $scope
+ * @param $location
+ * @param $http
+ */
+function activateAccountController($rootScope, $scope, $location, $http){
+    $rootScope.banner = 'none';
+    $rootScope.about = 'signup';
+    $scope.resetStatus = "waiting";
+
+    $scope.activate = function() {
+        $location.path('verifyemail/'+$scope.code);
+    }
+
+    $scope.resend = function() {
+        $http.get('/gc/api/utility/resendvalidationcode/' + $scope.email)
+            .success(function(data){
+                if(data.success) {
+                    $scope.resetStatus = "success";
+                } else {
+                    $scope.resetStatus = "error";
+                }
+            });
+    }
+}
+
 function servicesProgramsController($rootScope, $scope, $routeParams){
     $rootScope.about = 'service';
     $rootScope.service = $routeParams.service;
@@ -180,7 +208,7 @@ function servicesProgramsController($rootScope, $scope, $routeParams){
     }
 }
 
-
+//i don't think this is being used anywhere.....
 function MyCtrl2( $rootScope, $scope, $http, $log ) {
 	$scope.protected = 'Not loaded';
 

@@ -1252,6 +1252,9 @@ app.post('/utility/verifyprofile', function(req){
 
 });
 
+/**
+ * Verifies email and sets the user status to "verified"
+ */
 app.get('/utility/verifyemail/:token', function(req, token){
     var opts = {
         url: 'http://localhost:9300/myapp/api/email/verifyprofile/' + token,
@@ -1263,6 +1266,46 @@ app.get('/utility/verifyemail/:token', function(req, token){
     var exchange = httpclient.request(opts);
 
     console.log('EXCHANGE STATUS!!! ', exchange.status);
+
+    var result = json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
+
+    result.status = exchange.status;
+
+    return result;
+});
+
+/**
+ *  Resends validation token to users email.
+ */
+app.get('/utility/resendvalidationcode/:email', function(req, email){
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/byprimaryemail/' + email,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    if(exchange.status === 404) {
+        return json({ "success": false });
+    }
+
+    var id = JSON.parse(exchange.content)._id;
+
+    opts = {
+        url: 'http://localhost:9300/myapp/api/email/resendverifyprofile/' + id,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    exchange = httpclient.request(opts);
 
     var result = json({
         'status': exchange.status,
