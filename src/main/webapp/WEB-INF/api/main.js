@@ -437,13 +437,12 @@ app.post('/profiles/', function(req){
 
 app.get('/profiles/:id', function(req, id){
     var user = getUserDetails();
-    var userCanEdit;
+    var userCanEdit = false;
+    var isAdmin = false;
 
     log.info('Current user details {}', JSON.stringify(user, null, 4));
 
-    if(user.roles[0] === "role_anonymous"){
-        userCanEdit = false;
-    }
+    isAdmin = true ? user.roles.indexOf('role_admin') !== -1 : false;
 
     if(user.principal.id === id || user.roles.indexOf('role_admin') !== -1){
         userCanEdit = true;
@@ -472,7 +471,7 @@ app.get('/profiles/:id', function(req, id){
     result.content.facultyFellow = result.content.roles.some(function(role) {
         return role == "ROLE_PREMIUM";
     });
-    result.content.isAdmin = true ? user.roles.indexOf('role_admin') !== -1 : false;
+    result.content.isAdmin = isAdmin;
 
     return json(result);
 });

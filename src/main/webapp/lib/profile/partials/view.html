@@ -70,6 +70,95 @@
                     </div>
                 </div>
 
+                <div class="info general">
+                    <h3 class="sans-serif">
+                        GENERAL
+                        <div ng-switch on=profile.userCanEdit>
+                            <div ng-switch-when=true>
+                                <div ng-click="$parent.showHideGeneral=!showHideGeneral" class="edit"><i class="icon-pencil"></i> Edit
+                                    General Info
+                                </div>
+                            </div>
+                        </div>
+                    </h3>
+                    <p><strong>Username: </strong>{{profile.username}}</p>
+                    <p><strong>Full Name: </strong>{{profile.name.given}} {{profile.name.surname}}</p>
+                </div>
+
+                <div ng-switch on=profile.userCanEdit>
+                    <div ng-switch-when=true>
+                        <form ui-toggle="showHideGeneral" name="editGeneral" class="form-horizontal" novalidate>
+                            <h3 class="sans-serif">EDIT GENERAL INFO</h3>
+                            <div class="control-group">
+                                <label class="control-label" for="username">Username:</label>
+
+                                <div class="controls">
+                                    <input type="text" id="username" ng-model="profile.username" placeholder="Username"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="first-name">First Name:</label>
+
+                                <div class="controls">
+                                    <input type="text" id="first-name" ng-model="profile.name.given" placeholder="First Name"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="last-name">Last Name:</label>
+
+                                <div class="controls">
+                                    <input type="text" id="last-name" ng-model="profile.name.surname" placeholder="Last Name"/>
+                                </div>
+                            </div>
+
+                            <div ng-switch on=profile.isAdmin>
+                                <div ng-switch-when=true>
+                                    <div class="control-group">
+                                        <label class="control-label"></label>
+                                        <div class="controls">
+                                            <div class="btn-group-border">
+                                                <div class="btn-group bgc">
+                                                    <button admin-reset-password email={{profile.accountEmail.address}} class="btn btn-success">Reset Password</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-switch-default>
+                                    <div class="control-group">
+                                        <label class="control-label" for="new-password">New Password:</label>
+
+                                        <div class="controls">
+                                            <input type="text" id="new-password" ng-model="profile.newPassword" placeholder="New Password"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label" for="new-password-repeat">Repeat New Password:</label>
+
+                                        <div class="controls">
+                                            <input type="text" id="new-password-repeat" placeholder="Repeat New Password"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label"></label>
+                                <div class="controls">
+                                    <div class="btn-group-border">
+                                        <div class="btn-group bgc">
+                                            <button ng-click="updateGeneralInfo(profile)" class="btn btn-success">Save</button>
+                                            <button ng-click="cancelGeneralInfoUpdate()" class="btn btn-success">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
                 <div class="info institution">
                     <h3 class="sans-serif">INSTITUTION
                         <div ng-switch on=profile.userCanEdit>

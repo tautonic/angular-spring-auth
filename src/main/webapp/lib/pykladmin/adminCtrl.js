@@ -67,11 +67,13 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
         $scope.profiles = profiles.content;
     });
 
+/*
     $scope.delete = function(id){
         var profile = Profile.delete({profileId:id}, function(){
             console.log(profile);
         });
     }
+*/
 }
 
 function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location, Profile){

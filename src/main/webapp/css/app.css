@@ -2021,3 +2021,8 @@ li.search-result.members{
 .new-user.name-title{
     min-height: 98px;
 }
+
+.control-group .controls h3{
+    line-height: 23px;
+    font-size: 20px;
+}

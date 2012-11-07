@@ -219,6 +219,26 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         $scope.profile = $scope.master;
     };
 
+    $scope.updateGeneralInfo = function(profile){
+        if($scope.profile.newPassword !== ''){
+            profile.password = $scope.profile.newPassword;
+        }
+        Profile.update({profileId: profile._id}, profile, function(response){
+            $scope.showHideContact = false;
+            $scope.profile = response;
+            $scope.responseContent = response;
+            $scope.master = angular.copy($scope.profile);
+        }, function(response){
+            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
+            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
+    };
+
+    $scope.cancelGeneralInfoUpdate = function(){
+        $scope.showHideContact = false;
+        $scope.profile = $scope.master;
+    };
+
     $scope.updateInstitutionInfo = function(profile){
         Profile.update({profileId: profile._id}, profile, function(response){
             $scope.showHideInstitution = false;
@@ -279,6 +299,22 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
             console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
+    }
+
+    $scope.resetPassword = function(email){
+        console.log('User email address ' + email );
+        var data = {
+            profileEmail: email
+        }
+
+        $http.post('/gc/api/utility/resettoken/', data)
+            .success(function(data, status, headers, config){
+                if(data.success) {
+                    $location.path('/passswordsendsuccess');
+                } else {
+                    $scope.showError = true;
+                }
+            });
     }
 
     $scope.followUser = function(id) {

@@ -1098,3 +1098,47 @@ angular.module('bgc.directives').directive('spam', ['$http', '$rootScope', funct
         }
     }
 }]);
+
+angular.module('bgc.directives').directive('adminDeleteUser', ['Profile', function(Profile){
+    return {
+        restrict: 'A',
+        link: function(scope, elm, attrs){
+            var attrs = attrs;
+            elm.bind('click', function(){
+                var userId = attrs.userid
+                var profile = Profile.delete({profileId:userId}, function(){
+                    elm.parents('.profile-list-item.profile').fadeOut('slow', function(){
+                        $(this).remove();
+                    });
+                });
+            });
+        }
+    }
+}]);
+
+angular.module('bgc.directives').directive('adminResetPassword', ['$http', function($http){
+    return {
+        restrict: 'A',
+        link: function(scope, elm, attrs){
+            var attrs = attrs;
+            elm.bind('click', function(){
+                var data = {
+                    profileEmail: attrs.email
+                }
+
+                $http.post('/gc/api/utility/resettoken/', data)
+                    .success(function(data, status, headers, config){
+                        if(data.success) {
+                            elm.parents('.btn-group-border').fadeOut('fast', function(){
+                                var controlsElement = elm.parents('.controls');
+                                $(this).remove();
+                                controlsElement.append("<h3>We've sent an email to this user with instructions on how to complete the password reset process</h3>");
+                            });
+                        } else {
+                            //$scope.showError = true;
+                        }
+                    });
+            });
+        }
+    }
+}]);
