@@ -946,14 +946,23 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
     }
 }]);
 
+/**
+ * Reloads the twitter buttons. Without this, twitter buttons show up as unstyled "Tweet" links, which are boring and ugly.
+ *
+ * @example <div class="article-tweet-button" reload-twitter-btns>
+             <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
+            </div>
+ */
 angular.module('bgc.directives').directive('reloadTwitterBtns', function(){
     'use strict'
 
     return {
-        link: function(scope, element, attrs){
-            scope.$on('$routeChangeSuccess', function(){
-                twttr.widgets.load();
-            });
+        compile: function compile() {
+            return {
+                post: function(){
+                    twttr.widgets.load();
+                }
+            }
         }
     }
 });
