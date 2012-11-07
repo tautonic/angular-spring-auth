@@ -3,24 +3,37 @@
         <div class="span12">
             <div class="row">
                 <div class="span9">
-                    <!--<ul class="search-results-list">
-                        <li class="search-result members" ng-repeat="profile in profiles">
-                            <div class="profile-list-item profile grey-gradient clearfix">
-                                <div thumbnail thumb=profile size="large" rotation="counter-clockwise" type="profile" />
-                                <div class="profile-left">
-                                    <h3>{{profile.name.given}} {{profile.name.surname}}</h3>
-                                    <h5>{{profile.workHistory[0].title}}</h5>
-                                    <h5 class="muted">{{profile.workHistory[0].businessName}}</h5>
+                    <div when-scrolled="loadMore(searchTerm)">
+                        <div class="article admin row" ng-repeat="article in articles">
+                            <div class="span2">
+                                <div thumbnail thumb=article size="medium" text="Preview" type="content" />
+                            </div>
+                            <div class="span7 content">
+                                <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
+                                <p class="article-meta"><span class="doc-type {{article.doctype}}"></span><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
+                                <div class="tags">
+                                    <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
                                 </div>
-                                <div class="profile-right">
-                                    <h3 class="sans-serif">LATEST ACTIVITY:</h3>
-                                    <p><i ng-bind-html-unsafe=profile.activity.message></i></p>
-                                    <p class="muted">about {{profile.activity.dateCreated | timeago}}</p>
+                                <p class="article-brief">{{article.description}}</p>
+                                <ul class="article-stats">
+                                    <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
+                                    <li class="muted"><i class="views"></i> {{article.views}} Views</li>
+                                    <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
+                                </ul>
+
+                                <div class="btn-group-border">
+                                    <div class="btn-group bgc">
+                                        <a class="btn btn-success" ng-href="#/admin/articles/update/{{article._id}}"><i class="icon-pencil icon-white"></i> Update</a>
+                                        <button class="btn btn-danger" admin-delete-user userId={{profile._source._id}}><i class="icon-trash icon-white"></i> Delete</button>
+                                    </div>
                                 </div>
                             </div>
-                        </li>
-                    </ul>-->
-                </div>
+
+                        </div>
+                        <div ng-show="(articles.length == 0)">No articles found.</div>
+                        <div ng-show="(paging.more)">Loading...</div>
+                        <div ng-show="((!paging.more) && (articles.length != 0))">No more articles found.</div>
+                    </div>                </div>
                 <div class="span3">
                     <div class="admin services-secondary-nav search-box content">
                         <div class="header">
@@ -30,6 +43,12 @@
                             <li class="nav-option"><a ng-href="#/admin/users">Users</a></li>
                             <li class="nav-option"><a ng-href="#/admin/articles">Articles</a></li>
                         </ul>
+                    </div>
+                    <br>
+                    <div class="btn-group-border">
+                        <div class="btn-group bgc">
+                            <a class="btn btn-success" ng-href="#/admin/articles/create"><i class="icon-plus icon-white"></i> Create a new article</a>
+                        </div>
                     </div>
                 </div>
             </div>

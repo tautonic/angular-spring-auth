@@ -154,6 +154,36 @@ app.post('/article/new', function(req) {
     //at this point we need to send the post content to the zocia server and specifically the wordpress thing
 });
 
+app.post('/admin/articles', function(req){
+    var data = {
+        title: req.postParams.title,
+        content: req.postParams.content
+    };
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/resources/',
+        method: 'POST',
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    log.info('NEW ARTICLE CREATION: ', exchange.status);
+
+    var result = {
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    };
+
+    result.status = exchange.status;
+
+    return json(result);
+});
+
 /********** Discussion posts *********/
 
 /**

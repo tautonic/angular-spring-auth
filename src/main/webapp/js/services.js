@@ -28,5 +28,17 @@ angular.module( 'bgc.services', ['ngResource'] )
                 discussions:     { method: 'POST', isArray: false }
             }
         );
+    })
+    .factory('Article', function($resource){
+        return $resource('/gc/api/admin/articles/:articleId',
+            {},
+            {
+                update: { method: 'PUT', isArray: false },
+                query:  { method: 'GET', isArray: false }
+            }
+        );
     });
+
+//angular.module('bgc.services', ['ngResource'] )
+
 

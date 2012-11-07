@@ -200,11 +200,62 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
     }
 }
 
-function adminArticlesList($rootScope, $scope, $routeParams, $http, $log, $location){
-    $scope.adminUsers = false;
-    $scope.adminArticles = true;
-
+function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $location, Article){
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
+
+    $scope.tinyMCEConfig = {
+        width: '100%',
+        height: '600px',
+        theme: 'advanced'
+    }
+
+    $http.get( 'api/article/' + $routeParams.articleId )
+        .success( function (data) {
+            console.log("ARTICLE RETURNED: ",data);
+            $scope.article = data;
+        })
+        .error(function(data, status) {
+            $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+        });
+
+    $scope.cancel = function(){
+        $location.path('/admin/articles');
+    }
+}
+
+function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $location, Article){
+    $rootScope.banner = 'none';
+    $rootScope.about = 'none';
+
+    $scope.tinyMCEConfig = {
+        width: '100%',
+        height: '600px',
+        theme: 'advanced'
+    }
+
+    $scope.article = {
+        title: '',
+        content: '',
+        format: 'article',
+        author: ''
+    }
+
+    $scope.save = function(article){
+        $scope.newArticle = new Article(article);
+
+        $scope.newArticle.$save(
+            function(response){
+                console.log('ARTICLE SUCCESSFULLY SAVED!!!', 'STATUS CODE: ' + response.status);
+            },
+            function(response){
+                console.log('ARTICLE SAVE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+            }
+        );
+    }
+
+    $scope.cancel = function(){
+        $location.path('/admin/articles');
+    }
 }
 

@@ -58,14 +58,24 @@
             controller: 'adminUsersList'
         });
 
-        $routeProvider.when( '/admin/articles', {
-            templateUrl: 'lib/pykladmin/partials/articles.html',
-            controller: 'adminArticlesList'
-        });
-
         $routeProvider.when( '/admin/users/new', {
             templateUrl: 'lib/pykladmin/partials/newuser.html',
             controller: 'adminUsersNew'
+        });
+
+        $routeProvider.when( '/admin/articles', {
+            templateUrl: 'lib/pykladmin/partials/articles.html',
+            controller: 'ListResources'
+        });
+
+        $routeProvider.when( '/admin/articles/create', {
+            templateUrl: 'lib/pykladmin/partials/articlescreate.html',
+            controller: 'adminArticlesCreate'
+        });
+
+        $routeProvider.when( '/admin/articles/update/:articleId', {
+            templateUrl: 'lib/pykladmin/partials/articlesupdate.html',
+            controller: 'adminArticlesUpdate'
         });
 
         $routeProvider.when( '/login', {

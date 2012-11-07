@@ -1,5 +1,5 @@
 'use strict';
-function ListResources( $rootScope, $scope, $auth, $http, $log ) {
+function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
     var sortBy = 'featured';
     var url = "api/article/search?sort=" + sortBy;
     $scope.filters = {};
@@ -13,6 +13,12 @@ function ListResources( $rootScope, $scope, $auth, $http, $log ) {
     $rootScope.service = 'curriculum';
 
     function loadContent() {
+        $scope.adminUsers = false;
+        $scope.adminArticles = true;
+
+        $rootScope.banner = 'none';
+        $rootScope.about = 'none';
+
         $http.get( url ).success( function (data) {
             console.log("URL WAS: " + url + " ARTICLE RETURNED: ",data);
             if(data !== "false") {
@@ -110,8 +116,13 @@ function ListResources( $rootScope, $scope, $auth, $http, $log ) {
     $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
     $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
     $scope.$on('$routeChangeSuccess', function(){
-        $rootScope.banner = 'curriculum';
-        $rootScope.about = 'curriculum';
+        if($location.path() === '/admin/articles'){
+            $rootScope.banner = 'none';
+            $rootScope.about = 'none';
+        }else{
+            $rootScope.banner = 'curriculum';
+            $rootScope.about = 'curriculum';
+        }
     });
 
     function resetPaging() {
@@ -165,15 +176,13 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
     $rootScope.$on($auth.event.signoutConfirmed, function() { loadContent(); });
 
-    $scope.$on('$routeChangeSuccess', function(){
-        $rootScope.banner = 'none';
-        $rootScope.about = 'none';
-    });
+    $rootScope.banner = 'none';
+    $rootScope.about = 'none';
 
     loadContent();
 }
 
-ListResources.$inject = ['$rootScope', '$scope', '$auth', '$http', '$log'];
+ListResources.$inject = ['$rootScope', '$scope', '$auth', '$http', '$log', '$location'];
 ViewResource.$inject = ['$rootScope', '$scope', '$routeParams', '$auth', '$http', '$log'];
 
 
