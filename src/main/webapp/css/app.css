@@ -1469,6 +1469,10 @@ li.search-result.members{
     margin-top: 3em;
 }
 
+.container.content.profile .nav {
+    margin-top: -35px;
+}
+
 .nav-tabs{
     border-bottom: none;
 }

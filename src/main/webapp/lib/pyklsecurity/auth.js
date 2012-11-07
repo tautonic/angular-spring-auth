@@ -185,6 +185,10 @@ var pykl = window.pykl || {};
             return false;
         };
 
+        var isUser = $rootScope.auth.isUser = function(id) {
+            return ($rootScope.auth.id === id);
+        }
+
         $rootScope.$on(EVENT_INTERNAL_SIGNIN_CONFIRMED, function () {
             getAuth().then(function () {
                 $rootScope.$broadcast(EVENT_SIGNIN_CONFIRMED, result);
@@ -256,7 +260,7 @@ var pykl = window.pykl || {};
         <ul class="dropdown-menu"> \
             <li><span class="gradient"><a ng-href="#/profiles/view/{{auth.principal.id}}">My profile</a></span></li> \
             <li><span class="gradient"><a ng-href="#/profiles/update/{{auth.principal.id}}">Change Picture</a></span></li> \
-        <li ng-show="auth.isUserInRole(\'ROLE_ADMIN\')"><span class="gradient"><a ng-href="#/admin/users">Admin Panel</a></span></li> \
+        <li ui-if="auth.isUserInRole(\'ROLE_ADMIN\')"><span class="gradient"><a ng-href="#/admin/users">Admin Panel</a></span></li> \
             <li><span class="gradient"><a ng-click="signout()">Logout</a></span></li> \
         </ul> \
         </div> \

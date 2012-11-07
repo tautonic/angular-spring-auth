@@ -75,7 +75,7 @@
 
         //individual controller pages, some of these might be removed
         $routeProvider.when( '/profiles/view/:profileId', {
-            templateUrl: 'lib/profile/partials/view.html',
+            templateUrl: 'lib/profile/partials/landingPage.html',
             controller: 'viewProfile'
         } );
         $routeProvider.when( '/profiles/update/:profileId', {
