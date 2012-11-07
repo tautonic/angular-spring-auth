@@ -238,11 +238,31 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         title: '',
         content: '',
         format: 'article',
-        author: ''
+        author: 'James Hines',
+        key: '',
+        thumbnail: '',
+        lastModifiedDate: '',
+        dateCreated: '',
+        likes: 0,
+        comments: 0,
+        views: 0,
+        rating: 0
     }
+
+    //dateCreated: "2011-01-17T23:07:32.000Z"
 
     $scope.save = function(article){
         $scope.newArticle = new Article(article);
+
+        var date = new Date();
+
+        $scope.newArticle.lastModifiedDate = ISODateString(date);
+        $scope.newArticle.dateCreated = ISODateString(date);
+
+        var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
+            date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+
+        $scope.newArticle.key = 'article-key-' + utc_timestamp;
 
         $scope.newArticle.$save(
             function(response){
@@ -256,6 +276,16 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
 
     $scope.cancel = function(){
         $location.path('/admin/articles');
+    }
+
+    function ISODateString(d){
+        function pad(n){return n<10 ? '0'+n : n}
+        return d.getUTCFullYear()+'-'
+            + pad(d.getUTCMonth()+1)+'-'
+            + pad(d.getUTCDate())+'T'
+            + pad(d.getUTCHours())+':'
+            + pad(d.getUTCMinutes())+':'
+            + pad(d.getUTCSeconds())+'Z'
     }
 }
 
