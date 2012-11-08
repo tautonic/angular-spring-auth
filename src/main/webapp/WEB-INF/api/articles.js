@@ -119,7 +119,7 @@ var searchAllArticles = function(params) {
     }
 
     return result;
-}
+};
 
 var getAllArticles = function(type, max) {
     var result = ajax('http://localhost:9300/myapp/api/resources/' + type + '/' + max);
@@ -135,7 +135,7 @@ var getArticlesByCategory = function(category) {
     result.content.forEach(configureArticles);
 
     return result;
-}
+};
 
 var getArticle = function(id) {
     var result = ajax('http://localhost:9300/myapp/api/resources/' + id);
@@ -148,7 +148,7 @@ var getArticle = function(id) {
     result.content.premium = (result.content.roles.some(function(element) { return element == "ROLE_PREMIUM"; }));
 
     return result;
-}
+};
 
 function getDocType(mimetype) {
     var doctype;
@@ -284,7 +284,7 @@ function getRandomInt(min, max) {
 
 var returnRandomQuote = function() {
     return quotes[getRandomInt(0, quotes.length)];
-}
+};
 
 function generateBasicAuthorization(user) {
     var header = user.username + ":" + user.password;
@@ -294,7 +294,7 @@ function generateBasicAuthorization(user) {
 
 function configureArticles(article) {
     article.doctype = getDocType(article.mimetype);
-    article.premium = (article.roles.some(function(element) { return element == "ROLE_PREMIUM"; }));
+    article.premium = article.roles.some(function(element) { return element == "ROLE_PREMIUM"; });
 }
 
 export('ajax', 'searchAllArticles', 'getAllArticles', 'getArticlesByCategory', 'getArticle', 'linkDiscussionToArticle', 'returnRandomQuote');
