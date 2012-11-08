@@ -1174,10 +1174,63 @@ angular.module('bgc.directives').directive('adminResetPassword', ['$http', funct
 angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', function($http){
     return {
         restrict: 'A',
-        link: function(){
-            elm.bind('click', function(){
+        link: function(scope, elm, attrs){
+            var config = {
+                scope: scope,
+                runtimes: 'html5',
+                browse_button: 'choose-files',
+                container:'container',
+                url: '/gc/api/profiles/images/upload/',
+                max_file_size:'100mb',
+                resize:{width:320, height:240, quality:90},
+                flash_swf_url:'../js/plupload.flash.swf',
+                silverlight_xap_url:'../js/plupload.silverlight.xap',
+                filters:[
+                    {title:"Image files", extensions:"pdf,docx,pptx,rtf,xls,txt"},
+                    {title:"Zip files", extensions:"zip"}
+                ]
+            };
 
-            })
+            function $$(id) {
+                return document.getElementById(id);
+            }
+
+            var uploader = new plupload.Uploader(config);
+
+            uploader.bind('FilesAdded', function (up, files) {
+                for (var i in files) {
+                    $$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+                }
+
+                /*setTimeout(function () {
+                    uploader.start();
+                }, 500);*/
+            });
+
+            uploader.bind('BeforeUpload', function(upload, file){
+                upload.settings.multipart_params = {size: file.size}
+            });
+
+
+            uploader.bind('UploadProgress', function (up, file) {
+                $$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+            });
+
+            var url;
+
+            uploader.bind('FileUploaded', function(uploader, file, response){
+                url = response.response;
+            });
+
+            var jcropApi;
+            var height;
+            var width;
+
+            uploader.bind('UploadComplete', function(uploader, file){
+
+            });
+
+            uploader.init();
         }
     }
 }]);

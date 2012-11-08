@@ -287,7 +287,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             file : '../../../../../gc/partials/tinymceuploads.html',
             title : 'Babson GCEE Insert/Upload',
             width : 600,  // Your dimensions may differ - toy around with them!
-            height : 400,
+            height : 220,
             resizable : "yes",
             inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
             close_previous : "no"
@@ -400,7 +400,7 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
             file : '../../../../../gc/partials/tinymceuploads.html',
             title : 'Babson GCEE Insert/Upload',
             width : 600,  // Your dimensions may differ - toy around with them!
-            height : 400,
+            height : 220,
             resizable : "yes",
             inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
             close_previous : "no"

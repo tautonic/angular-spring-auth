@@ -19,23 +19,32 @@
                                 </div>
                             </div>
 
-                            <div class="control-group">
-                                <label class="control-label"></label>
-                                <div class="controls">
-                                    <div class="btn-group-border">
-                                        <div class="btn-group bgc">
-                                            <button ng-click="save(article)" class="btn btn-success">Save</button>
-                                            <button ng-click="cancel()" class="btn btn-success">Cancel</button>
+                            <div pykl-file-attachment>
+                                <div class="control-group">
+                                    <label class="control-label"></label>
+                                    <div class="controls">
+                                        <div class="btn-group-border">
+                                            <div class="btn-group bgc">
+                                                <button ng-click="save(article)" class="btn btn-success">Save</button>
+                                                <button ng-click="cancel()" class="btn btn-success">Cancel</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="btn-group-border">
+                                            <div class="btn-group bgc">
+                                                <button id="choose-files" class="btn btn-success"><i class="icon-file icon-white"></i> Add an attachment</button>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="btn-group-border">
-                                        <div class="btn-group bgc">
-                                            <button pykl-file-attach class="btn btn-success"><i class="icon-file icon-white"></i> Add an attachment</button>
-                                        </div>
+                                    <div id="container">
+                                        <br>
+                                        <div id="filelist"></div>
+                                        <br />
                                     </div>
                                 </div>
                             </div>
+
                         </form>
                     </div>
                 </div>
