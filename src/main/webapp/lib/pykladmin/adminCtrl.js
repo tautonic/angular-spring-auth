@@ -219,7 +219,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         theme_advanced_toolbar_location : "top",
 
         file_browser_callback: bgcFileBrowser
-    }
+    };
 
     /*var article = Article.get({articleId:$routeParams.articleId},
         function(){
@@ -246,6 +246,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         delete article.premium;
 
         //article.lastModifiedDate = ISODateString(date);
+        article.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
 
         Article.update({articleId: article._id}, article, function(response){
             $location.path('/content/' + article._id);
@@ -256,6 +257,16 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
 
     $scope.cancel = function(){
         $location.path('/admin/articles');
+    };
+
+    function generateDescription(content){
+        var result = content;
+        var resultArray = result.split(" ");
+        if(resultArray.length > 40){
+            resultArray = resultArray.slice(0, 40);
+            result = resultArray.join(" ") + " ...";
+        }
+        return result;
     };
 
     function ISODateString(d){
@@ -338,8 +349,12 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
 
         $scope.newArticle.key = 'article-key-' + utc_timestamp;
 
+        $scope.newArticle.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
+        //console.log('Content with stripped tags' + article.content.replace(/<(?:.|\n)*?>/gm, ''));
+
         $scope.newArticle.$save(
             function(response){
+                $location.path('/content/' + response.content._id);
                 console.log('ARTICLE SUCCESSFULLY SAVED!!!', 'STATUS CODE: ' + response.status);
             },
             function(response){
@@ -360,6 +375,16 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
             + pad(d.getUTCHours())+':'
             + pad(d.getUTCMinutes())+':'
             + pad(d.getUTCSeconds())+'Z'
+    }
+
+    function generateDescription(content){
+        var result = content;
+        var resultArray = result.split(" ");
+        if(resultArray.length > 40){
+            resultArray = resultArray.slice(0, 40);
+            result = resultArray.join(" ") + " ...";
+        }
+        return result;
     }
 
     function bgcFileBrowser(field_name, url, type, win){
