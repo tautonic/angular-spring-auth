@@ -409,8 +409,6 @@ function isUserFollowing(id) {
  * classes.
  */
 app.get( '/auth', function ( req ) {
-    java.lang.Thread.sleep(1000);
-
 	var result = getUserDetails();
 
     log.info("logging in user");
@@ -730,7 +728,7 @@ app.post('/profiles/images/upload/', function (req) {
                     'x-rt-index': 'gc',
                     'Authorization': auth,
                     'x-rt-upload-name': params.file.filename,
-                    'x-rt-upload-content-type': params.file.contentType,
+                    'x-rt-upload-content-type': params.file.contentType
                     //'x-rt-upload-size': params.size
                     //'x-rt-upload-title': ''	// This param was never set in "old" NEP
                 },

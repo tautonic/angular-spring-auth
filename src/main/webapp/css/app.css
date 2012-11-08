@@ -268,9 +268,10 @@ a.left-arrow {
 }
 
 ul.menu {
-    float: left;
+    position: relative;
+    z-index: 2;
     list-style-type: none;
-    margin: 13 -11px 0 28px;
+    margin: 13px 50px 0 150px;
     height: 40px;
     border: 1px solid black;
     border-top-right-radius: 20px;
@@ -1175,27 +1176,68 @@ i.globe{
     top: -7px;
 }
 
-.search-dropdown{
-    top: 18px;
-    left: -107px;
+#searchSite{
+    position: absolute;
+    top: 20px;
+    right: 80px;
+    z-index: 0;
 }
 
-.search-dropdown .form-horizontal .control-label{
-    width: 0;
+.slideout {
+    -webkit-animation-duration: 1s;
+    -webkit-animation-name: slideout;
+    -webkit-animation-fill-mode: forwards;
+
+    -moz-animation-duration: 1s;
+    -moz-animation-name: slideout;
+    -moz-animation-fill-mode: forwards;
+
+    -o-animation-duration: 1s;
+    -o-animation-name: slideout;
+    -o-animation-fill-mode: forwards;
+
+    -o-animation-duration: 1s;
+    -o-animation-name: slideout;
+    -o-animation-fill-mode: forwards;
+
+    animation-duration: 1s;
+    animation-name: slideout;
+    animation-fill-mode: forwards;
 }
 
-.search-dropdown .form-horizontal .controls{
-    margin-left: 60px;
+@-webkit-keyframes slideout {
+  from {
+    right: 80px;
+  }
+
+  to {
+    right: -100px;
+  }
 }
 
-.search-dropdown p{
-    color: white;
-    text-align: center;
+@-moz-keyframes slideout {
+  from {
+    right: 80px;
+  }
+
+  to {
+    right: -100px;
+  }
 }
 
-.search-dropdown .form-search{
-    margin: 20px 40px 0px 10px;
-    background: none;
+@keyframes slideout {
+  from {
+    right: 80px;
+  }
+
+  to {
+    right: -100px;
+  }
+}
+
+#searchSite input.search-query {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 input.input-medium.search-query{
@@ -1448,14 +1490,6 @@ li.search-result.members{
     height: 29px;
     width: 110%;
     background-position: 68px -8px;
-}
-
-.search-dropdown li span:first-child{
-    height: 135%
-}
-
-.search-dropdown li:first-child{
-    height: 46px;
 }
 
 .tags div{
