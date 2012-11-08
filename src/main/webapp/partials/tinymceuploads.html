@@ -20,6 +20,8 @@
     <script src="../lib/pykl-angular-ui/plupload/js/plupload.browserplus.js"></script>
     <script src="../lib/pykl-angular-ui/plupload/js/plupload.html4.js"></script>
     <script src="../lib/pykl-angular-ui/plupload/js/plupload.html5.js"></script>
+
+    <script src="../lib/angularui/tinymce/tiny_mce_popup.js"></script>
 </head>
 <body>
     <div class="image-upload">
@@ -34,13 +36,19 @@
                 <button id="choose-files" class="btn btn-success"><i class="icon-folder-open icon-white"></i> Browse</button>
             </div>
         </div>
+
+        <div id="container">
+            <br>
+            <div id="filelist"></div>
+            <br />
+        </div>
     </div>
 
     <script type="text/javascript">
         var config = {
             runtimes: 'html5',
             browse_button: 'choose-files',
-            //container:'container',
+            container:'container',
             drop_element: 'profile-thumb-drop-target',
             url: '/gc/api/profiles/images/upload/',
             max_file_size:'100mb',
@@ -82,6 +90,22 @@
 
         uploader.bind('FileUploaded', function(uploader, file, response){
             url = response.response;
+        });
+
+        uploader.bind('UploadComplete', function(uploader, files){
+            var win = tinyMCEPopup.getWindowArg("window");
+
+            win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = 'http:' + url;
+
+            if (win.ImageDialog.getImageData){
+                win.ImageDialog.getImageData();
+            }
+
+            if (win.ImageDialog.showPreviewImage){
+                win.ImageDialog.showPreviewImage(url);
+            }
+
+            tinyMCEPopup.close();
         });
 
         uploader.init();
