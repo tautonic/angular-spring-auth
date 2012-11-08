@@ -231,7 +231,18 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     $scope.tinyMCEConfig = {
         width: '100%',
         height: '600px',
-        theme: 'advanced'
+        mode: 'textareas',
+        theme: 'advanced',
+
+        plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+        theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,cut,copy,paste,pastetext,pasteword",
+        theme_advanced_buttons2 : "styleselect,formatselect,fontselect,fontsizeselect",
+        theme_advanced_buttons3 : "search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
+        theme_advanced_buttons4 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup",
+        theme_advanced_buttons5 : "charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+        theme_advanced_toolbar_location : "top",
+
+        file_browser_callback: bgcFileBrowser
     }
 
     $scope.article = {
@@ -286,6 +297,39 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
             + pad(d.getUTCHours())+':'
             + pad(d.getUTCMinutes())+':'
             + pad(d.getUTCSeconds())+'Z'
+    }
+
+    function bgcFileBrowser(field_name, url, type, win){
+
+        //alert("Field_Name: " + field_name + "nURL: " + url + "nType: " + type + "nWin: " + win); // debug/testing
+
+        /* If you work with sessions in PHP and your client doesn't accept cookies you might need to carry
+         the session name and session ID in the request string (can look like this: "?PHPSESSID=88p0n70s9dsknra96qhuk6etm5").
+         These lines of code extract the necessary parameters and add them back to the filebrowser URL again. */
+
+        /* Here goes the URL to your server-side script which manages all file browser things. */
+        /*var cmsURL = window.location.pathname;     // your URL could look like "/scripts/my_file_browser.php"
+        var searchString = window.location.search; // possible parameters
+        if (searchString.length < 1) {
+            // add "?" to the URL to include parameters (in other words: create a search string because there wasn't one before)
+            searchString = "?";
+        }*/
+
+        // newer writing style of the TinyMCE developers for tinyMCE.openWindow
+
+        tinyMCE.activeEditor.windowManager.open({
+            file : '../../../../../gc/partials/tinymceuploads.html',
+            title : 'Babson GCEE Insert/Upload',
+            width : 600,  // Your dimensions may differ - toy around with them!
+            height : 400,
+            resizable : "yes",
+            inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
+            close_previous : "no"
+        }, {
+            window : win,
+            input : field_name
+        });
+        return false;
     }
 }
 

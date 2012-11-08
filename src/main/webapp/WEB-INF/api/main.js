@@ -518,7 +518,7 @@ app.get('/profiles/admin', function(req){
     var profileExchange = httpclient.request(opts);
 
     var profiles = JSON.parse(profileExchange.content);
-    log.info('Facets returned from Zocia {}', JSON.stringify(profiles.facets, null, 4));
+    //log.info('Facets returned from Zocia {}', JSON.stringify(profiles.facets, null, 4));
     // we'll be using  the raw elasticsearch result facets
     var facets = profiles.facets.status.terms;
 
