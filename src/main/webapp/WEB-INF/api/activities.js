@@ -2,10 +2,10 @@ var log = require('ringo/logging').getLogger(module.id);
 var {format} = java.lang.String;
 var httpclient = require('ringo/httpclient');
 
-//var {roundTableAjaxRequest, getContent, getArticle, getThumbnailUrl, getDiscussion, getCompanyById} = require('common-io');
+var {Headers} = require('ringo/utils/http');
+
 var {getArticle} = require('articles');
 var {getDiscussion} = require('discussions');
-//var {def} = require('defaults');
 
 var {trimpathString} = require('trimpath');
 
@@ -53,31 +53,9 @@ var text = {
     "notifications-activity.uco.profiles": "${actorLink} promoted ${directLink} to be an owner of ${aboutLink}",
     "notifications-activity.ufsp.profiles": "${actorLink} stopped following ${directLink}.",
     "notifications-activity.ufsp.services": "${actorLink} stopped following ${directLink}."
-}
+};
 
-function getProfile(id) {
-    var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/' + id,
-        method: 'GET',
-        headers: Headers({ 'x-rt-index': 'gc' }),
-        async: false
-    };
-
-    var exchange = httpclient.request(opts);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    result.status = exchange.status;
-
-    return result;
-}
-
-exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
+var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
     var result = {};
 
     var defAttrs = {
@@ -225,14 +203,16 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                     activity.actor._id, activity.actor.fullName || activity.actor.username);
             }
 
+            var linkId, linkText,
+                linkType = type;
+
             // Indirect object link
             if (about) {
                 // Determine data on the indirect object
 
                 // Defaults
-                var linkId = about._id,
-                    linkText = about.title,
-                    linkType = type;
+                linkId = about._id;
+                linkText = about.title;
 
                 switch (about.dataType) {
                     case 'ventures':
@@ -268,9 +248,8 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
             if (direct) {
                 // Determine data on the direct object
 
-                var linkId = direct._id,
-                    linkText = direct.title,
-                    linkType = type;
+                linkId = direct._id;
+                linkText = direct.title;
 
                 switch (direct.dataType) {
                     case 'posts':
@@ -340,3 +319,60 @@ exports.ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
 
     return result;
 };
+
+var getLatestActivity = function(request, profile, context, userId) {
+    var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
+    var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
+    var allowedActivities = filters.trim().split(' ');
+
+    //remove terms that are not in the active filter list
+    allowedActivities.forEach(function(activity) {
+        filteredActivities = filteredActivities.replace(activity, '');
+    });
+
+    var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
+
+    var opts = {
+        url: url,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
+    var activityExchange = httpclient.request(opts);
+
+    var stream = JSON.parse(activityExchange.content);
+
+    //log.info('Activity stream for {}: {}', profile.username, JSON.stringify(stream, null, 4));
+
+    // find the latest activity directly taken by the owner of the profile
+    // the latest activity is the last activity in the array
+    var activity = new ActivityMixin(stream.pop(), request, context, userId);
+
+    return {
+        'fullName': activity.fullName,
+        'message': activity.description,
+        'dateCreated': activity.props.dateCreated
+    };
+};
+
+var convertActivity = function(activity, request, context, userId) {
+    activity = new ActivityMixin(activity, request, context, userId);
+
+    if (activity.description !== null) {
+
+        return {
+            'thumbnailUrl': activity.thumbnailUrl,
+            'fullName': activity.fullName,
+            'username': activity.props.actor.username,
+            'message': activity.description,
+            'dateCreated': activity.props.dateCreated,
+            'isOwner': activity.isOwner,
+            'profileId': activity.profileId
+        };
+    }
+    return null;
+};
+
+export('convertActivity', 'getLatestActivity');

@@ -15,7 +15,7 @@ var {digest} = require('ringo/utils/strings');
 var {Application} = require( 'stick' );
 var {ajax, searchAllArticles, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle, returnRandomQuote} = require('articles');
 var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
-var {ActivityMixin} = require('activities');
+var {convertActivity, getLatestActivity} = require('activities');
 
 var {encode} = require('ringo/base64');
 
@@ -75,12 +75,7 @@ app.get( '/index.html', function ( req ) {
 
 app.get('/article/all/news', function(req) {
     return articles(req, "articles", 3);
-})
-
-/* Attempt to allow for sorting by type. didn't quite work */
-/*app.get('/article/all/:type', function(req, type) {
-    return articles(req, type);
-});*/
+});
 
 app.get('/article/all', function(req) {
     return articles(req, 'articles');
@@ -99,7 +94,7 @@ app.get('/article/search', function(req) {
     var articles = searchAllArticles(req.params);
 
     return json(articles);
-})
+});
 
 app.get('/article/all/bycategory/:category', function(req, category) {
     var articles = getArticlesByCategory(category);
@@ -160,20 +155,7 @@ app.post('/admin/articles', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    log.info('NEW ARTICLE CREATION: ', exchange.status);
-
-    var result = {
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    };
-
-    result.status = exchange.status;
-
-    return json(result);
+    return _simpleHTTPRequest(opts);
 });
 
 /********** Discussion posts *********/
@@ -322,20 +304,11 @@ app.get('/notifications', function(req) {
 
         var activities = [];
         stream.acts.forEach(function (activity) {
-            activity = new ActivityMixin(activity, req, ctx('/'), profile.principal.id);
+            activity = convertActivity(activity, req, ctx('/'), profile.principal.id);
 
-            if (activity.description !== null) {
-
+            if (activity !== null) {
                 // Assign values from the mixin to a temp object, since the mixin won't be passed via JSON
-                activities.push({
-                    'thumbnailUrl': activity.thumbnailUrl,
-                    'fullName': activity.fullName,
-                    'username': activity.props.actor.username,
-                    'message': activity.description,
-                    'dateCreated': activity.props.dateCreated,
-                    'isOwner': activity.isOwner,
-                    'profileId': activity.profileId
-                });
+                activities.push(activity);
             }
         });
 
@@ -374,16 +347,9 @@ app.post('/follow/:followedById/:entityId', function(req, followedById, entityId
         data: {},
         headers: Headers({ "Authorization": _generateBasicAuthorization(user.username, user.password), 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
-    }
+    };
 
-    var exchange = httpclient.request(opts);
-
-    return json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
+    return _simpleHTTPRequest(opts);
 });
 
 function isUserFollowing(id) {
@@ -394,7 +360,7 @@ function isUserFollowing(id) {
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
-    }
+    };
 
     var exchange = httpclient.request(opts);
 
@@ -442,16 +408,7 @@ app.post('/profiles/', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    log.info('NEW PROFILE CREATION: ', exchange.status);
-
-    return json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
+    return _simpleHTTPRequest(opts);
 });
 
 app.get('/profiles/:id', function(req, id){
@@ -525,44 +482,7 @@ app.get('/profiles/admin', function(req){
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
     profiles.forEach(function(profile){
-        var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
-        var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
-        var allowedActivities = filters.trim().split(' ');
-
-        //remove terms that are not in the active filter list
-        allowedActivities.forEach(function(activity) {
-            filteredActivities = filteredActivities.replace(activity, '');
-        });
-
-        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
-
-        var opts = {
-            url: url,
-            method: 'GET',
-            headers: Headers({ 'x-rt-index': 'gc' }),
-            async: false
-        }
-
-        // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
-        var activityExchange = httpclient.request(opts);
-
-        var stream = JSON.parse(activityExchange.content);
-
-        var latestActivity;
-
-        log.info('Activity stream for {}: {}', profile._source.username, JSON.stringify(stream, null, 4));
-
-        // find the latest activity directly taken by the owner of the profile
-        // the latest activity is the last activity in the array
-        var activity = new ActivityMixin(stream.pop(), req, ctx('/'), user.principal.id);
-
-        latestActivity = {
-            'fullName': activity.fullName,
-            'message': activity.description,
-            'dateCreated': activity.props.dateCreated
-        }
-
-        profile.activity = latestActivity;
+        profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);
 
         profile.isUserFollowing = isUserFollowing(profile._id);
 
@@ -609,44 +529,7 @@ app.post('/profiles/admin/status', function(req){
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
     profiles.forEach(function(profile){
-        var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
-        var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
-        var allowedActivities = filters.trim().split(' ');
-
-        //remove terms that are not in the active filter list
-        allowedActivities.forEach(function(activity) {
-            filteredActivities = filteredActivities.replace(activity, '');
-        });
-
-        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
-
-        var opts = {
-            url: url,
-            method: 'GET',
-            headers: Headers({ 'x-rt-index': 'gc' }),
-            async: false
-        }
-
-        // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
-        var activityExchange = httpclient.request(opts);
-
-        var stream = JSON.parse(activityExchange.content);
-
-        var latestActivity;
-
-        log.info('Activity stream for {}: {}', profile._source.username, JSON.stringify(stream, null, 4));
-
-        // find the latest activity directly taken by the owner of the profile
-        // the latest activity is the last activity in the array
-        var activity = new ActivityMixin(stream.pop(), req, ctx('/'), user.principal.id);
-
-        latestActivity = {
-            'fullName': activity.fullName,
-            'message': activity.description,
-            'dateCreated': activity.props.dateCreated
-        }
-
-        profile.activity = latestActivity;
+        profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);;
 
         profile.isUserFollowing = isUserFollowing(profile._id);
 
@@ -684,44 +567,7 @@ app.get('/profiles/', function(req){
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
     profiles.forEach(function(profile){
-        var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
-        var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
-        var allowedActivities = filters.trim().split(' ');
-
-        //remove terms that are not in the active filter list
-        allowedActivities.forEach(function(activity) {
-            filteredActivities = filteredActivities.replace(activity, '');
-        });
-
-        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
-
-        var opts = {
-            url: url,
-            method: 'GET',
-            headers: Headers({ 'x-rt-index': 'gc' }),
-            async: false
-        }
-
-        // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
-        var activityExchange = httpclient.request(opts);
-
-        var stream = JSON.parse(activityExchange.content);
-
-        var latestActivity;
-
-        log.info('Activity stream for {}: {}', profile.username, JSON.stringify(stream, null, 4));
-
-        // find the latest activity directly taken by the owner of the profile
-        // the latest activity is the last activity in the array
-        var activity = new ActivityMixin(stream.pop(), req, ctx('/'), user.principal.id);
-
-        latestActivity = {
-            'fullName': activity.fullName,
-            'message': activity.description,
-            'dateCreated': activity.props.dateCreated
-        }
-
-        profile.activity = latestActivity;
+        profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);
 
         profile.isUserFollowing = isUserFollowing(profile._id);
 
@@ -778,18 +624,7 @@ app.put('/profiles/:id', function(req, id){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    result.status = exchange.status;
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 app.del('/profiles/:id', function(req, id){
@@ -802,18 +637,7 @@ app.del('/profiles/:id', function(req, id){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    result.status = exchange.status;
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 app.get('/profiles/byprimaryemail/:email', function(req, email){
@@ -824,16 +648,7 @@ app.get('/profiles/byprimaryemail/:email', function(req, email){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 app.get('/profiles/byusername/:username', function(req, username){
@@ -844,16 +659,7 @@ app.get('/profiles/byusername/:username', function(req, username){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 /**
@@ -893,7 +699,7 @@ app.post('/profiles/images/upload/', function (req) {
                 },
                 "data": params.file.value,
                 "method": 'PUT'
-            }
+            };
 
             java.lang.Thread.sleep(1000);
 
@@ -949,22 +755,9 @@ app.post('/profiles/images/crop/', function (req) {
         },
         "data": params,
         "method": 'PUT'
-    }
+    };
 
-    var exchange = httpclient.request(opts);
-
-    log.info('IMAGE CROP RESPONSE: ', JSON.stringify(exchange.content, null, 4));
-
-    //return json({ response: JSON.parse(exchange.content) });
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    return result
+    return _simpleHTTPRequest(opts);
 });
 
 app.get('/profiles/images/', function(req, id){
@@ -1031,7 +824,7 @@ app.get('/profiles/images/', function(req, id){
 // gets a random quote, used on the homepage. quotes are currently placeholders
 app.get('/utility/getquote', function(req) {
     return json({ "quote": returnRandomQuote() });
-})
+});
 
 // increments view count for an object
 app.post('/utility/view/:id', function(req, id) {
@@ -1045,7 +838,7 @@ app.post('/utility/view/:id', function(req, id) {
     var exchange = httpclient.request(opts);
 
     return json(JSON.parse(exchange.content));
-})
+});
 
 //likes a specific object. todo: can anonymous users like something?
 app.post('/utility/like/:id', function(req, id) {
@@ -1061,7 +854,7 @@ app.post('/utility/like/:id', function(req, id) {
     var exchange = httpclient.request(opts);
 
     return json(JSON.parse(exchange.content));
-})
+});
 
 //checks to see if a user has already liked this particular object, if so, returns true, otherwise, returns false
 app.get('/utility/like/:id', function(req, id) {
@@ -1081,7 +874,7 @@ app.get('/utility/like/:id', function(req, id) {
     } else {
         return json(true);
     }
-})
+});
 
 //deletes a like relationship, effectively decreasing total likes by one
 app.post('/utility/unlike/:id', function(req, id) {
@@ -1096,9 +889,9 @@ app.post('/utility/unlike/:id', function(req, id) {
     };
 
     var exchange = httpclient.request(opts);
-    log.info("unliked: "+exchange.content);
+
     return json(JSON.parse(exchange.content));
-})
+});
 
 //marks a specific object (namely, discussion posts) as spam. todo: can anonymous users mark something as spam?
 app.post('/utility/spam/:id', function(req, id) {
@@ -1114,7 +907,7 @@ app.post('/utility/spam/:id', function(req, id) {
     var exchange = httpclient.request(opts);
 
     return json(JSON.parse(exchange.content));
-})
+});
 
 //checks to see if a user has already marked this particular object as spam, if so, returns true, otherwise, returns false
 app.get('/utility/spam/:id', function(req, id) {
@@ -1135,7 +928,7 @@ app.get('/utility/spam/:id', function(req, id) {
     } else {
         return json(true);
     }
-})
+});
 
 //deletes a spam relationship, effectively decreasing total spam count by one
 app.post('/utility/unspam/:id', function(req, id) {
@@ -1152,7 +945,7 @@ app.post('/utility/unspam/:id', function(req, id) {
     var exchange = httpclient.request(opts);
 
     return json(JSON.parse(exchange.content));
-})
+});
 
 /**
  * Requires an email address, and passes that to zocia. If the email address is valid/in use, it will send the user an email giving them a link to reset their password using the token that's generated
@@ -1171,18 +964,7 @@ app.post('/utility/resettoken/', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 /**
@@ -1199,18 +981,7 @@ app.post('/utility/resetpassword/', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 app.post('/utility/verifyprofile', function(req){
@@ -1224,21 +995,7 @@ app.post('/utility/verifyprofile', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    result.status = exchange.status;
-
-    return result;
-
+    return _simpleHTTPRequest(opts);
 });
 
 /**
@@ -1252,20 +1009,7 @@ app.get('/utility/verifyemail/:token', function(req, token){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    result.status = exchange.status;
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 /**
@@ -1294,18 +1038,7 @@ app.get('/utility/resendvalidationcode/:email', function(req, email){
         async: false
     };
 
-    exchange = httpclient.request(opts);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    result.status = exchange.status;
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 app.post('/utility/sendusername/:email', function(req, email){
@@ -1316,20 +1049,7 @@ app.post('/utility/sendusername/:email', function(req, email){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    result.status = exchange.status;
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 // GCEE global search
@@ -1386,41 +1106,7 @@ app.post('/search/site/', function(req){
         //log.info('GCEE object returned from Zocia {}', JSON.stringify(object, null, 4));
         // We have to get last activity information for each profile
         if(object._source.dataType === 'profiles'){
-            var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
-            var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
-            var allowedActivities = filters.trim().split(' ');
-
-            //remove terms that are not in the active filter list
-            allowedActivities.forEach(function(activity) {
-                filteredActivities = filteredActivities.replace(activity, '');
-            });
-
-            var url = 'http://localhost:9300/myapp/api/activities/byactor/' + object._id;
-
-            var opts = {
-                url: url,
-                method: 'GET',
-                headers: Headers({ 'x-rt-index': 'gc' }),
-                async: false
-            }
-
-            // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
-            var activityExchange = httpclient.request(opts);
-
-            var stream = JSON.parse(activityExchange.content);
-
-            var latestActivity;
-
-            // find the latest activity directly taken by the owner of the profile
-            var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
-
-            latestActivity = {
-                'fullName': activity.fullName,
-                'message': activity.description,
-                'dateCreated': activity.props.dateCreated
-            }
-
-            object._source.activity = latestActivity;
+            object._source.activity = getLatestActivity(req, object._source, ctx('/'), getUserDetails().principal.id);
 
             object._source.facultyFellow = object._source.roles.some(function(role) {
                 return role == "ROLE_PREMIUM";
@@ -1490,43 +1176,7 @@ app.post('/search/faculty/', function(req){
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
     profiles.forEach(function(profile){
-        var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
-        var filteredActivities = 'likes comments discussions collaborators ideas companies profiles spMessages';
-        var allowedActivities = filters.trim().split(' ');
-
-        //remove terms that are not in the active filter list
-        allowedActivities.forEach(function(activity) {
-            filteredActivities = filteredActivities.replace(activity, '');
-        });
-
-        var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._source._id;
-
-        var opts = {
-            url: url,
-            method: 'GET',
-            headers: Headers({ 'x-rt-index': 'gc' }),
-            async: false
-        }
-
-        // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
-        var activityExchange = httpclient.request(opts);
-
-        var stream = JSON.parse(activityExchange.content);
-
-        var latestActivity;
-
-        log.info('Activity stream for {}: {}', profile._source.username, JSON.stringify(stream, null, 4));
-
-        // find the latest activity directly taken by the owner of the profile
-        var activity = new ActivityMixin(stream[0], req, ctx('/'), undefined);
-
-        latestActivity = {
-            'fullName': activity.fullName,
-            'message': activity.description,
-            'dateCreated': activity.props.dateCreated
-        }
-
-        profile._source.activity = latestActivity;
+        profile._source.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);
 
         profile._source.facultyFellow = profile._source.roles.some(function(role) {
             return role == "ROLE_PREMIUM";
@@ -1566,20 +1216,7 @@ app.post('/search/content/', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    result.status = exchange.status;
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 app.post('/search/discussions/', function(req){
@@ -1629,18 +1266,14 @@ app.post('/search/discussions/', function(req){
         thread.commentCount = comment.count;
     });
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    log.info('EXCHANGE STATUS!!! ', exchange.status);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': threads,
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    result.status = exchange.status;
-
-    return result;
 });
 
 /************************
@@ -1658,18 +1291,7 @@ app.get('/admin/users', function(req) {
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    result.status = exchange.status;
-
-    return result;
+    return _simpleHTTPRequest(opts);
 });
 
 app.put('/admin/users', function(req) {
@@ -1694,19 +1316,8 @@ app.put('/admin/users', function(req) {
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
-
-    result.status = exchange.status;
-
-    return result;
-})
+    return _simpleHTTPRequest(opts);
+});
 
 /************************
  *
@@ -1726,6 +1337,19 @@ function _generateBasicAuthorization(username, password) {
 	var header = username + ":" + password;
 	var base64 = encode(header);
 	return 'Basic ' + base64;
+}
+
+function _simpleHTTPRequest(opts) {
+    var exchange = httpclient.request(opts);
+
+    log.info('EXCHANGE STATUS!!! ', exchange.status);
+
+    return json({
+        'status': exchange.status,
+        'content': JSON.parse(exchange.content),
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
 }
 
 function getUserDetails() {
@@ -1765,6 +1389,3 @@ function getUserDetails() {
 
     return result;
 }
-
-
-
