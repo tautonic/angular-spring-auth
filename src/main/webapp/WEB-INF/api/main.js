@@ -115,7 +115,7 @@ app.get('/article/:id', function(req, id) {
 
     if(article.success) {
         var servletRequest = req.env.servletRequest;
-        if( (article.content.premium) && (!servletRequest.isUserInRole('ROLE_ADMIN')) )
+        if( (article.content.premium) && (!servletRequest.isUserInRole('ROLE_PREMIUM')) )
         {
             log.info("User does not have access to full article content.");
             delete article.content.content;
@@ -137,28 +137,20 @@ app.get('/article/:id', function(req, id) {
     }
 });
 
-app.post('/article/new', function(req) {
-    var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
-    var auth = SecurityContextHolder.context.authentication;
-
-    var servletRequest = req.env.servletRequest;
-    if(servletRequest.isUserInRole('ROLE_ADMIN'))
-    {
+app.post('/admin/articles', function(req){
+    /*var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {     log.info("USER IS NOT ADMIN");
         return {
-            status:400,
+            status:401,
             headers:{"Content-Type":'text/html'},
             body:[]
         };
-    }
+    } */
 
-    //at this point we need to send the post content to the zocia server and specifically the wordpress thing
-});
-
-app.post('/admin/articles', function(req){
-    var data = {
-        title: req.postParams.title,
-        content: req.postParams.content
-    };
+    req.postParams.format = 'article';
+    req.postParams.locale = 'en';
+    req.postParams.roles = ['ROLE_ANONYMOUS'];
 
     var opts = {
         url: 'http://localhost:9300/myapp/api/resources/',

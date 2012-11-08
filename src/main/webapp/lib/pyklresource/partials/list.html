@@ -103,7 +103,7 @@
                         <hr>
                         <input type="checkbox" id="image" ng-model="filters.image" ng-change="search(searchTerm)"><label for="image"><span class="doc-type image"></span>Pictures ({{count('image')}})</label>
                     </form>
-                    <button ng-show="auth.isUserInRole('ROLE_ADMIN')" ng-click="addNewArticle()" class="btn btn-info">Add Article</button>
+                    <a ng-href="admin/articles/create" ng-show="auth.isUserInRole('ROLE_ADMIN')" class="btn btn-info">Add Article</a>
 
                 </div>
             </div>
