@@ -237,7 +237,6 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     $scope.article = {
         title: '',
         content: '',
-        format: 'article',
         author: 'James Hines',
         key: '',
         thumbnail: '',
