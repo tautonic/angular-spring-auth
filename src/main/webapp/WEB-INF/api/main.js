@@ -75,12 +75,7 @@ app.get( '/index.html', function ( req ) {
 
 app.get('/article/all/news', function(req) {
     return articles(req, "articles", 3);
-})
-
-/* Attempt to allow for sorting by type. didn't quite work */
-/*app.get('/article/all/:type', function(req, type) {
-    return articles(req, type);
-});*/
+});
 
 app.get('/article/all', function(req) {
     return articles(req, 'articles');
@@ -99,7 +94,7 @@ app.get('/article/search', function(req) {
     var articles = searchAllArticles(req.params);
 
     return json(articles);
-})
+});
 
 app.get('/article/all/bycategory/:category', function(req, category) {
     var articles = getArticlesByCategory(category);
@@ -374,7 +369,7 @@ app.post('/follow/:followedById/:entityId', function(req, followedById, entityId
         data: {},
         headers: Headers({ "Authorization": _generateBasicAuthorization(user.username, user.password), 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
-    }
+    };
 
     var exchange = httpclient.request(opts);
 
@@ -394,7 +389,7 @@ function isUserFollowing(id) {
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
-    }
+    };
 
     var exchange = httpclient.request(opts);
 
@@ -560,7 +555,7 @@ app.get('/profiles/admin', function(req){
             'fullName': activity.fullName,
             'message': activity.description,
             'dateCreated': activity.props.dateCreated
-        }
+        };
 
         profile.activity = latestActivity;
 
@@ -625,7 +620,7 @@ app.post('/profiles/admin/status', function(req){
             method: 'GET',
             headers: Headers({ 'x-rt-index': 'gc' }),
             async: false
-        }
+        };
 
         // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
         var activityExchange = httpclient.request(opts);
@@ -644,7 +639,7 @@ app.post('/profiles/admin/status', function(req){
             'fullName': activity.fullName,
             'message': activity.description,
             'dateCreated': activity.props.dateCreated
-        }
+        };
 
         profile.activity = latestActivity;
 
@@ -700,7 +695,7 @@ app.get('/profiles/', function(req){
             method: 'GET',
             headers: Headers({ 'x-rt-index': 'gc' }),
             async: false
-        }
+        };
 
         // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
         var activityExchange = httpclient.request(opts);
@@ -719,7 +714,7 @@ app.get('/profiles/', function(req){
             'fullName': activity.fullName,
             'message': activity.description,
             'dateCreated': activity.props.dateCreated
-        }
+        };
 
         profile.activity = latestActivity;
 
@@ -949,7 +944,7 @@ app.post('/profiles/images/crop/', function (req) {
         },
         "data": params,
         "method": 'PUT'
-    }
+    };
 
     var exchange = httpclient.request(opts);
 
@@ -957,14 +952,12 @@ app.post('/profiles/images/crop/', function (req) {
 
     //return json({ response: JSON.parse(exchange.content) });
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    return result
 });
 
 app.get('/profiles/images/', function(req, id){
@@ -1031,7 +1024,7 @@ app.get('/profiles/images/', function(req, id){
 // gets a random quote, used on the homepage. quotes are currently placeholders
 app.get('/utility/getquote', function(req) {
     return json({ "quote": returnRandomQuote() });
-})
+});
 
 // increments view count for an object
 app.post('/utility/view/:id', function(req, id) {
@@ -1045,7 +1038,7 @@ app.post('/utility/view/:id', function(req, id) {
     var exchange = httpclient.request(opts);
 
     return json(JSON.parse(exchange.content));
-})
+});
 
 //likes a specific object. todo: can anonymous users like something?
 app.post('/utility/like/:id', function(req, id) {
@@ -1061,7 +1054,7 @@ app.post('/utility/like/:id', function(req, id) {
     var exchange = httpclient.request(opts);
 
     return json(JSON.parse(exchange.content));
-})
+});
 
 //checks to see if a user has already liked this particular object, if so, returns true, otherwise, returns false
 app.get('/utility/like/:id', function(req, id) {
@@ -1081,7 +1074,7 @@ app.get('/utility/like/:id', function(req, id) {
     } else {
         return json(true);
     }
-})
+});
 
 //deletes a like relationship, effectively decreasing total likes by one
 app.post('/utility/unlike/:id', function(req, id) {
@@ -1098,7 +1091,7 @@ app.post('/utility/unlike/:id', function(req, id) {
     var exchange = httpclient.request(opts);
     log.info("unliked: "+exchange.content);
     return json(JSON.parse(exchange.content));
-})
+});
 
 //marks a specific object (namely, discussion posts) as spam. todo: can anonymous users mark something as spam?
 app.post('/utility/spam/:id', function(req, id) {
@@ -1114,7 +1107,7 @@ app.post('/utility/spam/:id', function(req, id) {
     var exchange = httpclient.request(opts);
 
     return json(JSON.parse(exchange.content));
-})
+});
 
 //checks to see if a user has already marked this particular object as spam, if so, returns true, otherwise, returns false
 app.get('/utility/spam/:id', function(req, id) {
@@ -1135,7 +1128,7 @@ app.get('/utility/spam/:id', function(req, id) {
     } else {
         return json(true);
     }
-})
+});
 
 //deletes a spam relationship, effectively decreasing total spam count by one
 app.post('/utility/unspam/:id', function(req, id) {
@@ -1152,7 +1145,7 @@ app.post('/utility/unspam/:id', function(req, id) {
     var exchange = httpclient.request(opts);
 
     return json(JSON.parse(exchange.content));
-})
+});
 
 /**
  * Requires an email address, and passes that to zocia. If the email address is valid/in use, it will send the user an email giving them a link to reset their password using the token that's generated
@@ -1173,16 +1166,14 @@ app.post('/utility/resettoken/', function(req){
 
     var exchange = httpclient.request(opts);
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    log.info('EXCHANGE STATUS!!! ', exchange.status);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    return result;
 });
 
 /**
@@ -1201,16 +1192,14 @@ app.post('/utility/resetpassword/', function(req){
 
     var exchange = httpclient.request(opts);
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    log.info('EXCHANGE STATUS!!! ', exchange.status);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    return result;
 });
 
 app.post('/utility/verifyprofile', function(req){
@@ -1226,18 +1215,14 @@ app.post('/utility/verifyprofile', function(req){
 
     var exchange = httpclient.request(opts);
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    log.info('EXCHANGE STATUS!!! ', exchange.status);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    result.status = exchange.status;
-
-    return result;
 
 });
 
@@ -1254,18 +1239,14 @@ app.get('/utility/verifyemail/:token', function(req, token){
 
     var exchange = httpclient.request(opts);
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    log.info('EXCHANGE STATUS!!! ', exchange.status);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    result.status = exchange.status;
-
-    return result;
 });
 
 /**
@@ -1296,16 +1277,12 @@ app.get('/utility/resendvalidationcode/:email', function(req, email){
 
     exchange = httpclient.request(opts);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    result.status = exchange.status;
-
-    return result;
 });
 
 app.post('/utility/sendusername/:email', function(req, email){
@@ -1318,18 +1295,14 @@ app.post('/utility/sendusername/:email', function(req, email){
 
     var exchange = httpclient.request(opts);
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    log.info('EXCHANGE STATUS!!! ', exchange.status);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    result.status = exchange.status;
-
-    return result;
 });
 
 // GCEE global search
@@ -1402,7 +1375,7 @@ app.post('/search/site/', function(req){
                 method: 'GET',
                 headers: Headers({ 'x-rt-index': 'gc' }),
                 async: false
-            }
+            };
 
             // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
             var activityExchange = httpclient.request(opts);
@@ -1418,7 +1391,7 @@ app.post('/search/site/', function(req){
                 'fullName': activity.fullName,
                 'message': activity.description,
                 'dateCreated': activity.props.dateCreated
-            }
+            };
 
             object._source.activity = latestActivity;
 
@@ -1506,7 +1479,7 @@ app.post('/search/faculty/', function(req){
             method: 'GET',
             headers: Headers({ 'x-rt-index': 'gc' }),
             async: false
-        }
+        };
 
         // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
         var activityExchange = httpclient.request(opts);
@@ -1524,7 +1497,7 @@ app.post('/search/faculty/', function(req){
             'fullName': activity.fullName,
             'message': activity.description,
             'dateCreated': activity.props.dateCreated
-        }
+        };
 
         profile._source.activity = latestActivity;
 
@@ -1629,18 +1602,14 @@ app.post('/search/discussions/', function(req){
         thread.commentCount = comment.count;
     });
 
-    console.log('EXCHANGE STATUS!!! ', exchange.status);
+    log.info('EXCHANGE STATUS!!! ', exchange.status);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': threads,
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    result.status = exchange.status;
-
-    return result;
 });
 
 /************************
@@ -1660,16 +1629,12 @@ app.get('/admin/users', function(req) {
 
     var exchange = httpclient.request(opts);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    result.status = exchange.status;
-
-    return result;
 });
 
 app.put('/admin/users', function(req) {
@@ -1696,17 +1661,13 @@ app.put('/admin/users', function(req) {
 
     var exchange = httpclient.request(opts);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    result.status = exchange.status;
-
-    return result;
-})
+});
 
 /************************
  *
@@ -1765,6 +1726,3 @@ function getUserDetails() {
 
     return result;
 }
-
-
-
