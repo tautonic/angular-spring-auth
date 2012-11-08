@@ -221,6 +221,15 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         file_browser_callback: bgcFileBrowser
     }
 
+    /*var article = Article.get({articleId:$routeParams.articleId},
+        function(){
+            if(article.status === 400){
+                $location.path('/error/404');
+            }else{
+                $scope.article = article.content;
+            }
+        }
+    );*/
     $http.get( 'api/article/' + $routeParams.articleId )
         .success( function (data) {
             console.log("ARTICLE RETURNED: ",data);
