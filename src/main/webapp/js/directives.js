@@ -1170,3 +1170,14 @@ angular.module('bgc.directives').directive('adminResetPassword', ['$http', funct
         }
     }
 }]);
+
+angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', function($http){
+    return {
+        restrict: 'A',
+        link: function(){
+            elm.bind('click', function(){
+
+            })
+        }
+    }
+}]);

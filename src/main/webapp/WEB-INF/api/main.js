@@ -133,7 +133,7 @@ app.get('/article/:id', function(req, id) {
 });
 
 app.post('/admin/articles', function(req){
-    /*var servletRequest = req.env.servletRequest;
+    var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
     {     log.info("USER IS NOT ADMIN");
         return {
@@ -141,7 +141,7 @@ app.post('/admin/articles', function(req){
             headers:{"Content-Type":'text/html'},
             body:[]
         };
-    } */
+    }
 
     req.postParams.format = 'article';
     req.postParams.locale = 'en';
@@ -159,11 +159,17 @@ app.post('/admin/articles', function(req){
 });
 
 app.put('/admin/articles/:id', function(req, id){
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {     log.info("USER IS NOT ADMIN");
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
 
-    req.postParams.format = 'article';
-    req.postParams.locale = 'en';
-    req.postParams.roles = ['ROLE_ANONYMOUS'];
+    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
     var opts = {
         url: 'http://localhost:9300/myapp/api/resources/' + id,

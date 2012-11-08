@@ -352,6 +352,11 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         $scope.newArticle.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
         //console.log('Content with stripped tags' + article.content.replace(/<(?:.|\n)*?>/gm, ''));
 
+        var thumbnail = /<\s*img [^\>]*src\s*=\s*(["\'])(.*?)\1/.exec(article.content);
+        console.log(thumbnail);
+
+        $scope.newArticle.thumbnail = thumbnail[2];
+
         $scope.newArticle.$save(
             function(response){
                 $location.path('/content/' + response.content._id);
