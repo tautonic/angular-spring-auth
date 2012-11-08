@@ -158,6 +158,37 @@ app.post('/admin/articles', function(req){
     return _simpleHTTPRequest(opts);
 });
 
+app.put('/admin/articles/:id', function(req, id){
+    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+
+    req.postParams.format = 'article';
+    req.postParams.locale = 'en';
+    req.postParams.roles = ['ROLE_ANONYMOUS'];
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/resources/' + id,
+        method: 'PUT',
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
+});
+
+app.del('/admin/articles/:id', function(req, id){
+    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/resources/' + id,
+        method: 'DELETE',
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
+});
+
 /********** Discussion posts *********/
 
 /**

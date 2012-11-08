@@ -1116,9 +1116,26 @@ angular.module('bgc.directives').directive('adminDeleteUser', ['Profile', functi
         link: function(scope, elm, attrs){
             var attrs = attrs;
             elm.bind('click', function(){
-                var userId = attrs.userid
-                var profile = Profile.delete({profileId:userId}, function(){
+                //var userId = attrs.userid
+                var profile = Profile.delete({profileId:attrs.userid}, function(){
                     elm.parents('.profile-list-item.profile').fadeOut('slow', function(){
+                        $(this).remove();
+                    });
+                });
+            });
+        }
+    }
+}]);
+
+angular.module('bgc.directives').directive('adminDeleteArticle', ['Article', function(Article){
+    return {
+        restrict: 'A',
+        link: function(scope, elm, attrs){
+            var attrs = attrs;
+            elm.bind('click', function(){
+                //var articleId = attrs.articleid
+                var profile = Article.delete({articleId:attrs.articleid}, function(){
+                    elm.parents('.article.admin.row').fadeOut('slow', function(){
                         $(this).remove();
                     });
                 });
