@@ -324,14 +324,14 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     }
 }
 
-function createProfile($rootScope, $scope, $location, $http, Profile){
+function createProfile($rootScope, $scope, $routeParams, $location, $http, Profile){
     $rootScope.banner = 'none';
     $rootScope.about = 'signup';
 
     $scope.signupSuccess = false;
     $scope.profile = {};
     $scope.profile.accountEmail = {
-        address: ''
+        address: $routeParams.email || ''
     };
 
     $scope.profile.workHistory = [
