@@ -444,18 +444,6 @@ app.post('/profiles/', function(req){
 });
 
 app.get('/profiles/:id', function(req, id){
-    var servletRequest = req.env.servletRequest;
-
-    var user = getUserDetails();
-    var userCanEdit = false;
-    var isAdmin = servletRequest.isUserInRole( 'ROLE_ADMIN' );
-
-    log.info('Current user details {}', JSON.stringify(user, null, 4));
-
-    if(user.principal.id === id || user.roles.indexOf('role_admin') !== -1){
-        userCanEdit = true;
-    }
-
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
         method: 'GET',
@@ -474,12 +462,10 @@ app.get('/profiles/:id', function(req, id){
 
     result.status = exchange.status;
 
-    result.content.userCanEdit = userCanEdit;
     result.content.isUserFollowing = isUserFollowing(result.content._id);
     result.content.facultyFellow = result.content.roles.some(function(role) {
         return role == "ROLE_PREMIUM";
     });
-    result.content.isAdmin = isAdmin;
 
     return json(result);
 });

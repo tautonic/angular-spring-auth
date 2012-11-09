@@ -322,6 +322,10 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             $scope.profile.isUserFollowing = data.success;
         });
     }
+
+    $scope.canEditProfile = function() {
+        return ( ($rootScope.auth.isUserInRole('ROLE_ADMIN')) || ($rootScope.auth.isUser($scope.profile._id)) );
+    }
 }
 
 function createProfile($rootScope, $scope, $routeParams, $location, $http, Profile){
