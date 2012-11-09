@@ -2084,3 +2084,21 @@ li.search-result.members{
 .image-upload.tinymce{
     float: none;
 }
+
+.article-attachments .left{
+    float: left;
+    width: 70%;
+}
+
+.article-attachments .right{
+    position: relative;
+    margin-left: 2em;
+    float: left;
+    width: 7%;
+}
+
+.article-attachments .right span{
+    position: absolute;
+    top: 1px;
+    right: -6px;
+}

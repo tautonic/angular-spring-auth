@@ -1186,7 +1186,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                 flash_swf_url:'../js/plupload.flash.swf',
                 silverlight_xap_url:'../js/plupload.silverlight.xap',
                 filters:[
-                    {title:"Image files", extensions:"pdf,docx,pptx,rtf,xls,txt"},
+                    {title:"Image files", extensions:"pdf,docx,doc,ppt,pptx,rtf,xls,txt"},
                     {title:"Zip files", extensions:"zip"}
                 ]
             };

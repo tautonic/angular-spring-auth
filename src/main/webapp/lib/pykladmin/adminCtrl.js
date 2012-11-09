@@ -303,6 +303,25 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 
+    $scope.attachments = [
+        {
+            title: '',
+            name: '',
+            description: '',
+            author: '',
+            dataType: 'resources',
+            key: '',
+            thumbnail: '',
+            dateCreated: '',
+            format: 'attachment',
+            uri: '',
+            views: 0,
+            likes: 0,
+            comments: 0,
+            rating: 0
+        }
+    ];
+
     $scope.tinyMCEConfig = {
         width: '100%',
         height: '600px',
