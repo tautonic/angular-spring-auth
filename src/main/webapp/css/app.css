@@ -1179,7 +1179,7 @@ i.globe{
 #searchSite{
     position: absolute;
     top: 20px;
-    right: 80px;
+    right: 86px;
     z-index: 0;
 }
 
@@ -1207,7 +1207,7 @@ i.globe{
 
 @-webkit-keyframes slideout {
   from {
-    right: 80px;
+    right: 86px;
   }
 
   to {
@@ -1217,7 +1217,7 @@ i.globe{
 
 @-moz-keyframes slideout {
   from {
-    right: 80px;
+    right: 86px;
   }
 
   to {
@@ -1227,7 +1227,7 @@ i.globe{
 
 @keyframes slideout {
   from {
-    right: 80px;
+    right: 86px;
   }
 
   to {
@@ -2100,4 +2100,13 @@ li.search-result.members{
     position: absolute;
     top: 1px;
     right: -6px;
+}
+
+.loader {
+    text-align: center;
+    margin: 5px 0;
+}
+
+.loader img {
+    margin-right: 10px;
 }

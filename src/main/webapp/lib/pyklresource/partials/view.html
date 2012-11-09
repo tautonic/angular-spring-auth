@@ -24,8 +24,8 @@
             <div class="offset8 span2">
                 <div class="btn-group-border">
                     <div class="btn-group bgc paging">
-                        <button class="btn btn-success"><div class="read-more-arrow read-less-arrow"></div></button>
-                        <button class="btn btn-success"><div class="read-more-arrow"></div></button>
+                        <button class="btn btn-success" ng-click="previous()"><div class="read-more-arrow read-less-arrow"></div></button>
+                        <button class="btn btn-success" ng-click="next()"><div class="read-more-arrow"></div></button>
                     </div>
                 </div>
             </div>
@@ -62,14 +62,17 @@
             </div>
             <div class="activity-stream-content">
                 <p class="author">by {{article.author}}, {{article.dateCreated | asDate}}</p>
-                <hr>
-                <!--<div class="tags">
-                    <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
-                </div>-->
-                <div class="btn-group-border">
-                    <div class="btn-group bgc">
-                        <button class="btn btn-success">Download</button>
-                        <button class="btn btn-success" ng-click="toggleModal(true)">Preview</button>
+                <div ui-if="attachments">
+                    <p>This article has attachments. Download or preview them using the buttons below.</p>
+                    <hr>
+                    <!--<div class="tags">
+                        <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
+                    </div>-->
+                    <div class="btn-group-border">
+                        <div class="btn-group bgc">
+                            <button class="btn btn-success">Download</button>
+                            <button class="btn btn-success" ng-click="toggleModal(true)">Preview</button>
+                        </div>
                     </div>
                 </div>
             </div>

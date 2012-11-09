@@ -25,7 +25,7 @@
                 </div>
                 <div ng-switch-when="curriculum">
                     <div id="curriculum-content" ui-tabs="{tab1: {label: 'FEATURED CONTENT', sortBy: 'featured', sortFunction: sortBy }, tab2: {label: 'MOST RECENT', sortBy: 'recent', sortFunction: sortBy }, tab3: {label: 'MOST POPULAR', sortBy: 'popular', sortFunction: sortBy }}">
-                        <div when-scrolled="loadMore(searchTerm)" offset="87">
+                        <div when-scrolled="loadMore(searchTerm)" offset="96">
                             <div class="article row" ng-repeat="article in articles">
                                 <div class="span2">
                                     <div thumbnail thumb=article size="medium" text="Preview" type="content" />
@@ -44,9 +44,9 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div ng-show="(articles.length == 0)">No articles found.</div>
-                            <div ng-show="(paging.more)">Loading...</div>
-                            <div ng-show="((!paging.more) && (articles.length != 0))">No more articles found.</div>
+                            <div ng-show="(articles.length == 0)" class="loader">No articles found.</div>
+                            <div ng-show="(paging.more)" class="loader"><img src="images/ajax-loader.gif">Loading...</div>
+                            <div ng-show="((!paging.more) && (articles.length != 0))" class="loader">No more articles found.</div>
                         </div>
 
                         <!-- dummy elements because the ui-tabs directive needs them -->

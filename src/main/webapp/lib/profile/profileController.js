@@ -475,6 +475,10 @@ function viewActivities($scope, $http, $log) {
 
     $http.get(url).success(function(data) {
         $scope.stream = data;
+
+        if($scope.stream.items.length < $scope.paging.size) {
+            $scope.paging.more = false;
+        }
     });
 
     $scope.loadMore = function() {
