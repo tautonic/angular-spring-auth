@@ -285,9 +285,6 @@ app.post('/discussions/new', function(req) {
  * Reply to a discussion
  */
 app.post('/discussions/:id', function(req, id) {
-    var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
-    var auth = SecurityContextHolder.context.authentication;
-
     var servletRequest = req.env.servletRequest;
     if(servletRequest.isUserInRole('ROLE_ANONYMOUS'))
     {
@@ -447,13 +444,13 @@ app.post('/profiles/', function(req){
 });
 
 app.get('/profiles/:id', function(req, id){
+    var servletRequest = req.env.servletRequest;
+
     var user = getUserDetails();
     var userCanEdit = false;
-    var isAdmin = false;
+    var isAdmin = servletRequest.isUserInRole( 'ROLE_ADMIN' );
 
     log.info('Current user details {}', JSON.stringify(user, null, 4));
-
-    isAdmin = true ? user.roles.indexOf('role_admin') !== -1 : false;
 
     if(user.principal.id === id || user.roles.indexOf('role_admin') !== -1){
         userCanEdit = true;
@@ -804,13 +801,6 @@ app.get('/profiles/images/', function(req, id){
     };
 
     var exchange = httpclient.request(opts);
-
-    /*var result = json({
-        'status': exchange.status,
-        'content': JSON.parse(exchange.content),
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });*/
 
     var profile = JSON.parse(exchange.content);
 

@@ -1236,8 +1236,7 @@ i.globe{
 }
 
 #searchSite input.search-query {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-radius: 0;
 }
 
 input.input-medium.search-query{
