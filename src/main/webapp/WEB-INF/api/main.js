@@ -742,7 +742,7 @@ app.post('/profiles/images/upload/', function (req) {
 
             var content = JSON.parse(exchange.content);
 
-            log.info('UPLOAD EXCHANGE URI', JSON.stringify(content.uri, null, 4));
+            log.info('UPLOAD EXCHANGE CONTENT', JSON.stringify(content, null, 4));
 
             if(exchange.status === 200 ){
                 return {
@@ -750,7 +750,7 @@ app.post('/profiles/images/upload/', function (req) {
                     headers: {
                         "Content-Type": "text/html"
                     },
-                    body: [content.uri]
+                    body: [content]
                 }
             }else if(exchange.status === 401){
                 return {
@@ -848,6 +848,18 @@ app.get('/profiles/images/', function(req, id){
         headers:{"Content-Type":'application/json'},
         body:[]
     }
+});
+
+app.post('/attachments', function(req, id){
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/resources/',
+        method: 'POST',
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
 });
 
 /***********************

@@ -303,24 +303,7 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 
-    $scope.attachments = [
-        {
-            title: '',
-            name: '',
-            description: '',
-            author: '',
-            dataType: 'resources',
-            key: '',
-            thumbnail: '',
-            dateCreated: '',
-            format: 'attachment',
-            uri: '',
-            views: 0,
-            likes: 0,
-            comments: 0,
-            rating: 0
-        }
-    ];
+    $scope.attachments = [];
 
     $scope.tinyMCEConfig = {
         width: '100%',
@@ -350,7 +333,8 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         likes: 0,
         comments: 0,
         views: 0,
-        rating: 0
+        rating: 0,
+        attachments: []
     }
 
     //dateCreated: "2011-01-17T23:07:32.000Z"
@@ -374,7 +358,9 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         var thumbnail = /<\s*img [^\>]*src\s*=\s*(["\'])(.*?)\1/.exec(article.content);
         console.log(thumbnail);
 
-        $scope.newArticle.thumbnail = thumbnail[2];
+        if(thumbnail){
+            $scope.newArticle.thumbnail = thumbnail[2];
+        }
 
         $scope.newArticle.$save(
             function(response){

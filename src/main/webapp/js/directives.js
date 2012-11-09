@@ -288,7 +288,7 @@ angular.module('bgc.directives')
                 var url;
 
                 function fileUploaded(uploader, file, response) {
-                    url = response.response;
+                    url = response.response.uri;
                 }
 
                 uploader.bind('FileUploaded', fileUploaded);
@@ -437,7 +437,7 @@ angular.module('bgc.directives')
             var url;
 
             uploader.bind('FileUploaded', function(uploader, file, response){
-                url = response.response;
+                url = response.response.uri;
             });
 
             var jcropApi;
@@ -1175,6 +1175,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
     return {
         restrict: 'A',
         link: function(scope, elm, attrs){
+            var startUploadBtn = angular.element('#upload-files');
+
             var config = {
                 scope: scope,
                 runtimes: 'html5',
@@ -1186,7 +1188,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                 flash_swf_url:'../js/plupload.flash.swf',
                 silverlight_xap_url:'../js/plupload.silverlight.xap',
                 filters:[
-                    {title:"Image files", extensions:"pdf,docx,doc,ppt,pptx,rtf,xls,txt"},
+                    {title : "Image files", extensions : "pdf,doc,ppt,txt"},
                     {title:"Zip files", extensions:"zip"}
                 ]
             };
@@ -1197,9 +1199,26 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
 
             var uploader = new plupload.Uploader(config);
 
+            startUploadBtn.bind('click', function(){
+                uploader.start();
+            });
+
             uploader.bind('FilesAdded', function (up, files) {
+                var scope = config.scope;
+
+                var attachment = {
+                    title: '',
+                    description: '',
+                    file_id: ''
+                };
+
                 for (var i in files) {
-                    $$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+                    attachment.file_id = files[i].id;
+                    scope.attachments.push(attachment);
+                    scope.$apply();
+                    //$$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
+                    var lastFields = jQuery('.attachment-fields').last();
+                    lastFields.children('.filename').html(files[i].name + ' (' + plupload.formatSize(files[i].size) + ')');
                 }
 
                 /*setTimeout(function () {
@@ -1207,24 +1226,62 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                 }, 500);*/
             });
 
-            uploader.bind('BeforeUpload', function(upload, file){
-                upload.settings.multipart_params = {size: file.size}
-            });
+            uploader.bind('FilesRemoved', function(uploader, files){
 
+            });
 
             uploader.bind('UploadProgress', function (up, file) {
-                $$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                //$$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
             });
 
-            var url;
+            var content;
 
             uploader.bind('FileUploaded', function(uploader, file, response){
-                url = response.response;
-            });
+                 content = response.response;
+                // get the element in the array of attachments and create a new request object
+                scope.attachments.forEach(function(attachment, index, array){
+                    if(attachment.file_id === file.id){
+                        // make an xhr and create a resource for this attachment
+                        var date = new Date();
 
-            var jcropApi;
-            var height;
-            var width;
+                        var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
+                            date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+
+                        //$scope.newArticle.key = ;
+
+                        var attachment = {
+                            dataType: 'resources',
+                            title: attachment.title,
+                            description: attachment.description,
+                            key: 'attachment-key-' + utc_timestamp,
+                            author: 'James Hines',
+                            format: 'attachment',
+                            mimetype: response.mimetype,
+                            uri: response.uri,
+                            views: 0,
+                            likes: 0,
+                            comments: 0,
+                            rating: 0
+                        };
+
+                        var attachmentId;
+
+                        $http.post('/gc/api/attachments', attachment)
+                            .success(function(data, status){
+                                // remove this attachment from the attachments array
+                                attachmentId = data.content._id;
+                                scope.article.attachments.push(attachmentId);
+                                scope.attachments.splice(index, 1);
+                            })
+                            .error(function(data, status){
+
+                            });
+
+                        return;
+                    }
+                });
+
+            });
 
             uploader.bind('UploadComplete', function(uploader, file){
 
