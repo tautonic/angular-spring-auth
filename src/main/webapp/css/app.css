@@ -496,11 +496,11 @@ ul.dropdown-menu li:last-child a {
     text-decoration: none;
 }
 
-.sign-up .details a.gradient {
-    height: 24px;
-    width: 20px;
+.sign-up .details button.gradient {
+    height: 29px;
+    width: 29px;
+    padding: 0;
     display: inline-block;
-    padding: 0 0 0 10px;
     border: 1px solid black;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -1179,7 +1179,7 @@ i.globe{
 #searchSite{
     position: absolute;
     top: 20px;
-    right: 80px;
+    right: 86px;
     z-index: 0;
 }
 
@@ -1207,7 +1207,7 @@ i.globe{
 
 @-webkit-keyframes slideout {
   from {
-    right: 80px;
+    right: 86px;
   }
 
   to {
@@ -1217,7 +1217,7 @@ i.globe{
 
 @-moz-keyframes slideout {
   from {
-    right: 80px;
+    right: 86px;
   }
 
   to {
@@ -1227,7 +1227,7 @@ i.globe{
 
 @keyframes slideout {
   from {
-    right: 80px;
+    right: 86px;
   }
 
   to {
@@ -1236,8 +1236,7 @@ i.globe{
 }
 
 #searchSite input.search-query {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-radius: 0;
 }
 
 input.input-medium.search-query{
@@ -2101,4 +2100,13 @@ li.search-result.members{
     position: absolute;
     top: 1px;
     right: -6px;
+}
+
+.loader {
+    text-align: center;
+    margin: 5px 0;
+}
+
+.loader img {
+    margin-right: 10px;
 }

@@ -322,16 +322,20 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             $scope.profile.isUserFollowing = data.success;
         });
     }
+
+    $scope.canEditProfile = function() {
+        return ( ($rootScope.auth.isUserInRole('ROLE_ADMIN')) || ($rootScope.auth.isUser($scope.profile._id)) );
+    }
 }
 
-function createProfile($rootScope, $scope, $location, $http, Profile){
+function createProfile($rootScope, $scope, $routeParams, $location, $http, Profile){
     $rootScope.banner = 'none';
     $rootScope.about = 'signup';
 
     $scope.signupSuccess = false;
     $scope.profile = {};
     $scope.profile.accountEmail = {
-        address: ''
+        address: $routeParams.email || ''
     };
 
     $scope.profile.workHistory = [
@@ -475,6 +479,10 @@ function viewActivities($scope, $http, $log) {
 
     $http.get(url).success(function(data) {
         $scope.stream = data;
+
+        if($scope.stream.items.length < $scope.paging.size) {
+            $scope.paging.more = false;
+        }
     });
 
     $scope.loadMore = function() {

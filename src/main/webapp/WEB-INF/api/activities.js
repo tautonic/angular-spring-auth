@@ -227,15 +227,23 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         }
                         break;
                     case 'resources':
-                        linkId = about.key;
+                        linkId = about._id;
                         // Need to get the title here
-                        var resource = getArticle(about.key, request.locale);
-                        linkText = resource.title;
-                        linkType = 'resources';
+                        var resource = getArticle(about._id, request.locale);
+                        linkText = resource.content.title;
+                        linkType = '#/content';
                         break;
                     case 'posts':
-                        // Get the discussion root
-                        var discussion = getDiscussion(about._id);
+                        linkText = about.title;
+                        linkId = about._id;
+                        linkType = '#/network/discussion/view';
+
+                        if(about._id != about.parentId) {
+                            // Get the discussion root
+                            var discussion = getDiscussion(about.parentId);
+                            linkText = "a reply to " + discussion.content[0].title;
+                            linkId = discussion.content[0]._id
+                        }
                         break;
                     default: break;
                 }
@@ -297,7 +305,6 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         linkType = 'users';
                         break;
                 }
-
                 activity.directLink = format('<a href="%s%s/%s">%s</a>',
                     baseUrl, linkType, linkId, linkText);
             }

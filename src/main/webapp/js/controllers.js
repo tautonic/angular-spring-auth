@@ -35,6 +35,10 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     $scope.isEmpty = function () {
         return (($scope.stream) && ($scope.stream.itemCount === 0));
     };
+
+    $scope.signup = function() {
+        $location.path("/signup/"+$scope.signupEmail);
+    }
 }
 
 function SiteSearchController($rootScope, $scope, $location){

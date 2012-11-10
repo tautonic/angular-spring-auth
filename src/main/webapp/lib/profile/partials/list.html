@@ -15,7 +15,7 @@
 
                         <div class="btn-group-border">
                             <div class="btn-group bgc">
-                                <button class="btn btn-success" ng-click="followUser(profileModal.id)"><span ng-show="!profileModal.isUserFollowing">Follow</span><span ng-show="profileModal.isUserFollowing">Unfollow</span></button>
+                                <button ui-if="auth.isAuthenticated" class="btn btn-success" ng-click="followUser(profileModal.id)"><span ng-show="!profileModal.isUserFollowing">Follow</span><span ng-show="profileModal.isUserFollowing">Unfollow</span></button>
                                 <button class="btn btn-success" ng-click="closeProfileModal('profiles/view/')">Full Profile</button>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
 
                         <div class="btn-group-border">
                             <div class="btn-group bgc">
-                                <button class="btn btn-success" ng-click="followUser(profile._id)"><span ng-show="!profile.isUserFollowing">Follow</span><span ng-show="profile.isUserFollowing">Unfollow</span></button>
+                                <button ui-if="auth.isAuthenticated" class="btn btn-success" ng-click="followUser(profile._id)"><span ng-show="!profile.isUserFollowing">Follow</span><span ng-show="profile.isUserFollowing">Unfollow</span></button>
                                 <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
                             </div>
                         </div>

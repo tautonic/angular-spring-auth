@@ -23,7 +23,7 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
             console.log("URL WAS: " + url + " ARTICLE RETURNED: ",data);
             if(data !== "false") {
                 $scope.articles = data;
-                if($scope.articles.length === 0) {
+                if($scope.articles.length < $scope.paging.size) {
                     $scope.paging.more = false;
                 }
             } else {
@@ -133,6 +133,7 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
 
 function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     var url = 'api/article/' + $routeParams.articleId;
+    var attachmentIndex = 0;
     $scope.filters = {};
     $scope.showModal = false;
 
@@ -142,22 +143,61 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             $scope.article = data;
             $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
             $http.post("api/utility/view/" + $scope.article._id);
+
+            if($scope.article.attachments) {
+                console.log("article has attachments");
+            }
         }).error(function(data, status) {
-                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
-            });
+            $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+        });
     }
 
     $scope.toggleModal = function(value) {
         $scope.showModal = value;
-        $scope.modal = {
-            document: {
-                title: $scope.article.title,
-                url: "https://docs.google.com/a/pykl.com/document/d/1KgIuo9dcZ6ggAp4Qe8C_jE4ULb5RzwQAiEtukRyphWc/?embedd=true",
-                doctype: $scope.article.doctype,
-                author: $scope.article.author,
-                dateCreated: $scope.article.dateCreated
-            }
+        if(value) {
+            loadAttachment();
         }
+    }
+
+    $scope.next = function() {
+        changeAttachmentIndex("inc");
+    }
+
+    $scope.previous = function() {
+        changeAttachmentIndex("dec");
+    }
+
+    function loadAttachment() {
+        var id = $scope.article.attachments[attachmentIndex];
+        $http.get( 'api/article/' + id ).success( function (data) {
+            console.log("attachment RETURNED: ",data);
+            $scope.modal = {
+                document: {
+                    title: data.title,
+                    url: data.url,
+                    doctype: data.doctype,
+                    author: data.author,
+                    dateCreated: data.dateCreated
+                }
+            }
+            $http.post("api/utility/view/" + id);
+        }).error(function(data, status) {
+            $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+        });
+    }
+
+    //we do this in a function so we can handle cases where it goes too far in one direction or another
+    function changeAttachmentIndex(direction) {
+        var change = (direction === "inc") ? 1 : -1;
+        attachmentIndex += change;
+
+        if(attachmentIndex > $scope.article.attachments.length) {
+            attachmentIndex = 0;
+        } else if(attachmentIndex < 0) {
+            attachmentIndex = $scope.article.attachments.length;
+        }
+
+        loadAttachment();
     }
 
     $scope.abstractVisible = function () {
