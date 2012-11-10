@@ -288,7 +288,8 @@ angular.module('bgc.directives')
                 var url;
 
                 function fileUploaded(uploader, file, response) {
-                    url = response.response.uri;
+                    url = scope.$eval(response.response);
+                    url = url.content.uri;
                 }
 
                 uploader.bind('FileUploaded', fileUploaded);
@@ -437,7 +438,8 @@ angular.module('bgc.directives')
             var url;
 
             uploader.bind('FileUploaded', function(uploader, file, response){
-                url = response.response.uri;
+                url = scope.$eval(response.response);
+                url = url.content.uri;
             });
 
             var jcropApi;
@@ -1185,8 +1187,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                 url: '/gc/api/profiles/images/upload/',
                 max_file_size:'100mb',
                 resize:{width:320, height:240, quality:90},
-                flash_swf_url:'../js/plupload.flash.swf',
-                silverlight_xap_url:'../js/plupload.silverlight.xap',
+                //flash_swf_url:'../js/plupload.flash.swf',
+                //silverlight_xap_url:'../js/plupload.silverlight.xap',
                 filters:[
                     {title : "Image files", extensions : "pdf,doc,ppt,txt"},
                     {title:"Zip files", extensions:"zip"}
@@ -1226,6 +1228,10 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                 }, 500);*/
             });
 
+            uploader.bind('BeforeUpload', function(upload, file){
+                upload.settings.multipart_params = {size: file.size}
+            });
+
             uploader.bind('FilesRemoved', function(uploader, files){
 
             });
@@ -1237,7 +1243,9 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
             var content;
 
             uploader.bind('FileUploaded', function(uploader, file, response){
-                 content = response.response;
+                content = scope.$eval("(" + response.response + ")");
+                content = scope.$eval("(" + content.content + ")");
+
                 // get the element in the array of attachments and create a new request object
                 scope.attachments.forEach(function(attachment, index, array){
                     if(attachment.file_id === file.id){
@@ -1256,8 +1264,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                             key: 'attachment-key-' + utc_timestamp,
                             author: 'James Hines',
                             format: 'attachment',
-                            mimetype: response.mimetype,
-                            uri: response.uri,
+                            mimetype: content.mimetype,
+                            uri: content.uri,
                             views: 0,
                             likes: 0,
                             comments: 0,

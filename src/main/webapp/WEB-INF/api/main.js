@@ -728,8 +728,8 @@ app.post('/profiles/images/upload/', function (req) {
                     'x-rt-index': 'gc',
                     'Authorization': auth,
                     'x-rt-upload-name': params.file.filename,
-                    'x-rt-upload-content-type': params.file.contentType
-                    //'x-rt-upload-size': params.size
+                    'x-rt-upload-content-type': params.file.contentType,
+                    'x-rt-upload-size': params.size
                     //'x-rt-upload-title': ''	// This param was never set in "old" NEP
                 },
                 "data": params.file.value,
@@ -740,18 +740,39 @@ app.post('/profiles/images/upload/', function (req) {
 
             exchange = httpclient.request(opts);
 
-            var content = JSON.parse(exchange.content);
+            //var content = JSON.parse(exchange.content);
 
-            log.info('UPLOAD EXCHANGE CONTENT', JSON.stringify(content, null, 4));
+            //log.info('UPLOAD EXCHANGE CONTENT', JSON.stringify(content, null, 4));
+
+            /*var result = {
+                'status': exchange.status,
+                'content': JSON.parse(exchange.content),
+                'headers': exchange.headers,
+                'success': Math.floor(exchange.status / 100) === 2
+            };
+
+            result.status = exchange.status;
+
+            return json(result);*/
 
             if(exchange.status === 200 ){
-                return {
+                var result = {
+                    'status': exchange.status,
+                    'content': exchange.content,
+                    'headers': exchange.headers,
+                    'success': Math.floor(exchange.status / 100) === 2
+                 };
+
+                 result.status = exchange.status;
+
+                 return json(result);
+                /*return {
                     status: 200,
                     headers: {
-                        "Content-Type": "text/html"
+                        "Content-Type": "'application/json"
                     },
                     body: [content]
-                }
+                }*/
             }else if(exchange.status === 401){
                 return {
                     status: 401,

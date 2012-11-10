@@ -81,7 +81,6 @@
             upload.settings.multipart_params = {size: file.size}
         });
 
-
         uploader.bind('UploadProgress', function (up, file) {
             $$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
         });
@@ -89,7 +88,9 @@
         var url;
 
         uploader.bind('FileUploaded', function(uploader, file, response){
-            url = response.response;
+            url = eval("(" + response.response  + ")");
+            url = eval("(" + url.content + ")");
+            url = url.uri;
         });
 
         uploader.bind('UploadComplete', function(uploader, files){
