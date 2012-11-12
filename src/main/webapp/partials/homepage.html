@@ -12,25 +12,23 @@
                 <h2>Global Consortium News</h2>
                 <hr>
 
-                <div class="article">
-                    <div class="article row" ng-repeat="article in articles">
-                        <div class="span3">
-                            <div thumbnail thumb=article size="medium" text="Read More" type="article" />
-                        </div>
-                        <div class="span5 content">
-                            <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
-                            <p class="article-meta"><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
-
-                            <p class="article-brief">{{article.description}}</p>
-                            <ul class="article-stats">
-                                <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
-                                <li class="muted"><i class="views"></i> {{article.views}} Views</li>
-                                <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
-                            </ul>
-                        </div>
+                <div class="article row" ng-repeat="article in articles">
+                    <div class="span3">
+                        <div thumbnail thumb=article size="medium" text="Read More" type="article" />
                     </div>
-                    <div ng-show="(articles.length == 0)">No news found.</div>
+                    <div class="span5 content">
+                        <h3><a ng-href="#/content/{{article._id}}">{{article.title}}</a></h3>
+                        <p class="article-meta"><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
+
+                        <p class="article-brief">{{article.description}}</p>
+                        <ul class="article-stats">
+                            <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
+                            <li class="muted"><i class="views"></i> {{article.views}} Views</li>
+                            <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
+                        </ul>
+                    </div>
                 </div>
+                <div class="article" ng-show="(articles.length == 0)">No news found.</div>
             </div>
         </div>
 

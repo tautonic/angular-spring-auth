@@ -152,7 +152,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     });
 
     var profile = Profile.get({profileId: $routeParams.profileId},
-        function(){
+        function(){    console.log("PROFILE RETURNED: ",profile);
             if(profile.status === 400){
                 $location.path('/error/404');
             }else{

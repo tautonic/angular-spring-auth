@@ -143,7 +143,7 @@ var addReply = function(id, reply, user) {
         "creator":{
             "_id": user.principal.id,
             "username": user.username,
-            "profilePicture": { 'filepath': "/img/bob.com" }
+            "profilePicture": { 'filepath': user.principal.thumbnail }
         },
         "title": "",
         "message": reply,

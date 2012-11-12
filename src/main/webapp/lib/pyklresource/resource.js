@@ -164,7 +164,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     };
 
     function loadAttachment() {
-        var id = $scope.article.attachments[attachmentIndex]; console.log("LOADING ATTACHMENT: "+id);
+        var id = $scope.article.attachments[attachmentIndex];
         $http.get( 'api/article/' + id ).success( function (data) {
             console.log("attachment RETURNED: ",data);
             $scope.modal = {
@@ -212,8 +212,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
         $scope.article.likes = likes;
     };
 
-    $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
-    $rootScope.$on($auth.event.signoutConfirmed, function() { loadContent(); });
+    $scope.$on($auth.event.signoutConfirmed, function() { loadContent(); });
 
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
