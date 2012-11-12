@@ -293,7 +293,7 @@ var pykl = window.pykl || {};
 
             });
 
-            $scope.signout = function () {   console.log("SIGNING OUT");
+            $scope.signout = function () {
                 $rootScope.$broadcast(EVENT_SIGNOUT_REQUEST);
             };
         }]

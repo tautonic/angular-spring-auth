@@ -137,12 +137,6 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
 function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $http, Profile, $auth){
     console.log('Is user authenticated: ' + $auth.isAuthenticated);
 
-    if($auth.principal === 'undefined'){
-        $scope.anonymousUser = false;
-    }else{
-        $scope.anonymousUser = $auth.principal;
-    }
-
     $scope.profile = {};
     $scope.master = {};
 
@@ -203,9 +197,9 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     );
 
     $scope.updateContactInfo = function(profile){
-        Profile.update({profileId: profile._id}, profile, function(response){
+        Profile.update({profileId: profile._id}, profile, function(response){   console.log("UPDATE CONTACT INFO RESPONSE IS: ",response);
             $scope.showHideContact = false;
-            $scope.profile = response;
+            //$scope.profile = response;
             $scope.responseContent = response;
             $scope.master = angular.copy($scope.profile);
         }, function(response){
@@ -214,8 +208,8 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         });
     };
 
-    $scope.cancelContactInfoUpdate = function(){
-        $scope.showHideContact = false;
+    $scope.cancelContactInfoUpdate = function(scope){
+        scope.showHideContact = false;
         $scope.profile = $scope.master;
     };
 
@@ -224,8 +218,8 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             profile.password = $scope.profile.newPassword;
         }
         Profile.update({profileId: profile._id}, profile, function(response){
-            $scope.showHideContact = false;
-            $scope.profile = response;
+            $scope.showHideGeneral = false;
+            //$scope.profile = response;
             $scope.responseContent = response;
             $scope.master = angular.copy($scope.profile);
         }, function(response){
@@ -234,15 +228,15 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         });
     };
 
-    $scope.cancelGeneralInfoUpdate = function(){
-        $scope.showHideContact = false;
+    $scope.cancelGeneralInfoUpdate = function(scope){
+        scope.showHideGeneral = false;
         $scope.profile = $scope.master;
     };
 
     $scope.updateInstitutionInfo = function(profile){
         Profile.update({profileId: profile._id}, profile, function(response){
             $scope.showHideInstitution = false;
-            $scope.profile = response;
+            //$scope.profile = response;
             $scope.responseContent = response;
             $scope.master = angular.copy($scope.profile);
         }, function(response){
@@ -251,15 +245,15 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         });
     }
 
-    $scope.cancelInstitutionInfoUpdate = function(){
-        $scope.showHideInstitution = false;
+    $scope.cancelInstitutionInfoUpdate = function(scope){
+        scope.showHideInstitution = false;
         $scope.profile = $scope.master;
     }
 
     $scope.updateEducationInfo = function(profile){
         Profile.update({profileId: profile._id}, profile, function(response){
             $scope.showHideEducation = false;
-            $scope.profile = response;
+            //$scope.profile = response;
             $scope.responseContent = response;
             $scope.master = angular.copy($scope.profile);
         }, function(response){
@@ -268,15 +262,15 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         });
     }
 
-    $scope.cancelEducationInfoUpdate = function(){
-        $scope.showHideEducation = false;
+    $scope.cancelEducationInfoUpdate = function(scope){
+        scope.showHideEducation = false;
         $scope.profile = $scope.master;
     }
 
     $scope.updateNotes = function(profile){
         Profile.update({profileId: profile._id}, profile, function(response){
             $scope.showHideNotes = false;
-            $scope.profile = response;
+            //$scope.profile = response;
             $scope.responseContent = response;
             $scope.master = angular.copy($scope.profile);
         }, function(response){
@@ -285,14 +279,14 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         });
     };
 
-    $scope.cancelNotesUpdate = function(){
-        $scope.showHideNotes = false;
+    $scope.cancelNotesUpdate = function(scope){
+        scope.showHideNotes = false;
         $scope.profile = $scope.master;
     };
 
     $scope.updateThumbnailUri = function(profile){
         Profile.update({profileId: profile._id}, profile, function(response){
-            $scope.profile = response;
+            //$scope.profile = response;
             $scope.responseContent = response;
             $scope.master = angular.copy($scope.profile);
         }, function(response){
