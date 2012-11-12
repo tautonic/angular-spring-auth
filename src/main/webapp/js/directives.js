@@ -1246,7 +1246,25 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
 
                     var startUploadBtn = angular.element('#upload-files');
 
-                    startUploadBtn.bind('click', function(){
+                    startUploadBtn.bind('click', function(event){
+                        scope.showUploadBtn = false;
+                        scope.$digest();
+
+                        // Remove all form fields related to attachments
+                        jQuery('.attachment-fields').remove();
+
+                        var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
+                                       <div id="block-2" class="little-block"></div> \
+                                       <div id="block-3" class="little-block"></div> \
+                                       <div id="block-4" class="little-block"></div> \
+                                       <div id="block-5" class="little-block"></div> \
+                                       <div id="block-6" class="little-block"></div> \
+                                       <div id="block-7" class="little-block"></div> \
+                                       <div id="block-8" class="little-block"></div> \
+                                       <div id="block-9" class="little-block"></div></div>'
+
+                        jQuery('#container').append(progress);
+
                         uploader.start();
                     });
                 }
@@ -1257,6 +1275,18 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
             uploader.bind('FileUploaded', function(uploader, file, response){
                 content = scope.$eval("(" + response.response + ")");
                 content = scope.$eval("(" + content.content + ")");
+
+                function getMimeType(mimetype){
+                    switch (mimetype)
+                    {
+                        case 'text/plain':
+                            return 'txt';
+                        case 'application/pdf':
+                            return 'pdf'
+                        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                            return 'word'
+                    }
+                }
 
                 // get the element in the array of attachments and create a new request object
                 scope.attachments.forEach(function(attachment, index, array){
@@ -1292,6 +1322,25 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                                 attachmentId = data.content._id;
                                 scope.article.attachments.push(attachmentId);
                                 scope.attachments.splice(index, 1);
+
+                                var attachmentDiv = '<div class="discussion-stack-container attachment"> \
+                                    <div class="discussion-item grey-gradient"> \
+                                        <h4>'+ data.content.title +'</h4> \
+                                        <h6>By '+ data.content.author +', 11/12/2012</h6> \
+                                        <p class="muted">'+ data.content.description +'</p> \
+                                    </div> \
+                                    \
+                                    <div class="paper-clip"></div> \
+                                    <div class="attached-doc"> \
+                                        <div class="new-picture-frame small content-thumbnail attachment"> \
+                                            <span class="doc-type '+ getMimeType(data.content.mimetype) +'"></span> \
+                                            <img src="images/document-default.jpg" alt=""> \
+                                            </div> \
+                                        </div> \
+                                    </div>'
+
+                                jQuery('#attachment-list').append(attachmentDiv);
+
                             })
                             .error(function(data, status){
 
@@ -1304,6 +1353,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
             });
 
             uploader.bind('UploadComplete', function(uploader, file){
+                jQuery('.upload-progress').remove();
                 scope.showUploadBtn = false;
             });
 
