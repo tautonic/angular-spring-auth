@@ -1194,7 +1194,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                 //flash_swf_url:'../js/plupload.flash.swf',
                 //silverlight_xap_url:'../js/plupload.silverlight.xap',
                 filters:[
-                    {title : "Image files", extensions : "pdf,doc,ppt,txt"},
+                    {title : "Image files", extensions : "pdf,doc,ppt,txt,jpg,jpeg"},
                     {title:"Zip files", extensions:"zip"}
                 ]
             };
@@ -1223,8 +1223,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                     scope.attachments.push(attachment);
                     scope.$apply();
                     //$$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
-                    var lastFields = jQuery('.attachment-fields').last();
-                    lastFields.children('.filename').html(files[i].name + ' (' + plupload.formatSize(files[i].size) + ')');
+                    var attachmentFields = jQuery('.attachment-fields').last();
+                    attachmentFields.children('.filename').html(files[i].name + ' (' + plupload.formatSize(files[i].size) + ')');
                 }
 
                 /*setTimeout(function () {
@@ -1242,7 +1242,14 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
 
             uploader.bind('UploadProgress', function (up, file) {
                 //$$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                jQuery('.attachment-fields').last().children('.progress').children('.bar').css('width', file.percent + '%');
             });
+
+            /*uploader.bind('ChunkUploaded', function (up, file) {
+                //$$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                //var attachmentFields = jQuery('.attachment-fields').last();
+                //attachmentFields.children('.progress .bar').css('width', file.percent);
+            });*/
 
             var content;
 

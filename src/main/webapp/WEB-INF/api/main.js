@@ -711,8 +711,8 @@ app.post('/profiles/images/upload/', function (req) {
                     'x-rt-index': 'gc',
                     'Authorization': auth,
                     'x-rt-upload-name': params.file.filename,
-                    'x-rt-upload-content-type': params.file.contentType,
-                    'x-rt-upload-size': params.size
+                    'x-rt-upload-content-type': params.file.contentType
+                    //'x-rt-upload-size': params.size
                     //'x-rt-upload-title': ''	// This param was never set in "old" NEP
                 },
                 "data": params.file.value,
