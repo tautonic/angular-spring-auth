@@ -288,8 +288,10 @@ angular.module('bgc.directives')
                 var url;
 
                 function fileUploaded(uploader, file, response) {
-                    url = scope.$eval(response.response);
-                    url = url.content.uri;
+                    var content = scope.$eval("(" + response.response + ")");
+
+                    content = scope.$eval("(" + content.content + ")");
+                    url = content.uri;
                 }
 
                 uploader.bind('FileUploaded', fileUploaded);
@@ -438,8 +440,10 @@ angular.module('bgc.directives')
             var url;
 
             uploader.bind('FileUploaded', function(uploader, file, response){
-                url = scope.$eval(response.response);
-                url = url.content.uri;
+                var content = scope.$eval("(" + response.response + ")");
+
+                content = scope.$eval("(" + content.content + ")");
+                url = content.uri;
             });
 
             var jcropApi;
