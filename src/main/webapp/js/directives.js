@@ -1178,7 +1178,7 @@ angular.module('bgc.directives').directive('adminResetPassword', ['$http', funct
     }
 }]);
 
-angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', function($http){
+angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$auth', function($http, $auth){
     return {
         restrict: 'A',
         link: function(scope, elm, attrs){
@@ -1273,6 +1273,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
 
             var content;
 
+            var attachmentDivPos = 0;
+
             uploader.bind('FileUploaded', function(uploader, file, response){
                 content = scope.$eval("(" + response.response + ")");
                 content = scope.$eval("(" + content.content + ")");
@@ -1290,6 +1292,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                 }
 
                 // get the element in the array of attachments and create a new request object
+
                 scope.attachments.forEach(function(attachment, index, array){
                     if(attachment.file_id === file.id){
                         // make an xhr and create a resource for this attachment
@@ -1299,11 +1302,12 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                             date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
 
                         //$scope.newArticle.key = ;
-
+                        var title = attachment.title === '' ? 'This attachment doesn\'t have a title' : attachment.title;
+                        var description = attachment.description === '' ? 'This attachment doesn\'t have a description' : attachment.description;
                         var attachment = {
                             dataType: 'resources',
-                            title: attachment.title,
-                            description: attachment.description,
+                            title: title,
+                            description: description,
                             key: 'attachment-key-' + utc_timestamp,
                             author: 'James Hines',
                             format: 'attachment',
@@ -1324,7 +1328,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                                 scope.article.attachments.push(attachmentId);
                                 scope.attachments.splice(index, 1);
 
-                                var attachmentDiv = '<div class="discussion-stack-container attachment"> \
+                                var attachmentDiv = '<div class="discussion-stack-container attachment" style="top:'+ attachmentDivPos+'em;"> \
                                     <div class="discussion-item grey-gradient"> \
                                         <h4>'+ data.content.title +'</h4> \
                                         <h6>By '+ data.content.author +', 11/12/2012</h6> \
@@ -1340,13 +1344,19 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                                         </div> \
                                     </div>'
 
+                                attachmentDivPos -= 3;
+
                                 jQuery('#attachment-list').append(attachmentDiv);
+
+                                jQuery('.discussion-stack-container.attachment').last().click(function(){
+                                    $('.discussion-stack-container.attachment').css('z-index', '1');
+                                    $(this).css('z-index', '20');
+                                })
 
                             })
                             .error(function(data, status){
 
                             });
-
                         return;
                     }
                 });

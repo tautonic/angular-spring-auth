@@ -248,6 +248,13 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         //article.lastModifiedDate = ISODateString(date);
         article.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
 
+        var thumbnail = /<\s*img [^\>]*src\s*=\s*(["\'])(.*?)\1/.exec(article.content);
+        console.log(thumbnail);
+
+        if(thumbnail){
+            article.thumbnail = thumbnail[2];
+        }
+
         Article.update({articleId: article._id}, article, function(response){
             $location.path('/content/' + article._id);
         }, function(response){
@@ -299,7 +306,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
     }
 }
 
-function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $location, Article){
+function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $location, Article, $auth){
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 

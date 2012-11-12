@@ -2115,6 +2115,10 @@ li.search-result.members{
     margin-top: 1em;
 }
 
+/*#attachment-list .attachment{
+    cursor: pointer;
+}*/
+
 .attachment-fields .filename{
     font-weight: bold;
 }
@@ -2125,8 +2129,7 @@ li.search-result.members{
 }
 
 .upload-progress{
-    display: block;
-    text-align: center;
+    margin-left: 18em;
 }
 
 .little-block {
