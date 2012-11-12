@@ -145,7 +145,13 @@ var getArticle = function(id) {
     }
 
     result.content.doctype = getDocType(result.content.mimetype);
-    result.content.premium = (result.content.roles.some(function(element) { return element == "ROLE_PREMIUM"; }));
+
+    if(result.content.roles) {
+        result.content.premium = (result.content.roles.some(function(element) { return element == "ROLE_PREMIUM"; }));
+    } else {
+        result.content.premium = false;
+    }
+
 
     return result;
 };
