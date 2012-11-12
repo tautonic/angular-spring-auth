@@ -143,10 +143,6 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             $scope.article = data;
             $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
             $http.post("api/utility/view/" + $scope.article._id);
-
-            if($scope.article.attachments) {
-                console.log("article has attachments");
-            }
         }).error(function(data, status) {
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
@@ -200,8 +196,8 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
         loadAttachment();
     }
 
-    $scope.hasAttachments = function() {
-        return (($scope.article.attachments) && ($scope.article.attachments.length > 0));
+    $scope.hasMoreThanAttachments = function(total) {
+        return (($scope.article.attachments) && ($scope.article.attachments.length > total));
     };
 
     $scope.abstractVisible = function () {

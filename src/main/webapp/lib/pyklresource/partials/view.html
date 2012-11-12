@@ -22,7 +22,7 @@
         </div>
 
         <div class="row bottom-row">
-            <div class="offset8 span2" ui-if="article.attachments.length > 1">
+            <div class="offset8 span2" ui-if="hasMoreThanAttachments(1)">
                 <div class="btn-group-border">
                     <div class="btn-group bgc paging">
                         <button class="btn btn-success" ng-click="previous()"><div class="read-more-arrow read-less-arrow"></div></button>
@@ -63,8 +63,8 @@
             </div>
             <div class="activity-stream-content">
                 <p class="author">by {{article.author}}, {{article.dateCreated | asDate}}</p>
-                <div ui-if="hasAttachments()">
-                    <p style="margin: 0 10px 10px;">This article has attachments. Download or preview them using the buttons below.</p>
+                <div ui-if="hasMoreThanAttachments(0)">
+                    <p style="margin: 0 10px 10px;">This article has attachments. Preview them using the buttons below.</p>
                     <hr>
                     <!--<div class="tags">
                         <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
