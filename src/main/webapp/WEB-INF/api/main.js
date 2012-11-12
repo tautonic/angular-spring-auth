@@ -691,6 +691,8 @@ app.post('/profiles/images/upload/', function (req) {
     var contentType = req.env.servletRequest.getContentType();
 
     if ((req.method === "POST" || req.method === "PUT") && fileUpload.isFileUpload(contentType)) {
+        var headers = {};
+
         log.info('File pre-upload: ' + JSON.stringify(req.params, null, 4));
 
         var encoding = req.env.servletRequest.getCharacterEncoding();
@@ -705,16 +707,29 @@ app.post('/profiles/images/upload/', function (req) {
 
         if(params.file){
             var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
-            var opts = {
-                "url": 'http://localhost:9300/myapp/api/files/upload/',
-                "headers": {
+
+            // as a workaround we're only adding a upload-size to the
+            // header if the file is over a certain size
+            if(params.size >= 131072){
+                headers = {
+                    'x-rt-index': 'gc',
+                    'Authorization': auth,
+                    'x-rt-upload-name': params.file.filename,
+                    'x-rt-upload-content-type': params.file.contentType,
+                    'x-rt-upload-size': params.size
+                }
+            }else{
+                headers = {
                     'x-rt-index': 'gc',
                     'Authorization': auth,
                     'x-rt-upload-name': params.file.filename,
                     'x-rt-upload-content-type': params.file.contentType
-                    //'x-rt-upload-size': params.size
-                    //'x-rt-upload-title': ''	// This param was never set in "old" NEP
-                },
+                }
+            }
+
+            var opts = {
+                "url": 'http://localhost:9300/myapp/api/files/upload/',
+                "headers": headers,
                 "data": params.file.value,
                 "method": 'PUT'
             };
@@ -723,7 +738,7 @@ app.post('/profiles/images/upload/', function (req) {
 
             exchange = httpclient.request(opts);
 
-            //var content = JSON.parse(exchange.content);
+            var content = JSON.parse(exchange.content);
 
             //log.info('UPLOAD EXCHANGE CONTENT', JSON.stringify(content, null, 4));
 
