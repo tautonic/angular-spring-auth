@@ -304,6 +304,7 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     $rootScope.about = 'none';
 
     $scope.attachments = [];
+    $scope.showUploadBtn = false;
 
     $scope.tinyMCEConfig = {
         width: '100%',

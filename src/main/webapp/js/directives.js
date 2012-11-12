@@ -1181,8 +1181,6 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
     return {
         restrict: 'A',
         link: function(scope, elm, attrs){
-            var startUploadBtn = angular.element('#upload-files');
-
             var config = {
                 scope: scope,
                 runtimes: 'html5',
@@ -1194,7 +1192,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                 //flash_swf_url:'../js/plupload.flash.swf',
                 //silverlight_xap_url:'../js/plupload.silverlight.xap',
                 filters:[
-                    {title : "Image files", extensions : "pdf,doc,ppt,txt"},
+                    {title : "Image files", extensions : "pdf,doc,ppt,txt,jpg,jpeg"},
                     {title:"Zip files", extensions:"zip"}
                 ]
             };
@@ -1204,10 +1202,6 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
             }
 
             var uploader = new plupload.Uploader(config);
-
-            startUploadBtn.bind('click', function(){
-                uploader.start();
-            });
 
             uploader.bind('FilesAdded', function (up, files) {
                 var scope = config.scope;
@@ -1223,8 +1217,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                     scope.attachments.push(attachment);
                     scope.$apply();
                     //$$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
-                    var lastFields = jQuery('.attachment-fields').last();
-                    lastFields.children('.filename').html(files[i].name + ' (' + plupload.formatSize(files[i].size) + ')');
+                    var attachmentFields = jQuery('.attachment-fields').last();
+                    attachmentFields.children('.filename').html(files[i].name + ' (' + plupload.formatSize(files[i].size) + ')');
                 }
 
                 /*setTimeout(function () {
@@ -1242,6 +1236,38 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
 
             uploader.bind('UploadProgress', function (up, file) {
                 //$$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                jQuery('.attachment-fields').last().children('.progress').children('.bar').css('width', file.percent + '%');
+            });
+
+            uploader.bind('QueueChanged', function(uploader){
+                if(uploader.files.length > 0 && !scope.showUploadBtn){
+                    scope.showUploadBtn = true;
+                    scope.$digest();
+
+                    var startUploadBtn = angular.element('#upload-files');
+
+                    startUploadBtn.bind('click', function(event){
+                        scope.showUploadBtn = false;
+                        scope.$digest();
+
+                        // Remove all form fields related to attachments
+                        jQuery('.attachment-fields').remove();
+
+                        var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
+                                       <div id="block-2" class="little-block"></div> \
+                                       <div id="block-3" class="little-block"></div> \
+                                       <div id="block-4" class="little-block"></div> \
+                                       <div id="block-5" class="little-block"></div> \
+                                       <div id="block-6" class="little-block"></div> \
+                                       <div id="block-7" class="little-block"></div> \
+                                       <div id="block-8" class="little-block"></div> \
+                                       <div id="block-9" class="little-block"></div></div>'
+
+                        jQuery('#container').append(progress);
+
+                        uploader.start();
+                    });
+                }
             });
 
             var content;
@@ -1249,6 +1275,18 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
             uploader.bind('FileUploaded', function(uploader, file, response){
                 content = scope.$eval("(" + response.response + ")");
                 content = scope.$eval("(" + content.content + ")");
+
+                function getMimeType(mimetype){
+                    switch (mimetype)
+                    {
+                        case 'text/plain':
+                            return 'txt';
+                        case 'application/pdf':
+                            return 'pdf'
+                        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                            return 'word'
+                    }
+                }
 
                 // get the element in the array of attachments and create a new request object
                 scope.attachments.forEach(function(attachment, index, array){
@@ -1284,6 +1322,25 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                                 attachmentId = data.content._id;
                                 scope.article.attachments.push(attachmentId);
                                 scope.attachments.splice(index, 1);
+
+                                var attachmentDiv = '<div class="discussion-stack-container attachment"> \
+                                    <div class="discussion-item grey-gradient"> \
+                                        <h4>'+ data.content.title +'</h4> \
+                                        <h6>By '+ data.content.author +', 11/12/2012</h6> \
+                                        <p class="muted">'+ data.content.description +'</p> \
+                                    </div> \
+                                    \
+                                    <div class="paper-clip"></div> \
+                                    <div class="attached-doc"> \
+                                        <div class="new-picture-frame small content-thumbnail attachment"> \
+                                            <span class="doc-type '+ getMimeType(data.content.mimetype) +'"></span> \
+                                            <img src="images/document-default.jpg" alt=""> \
+                                            </div> \
+                                        </div> \
+                                    </div>'
+
+                                jQuery('#attachment-list').append(attachmentDiv);
+
                             })
                             .error(function(data, status){
 
@@ -1296,7 +1353,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
             });
 
             uploader.bind('UploadComplete', function(uploader, file){
-
+                jQuery('.upload-progress').remove();
+                scope.showUploadBtn = false;
             });
 
             uploader.init();
