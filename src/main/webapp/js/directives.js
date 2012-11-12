@@ -157,6 +157,7 @@ angular.module('bgc.directives')
         return{
             restrict:'E',
             template: '<iframe src="" style="margin: 2em 0 0 2em; width:100%; height:700px;" frameborder="3px"></iframe>',
+
             compile: function(element, attrs){
                 var isGoogleDoc = false;
 

@@ -157,29 +157,30 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
         if(value) {
             loadAttachment();
         }
-    }
+    };
 
     $scope.next = function() {
         changeAttachmentIndex("inc");
-    }
+    };
 
     $scope.previous = function() {
         changeAttachmentIndex("dec");
-    }
+    };
 
     function loadAttachment() {
-        var id = $scope.article.attachments[attachmentIndex];
+        var id = $scope.article.attachments[attachmentIndex]; console.log("LOADING ATTACHMENT: "+id);
         $http.get( 'api/article/' + id ).success( function (data) {
             console.log("attachment RETURNED: ",data);
             $scope.modal = {
                 document: {
                     title: data.title,
-                    url: data.url,
+                    url: 'http://docs.google.com/viewer?url=http:' + data.uri + '&embedded=true',
+                    directLink: "http:" + data.uri,
                     doctype: data.doctype,
                     author: data.author,
                     dateCreated: data.dateCreated
                 }
-            }
+            };
             $http.post("api/utility/view/" + id);
         }).error(function(data, status) {
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
@@ -188,17 +189,20 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
 
     //we do this in a function so we can handle cases where it goes too far in one direction or another
     function changeAttachmentIndex(direction) {
-        var change = (direction === "inc") ? 1 : -1;
-        attachmentIndex += change;
+        attachmentIndex += (direction === "inc") ? 1 : -1;
 
-        if(attachmentIndex > $scope.article.attachments.length) {
+        if(attachmentIndex >= $scope.article.attachments.length) {
             attachmentIndex = 0;
         } else if(attachmentIndex < 0) {
-            attachmentIndex = $scope.article.attachments.length;
+            attachmentIndex = $scope.article.attachments.length - 1;
         }
 
         loadAttachment();
     }
+
+    $scope.hasAttachments = function() {
+        return (($scope.article.attachments) && ($scope.article.attachments.length > 0));
+    };
 
     $scope.abstractVisible = function () {
         if(typeof($scope.article) === "undefined")
@@ -206,11 +210,11 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             return false;
         }
         return (typeof($scope.article.content) === "undefined");
-    }
+    };
 
     $scope.increaseLikes = function(likes) {
         $scope.article.likes = likes;
-    }
+    };
 
     $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
     $rootScope.$on($auth.event.signoutConfirmed, function() { loadContent(); });

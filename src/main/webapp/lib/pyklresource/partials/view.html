@@ -8,7 +8,7 @@
             <div class="span2">
                 <div class="btn-group-border">
                     <div class="btn-group bgc">
-                        <button class="btn btn-success">Download</button>
+                        <a ng-href="{{modal.document.directLink}}" class="btn btn-success">Download</a>
                     </div>
                 </div>
             </div>
@@ -16,12 +16,13 @@
 
         <div class="row">
             <div class="span9">
-                <doc-viewer url="{{modal.document.url}}"></doc-viewer>
+                <iframe src="{{modal.document.url}}" style="margin: 2em 0 0 2em; width:100%; height:700px;" frameborder="3px"></iframe>
+                <!--<doc-viewer url=modal.document.url></doc-viewer>-->
             </div>
         </div>
 
         <div class="row bottom-row">
-            <div class="offset8 span2">
+            <div class="offset8 span2" ui-if="article.attachments.length > 1">
                 <div class="btn-group-border">
                     <div class="btn-group bgc paging">
                         <button class="btn btn-success" ng-click="previous()"><div class="read-more-arrow read-less-arrow"></div></button>
@@ -62,15 +63,15 @@
             </div>
             <div class="activity-stream-content">
                 <p class="author">by {{article.author}}, {{article.dateCreated | asDate}}</p>
-                <div ui-if="attachments">
-                    <p>This article has attachments. Download or preview them using the buttons below.</p>
+                <div ui-if="hasAttachments()">
+                    <p style="margin: 0 10px 10px;">This article has attachments. Download or preview them using the buttons below.</p>
                     <hr>
                     <!--<div class="tags">
                         <span ng-repeat="tag in article.taggable"><a href="#">{{tag}}</a><span ng-show="!$last">, </span></span>
                     </div>-->
                     <div class="btn-group-border">
                         <div class="btn-group bgc">
-                            <button class="btn btn-success">Download</button>
+                            <!--<a class="btn btn-success">Download</a>-->
                             <button class="btn btn-success" ng-click="toggleModal(true)">Preview</button>
                         </div>
                     </div>
