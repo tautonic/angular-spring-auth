@@ -738,8 +738,6 @@ app.post('/profiles/images/upload/', function (req) {
 
             exchange = httpclient.request(opts);
 
-            var content = JSON.parse(exchange.content);
-
             //log.info('UPLOAD EXCHANGE CONTENT', JSON.stringify(content, null, 4));
 
             /*var result = {

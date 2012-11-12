@@ -1181,8 +1181,6 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
     return {
         restrict: 'A',
         link: function(scope, elm, attrs){
-            var startUploadBtn = angular.element('#upload-files');
-
             var config = {
                 scope: scope,
                 runtimes: 'html5',
@@ -1204,10 +1202,6 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
             }
 
             var uploader = new plupload.Uploader(config);
-
-            startUploadBtn.bind('click', function(){
-                uploader.start();
-            });
 
             uploader.bind('FilesAdded', function (up, files) {
                 var scope = config.scope;
@@ -1245,11 +1239,18 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
                 jQuery('.attachment-fields').last().children('.progress').children('.bar').css('width', file.percent + '%');
             });
 
-            /*uploader.bind('ChunkUploaded', function (up, file) {
-                //$$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-                //var attachmentFields = jQuery('.attachment-fields').last();
-                //attachmentFields.children('.progress .bar').css('width', file.percent);
-            });*/
+            uploader.bind('QueueChanged', function(uploader){
+                if(uploader.files.length > 0 && !scope.showUploadBtn){
+                    scope.showUploadBtn = true;
+                    scope.$digest();
+
+                    var startUploadBtn = angular.element('#upload-files');
+
+                    startUploadBtn.bind('click', function(){
+                        uploader.start();
+                    });
+                }
+            });
 
             var content;
 
@@ -1303,7 +1304,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', funct
             });
 
             uploader.bind('UploadComplete', function(uploader, file){
-
+                scope.showUploadBtn = false;
             });
 
             uploader.init();

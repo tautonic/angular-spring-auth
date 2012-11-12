@@ -42,9 +42,6 @@
                                         <div ng-repeat="attachment in attachments">
                                             <div class="attachment-fields">
                                                 <div class="filename"></div>
-                                                <div class="progress">
-                                                    <div class="bar"></div>
-                                                </div>
                                                 <div class="control-group">
                                                     <label class="control-label" for="attachment-title">Title:</label>
                                                     <div class="controls">
@@ -61,14 +58,14 @@
                                             </div>
                                         </div>
                                         <br>
-                                    </div>
 
-                                    <div class="upload-btn">
-                                        <label class="control-label"></label>
-                                        <div class="controls">
-                                            <div class="btn-group-border">
-                                                <div class="btn-group bgc">
-                                                    <button id="upload-files" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload attachments</button>
+                                        <div ui-if=showUploadBtn class="upload-btn">
+                                            <label class="control-label"></label>
+                                            <div class="controls">
+                                                <div class="btn-group-border">
+                                                    <div class="btn-group bgc">
+                                                        <button id="upload-files" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload attachments</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

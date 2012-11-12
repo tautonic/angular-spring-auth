@@ -2110,3 +2110,7 @@ li.search-result.members{
 .loader img {
     margin-right: 10px;
 }
+
+.attachment-fields .filename{
+    font-weight: bold;
+}
