@@ -27,6 +27,7 @@ var text = {
     "notifications-activity.c.self.self.profiles": "You created your profile",
     "notifications-activity.c.spmessages": "${aboutLink}: ${message}",
     "notifications-activity.fsp.profiles": "${actorLink} started following ${directLink}.",
+    "notifications-activity.fsp.self.profiles": "${actorLink} started following yourself. THIS SHOULDN'T HAPPEN.",
     "notifications-activity.l.discussions": "${actorLink} liked ${aboutLink}",
     "notifications-activity.l.ideas": "${actorLink} liked ${aboutLink}",
     "notifications-activity.l.resources": "${actorLink} liked ${aboutLink}",
