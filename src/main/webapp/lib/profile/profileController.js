@@ -25,7 +25,7 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
         education: {},
         notes: '',
         activity: {}
-    }
+    };
 
     $scope.$on('hideModal', function(event){
         event.currentScope.showModal = false;
@@ -113,14 +113,14 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
             index: index,
             cannotFollow: profile.cannotFollow
         }
-    }
+    };
 
     $scope.closeProfileModal = function(path) {
         $scope.showModal = false;
         if(path !== undefined) {
             $location.path(path + $scope.profileModal.id);
         }
-    }
+    };
 
     $scope.followUser = function(id, index) {
         if($scope.profiles[index].isUserFollowing === true){
@@ -136,11 +136,11 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
                 $scope.profileModal.isUserFollowing = true;
             });
         }
-    }
+    };
 
     $scope.canEditProfile = function() {
         return ( ($rootScope.auth.id == $scope.profileModal.id) || ($rootScope.auth.isUserInRole("ROLE_ADMIN")) );
-    }
+    };
 
     Profile.query(function(profiles){
         $scope.profiles = profiles.content;
@@ -153,20 +153,24 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     $scope.profile = {};
     $scope.master = {};
 
+    $scope.editing = {
+        contact: false,
+        general: false,
+        institution: false,
+        education: false,
+        notes: false
+    };
+
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
         $rootScope.about = 'none';
     });
 
     var profile = Profile.get({profileId: $routeParams.profileId},
-        function(){    console.log("PROFILE RETURNED: ",profile);
+        function(){
             if(profile.status === 400){
                 $location.path('/error/404');
             }else{
-                $scope.showHideContact = false;
-                $scope.showHideInstitution = false;
-                $scope.showHideEducation = false;
-                $scope.showHideNotes = false;
                 $scope.profile = profile.content;
 
                 if(!$scope.profile.websites){
@@ -209,21 +213,23 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         }
     );
 
-    $scope.updateContactInfo = function(profile){
-        Profile.update({profileId: profile._id}, profile, function(response){   console.log("UPDATE CONTACT INFO RESPONSE IS: ",response);
-            $scope.showHideContact = false;
-            //$scope.profile = response;
-            $scope.responseContent = response;
-            $scope.master = angular.copy($scope.profile);
-        }, function(response){
-            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
-            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-        });
+    $scope.edit = function(param) {
+        $scope.editing[param] = !$scope.editing[param];  console.log("EDITING, MASTER IS: "+$scope.master.name.given);
     };
 
-    $scope.cancelContactInfoUpdate = function(scope){
-        scope.showHideContact = false;
-        $scope.profile = $scope.master;
+    $scope.cancelEditing = function(param) {
+        $scope.editing[param] = false;
+        $scope.profile = angular.copy($scope.master);
+    };
+
+    $scope.updateProfile = function(profile, section){
+        Profile.update({profileId: profile._id}, profile, function(response){
+            $scope.editing[section] = false;
+
+            $scope.master = angular.copy($scope.profile);
+        }, function(response){
+            log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
     };
 
     $scope.updateGeneralInfo = function(profile){
@@ -231,70 +237,14 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             profile.password = $scope.profile.newPassword;
         }
         Profile.update({profileId: profile._id}, profile, function(response){
-            $scope.showHideGeneral = false;
-            //$scope.profile = response;
+            $scope.editing.general = false;
+
             $scope.responseContent = response;
             $scope.master = angular.copy($scope.profile);
         }, function(response){
             $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
             console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
-    };
-
-    $scope.cancelGeneralInfoUpdate = function(scope){
-        scope.showHideGeneral = false;
-        $scope.profile = $scope.master;
-    };
-
-    $scope.updateInstitutionInfo = function(profile){
-        Profile.update({profileId: profile._id}, profile, function(response){
-            $scope.showHideInstitution = false;
-            //$scope.profile = response;
-            $scope.responseContent = response;
-            $scope.master = angular.copy($scope.profile);
-        }, function(response){
-            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
-            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-        });
-    }
-
-    $scope.cancelInstitutionInfoUpdate = function(scope){
-        scope.showHideInstitution = false;
-        $scope.profile = $scope.master;
-    }
-
-    $scope.updateEducationInfo = function(profile){
-        Profile.update({profileId: profile._id}, profile, function(response){
-            $scope.showHideEducation = false;
-            //$scope.profile = response;
-            $scope.responseContent = response;
-            $scope.master = angular.copy($scope.profile);
-        }, function(response){
-            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
-            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-        });
-    }
-
-    $scope.cancelEducationInfoUpdate = function(scope){
-        scope.showHideEducation = false;
-        $scope.profile = $scope.master;
-    }
-
-    $scope.updateNotes = function(profile){
-        Profile.update({profileId: profile._id}, profile, function(response){
-            $scope.showHideNotes = false;
-            //$scope.profile = response;
-            $scope.responseContent = response;
-            $scope.master = angular.copy($scope.profile);
-        }, function(response){
-            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
-            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-        });
-    };
-
-    $scope.cancelNotesUpdate = function(scope){
-        scope.showHideNotes = false;
-        $scope.profile = $scope.master;
     };
 
     $scope.updateThumbnailUri = function(profile){
@@ -306,13 +256,13 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
             console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
-    }
+    };
 
     $scope.resetPassword = function(email){
         console.log('User email address ' + email );
         var data = {
             profileEmail: email
-        }
+        };
 
         $http.post('/gc/api/utility/resettoken/', data)
             .success(function(data, status, headers, config){
@@ -322,17 +272,17 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
                     $scope.showError = true;
                 }
             });
-    }
+    };
 
     $scope.followUser = function(id) {
         $http.post('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
             $scope.profile.isUserFollowing = data.success;
         });
-    }
+    };
 
     $scope.canEditProfile = function() {
         return ( ($rootScope.auth.isUserInRole('ROLE_ADMIN')) || ($rootScope.auth.isUser($scope.profile._id)) );
-    }
+    };
 }
 
 function createProfile($rootScope, $scope, $routeParams, $location, $http, Profile){
@@ -374,7 +324,7 @@ function createProfile($rootScope, $scope, $routeParams, $location, $http, Profi
 
             var data = {
                 profileId: response.content._id
-            }
+            };
 
             $http.post('/gc/api/utility/verifyprofile/', data)
                 .success(function(data, status, headers, config){
@@ -447,11 +397,11 @@ function updateProfile($scope, $routeParams, $location, Profile){
             },
             "edNotes": ""
         });
-    }
+    };
 
     $scope.removeEdRow = function(index){
         $scope.profile.educationHistory.splice(index, 1);
-    }
+    };
 
     $scope.addContactRow = function(){
         $scope.profile.websites.push(
@@ -460,11 +410,11 @@ function updateProfile($scope, $routeParams, $location, Profile){
                 "url" : ''
             }
         );
-    }
+    };
 
     $scope.removeContactRow = function(index){
         $scope.profile.websites.splice(index, 1);
-    }
+    };
 
 }
 
@@ -515,7 +465,7 @@ function viewActivities($scope, $http, $log) {
         }).error(function(data, status) {
                 $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
             });
-    }
+    };
 
     function resetPaging() {
         $scope.paging.from = 0;

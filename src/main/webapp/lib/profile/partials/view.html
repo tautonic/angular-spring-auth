@@ -20,15 +20,15 @@
         <h3 class="sans-serif">
             CONTACT
             <div ui-if="canEditProfile()">
-                <div ng-click="$parent.showHideContact=!showHideContact" class="edit"><i class="icon-pencil"></i> Edit Contact Info</div>
+                <div ng-click="edit('contact')" class="edit"><i class="icon-pencil"></i> Edit Contact Info</div>
             </div>
         </h3>
         <p><strong>Email: </strong>{{profile.accountEmail.address}}</p>
         <p><strong>Website: </strong><a ng-href="{{profile.websites[0].url}}">{{profile.websites[0].title}}</a></p>
     </div>
 
-    <div ui-if="canEditProfile()">
-        <form ui-toggle="showHideContact" name="editContact" class="form-horizontal" novalidate>
+    <div ui-if="canEditProfile()" ui-toggle="editing.contact">
+        <form  name="editContact" class="form-horizontal" novalidate>
             <h3 class="sans-serif">EDIT CONTACT INFO</h3>
             <div class="control-group">
                 <label class="control-label" for="email">Email:</label>
@@ -55,8 +55,8 @@
                 <div class="controls">
                     <div class="btn-group-border">
                         <div class="btn-group bgc">
-                            <button ng-click="updateContactInfo(profile)" class="btn btn-success">Save</button>
-                            <button ng-click="cancelContactInfoUpdate(this)" class="btn btn-success">Cancel</button>
+                            <button ng-click="updateProfile(profile, 'contact')" class="btn btn-success">Save</button>
+                            <button ng-click="cancelEditing('contact')" class="btn btn-success">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
         <h3 class="sans-serif">
             GENERAL
             <div ui-if="canEditProfile()">
-                <div ng-click="$parent.showHideGeneral=!showHideGeneral" class="edit"><i class="icon-pencil"></i> Edit
+                <div ng-click="edit('general')" class="edit"><i class="icon-pencil"></i> Edit
                     General Info
                 </div>
             </div>
@@ -77,8 +77,8 @@
         <p><strong>Full Name: </strong>{{profile.name.given}} {{profile.name.surname}}</p>
     </div>
 
-    <div ui-if="canEditProfile()">
-        <form ui-toggle="showHideGeneral" name="editGeneral" class="form-horizontal" novalidate>
+    <div ui-if="canEditProfile()" ui-toggle="editing.general">
+        <form name="editGeneral" class="form-horizontal" novalidate>
             <h3 class="sans-serif">EDIT GENERAL INFO</h3>
             <div class="control-group">
                 <label class="control-label" for="username">Username:</label>
@@ -140,7 +140,7 @@
                     <div class="btn-group-border">
                         <div class="btn-group bgc">
                             <button ng-click="updateGeneralInfo(profile)" class="btn btn-success">Save</button>
-                            <button ng-click="cancelGeneralInfoUpdate(this)" class="btn btn-success">Cancel</button>
+                            <button ng-click="cancelEditing('general')" class="btn btn-success">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
     <div class="info institution">
         <h3 class="sans-serif">INSTITUTION
             <div ui-if="canEditProfile()">
-                <div ng-click="$parent.showHideInstitution=!showHideInstitution" class="edit"><i class="icon-pencil"></i> Edit Institution Info</div>
+                <div ng-click="edit('institution')" class="edit"><i class="icon-pencil"></i> Edit Institution Info</div>
             </div>
         </h3>
         <p><strong>Name: </strong>{{profile.workHistory[0].businessName}}</p>
@@ -161,8 +161,8 @@
         <p><strong>{{profile.workHistory[0].yearStarted.gregorian}} - {{profile.workHistory[0].yearFinished.gregorian}}</strong></p>
     </div>
 
-    <div ui-if="canEditProfile()">
-        <form ui-toggle="showHideInstitution" name="editInstitution" class="form-horizontal" novalidate>
+    <div ui-if="canEditProfile()" ui-toggle="editing.institution">
+        <form name="editInstitution" class="form-horizontal" novalidate>
             <h3 class="sans-serif">EDIT INSTITUTION INFO</h3>
             <div class="control-group">
                 <label class="control-label" for="institution-name">Title:</label>
@@ -202,8 +202,8 @@
                 <div class="controls">
                     <div class="btn-group-border">
                         <div class="btn-group bgc">
-                            <button ng-click="updateInstitutionInfo(profile)" class="btn btn-success">Save</button>
-                            <button ng-click="cancelInstitutionInfoUpdate(this)" class="btn btn-success">Cancel</button>
+                            <button ng-click="updateProfile(profile, 'institution')" class="btn btn-success">Save</button>
+                            <button ng-click="cancelEditing('institution')" class="btn btn-success">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -214,7 +214,7 @@
     <div class="info education">
         <h3 class="sans-serif">EDUCATION
             <div ui-if="canEditProfile()">
-                <div ng-click="$parent.showHideEducation=!showHideEducation" class="edit"><i class="icon-pencil"></i> Edit Education Info</div>
+                <div ng-click="edit('education')" class="edit"><i class="icon-pencil"></i> Edit Education Info</div>
             </div>
         </h3>
         <p><strong>Institution Name: </strong>{{profile.educationHistory[0].schoolName}}</p>
@@ -223,8 +223,8 @@
         <p><strong>{{profile.educationHistory[0].yearFrom.gregorian}} - {{profile.educationHistory[0].yearTo.gregorian}}</strong></p>
     </div>
 
-    <div ui-if="canEditProfile()">
-        <form ui-toggle="showHideEducation" name="editEducation" class="form-horizontal" novalidate>
+    <div ui-if="canEditProfile()" ui-toggle="editing.education">
+        <form name="editEducation" class="form-horizontal" novalidate>
             <h3 class="sans-serif">EDIT EDUCATION INFO</h3>
             <div class="control-group">
                 <label class="control-label" for="education-name">Institution Name:</label>
@@ -263,8 +263,8 @@
                 <div class="controls">
                     <div class="btn-group-border">
                         <div class="btn-group bgc">
-                            <button ng-click="updateEducationInfo(profile)" class="btn btn-success">Save</button>
-                            <button ng-click="cancelEducationInfoUpdate(this)" class="btn btn-success">Cancel</button>
+                            <button ng-click="updateProfile(profile, 'education')" class="btn btn-success">Save</button>
+                            <button ng-click="cancelEditing('education')" class="btn btn-success">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -273,13 +273,13 @@
     </div>
 
     <div ui-if="canEditProfile()">
-        <h3 class="sans-serif"><div style="padding-right: 1em;" ng-click="$parent.showHideNotes=!showHideNotes" class="edit"><i class="icon-pencil"></i> Edit Notes</div></h3>
+        <h3 class="sans-serif"><div style="padding-right: 1em;" ng-click="edit('notes')" class="edit"><i class="icon-pencil"></i> Edit Notes</div></h3>
     </div>
     <br>
     <p class="notes"><strong>Notes: </strong><i>{{profile.about}}</i></p>
 
-    <div ui-if="canEditProfile()">
-        <form ui-toggle="showHideNotes" name="editNotes" class="form-horizontal" novalidate>
+    <div ui-if="canEditProfile()" ui-toggle="editing.notes">
+        <form name="editNotes" class="form-horizontal" novalidate>
             <h3 class="sans-serif">EDIT NOTES</h3>
             <div class="control-group">
                 <label class="control-label" for="email">Notes:</label>
@@ -293,8 +293,8 @@
                 <div class="controls">
                     <div class="btn-group-border">
                         <div class="btn-group bgc">
-                            <button ng-click="updateNotes(profile)" class="btn btn-success">Save</button>
-                            <button ng-click="cancelNotesUpdate(this)" class="btn btn-success">Cancel</button>
+                            <button ng-click="updateProfile(profile, 'notes')" class="btn btn-success">Save</button>
+                            <button ng-click="cancelEditing('notes')" class="btn btn-success">Cancel</button>
                         </div>
                     </div>
                 </div>
