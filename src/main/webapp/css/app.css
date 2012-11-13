@@ -203,6 +203,10 @@ a {
     font-weight: bold;
 }
 
+a.btn {
+    text-decoration: none;
+}
+
 a.right-arrow, a.left-arrow {
     background-repeat: no-repeat;
     background-position: 5px 9px;
@@ -460,6 +464,14 @@ ul.dropdown-menu li:last-child a {
 
 .article hr {
     padding-top: 10px;
+}
+
+.modal .article h3 {
+    margin: 10px;
+}
+
+.article p.description {
+    margin: 10px;
 }
 
 /********* Sign Up Sidebar ********/
