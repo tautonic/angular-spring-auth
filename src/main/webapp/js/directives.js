@@ -1288,6 +1288,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
                             return 'pdf'
                         case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
                             return 'word'
+                        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                            return 'ppt'
                     }
                 }
 
