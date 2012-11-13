@@ -8,6 +8,8 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
     $scope.adminUsers = true;
     $scope.adminArticles = false;
 
+    $scope.location = $location;
+
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 
@@ -64,6 +66,8 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
 function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location, Profile){
     $scope.adminUsers = false;
     $scope.adminArticles = false;
+
+    $scope.location = $location;
 
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
@@ -151,6 +155,8 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
 function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $location, Article){
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
+
+    $scope.location = $location;
 
     $scope.tinyMCEConfig = {
         width: '100%',
@@ -257,6 +263,8 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
 function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $location, Article, $auth){
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
+
+    $scope.location = $location;
 
     $scope.attachments = [];
     $scope.showUploadBtn = false;

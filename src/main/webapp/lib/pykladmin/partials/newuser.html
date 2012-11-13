@@ -372,8 +372,8 @@
                     <h4>GCEE ADMINISTRATION</h4>
                 </div>
                 <ul class="secondary-nav-options">
-                    <li class="nav-option"><a ng-href="#/admin/users">Users</a></li>
-                    <li class="nav-option"><a ng-href="#/admin/articles">Articles</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/admin/users'}" ng-href="#/admin/users">Users</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/admin/articles'}" ng-href="#/admin/articles">Articles</a></li>
                 </ul>
             </div>
 
