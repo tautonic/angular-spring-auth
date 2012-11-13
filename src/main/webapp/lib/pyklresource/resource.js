@@ -16,8 +16,13 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
         $scope.adminUsers = false;
         $scope.adminArticles = true;
 
-        $rootScope.banner = 'none';
-        $rootScope.about = 'none';
+        if($location.path() === '/admin/articles'){
+            $rootScope.banner = 'none';
+            $rootScope.about = 'none';
+        }else{
+            $rootScope.banner = 'curriculum';
+            $rootScope.about = 'curriculum';
+        }
 
         $http.get( url ).success( function (data) {
             console.log("URL WAS: " + url + " ARTICLE RETURNED: ",data);
