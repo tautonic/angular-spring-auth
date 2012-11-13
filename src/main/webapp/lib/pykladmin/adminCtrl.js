@@ -326,6 +326,8 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
 
         if(thumbnail){
             $scope.newArticle.thumbnail = thumbnail[2];
+        }else{
+            $scope.newArticle.thumbnail = 'images/row-of-columns.jpg'
         }
 
         $scope.newArticle.$save(
