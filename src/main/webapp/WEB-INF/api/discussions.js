@@ -32,18 +32,7 @@ var getDiscussion = function(id) {
 
     var thread = JSON.parse(exchange.content);
 
-    opts = {
-        url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread[0]._id + '&types=discussion',
-        method: 'GET',
-        headers: Headers({ 'x-rt-index': 'gc' }),
-        async: false
-    };
-
-    exchange = httpclient.request(opts);
-
-    var comment = JSON.parse(exchange.content);
-
-    thread[0].commentCount = comment.count;
+    thread[0].commentCount = countComments(thread[0]);
 
     thread[0].children.forEach(function(comment) {
         comment.hidden = (comment.spam >= 3);
@@ -102,10 +91,14 @@ var getDiscussionList = function() {
 
     var exchange = httpclient.request(opts);
 
-    //filters out threads with empty titles and threads that are tied to an article
-    //todo: at this point, all threads tied to an article will likely have a title, so this might not be needed anymore.
+    //this mostly filters discussions that don't have titles, which mostly relates to replies on discussions
     var threads = JSON.parse(exchange.content).filter(function(element) {
         return !(element.title === "");
+    });
+
+    //filters out spam threads
+    threads.forEach(function(element) {
+        element.hidden = (element.spam >= 3);
     });
 
     //loop through each thread and add an attribute that contains the
@@ -120,9 +113,7 @@ var getDiscussionList = function() {
 
         exchange = httpclient.request(opts);
 
-        var comment = JSON.parse(exchange.content);
-
-        thread.commentCount = comment.count;
+        thread.commentCount = JSON.parse(exchange.content).count;//countComments(thread);
     });
 
 
@@ -134,7 +125,7 @@ var getDiscussionList = function() {
     };
 };
 
-var addReply = function(parentId, reply, user) { log.info("REYPL STUFFS: "+JSON.stringify(reply));
+var addReply = function(parentId, reply, user) {
     var data = {
         "dataType": "posts",
         "dateCreated": "",
@@ -166,7 +157,7 @@ var addReply = function(parentId, reply, user) { log.info("REYPL STUFFS: "+JSON.
     };
 
     var exchange = httpclient.request(opts);
-    log.info("reply to discussion: exchange.content: "+exchange.content);
+
     return JSON.parse(exchange.content);
 };
 
@@ -252,6 +243,14 @@ var editDiscussionPost = function(id, postId, postContent, user) {
     return (Math.floor(exchange.status/100) === 2);
 };
 
+function countComments(post) {
+    var length = post.children.length;
+    for(var i = 0; i < post.children.length; i++) {
+        length += countComments(post.children[i]);
+    }
+
+    return length;
+}
 
 function generateBasicAuthorization(user) {
     log.debug("Hash Pass?: " + user.password);

@@ -1411,7 +1411,7 @@ li.search-result.members{
     margin: 5px 0 0 5px;
 }
 
-.discussion-item a{
+.discussion-item a.author {
     color: #005172;
     text-decoration: none;
 }

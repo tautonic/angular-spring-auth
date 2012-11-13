@@ -4,6 +4,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
     var url = 'api/discussions/all';
 
     setupScope();
+    loadContent();
 
     function setupScope() {
         $scope.query = '';
@@ -27,7 +28,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
             return;
         }
         $http.get(url).success(function (data) {
-            if (data !== "false") {
+            if (data !== "false") {   console.log("DISCUSSIONS LOADED THIS: ",data);
                 $scope.discussion = data;
                 $scope.isLoaded = true;
             } else {
@@ -46,7 +47,27 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
         return (($scope.discussion) && ($scope.discussion.length === 0));
     };
 
-    loadContent();
+    //hides posts that have been marked as spam by the user
+    $scope.hidePost = function(id, action) {
+        //either increase or decrease the spam counter
+        var change = 0;
+        switch(action) {
+            case "inc":
+                change = 1;
+                break;
+            case "dec":
+                change = -1;
+                break;
+        }
+
+        $scope.discussion.forEach(function(post) {
+            if(post._id === id) {
+                post.spam += change;
+                post.hidden = (change > -1);
+            }
+        });
+    };
+
 }
 
 
@@ -83,7 +104,6 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
                 $rootScope.about = 'none';
             });
         }
-        //$rootScope.$watch('auth.isAuthenticated()', function(newValue, oldValue) { console.log('you are now (not) authenticated', newValue, oldValue, $rootScope.auth.getUsername()); });
     }
 
     function loadContent() {
