@@ -833,6 +833,7 @@ ul.dropdown-menu li:last-child a {
 .profile-list-item a.btn.btn-success{
     text-decoration: none;
     font-weight: normal;
+    color: white;
 }
 
 .counter-clockwise{
