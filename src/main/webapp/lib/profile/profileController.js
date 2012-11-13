@@ -35,7 +35,7 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
         //console.log('Route change start event fired!!!');
     });
 
-    $scope.showProfileModal = function(profile){
+    $scope.showProfileModal = function(profile, index){
         $scope.showModal = true;
 
         var thumbnail = profile.thumbnail === 'profiles-0000-0000-0000-000000000001' ?  'images/GCEE_image_profileMale_135x135.jpeg' : profile.thumbnail;
@@ -108,7 +108,8 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
             },
             notes: profile.about,
             activity: profile.activity,
-            isUserFollowing: profile.isUserFollowing
+            isUserFollowing: profile.isUserFollowing,
+            index: index
         }
     }
 
@@ -124,11 +125,13 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
             $http.delete('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
                 //$scope.profileModal.isUserFollowing = data.success === 1 ? true : false;
                 $scope.profiles[index].isUserFollowing = false;
+                $scope.profileModal.isUserFollowing = false;
             });
         }else if($scope.profiles[index].isUserFollowing === false){
             $http.post('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
                 //$scope.profileModal.isUserFollowing = data.success === 1 ? true : false;
                 $scope.profiles[index].isUserFollowing = true;
+                $scope.profileModal.isUserFollowing = true;
             });
         }
     }

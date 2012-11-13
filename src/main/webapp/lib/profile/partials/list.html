@@ -13,13 +13,25 @@
                         <h5>{{profileModal.title}}</h5>
                         <h5 class="muted">{{profileModal.institution.name}}</h5>
 
-                        <div class="btn-group-border">
-                            <div class="btn-group bgc">
-                                <button ui-if="auth.isAuthenticated" class="btn btn-success" ng-click="followUser(profileModal.id)">
-                                    <span ng-show="!profileModal.isUserFollowing">Follow</span>
-                                    <span ng-show="profileModal.isUserFollowing">Unfollow</span>
-                                </button>
-                                <button class="btn btn-success" ng-click="closeProfileModal('profiles/view/')">Full Profile</button>
+                        <div ui-if="auth.isAuthenticated">
+                            <div class="btn-group-border">
+                                <div class="btn-group bgc">
+                                    <button class="btn btn-success" ng-click="followUser(profile._id, profileModal.index)">
+                                        <div ng-switch on=profileModal.isUserFollowing>
+                                            <div ng-switch-when=true>Unfollow</div>
+                                            <div ng-switch-default>Follow</div>
+                                        </div>
+                                    </button>
+                                    <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ui-if="!auth.isAuthenticated">
+                            <div class="btn-group-border">
+                                <div class="btn-group bgc">
+                                    <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
+                                </div>
                             </div>
                         </div>
 
@@ -58,24 +70,9 @@
                 <div class="profile-list-item profile grey-gradient clearfix">
                     <div thumbnail thumb=profile size="large" rotation="counter-clockwise" type="profile" />
                     <div class="profile-left">
-                        <h3 ng-click="showProfileModal(profile)">{{profile.name.given}} {{profile.name.surname}}</h3>
+                        <h3 ng-click="showProfileModal(profile, $index)">{{profile.name.given}} {{profile.name.surname}}</h3>
                         <h5>{{profile.workHistory[0].title}}</h5>
                         <h5 class="muted">{{profile.workHistory[0].businessName}}</h5>
-
-                        <!--<div class="btn-group-border">
-                            <div class="btn-group bgc">
-                                <div ui-if="auth.isAuthenticated">
-                                    <div ui-if=!profile.isUserFollowing>
-                                        <button class="btn btn-success" ng-click="followUser(profile._id, $index)">Follow</button>
-                                    </div>
-                                    <div ui-if=profile.isUserFollowing>
-                                        <button class="btn btn-success" ng-click="unFollowUser(profile._id, $index)">Unfollow</button>
-                                    </div>
-                                </div>
-                                <button class="btn btn-success" ng-click="followUser(profile._id, $index)">Follow</button>
-                                <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
-                            </div>
-                        </div>-->
 
                         <div ui-if="auth.isAuthenticated">
                             <div class="btn-group-border">
