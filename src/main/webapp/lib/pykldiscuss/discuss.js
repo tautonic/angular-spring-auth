@@ -1,6 +1,6 @@
 'use strict';
 
-function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $auth, $location) {
+function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
     var url = 'api/discussions/all';
 
     setupScope();
@@ -50,7 +50,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log, $auth, $
 }
 
 
-function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $location) {
+function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
     var url = 'api/discussions/';
 
     $scope.hide = ($routeParams.articleId === null);
@@ -110,35 +110,52 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
             $rootScope.$broadcast($auth.event.signinRequired);
             return;
         }
+
         post.reply = {
             show: true
-        }
+        };
+
         if (quoting) {
-            var content = "<p><blockquote>" + post.message + "</blockquote></p>" + "<p></p>";
-            post.reply.message = content;
+            post.reply.message = "<p><blockquote>" + post.message + "</blockquote></p>" + "<p></p>";
         } else {
             post.reply.message = null;
         }
     };
 
     $scope.submitReply = function (post) {
-        var reply;
+        var replyArgs = {
+            reply: '',
+            title: '',
+            id: ''
+        };
+
+        //if we're replying to a single, solitary post
         if(post !== undefined) {
-            reply = post.reply.message;
+            replyArgs.reply = post.reply.message;
+            replyArgs.title = "";
+            replyArgs.id = post._id;
+
         } else {
-            reply = $scope.reply.message;
+            //otherwise, we're replying to a larger discussion
+            replyArgs.reply = $scope.reply.message;
+            replyArgs.title = $scope.reply.title;
+            replyArgs.id = $scope.discussion.threadId;
         }
+
         var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
-        $http.post(replyUrl, { reply:reply }).success(function (data) {
+
+        $http.post(replyUrl, replyArgs).success(function (data) {
             if(post !== undefined) {
                 post.reply.show = false;
                 post.reply.message = '';
+                post.children.unshift(data);
             } else {
                 $scope.reply.show = false;
                 $scope.reply.message = '';
                 $scope.reply.title = '';
+                $scope.discussion.children.unshift(data);
             }
-            $scope.discussion.children.unshift(data);
+
             $scope.discussion.commentCount++;
         });
     };
@@ -170,13 +187,13 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
         delete post.edited;
         post.edit = false;
         $http.put(url + "/" + post._id, post).success(function (data) {
-            console.log("edit saved successfully to server, url: " + url + "/" + post._id);
+            console.log("edit saved successfully to server");
         });
     };
 
     $scope.editFormInvalid = function(scope) {
         return scope.editForm.$invalid;
-    }
+    };
 
     //fired by the view resource controller after it's loaded, used to load a discussion as part of curriculum content or something
     $rootScope.$on('event:loadDiscussion', function ($event, $args) {
@@ -188,7 +205,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
 
     $scope.increaseLikes = function(likes) {
         $scope.discussion.likes = likes;
-    }
+    };
 
     //hides posts that have been marked as spam by the user
     $scope.hidePost = function(id, action) {
@@ -216,7 +233,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth, $l
     }
 }
 
-function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location) {
+function NewDiscussion($rootScope, $scope, $routeParams, $http, $location) {
     var url = 'api/discussions/new';
     $scope.hide = ($routeParams.articleId === null);
 
@@ -278,6 +295,6 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location
     });
 }
 
-ListDiscussions.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$auth', '$location'];
-ViewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$auth', '$location'];
-NewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$auth', '$location'];
+ListDiscussions.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log'];
+ViewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$auth'];
+NewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$location'];

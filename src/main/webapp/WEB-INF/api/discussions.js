@@ -55,7 +55,7 @@ var getDiscussion = function(id) {
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     };
-}
+};
 
 var getDiscussionByParent = function(parentId) {
     var query = {
@@ -90,7 +90,7 @@ var getDiscussionByParent = function(parentId) {
     }
 
     return getDiscussion(threadId);
-}
+};
 
 var getDiscussionList = function() {
     var opts = {
@@ -132,21 +132,21 @@ var getDiscussionList = function() {
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     };
-}
+};
 
-var addReply = function(id, reply, user) {
+var addReply = function(parentId, reply, user) { log.info("REYPL STUFFS: "+JSON.stringify(reply));
     var data = {
         "dataType": "posts",
         "dateCreated": "",
-        "threadId": id,
+        "threadId": reply.id,
         "type": "discussion",
         "creator":{
             "_id": user.principal.id,
             "username": user.username,
             "profilePicture": { 'filepath': user.principal.thumbnail }
         },
-        "title": "",
-        "message": reply,
+        "title": reply.title,
+        "message": reply.reply,
         "ip": "10.16.151.115",
         "spam": 0,
         "likedBy": [],
@@ -158,7 +158,7 @@ var addReply = function(id, reply, user) {
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/posts/'+id,
+        url: 'http://localhost:9300/myapp/api/posts/'+reply.id,
         method: 'POST',
         data: JSON.stringify(data),
         headers: headers,
@@ -168,7 +168,7 @@ var addReply = function(id, reply, user) {
     var exchange = httpclient.request(opts);
     log.info("reply to discussion: exchange.content: "+exchange.content);
     return JSON.parse(exchange.content);
-}
+};
 
 var log = require( 'ringo/logging' ).getLogger( module.id );
 
@@ -182,7 +182,7 @@ var createDiscussion = function(firstPost, user) {
         "creator":{
             "_id": user.principal.id,
             "username": user.username,
-            "profilePicture": { 'filepath': "/img/bob.com" }
+            "profilePicture": { 'filepath': user.principal.thumbnail }
         },
         "title": (firstPost.title || ''),
         "message": firstPost.posts[0].message,
@@ -217,7 +217,7 @@ var createDiscussion = function(firstPost, user) {
     }
 
     return false;
-}
+};
 
 var editDiscussionPost = function(id, postId, postContent, user) {
 
@@ -249,17 +249,12 @@ var editDiscussionPost = function(id, postId, postContent, user) {
 
     var exchange = httpclient.request(opts);
 
-    if(Math.floor(exchange.status/100) === 2)
-    {
-        return true;
-    }
-
-    return false;
-}
+    return (Math.floor(exchange.status/100) === 2);
+};
 
 
 function generateBasicAuthorization(user) {
-    log.debug("Hash Pass?: " + user.password)
+    log.debug("Hash Pass?: " + user.password);
     var header = user.username + ":" + user.password;
     var base64 = encode(header);
     return 'Basic ' + base64;

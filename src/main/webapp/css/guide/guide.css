@@ -670,6 +670,12 @@ a.btn:visited{
     font-style: italic;
 }
 
+/*** discussion posts "below" the default discussion posts *****/
+.sub-discussion-post .discussion-post,
+.sub-discussion-post .discussion-post-stats {
+    margin-left: 40px;
+}
+
 /********** article list styles ********/
 .article .picture-frame {
     float: left;

@@ -1,0 +1,56 @@
+<div class="discussion-post grey-gradient" ng-hide="post.hidden">
+    <div class="user">
+        <div thumbnail thumb=post.creator size="medium" rotation="counter-clockwise" type="profile" />
+    </div>
+    <h4>{{post.title}}</h4>
+    <h6><a ng-href="#/profile/{{post.creator._id}}">{{post.creator.username}}</a></h6>
+    <h6>{{post.dateCreated | asDate: 'fullDate'}}</h6>
+
+    <p ng-bind-html-unsafe="post.message" ng-show="!post.edit"></p>
+    <div class="content" ng-show="post.edit">
+        <form name="editForm" ng-submit="editPost(post)">
+            <fieldset class="control-group">
+                <textarea style="width: 100%; height: 50px;" ng-model="post.edited" ui-tinymce required></textarea>
+                <input type="submit" value="Save" class="btn btn-success" ng-disabled="editFormInvalid(this)">
+                <input type="button" ng-click="cancelEdit(post)" value="Cancel" class="btn btn-success">
+            </fieldset>
+        </form>
+    </div>
+</div>
+<div class="discussion-post grey-gradient" ng-show="post.hidden">
+    <p class="spammed">This post has been flagged as spam.</p>
+</div>
+<div class="discussion-post-stats grey-gradient" ng-show="!post.reply.show">
+        <span class="btn-group-border" ng-hide="post.hidden">
+            <div class="btn-group bgc">
+                <input type="submit" value="Reply" class="btn btn-success" ng-click="replyTo(post)">
+                <input type="submit" value="Edit" class="btn btn-success" ng-click="edit(post)" ng-show="canEdit(post)">
+                <input type="submit" value="Quote" class="btn btn-success" ng-click="replyTo(post, true)">
+            </div>
+        </span>
+    <span class="muted" ng-hide="post.hidden"><like objectid="{{post._id}}"></like></span>
+    <span class="muted"><spam objectid="{{post._id}}"></spam></span>
+</div>
+
+<div class="discussion-post-stats grey-gradient" ng-show="post.reply.show">
+    <div class="user">
+        <div class="new-picture-frame profile-thumbnail medium clockwise">
+            <img ng-src="{{auth.principal.thumbnail}}" alt="">
+        </div>
+    </div>
+    <form class="reply-form" name="replyForm">
+        <fieldset class="control-group">
+            <textarea rows="10" cols="100" ng-model="post.reply.message" required ui-tinymce placeholder="Subject"></textarea>
+
+            <br>
+            <div class="btn-group-border">
+                <div class="btn-group bgc">
+                    <input type="submit" value="Post" class="btn btn-success" ng-disabled="replyForm.$invalid" ng-click="submitReply(post)">
+                    <button class="btn btn-success" ng-click="cancelReply(post)">Cancel</button>
+                </div>
+            </div>
+            <span class="muted"><i class="add"></i> Add Image</span>
+        </fieldset>
+    </form>
+</div>
+<div class="sub-discussion-post" ng-repeat="post in post.children" ng-include="'lib/pykldiscuss/partials/post-template.html'"></div>
