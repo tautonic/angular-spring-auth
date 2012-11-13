@@ -191,48 +191,16 @@
 
                         <p>Refine your search results</p>
 
-                        <div class="sub documents">
-                            <!--<input type="checkbox" ng-model="allTypes" ng-click="searchAll()" id="all-types"><label for="all-types"></span>All</label>-->
-
-                            <div ng-repeat="facet in facets">
-                                <input type="checkbox" ng-model=facet.selected ng-click="filteredSearch($event.target.checked, facet.term)" id="{{facet.term}}"><label for="{{facet.term}}"></span>{{facet.term}} ({{facet.count}})</label>
+                        <div ui-if=!noResults>
+                            <div class="sub documents">
+                                <div ng-repeat="facet in facets">
+                                    <input type="checkbox" ng-model=facet.selected ng-click="filteredSearch($event.target.checked, facet.term)" id="{{facet.term}}"><label for="{{facet.term}}"></span>{{facet.term}} ({{facet.count}})</label>
+                                </div>
                             </div>
-                          </div>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-    <!--<h2>Your search returned {{(results | filter:lengthFilter).length}} results.</h2>-->
-
-    <!--<div ng-repeat="result in results">
-        <div ng-switch on="result._type">
-            <div ng-switch-when="profiles">
-                <div class="well well-small">
-                    <h4 style="display:inline">ID: </h4> {{result._id}} <br>
-                    <h4 style="display:inline">Name: </h4> {{result.name.given}} {{result.name.surname}} <br>
-                    <h4 style="display:inline">Email: </h4> {{result.accountEmail.address}}
-                </div>
-            </div>
-            <div ng-switch-when="resources">
-                <div class="well well-small">
-                    <h4 style="display:inline">ID: </h4> {{result._id}} <br>
-                    <h4 style="display:inline">Ref: </h4> {{result.ref}} <br>
-                    <h4 style="display:inline">Title: </h4> {{result.title}} <br>
-                    <h4 style="display:inline">Content: </h4> {{result.content}}
-                </div>
-            </div>
-            <div ng-switch-default>
-                <div class="well well-small">
-                    <h4 style="display:inline">ID: </h4> {{result._id}} <br>
-                    <h4 style="display:inline">Creator: </h4> {{result.creator.username}} <br>
-                    <h4 style="display:inline">Title: </h4> {{result.title}}<br>
-                    <h4 style="display:inline">Content: </h4> {{result.message}}
-                </div>
-            </div>
-        </div>
-    </div>-->
 </div>

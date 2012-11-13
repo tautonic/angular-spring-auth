@@ -19,6 +19,7 @@ function SearchSite($rootScope, $scope, $routeParams, $location, Search, $http) 
 
     $scope.results;
     $scope.query;
+    $scope.noResults = false;
 
     var data = {
         q: $routeParams.query
@@ -37,6 +38,11 @@ function SearchSite($rootScope, $scope, $routeParams, $location, Search, $http) 
         }
 
         $scope.resultLength = response.content.length;
+
+        if($scope.resultLength === 0){
+            $scope.noResults = true;
+        }
+
         $scope.query = $routeParams.query;
     }, function(response){
         console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
