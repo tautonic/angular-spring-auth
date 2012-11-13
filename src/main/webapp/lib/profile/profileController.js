@@ -109,7 +109,8 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
             notes: profile.about,
             activity: profile.activity,
             isUserFollowing: profile.isUserFollowing,
-            index: index
+            index: index,
+            cannotFollow: profile.cannotFollow
         }
     }
 

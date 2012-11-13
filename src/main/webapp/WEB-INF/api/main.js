@@ -603,6 +603,10 @@ app.get('/profiles/', function(req){
 
         profile.isUserFollowing = isUserFollowing(profile._id);
 
+        if(profile._id === user.principal.id){
+            profile.cannotFollow = true;
+        }
+
         profile.facultyFellow = profile.roles.some(function(role) {
             return role == "ROLE_PREMIUM";
         });
