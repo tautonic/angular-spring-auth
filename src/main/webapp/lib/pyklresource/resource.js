@@ -185,6 +185,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             $scope.modal = {
                 document: {
                     title: data.title,
+                    description: data.description,
                     url: 'http://docs.google.com/viewer?url=http:' + data.uri + '&embedded=true',
                     directLink: "http:" + data.uri,
                     doctype: data.doctype,
