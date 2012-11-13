@@ -33,14 +33,13 @@
         } );
 
         //by default, the network page lists discussions. This is for that
-        $routeProvider.when( '/network/', {
-            templateUrl: 'lib/pykldiscuss/partials/list.html',
-            controller: 'ListDiscussions'
+        $routeProvider.when( '/network/members', {
+            templateUrl: 'lib/profile/partials/list.html',
+            controller: 'listProfiles'
         } );
 
-        $routeProvider.when( '/network/discussion', {
-            templateUrl: 'lib/pykldiscuss/partials/list.html',
-            controller: 'ListDiscussions'
+        $routeProvider.when( '/network/discussion/list', {
+            templateUrl: 'lib/pykldiscuss/index.html'
         } );
 
         $routeProvider.when( '/network/discussion/view/:discussionId', {

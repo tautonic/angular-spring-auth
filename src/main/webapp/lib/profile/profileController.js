@@ -7,7 +7,8 @@
  */
 function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
     $scope.$on('$routeChangeSuccess', function(){
-        $rootScope.banner = 'faculty';
+        $rootScope.banner = 'network';
+        $rootScope.about = 'network';
     });
 
     //$rootScope.showModal = false;
