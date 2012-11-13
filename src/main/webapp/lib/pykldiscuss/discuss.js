@@ -288,7 +288,7 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $location) {
                 url = 'api/discussions/byParent/' + $routeParams.articleId;
             } else {
                 if (data.newId !== false) {
-                    if($scope.hasContent) {
+                    if($routeParams.articleId) {
                         $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': data.newId });
                     } else {
                         $location.path('/network/discussion/view/' + data.newId);
