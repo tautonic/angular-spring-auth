@@ -281,7 +281,7 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     $scope.article = {
         title: '',
         content: '',
-        author: 'James Hines',
+        author: $rootScope.auth.username,
         key: '',
         thumbnail: '',
         lastModifiedDate: '',
@@ -292,6 +292,8 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         rating: 0,
         attachments: []
     }
+
+    $log.info('Current user\'s username: ' + JSON.stringify($rootScope.auth.username));
 
     //dateCreated: "2011-01-17T23:07:32.000Z"
 

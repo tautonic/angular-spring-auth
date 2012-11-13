@@ -1311,7 +1311,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
                             title: title,
                             description: description,
                             key: 'attachment-key-' + utc_timestamp,
-                            author: 'James Hines',
+                            author: scope.$parent.$root.auth.principal.username,
                             format: 'attachment',
                             mimetype: content.mimetype,
                             uri: content.uri,
