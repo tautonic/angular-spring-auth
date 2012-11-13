@@ -119,10 +119,18 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
         }
     }
 
-    $scope.followUser = function(id) {
-        $http.post('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
-            $scope.profileModal.isUserFollowing = data.success;
-        });
+    $scope.followUser = function(id, index) {
+        if($scope.profiles[index].isUserFollowing === true){
+            $http.delete('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
+                //$scope.profileModal.isUserFollowing = data.success === 1 ? true : false;
+                $scope.profiles[index].isUserFollowing = false;
+            });
+        }else if($scope.profiles[index].isUserFollowing === false){
+            $http.post('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
+                //$scope.profileModal.isUserFollowing = data.success === 1 ? true : false;
+                $scope.profiles[index].isUserFollowing = true;
+            });
+        }
     }
 
     $scope.canEditProfile = function() {

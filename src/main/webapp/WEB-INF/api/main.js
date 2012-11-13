@@ -386,6 +386,20 @@ app.post('/follow/:followedById/:entityId', function(req, followedById, entityId
     return _simpleHTTPRequest(opts);
 });
 
+app.del('/follow/:followedById/:entityId', function(req, followedById, entityId) {
+    var user = getUserDetails();
+
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/follow/' + followedById + "/" + entityId,
+        method: 'DELETE',
+        data: {},
+        headers: Headers({ "Authorization": _generateBasicAuthorization(user.username, user.password), 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
+});
+
 function isUserFollowing(id) {
     var user = getUserDetails();
 
