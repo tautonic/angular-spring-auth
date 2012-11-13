@@ -1219,7 +1219,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
                     scope.$apply();
                     //$$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
                     var attachmentFields = jQuery('.attachment-fields').last();
-                    attachmentFields.children('.filename').html(files[i].name + ' (' + plupload.formatSize(files[i].size) + ')');
+                    attachmentFields.children('.filename').children('.control-group').children('.controls').html(files[i].name + ' (' + plupload.formatSize(files[i].size) + ')');
                 }
 
                 /*setTimeout(function () {
@@ -1237,7 +1237,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
 
             uploader.bind('UploadProgress', function (up, file) {
                 //$$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-                jQuery('.attachment-fields').last().children('.progress').children('.bar').css('width', file.percent + '%');
+                //jQuery('.attachment-fields').last().children('.progress').children('.bar').css('width', file.percent + '%');
             });
 
             uploader.bind('QueueChanged', function(uploader){
