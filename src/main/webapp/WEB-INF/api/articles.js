@@ -170,13 +170,13 @@ function getDocType(mimetype) {
         case 'application/powerpoint':
         case 'application/vnd.ms-powerpoint':
         case 'application/x-mspowerpoint':
-            doctype = 'powerpoint';
+            doctype = 'ppt';
             break;
         case 'application/excel':
         case 'application/vnd.ms-excel':
         case 'application/x-excel':
         case 'application/x-msexcel':
-            doctype = 'excel';
+            doctype = 'xls';
             break;
         case 'application/rtf':
         case 'application/x-rtf':
@@ -207,10 +207,10 @@ function getPossibleMimetypes(doctype) {
         case 'word':
             mimetypes = ['application/msword'];
             break;
-        case 'powerpoint':
+        case 'ppt':
             mimetypes = ['application/mspowerpoint', 'application/powerpoint', 'application/vnd.ms-powerpoint', 'application/x-mspowerpoint'];
             break;
-        case 'excel':
+        case 'xls':
             mimetypes = ['application/excel', 'application/vnd.ms-excel', 'application/x-excel', 'application/x-msexcel'];
             break;
         case 'rtf':

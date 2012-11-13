@@ -90,12 +90,12 @@
                         </div>
 
                         <hr>
-                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments()"><label for="documents">Documents ({{count('docs')}})</label>
+                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments()"><label for="documents">Documents ({{countDocuments()}})</label>
                         <div class="sub documents">
                             <input type="checkbox" id="pdf" ng-model="filters.pdf" ng-change="search(searchTerm)"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{count('pdf')}})</label>
                             <input type="checkbox" id="word" ng-model="filters.word" ng-change="search(searchTerm)"><label for="word"><span class="doc-type word"></span>Microsoft Word ({{count('word')}})</label>
-                            <input type="checkbox" id="powerpoint" ng-model="filters.powerpoint" ng-change="search(searchTerm)"><label for="powerpoint"><span class="doc-type powerpoint"></span>PowerPoint ({{count('powerpoint')}})</label>
-                            <input type="checkbox" id="excel" ng-model="filters.excel" ng-change="search(searchTerm)"><label for="excel"><span class="doc-type excel"></span>Excel Spreadsheet ({{count('excel')}})</label>
+                            <input type="checkbox" id="powerpoint" ng-model="filters.ppt" ng-change="search(searchTerm)"><label for="powerpoint"><span class="doc-type ppt"></span>PowerPoint ({{count('powerpoint')}})</label>
+                            <input type="checkbox" id="excel" ng-model="filters.xls" ng-change="search(searchTerm)"><label for="excel"><span class="doc-type xls"></span>Excel Spreadsheet ({{count('excel')}})</label>
                             <input type="checkbox" id="text" ng-model="filters.text" ng-change="search(searchTerm)"><label for="text"><span class="doc-type text"></span>Text File ({{count('text')}})</label>
                             <input type="checkbox" id="rtf" ng-model="filters.rtf" ng-change="search(searchTerm)"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{count('rtf')}})</label>
                         </div>
@@ -107,14 +107,6 @@
 
                 </div>
             </div>
-
-            <!--<div ng-switch on=service>
-                <div ng-switch-when="curriculum">
-
-                </div>
-
-                <div ng-switch-default></div>
-            </div>-->
         </div>
     </div>
 </div>

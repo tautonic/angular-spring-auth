@@ -27,7 +27,6 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
         }
 
         $http.get( url ).success( function (data) {
-            console.log("URL WAS: " + url + " ARTICLE RETURNED: ",data);
             if(data !== "false") {
                 $scope.articles = data;
                 if($scope.articles.length < $scope.paging.size) {
@@ -49,7 +48,7 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
         sortBy = param;
 
         $scope.search($scope.searchTerm);
-    }
+    };
 
     function buildFilters() {
         var result = "";
@@ -66,11 +65,11 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
     $scope.toggleDocuments = function() {
         $scope.filters.pdf = $scope.filters.documents;
         $scope.filters.word = $scope.filters.documents;
-        $scope.filters.powerpoint = $scope.filters.documents;
-        $scope.filters.excel = $scope.filters.documents;
+        $scope.filters.ppt = $scope.filters.documents;
+        $scope.filters.xls = $scope.filters.documents;
         $scope.filters.text = $scope.filters.documents;
         $scope.filters.rtf = $scope.filters.documents;
-    }
+    };
 
     $scope.search = function(term) {
         term = term || "";
@@ -79,7 +78,7 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
         url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy;
 
         loadContent();
-    }
+    };
 
     $scope.loadMore = function(term) {
         //if there's no more pages to load
@@ -104,9 +103,9 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
         }).error(function(data, status) {
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
-    }
+    };
 
-    $scope.count = function(what) {
+    function count(what) {
         if(typeof($scope.articles) === "undefined")
         {
             return 0;
@@ -119,7 +118,16 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
         return result.length;
     }
 
-    $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
+    $scope.countDocuments = function() {
+        var total = 0;
+        total = count('pdf') + count('word') + count('ppt') + count('xls') + count('text') + count('rtf');
+
+        return total;
+    };
+
+    $scope.count = count;
+
+        $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
     $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
     $scope.$on('$routeChangeSuccess', function(){
         if($location.path() === '/admin/articles'){
