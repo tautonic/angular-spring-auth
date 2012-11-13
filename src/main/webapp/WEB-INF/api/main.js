@@ -295,7 +295,7 @@ app.post('/discussions/:id', function(req, id) {
         };
     }
 
-    return json(addReply(id, req.params.reply, getUserDetails()));
+    return json(addReply(id, req.params, getUserDetails()));
 });
 /****** End discussion posts ********/
 
