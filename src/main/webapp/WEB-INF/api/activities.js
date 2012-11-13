@@ -293,7 +293,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         linkText = direct.fullName || direct.username;
                         break;
                     case 'profiles':
-                        linkId = direct.username;
+                        linkId = direct._id;
                         linkText = direct.fullName || direct.username;
                         // If showing this message to the same user, use the "you" word
                         if (authenticatedId === direct._id) {
@@ -301,9 +301,9 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
 
                             linkText = 'you';
                         }else{
-                            linkText = direct.fullName;
+                            linkText = direct.username;
                         }
-                        linkType = 'users';
+                        linkType = '#/profiles/view';
                         break;
                 }
                 activity.directLink = format('<a href="%s%s/%s">%s</a>',
