@@ -1862,7 +1862,7 @@ li.search-result.members{
     background-color: #f8f8f8;
 }
 
-.secondary-nav-options li a.active-secondary{
+.secondary-nav-options li a.activeSecondary{
     color: #f8f8f8;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#51a463), to(#127551));
     background-image: -webkit-linear-gradient(top, #51a463, #127551);

@@ -184,9 +184,11 @@ function activateAccountController($rootScope, $scope, $location, $http){
     }
 }
 
-function servicesProgramsController($rootScope, $scope, $routeParams){
+function servicesProgramsController($rootScope, $scope, $routeParams, $location){
     $rootScope.about = 'service';
     $rootScope.service = $routeParams.service;
+
+    $scope.location = $location;
 
     //$rootScope.serviceTitle = 'Access To Babson Curriculum';
 

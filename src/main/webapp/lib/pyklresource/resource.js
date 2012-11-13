@@ -16,6 +16,8 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
         $scope.adminUsers = false;
         $scope.adminArticles = true;
 
+        $scope.location = $location;
+
         if($location.path() === '/admin/articles'){
             $rootScope.banner = 'none';
             $rootScope.about = 'none';
