@@ -1,5 +1,6 @@
 package com.pykl.spring.security;
 
+import com.zocia.spring.security.RoundtableUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
@@ -30,6 +31,7 @@ public class AjaxAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
     @Override
     public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response, final Authentication authentication) throws IOException, ServletException {
         response.getWriter().print("AUTH_SUCCESS");
+
         response.getWriter().flush();
         clearAuthenticationAttributes(request);
     }

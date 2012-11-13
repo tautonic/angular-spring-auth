@@ -30,6 +30,12 @@
                             </span>
                         </div>
                     </div>
+
+                    <div class="alert alert-error alert-block" ng-show="showSignInError">
+                        <button type="button" class="close" ui-event="{ closed: 'closeErrorAlert()' }" data-dismiss="alert">&times;</button>
+                        <h4>Error!</h4>
+                        There was a problem signing in. {{signInErrorReason}}.
+                    </div>
                 </form>
             </div>
         </div>

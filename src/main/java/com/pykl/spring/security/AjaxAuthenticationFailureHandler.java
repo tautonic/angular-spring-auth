@@ -1,5 +1,8 @@
 package com.pykl.spring.security;
 
+import com.zocia.spring.security.RoundtableUser;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
@@ -29,7 +32,16 @@ public class AjaxAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
      */
     @Override
     public void onAuthenticationFailure(final HttpServletRequest request, final HttpServletResponse response, final AuthenticationException exception) throws IOException, ServletException {
-        response.getWriter().print("AUTH_FAIL");
+
+        if(exception instanceof LockedException)
+        {
+            response.getWriter().print("AUTH_INACTIVE");
+        } else if(exception instanceof BadCredentialsException) {
+            response.getWriter().print("AUTH_BAD_CREDENTIALS");
+        } else {
+            response.getWriter().print("AUTH_FAIL");
+        }
+
         response.getWriter().flush();
     }
 
