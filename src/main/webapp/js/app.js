@@ -17,26 +17,29 @@
 			templateUrl: 'partials/faculty.html',
             controller: 'facultyFellows'
         } );
+
+        //services and programs section. mostly articles
         $routeProvider.when( '/content/', {
-			templateUrl: 'lib/pyklresource/partials/list.html',
+			templateUrl: 'lib/pyklresource/index.html',
             controller: 'ListResources'
 		} );
-        //using the index here because individual content/articles can have discussions attached to them, and this makes that happen
-        //so there can't really be a single controller set here
-        $routeProvider.when( '/content/:articleId', {
-            templateUrl: 'lib/pyklresource/index.html'
+
+        $routeProvider.when( '/content/:sortBy', {
+            templateUrl: 'lib/pyklresource/index.html',
+            controller: 'ListResources'
+        } );
+
+        //no controller here because individual content/articles can have discussions attached to them, and this makes that happen
+        $routeProvider.when( '/content/view/:articleId', {
+            templateUrl: 'lib/pyklresource/partials/view.html'
         } );
 
         $routeProvider.when( '/content/service/:service', {
-            templateUrl: 'lib/pyklresource/partials/list.html',
+            templateUrl: 'lib/pyklresource/index.html',
             controller: 'servicesProgramsController'
         } );
 
         //by default, the network page lists discussions. This is for that
-        $routeProvider.when( '/network/members', {
-            templateUrl: 'lib/profile/partials/list.html',
-            controller: 'listProfiles'
-        } );
 
         $routeProvider.when( '/network/discussion/list', {
             templateUrl: 'lib/pykldiscuss/index.html'
@@ -52,6 +55,7 @@
             controller: 'NewDiscussion'
         } );
 
+        //admin section
         $routeProvider.when( '/admin/users', {
             templateUrl: 'lib/pykladmin/partials/users.html',
             controller: 'adminUsersList'
@@ -77,12 +81,12 @@
             controller: 'adminArticlesUpdate'
         });
 
-        $routeProvider.when( '/login', {
-            templateUrl: 'lib/pyklsecurity/partials/signin-form.html',
-            controller: pykl.LoginCtrl
-        });
+        //profile section
+        $routeProvider.when( '/network/members', {
+            templateUrl: 'lib/profile/partials/list.html',
+            controller: 'listProfiles'
+        } );
 
-        //individual controller pages, some of these might be removed
         $routeProvider.when( '/profiles/view/:profileId', {
             templateUrl: 'lib/profile/partials/landingPage.html',
             controller: 'viewProfile'
@@ -92,16 +96,7 @@
             controller: 'updateProfile'
         } );
 
-        $routeProvider.when( '/signup/:email', {
-            templateUrl: 'lib/profile/partials/create.html',
-            controller: 'createProfile'
-        } );
-        $routeProvider.when( '/signup', {
-            templateUrl: 'lib/profile/partials/create.html',
-            controller: 'createProfile'
-        } );
-
-
+        //search site and other sections
         $routeProvider.when( '/search/profiles/:query', {
             templateUrl: 'lib/search/partials/searchFacultyResults.html',
             controller: 'SearchProfiles'
@@ -122,6 +117,7 @@
             controller: 'SearchDiscussions'
         } );
 
+        //error pages
         $routeProvider.when( '/error/404', {
             templateUrl: 'partials/404.html',
             controller: 'errorController'
@@ -130,6 +126,21 @@
         $routeProvider.when( '/error/500', {
             templateUrl: 'partials/500.html',
             controller: 'error500Controller'
+        } );
+
+        //stuff related to login and account management
+        $routeProvider.when( '/login', {
+            templateUrl: 'lib/pyklsecurity/partials/signin-form.html',
+            controller: pykl.LoginCtrl
+        });
+
+        $routeProvider.when( '/signup/:email', {
+            templateUrl: 'lib/profile/partials/create.html',
+            controller: 'createProfile'
+        } );
+        $routeProvider.when( '/signup', {
+            templateUrl: 'lib/profile/partials/create.html',
+            controller: 'createProfile'
         } );
 
         $routeProvider.when( '/verifyemail/:token', {
