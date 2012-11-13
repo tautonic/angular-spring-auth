@@ -383,7 +383,6 @@ var pykl = window.pykl || {};
                     if (data === 'AUTH_SUCCESS') {
                         $rootScope.$broadcast(EVENT_INTERNAL_SIGNIN_CONFIRMED);
                     } else {
-                        // todo: Implement something
                         $rootScope.$broadcast(EVENT_INTERNAL_SIGNIN_FAILED, data);
                     }
                 };
@@ -405,7 +404,17 @@ var pykl = window.pykl || {};
             //todo: sign in only provides an error on failure, it does not provide a reason for the failure
             $rootScope.$on(EVENT_INTERNAL_SIGNIN_FAILED, function(event, reason) {
                 $log.info("ERROR logging in: Login attempt returned: "+reason);
-                $location.path('activateAccount');
+                if(reason === "AUTH_INACTIVE") {
+                    $location.path('activateAccount');
+                } else if(reason === "AUTH_BAD_CREDENTIALS") {
+                    $rootScope.showSignInError = true;
+                    $rootScope.signInErrorReason = "Username or password incorrect";
+                } else {
+
+                    $rootScope.showSignInError = true;
+                    $rootScope.signInErrorReason = "Your account could not be logged in";
+                }
+
             })
         } ]
     );

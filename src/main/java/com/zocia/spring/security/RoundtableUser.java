@@ -124,7 +124,7 @@ public class RoundtableUser implements UserDetails {
 	 * @return <code>true</code> if the user is not locked, <code>false</code> otherwise
 	 */
 	public boolean isAccountNonLocked() {
-		return true;
+		return (status.equalsIgnoreCase("verified"));
 	}
 
 	/**
