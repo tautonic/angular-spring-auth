@@ -4,7 +4,7 @@
             <div style="overflow:hidden; height:151px;">
                 <!--<img ng-src="http://images.ruwad.org.sa/assets/{{thumb.thumbnail}}" width="93%" alt="">-->
                 <img ng-src="{{thumb.thumbnail}}" width="93%" alt="">
-                <div class="premium" ng-show="thumb.premium"></div>
+                <!--<div class="premium" ng-show="thumb.premium"></div>-->
             </div>
 
             <a ng-href="#/content/{{thumb._id}}">
@@ -19,7 +19,7 @@
             <div style="overflow:hidden; height:151px;">
                 <!--<img ng-src="images/row-of-columns.jpg" width="93%" alt="">-->
                 <img ng-src="//images.ruwad.org.sa/assets/{{thumb.thumbnail}}" width="93%" alt="">
-                <div class="premium" ng-show="thumb.premium"></div>
+                <!--<div class="premium" ng-show="thumb.premium"></div>-->
             </div>
 
             <a ng-href="#/content/{{thumb._id}}">
@@ -34,11 +34,11 @@
             <div ng-switch on=thumb.thumbnail>
                 <div ng-switch-when="profiles-0000-0000-0000-000000000001">
                     <img class="profile-image {{thumbnail.size}}" ng-src="images/GCEE_image_profileMale_135x135.jpeg" alt="">
-                    <div class="premium" ng-show="thumb.facultyFellow"></div>
+                    <!--<div class="premium" ng-show="thumb.facultyFellow"></div>-->
                 </div>
                 <div ng-switch-default>
                     <img class="profile-image {{thumbnail.size}}" ng-src="{{thumb.thumbnail}}" alt="">
-                    <div class="premium" ng-show="thumb.facultyFellow"></div>
+                    <!--<div class="premium" ng-show="thumb.facultyFellow"></div>-->
                 </div>
             </div>
         </div>
