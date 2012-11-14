@@ -41,7 +41,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         }
 
         $http.get( url ).success( function (data) {
-            if(data !== "false") {    console.log("URL IS: "+url);
+            if(data !== "false") {
                 $scope.articles = data;
                 if($scope.articles.length < $scope.paging.size) {
                     $scope.paging.more = false;
