@@ -1,42 +1,15 @@
 <div class="container content profile">
     <div class="row">
         <div class="span9">
-            <div ui-if="auth.isUser(profile._id)" ui-tabs="{tab1: {label: 'MY PROFILE'}, tab2: {label: 'ACTIVITY STREAM'}}">
-                <div ng-include="'lib/profile/partials/view.html'" ng-controller="viewProfile"></div>
-                <div ng-include="'lib/profile/partials/activities.html'" ng-controller="viewActivities"></div>
+            <div ui-if="auth.isUser(profile._id)">
+                <ul class="nav nav-tabs ng-scope">
+                    <li class="active"><a>MY PROFILE</a></li>
+                    <li><a ng-href="#/profiles/view/{{profile._id}}/activities">ACTIVITY STREAM</a></li>
+                </ul>
             </div>
-            <div ui-if="!auth.isUser(profile._id)">
-                <div ng-include="'lib/profile/partials/view.html'" ng-controller="viewProfile"></div>
-            </div>
+            <div ng-include="'lib/profile/partials/view.html'"></div>
         </div>
 
-        <div class="span3">
-            <div ui-if="auth.isUserInRole('ROLE_ADMIN')">
-                <div class="admin services-secondary-nav search-box content">
-                    <div class="header">
-                        <h4>GCEE ADMINISTRATION</h4>
-                    </div>
-                    <ul class="secondary-nav-options">
-                        <li class="nav-option"><a ng-href="#/admin/users">Users</a></li>
-                        <li class="nav-option"><a ng-href="#/admin/articles">Articles</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="profile search-box members">
-                <div class="header">
-                    <h4>SEARCH MEMBERS</h4>
-                </div>
-                <div class="form-container">
-                    <form ng-controller="searchProfiles" ng-submit="searchProfiles()">
-                        <input type="text" ng-model="profileSearchQuery" placeholder="Search Members...">
-                        <div class="btn-group-border"></div>
-                        <div class="search-lens read-more gradient">
-                            <div class="preview-lens"></div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <div ng-include="'lib/profile/partials/sidebar.html'"></div>
     </div>
 </div>

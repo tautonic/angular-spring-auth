@@ -424,10 +424,16 @@ function searchProfiles($scope, $location){
     };
 }
 
-function viewActivities($scope, $http, $log) {
+function viewActivities($rootScope, $scope, $http, $routeParams, $log) {
     $scope.paging = {
         size: 15
     };
+    $scope.id = $routeParams.profileId;
+
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+        $rootScope.about = 'none';
+    });
 
     resetPaging();
 
@@ -473,4 +479,4 @@ function viewActivities($scope, $http, $log) {
     }
 }
 
-viewActivities.$inject = ['$scope', '$http', '$log'];
+viewActivities.$inject = ['$rootScope', '$scope', '$http', '$routeParams', '$log'];
