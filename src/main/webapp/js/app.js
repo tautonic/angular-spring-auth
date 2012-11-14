@@ -34,10 +34,17 @@
             templateUrl: 'lib/pyklresource/partials/view.html'
         } );
 
+        //this is for the contact info page. will eventually need designed+a controller
+        $routeProvider.when( '/content/service/contact', {
+            templateUrl: 'lib/pyklresource/partials/contactinfo.html'
+        } );
+
         $routeProvider.when( '/content/service/:service', {
             templateUrl: 'lib/pyklresource/index.html',
-            controller: 'servicesProgramsController'
+            controller: 'ListResources'
         } );
+
+
 
         //by default, the network page lists discussions. This is for that
 

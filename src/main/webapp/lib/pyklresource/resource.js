@@ -1,6 +1,8 @@
 'use strict';
 function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $location ) {
     var sortBy = $routeParams.sortBy || 'featured';
+    var category = $routeParams.service || '';
+
     $scope.tabs = {
         featured: true,
         recent: false,
@@ -13,7 +15,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $scope.tabs[sortBy] = true;
     }
 
-    var url = "api/article/search?sort=" + sortBy;
+    var url = "api/article/search?sort=" + sortBy + "&category=" + category;
     $scope.filters = {};
     $scope.paging = {
         size: 10
@@ -39,7 +41,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         }
 
         $http.get( url ).success( function (data) {
-            if(data !== "false") {
+            if(data !== "false") {    console.log("URL IS: "+url);
                 $scope.articles = data;
                 if($scope.articles.length < $scope.paging.size) {
                     $scope.paging.more = false;
@@ -89,7 +91,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         term = term || "";
         resetPaging();
 
-        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy;
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category;
 
         loadContent();
     };
@@ -101,7 +103,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         }
         term = term || "";
         $scope.paging.from += $scope.paging.size;
-        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size + "&sort=" + sortBy;
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size + "&sort=" + sortBy + "&category=" + category;
 
 
         $http.get( url ).success( function (data) {

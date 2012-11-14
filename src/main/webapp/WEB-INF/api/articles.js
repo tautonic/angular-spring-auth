@@ -86,6 +86,10 @@ var searchAllArticles = function(params) {
         "sort": sorting
     };
 
+    if((params.category) && (params.category !== '')) {
+        data.query.filtered.filter.and.push({ "term": { "category": params.category } });
+    }
+
     if(params.filters) {
         var mimetypeFilters = [];
         var filters = params.filters.split(',');

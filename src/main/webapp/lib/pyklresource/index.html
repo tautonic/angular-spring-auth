@@ -2,32 +2,7 @@
     <div class="row">
         <div class="articles span9" >
             <div id="curriculum-content">
-                <div ng-switch on=service>
-                    <div ng-switch-when="access">
-                        <div ng-include="'lib/pyklresource/partials/accesstobabson.html'"></div>
-                    </div>
-                    <div ng-switch-when="facultydev">
-                        <div ng-include="'lib/pyklresource/partials/facultydevelopment.html'"></div>
-                    </div>
-                    <div ng-switch-when="nextopp">
-                        <div ng-include="'lib/pyklresource/partials/nextopportunity.html'"></div>
-                    </div>
-                    <div ng-switch-when="handbook">
-                        <div ng-include="'lib/pyklresource/partials/handbook.html'"></div>
-                    </div>
-                    <div ng-switch-when="entrepreneurship">
-                        <div ng-include="'lib/pyklresource/partials/entrepreneurship.html'"></div>
-                    </div>
-                    <div ng-switch-when="gceemsce">
-                        <div ng-include="'lib/pyklresource/partials/gceemsce.html'"></div>
-                    </div>
-                    <div ng-switch-when="contact">
-                        <div ng-include="'lib/pyklresource/partials/contactinfo.html'"></div>
-                    </div>
-                    <div ng-switch-default>
-                        <div ng-include="'lib/pyklresource/partials/list.html'"></div>
-                    </div>
-                </div>
+                <div ng-include="'lib/pyklresource/partials/list.html'"></div>
             </div>
         </div>
 
