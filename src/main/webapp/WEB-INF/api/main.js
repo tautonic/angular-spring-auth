@@ -420,11 +420,40 @@ app.get('/following/:userId', function(req, userId, params) {
         return json({
             following: following,
             success: true
-        })
+        });
     }
 
     return json({
         following: [],
+        success: false
+    });
+});
+
+app.get('/followers/:userId', function(req, userId, params) {
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/follow/byEntity/' + userId,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    if(Math.floor(exchange.status / 100) === 2) {
+        var followers = [];
+        var list = JSON.parse(exchange.content);
+        list.forEach(function(follow) {
+            followers.push(getUser(req, follow.followedById));
+        });
+
+        return json({
+            followers: followers,
+            success: true
+        });
+    }
+
+    return json({
+        followers: [],
         success: false
     });
 });

@@ -17,6 +17,23 @@
             <div ng-include="'lib/profile/partials/view.html'"></div>
         </div>
 
-        <div ng-include="'lib/profile/partials/sidebar.html'"></div>
+        <div class="span3">
+            <div ng-include="'lib/profile/partials/sidebar.html'"></div>
+
+            <div class="profile search-box followers">
+                <div class="header">
+                    <h4>FOLLOWERS</h4>
+                </div>
+                <div class="form-container">
+                    <!--<p>Following this user is</p>-->
+                    <div ng-repeat="profile in followers" class="follower">
+                        <div thumbnail thumb=profile size="small" type="profile" /><a ng-href="#/profiles/view/{{profile._id}}">{{profile.name.given}} {{profile.name.surname}}</a>
+                    </div>
+                    <div ng-show="followers.length == 0">
+                        <p>No one is following this user.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

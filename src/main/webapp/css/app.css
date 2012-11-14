@@ -2204,3 +2204,34 @@ li.search-result.members{
 	0%{-webkit-transform: scale(1.2);opacity:1;}
 	100%{-webkit-transform: scale(0.7);opacity:0.1;}
 }
+
+.followers .form-container {
+    padding: 0;
+}
+
+.followers .form-container p {
+    padding: 10px 10px 0 20px;
+}
+
+.follower {
+    margin: 10px 0;
+    padding: 10px 10px 10px 20px;
+    border-top: 1px solid #cecece;
+}
+
+.follower:first-child {
+    border-top: none;
+    margin-top: 0;
+}
+
+.search-box .follower a {
+    margin-left: 40px;
+    margin-top: 8px;
+    display: inline-block;
+    text-decoration: none;
+    color: #eeaf00;
+}
+
+.follower .premium {
+    display: none;
+}

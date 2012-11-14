@@ -209,6 +209,17 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
                 }
 
                 $scope.master = angular.copy($scope.profile);
+
+                var url = "api/followers/" + $scope.profile._id;
+
+                $http.get(url).success(function(data) {
+                    if(data.success) {
+                        $scope.followers = data.followers;
+                    } else {
+                        log.info("There was an error loading followers");
+                        //$scope.paging.more = false;
+                    }
+                });
             }
         }
     );
