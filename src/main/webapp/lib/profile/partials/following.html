@@ -1,0 +1,33 @@
+<div class="container content profile">
+    <div class="row">
+        <div class="span9">
+            <div ui-if="auth.isUser(id)">
+                <ul class="nav nav-tabs ng-scope">
+                    <li><a ng-href="#/profiles/view/{{id}}">MY PROFILE</a></li>
+                    <li><a ng-href="#/profiles/view/{{id}}/activities">ACTIVITY STREAM</a></li>
+                    <li class="active"><a>FOLLOWING</a></li>
+                </ul>
+            </div>
+            <div ui-if="!auth.isUser(id)">
+                <ul class="nav nav-tabs ng-scope">
+                    <li><a ng-href="#/profiles/view/{{id}}">PROFILE</a></li>
+                    <li class="active"><a>FOLLOWING</a></li>
+                </ul>
+            </div>
+
+            <div when-scrolled="loadMore()" offset="5">
+                <ul class="activity-stream-items">
+                    <li class="activity-stream-item" ng-repeat="profile in following">
+                        <div ng-include="'lib/profile/partials/singleProfile.html'"></div>
+                    </li>
+                </ul>
+
+                <div ng-show="(following.length == 0)" class="loader">You are not following anyone at the moment.</div>
+                <div ng-show="(paging.more)" class="loader"><img src="images/ajax-loader.gif">Loading...</div>
+                <div ng-show="((!paging.more) && (following.length != 0))" class="loader">That's everyone you're following.</div>
+            </div>
+        </div>
+
+        <div ng-include="'lib/profile/partials/sidebar.html'"></div>
+    </div>
+</div>

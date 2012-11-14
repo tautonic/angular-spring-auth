@@ -400,6 +400,58 @@ app.del('/follow/:followedById/:entityId', function(req, followedById, entityId)
     return _simpleHTTPRequest(opts);
 });
 
+app.get('/following/:userId', function(req, userId, params) {
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/follow/byUser/' + userId,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    if(Math.floor(exchange.status / 100) === 2) {
+        var following = [];
+        var list = JSON.parse(exchange.content);
+        list.forEach(function(follow) {
+            following.push(getUser(req, follow.entityId));
+        });
+
+        return json({
+            following: following,
+            success: true
+        })
+    }
+
+    return json({
+        following: [],
+        success: false
+    });
+});
+
+function getUser(req, id) {
+    var user = getUserDetails();
+    var opts = {
+        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    var profile = JSON.parse(exchange.content);
+
+    profile.isUserFollowing = isUserFollowing(profile._id);
+    profile.facultyFellow = profile.roles.some(function(role) {
+        return role == "ROLE_PREMIUM";
+    });
+
+    profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);
+
+    return profile;
+}
+
 function isUserFollowing(id) {
     var user = getUserDetails();
 

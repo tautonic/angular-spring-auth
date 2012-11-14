@@ -479,4 +479,63 @@ function viewActivities($rootScope, $scope, $http, $routeParams, $log) {
     }
 }
 
+function viewFollowing($rootScope, $scope, $http, $routeParams, $log) {
+    $scope.paging = {
+        size: 10
+    };
+    $scope.id = $routeParams.profileId;
+
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+        $rootScope.about = 'none';
+    });
+
+    resetPaging();
+
+    var url = "api/following/" + $scope.id + "?from=" + $scope.paging.from + "&size=" + $scope.paging.size;
+
+    $http.get(url).success(function(data) {
+        if(data.success) {
+            $scope.following = data.following;
+
+            if($scope.following.length < $scope.paging.size) {
+                $scope.paging.more = false;
+            }
+        } else {
+            log.info("There was an error loading followers");
+            $scope.paging.more = false;
+        }
+    });
+
+    $scope.loadMore = function() {
+        //if there's no more pages to load
+        if(!$scope.paging.more) {
+            return;
+        }
+
+        $scope.paging.from += $scope.paging.size;
+
+        url = "api/following?from=" + $scope.paging.from + "&size=" + $scope.paging.size;
+
+        $http.get( url ).success( function (data) {
+            if(data !== "false") {
+                if(data.following.length === 0) {
+                    $scope.paging.more = false;
+                } else {
+                    $scope.following = $scope.following.concat(data.following);
+                }
+            } else {
+                $log.info("ERROR getting article, or resource.");
+            }
+        }).error(function(data, status) {
+                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+            });
+    };
+
+    function resetPaging() {
+        $scope.paging.from = 0;
+        $scope.paging.more = true;
+    }
+}
+
 viewActivities.$inject = ['$rootScope', '$scope', '$http', '$routeParams', '$log'];

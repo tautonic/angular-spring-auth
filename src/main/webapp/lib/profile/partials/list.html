@@ -85,51 +85,7 @@
                         </div>
 
                         <div ng-repeat="profile in profiles">
-                            <div class="profile-list-item profile grey-gradient clearfix">
-                                <div thumbnail thumb=profile size="large" rotation="counter-clockwise" type="profile" />
-                                <div class="profile-left">
-                                    <h3 ng-click="showProfileModal(profile, $index)">{{profile.name.given}} {{profile.name.surname}}</h3>
-                                    <h5>{{profile.workHistory[0].title}}</h5>
-                                    <h5 class="muted">{{profile.workHistory[0].businessName}}
-
-                                        <div ui-if="auth.isAuthenticated">
-                                            <div ui-if="profile.cannotFollow">
-                                                <div class="btn-group-border">
-                                                    <div class="btn-group bgc">
-                                                        <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div ui-if="!profile.cannotFollow">
-                                                <div class="btn-group-border">
-                                                    <div class="btn-group bgc">
-                                                        <button class="btn btn-success" ng-click="followUser(profile._id, $index)">
-                                                            <div ng-switch on=profile.isUserFollowing>
-                                                                <div ng-switch-when=true>Unfollow</div>
-                                                                <div ng-switch-default>Follow</div>
-                                                            </div>
-                                                        </button>
-                                                        <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div ui-if="!auth.isAuthenticated">
-                                            <div class="btn-group-border">
-                                                <div class="btn-group bgc">
-                                                    <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                </div>
-                                <div class="profile-right">
-                                    <h3 class="sans-serif">LATEST ACTIVITY:</h3>
-                                    <p><i ng-bind-html-unsafe=profile.activity.message></i></p>
-                                    <p class="muted">about {{profile.activity.dateCreated | timeago}}</p>
-                                </div>
-                            </div>
+                            <div ng-include="'lib/profile/partials/singleProfile.html'"></div>
                         </div>
                     </div>
                     <div class="span3">

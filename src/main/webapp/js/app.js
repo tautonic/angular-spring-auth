@@ -91,9 +91,15 @@
             templateUrl: 'lib/profile/partials/landingPage.html',
             controller: 'viewProfile'
         } );
+
         $routeProvider.when( '/profiles/view/:profileId/activities', {
             templateUrl: 'lib/profile/partials/activities.html',
             controller: 'viewActivities'
+        } );
+
+        $routeProvider.when( '/profiles/view/:profileId/following', {
+            templateUrl: 'lib/profile/partials/following.html',
+            controller: 'viewFollowing'
         } );
 
         $routeProvider.when( '/profiles/update/:profileId', {

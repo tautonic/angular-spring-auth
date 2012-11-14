@@ -5,6 +5,13 @@
                 <ul class="nav nav-tabs ng-scope">
                     <li class="active"><a>MY PROFILE</a></li>
                     <li><a ng-href="#/profiles/view/{{profile._id}}/activities">ACTIVITY STREAM</a></li>
+                    <li><a ng-href="#/profiles/view/{{profile._id}}/following">FOLLOWING</a></li>
+                </ul>
+            </div>
+            <div ui-if="!auth.isUser(profile._id)">
+                <ul class="nav nav-tabs ng-scope">
+                    <li class="active"><a>PROFILE</a></li>
+                    <li><a ng-href="#/profiles/view/{{profile._id}}/following">FOLLOWING</a></li>
                 </ul>
             </div>
             <div ng-include="'lib/profile/partials/view.html'"></div>
