@@ -1388,6 +1388,9 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
 
                         $http.post('/gc/api/attachments', attachment)
                             .success(function(data, status){
+                                var date = new Date();
+                                date = date.getMonth()+1 +'/'+date.getDate()+'/'+date.getFullYear();
+
                                 // remove this attachment from the attachments array
                                 attachmentId = data.content._id;
                                 scope.article.attachments.push(attachmentId);
@@ -1396,7 +1399,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
                                 var attachmentDiv = '<div class="discussion-stack-container attachment" style="top:'+ attachmentDivPos+'em;"> \
                                     <div class="discussion-item grey-gradient"> \
                                         <h4>'+ data.content.title +'</h4> \
-                                        <h6>By '+ data.content.author +', 11/12/2012</h6> \
+                                        <h6>By '+ data.content.author +', '+ date +'</h6> \
                                         <p class="muted">'+ data.content.description +'</p> \
                                     </div> \
                                     \
