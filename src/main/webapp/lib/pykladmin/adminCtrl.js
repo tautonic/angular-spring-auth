@@ -332,7 +332,7 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
 
         $scope.newArticle.$save(
             function(response){
-                $location.path('/content/' + response.content._id);
+                $location.path('/content/view/' + response.content._id);
                 console.log('ARTICLE SUCCESSFULLY SAVED!!!', 'STATUS CODE: ' + response.status);
             },
             function(response){

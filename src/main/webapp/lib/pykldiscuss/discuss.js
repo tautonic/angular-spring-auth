@@ -98,7 +98,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
                 $scope.pageType = "byParent/" + $routeParams.articleId;
                 $scope.reply.title = '';
                 dataType = "comment";
-                parentId = $routeParams.articleId; console.log("WE'RE IN AN ARTICLE: ",$routeParams);
+                parentId = $routeParams.articleId;
             }
 
             url = url + $scope.pageType;
@@ -170,7 +170,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
         }
 
         var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
-         console.log("REPLYING:",replyArgs);
+
         $http.post(replyUrl, replyArgs).success(function (data) {
             if(post !== undefined) {
                 post.reply.show = false;

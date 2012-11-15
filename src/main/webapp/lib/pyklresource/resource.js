@@ -229,7 +229,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     }
 
     $scope.hasMoreThanAttachments = function(total) {
-        return (($scope.article.attachments) && ($scope.article.attachments.length > total));
+        return (($scope.article) && ($scope.article.attachments) && ($scope.article.attachments.length > total));
     };
 
     $scope.abstractVisible = function () {
