@@ -1185,7 +1185,13 @@ angular.module('bgc.directives').directive('adminDeleteUser', ['Profile', functi
         restrict: 'A',
         link: function(scope, elm, attrs){
             var attrs = attrs;
+            var check = false;
             elm.bind('click', function(){
+                if(!check) {
+                    elm.html('<i class="icon-question-sign icon-white"></i> Are You Sure?');
+                    check = true;
+                    return;
+                }
                 //var userId = attrs.userid
                 var profile = Profile.delete({profileId:attrs.userid}, function(){
                     elm.parents('.profile-list-item.profile').fadeOut('slow', function(){
@@ -1202,13 +1208,20 @@ angular.module('bgc.directives').directive('adminDeleteArticle', ['Article', fun
         restrict: 'A',
         link: function(scope, elm, attrs){
             var attrs = attrs;
+            var check = false;
             elm.bind('click', function(){
+                if(!check) {
+                    elm.html('<i class="icon-question-sign icon-white"></i> Are You Sure?');
+                    check = true;
+                    return;
+                }
                 //var articleId = attrs.articleid
                 var profile = Article.delete({articleId:attrs.articleid}, function(){
                     elm.parents('.article.admin.row').fadeOut('slow', function(){
                         $(this).remove();
                     });
                 });
+
             });
         }
     }
@@ -1219,7 +1232,13 @@ angular.module('bgc.directives').directive('adminResetPassword', ['$http', funct
         restrict: 'A',
         link: function(scope, elm, attrs){
             var attrs = attrs;
+            var check = false;
             elm.bind('click', function(){
+                if(!check) {
+                    elm.html('<i class="icon-question-sign icon-white"></i> Are You Sure?');
+                    check = true;
+                    return;
+                }
                 var data = {
                     profileEmail: attrs.email
                 }
