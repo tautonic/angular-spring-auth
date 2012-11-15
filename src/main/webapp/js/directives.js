@@ -409,6 +409,9 @@ angular.module('bgc.directives')
             var cancelCropBtn;
             var saveCropBtn;
 
+            cancelCropBtn = angular.element('#cancel-crop');
+            saveCropBtn = angular.element('#save-crop');
+
             options = scope.$eval(attrs.pyklProfileImageUpload);
 
             var config = {
@@ -442,10 +445,6 @@ angular.module('bgc.directives')
             var uploader = new plupload.Uploader(config);
 
             uploader.bind('FilesAdded', function (up, files) {
-                console.log('Files in queue: ' + files.length);
-                /*for (var i in files) {
-                    $$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
-                }*/
                 $('.jcrop-holder').empty();
                 var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
                                        <div id="block-2" class="little-block"></div> \
@@ -479,22 +478,81 @@ angular.module('bgc.directives')
 
             uploader.bind('FileUploaded', function(uploader, file, response){
                 var content = scope.$eval("(" + response.response + ")");
-
                 content = scope.$eval("(" + content.content + ")");
+
                 url = content.uri;
             });
 
             var jcropApi;
-            var height;
-            var width;
+            //var height;
+            //var width;
+
+            cancelCropBtn.bind('click', function(){
+                $('.upload-progress').remove();
+                $('.jcrop-holder').empty();
+                $('.profile-crop-preview').hide();
+                //jcropApi.destroy();
+                console.log('Files in queue: ' + uploader.files.length)
+            });
+
+            saveCropBtn.bind('click', function(){
+                var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
+                                       <div id="block-2" class="little-block"></div> \
+                                       <div id="block-3" class="little-block"></div> \
+                                       <div id="block-4" class="little-block"></div> \
+                                       <div id="block-5" class="little-block"></div> \
+                                       <div id="block-6" class="little-block"></div> \
+                                       <div id="block-7" class="little-block"></div> \
+                                       <div id="block-8" class="little-block"></div> \
+                                       <div id="block-9" class="little-block"></div></div>'
+
+                jQuery('.info.image h3').after(progress);
+
+                var rxp = /^.*cms\//;
+                var assetKey = url;
+
+                assetKey = assetKey.replace(rxp, "");
+
+                var coords = jcropApi.tellSelect();
+
+                var data = {
+                    'x1':       coords.x,
+                    'x2':       coords.x2,
+                    'y1':       coords.y,
+                    'y2':       coords.y2,
+                    'w':        coords.w,
+                    'h':        coords.h,
+                    'assetKey': assetKey
+                };
+
+                var scope = config.scope;
+                var profile = scope.$parent.profile;
+
+                $http.post('/gc/api/profiles/images/crop/', data).success(
+                    function(data, status, headers, config){
+                        $('.upload-progress').remove();
+                        var uri = data.content.uri;
+                        uri = uri.replace(/http:/, '');
+                        profile.thumbnail = uri;
+                        scope.$parent.updateThumbnailUri(profile);
+                        //scope.$digest();
+                        //$('.new-picture-frame.profile-thumbnail img').attr('src', uri);
+                    }).error(
+                    function(){
+                        console.log('Image crop error!');
+                    }
+                );
+
+                //height = $('#image-crop').height();
+                //width = $('#image-crop').width();
+
+                $('.profile-crop-preview').hide();
+            });
 
             uploader.bind('UploadComplete', function(uploader, file){
                 //$('#image-crop').attr('src', url);
                 $('.upload-progress').remove();
                 $('.profile-crop-preview').show();
-
-                cancelCropBtn = angular.element('#cancel-crop');
-                saveCropBtn = angular.element('#save-crop');
 
                 $('.jcrop-holder img').attr('src', url);
 
@@ -511,69 +569,7 @@ angular.module('bgc.directives')
                     jcropApi = this;
                 });
 
-                cancelCropBtn.bind('click', function(){
-                    $('.upload-progress').remove();
-                    $('.jcrop-holder').empty();
-                    $('.profile-crop-preview').hide();
-                    //jcropApi.destroy();
-                    console.log('Files in queue: ' + uploader.files.length)
-                });
-
-                saveCropBtn.bind('click', function(){
-                    var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
-                                       <div id="block-2" class="little-block"></div> \
-                                       <div id="block-3" class="little-block"></div> \
-                                       <div id="block-4" class="little-block"></div> \
-                                       <div id="block-5" class="little-block"></div> \
-                                       <div id="block-6" class="little-block"></div> \
-                                       <div id="block-7" class="little-block"></div> \
-                                       <div id="block-8" class="little-block"></div> \
-                                       <div id="block-9" class="little-block"></div></div>'
-
-                    jQuery('.info.image h3').after(progress);
-
-                    var rxp = /^.*cms\//;
-                    var assetKey = url;
-
-                    assetKey = assetKey.replace(rxp, "");
-
-                    var coords = jcropApi.tellSelect();
-
-                    var data = {
-                        'x1':       coords.x,
-                        'x2':       coords.x2,
-                        'y1':       coords.y,
-                        'y2':       coords.y2,
-                        'w':        coords.w,
-                        'h':        coords.h,
-                        'assetKey': assetKey
-                    };
-
-                    var scope = config.scope;
-                    var profile = scope.$parent.profile;
-
-                    $http.post('/gc/api/profiles/images/crop/', data).success(
-                        function(data, status, headers, config){
-                            $('.upload-progress').remove();
-                            var uri = data.content.uri;
-                            uri = uri.replace(/http:/, '');
-                            profile.thumbnail = uri;
-                            scope.$parent.updateThumbnailUri(profile);
-                            scope.$digest();
-                            //$('.new-picture-frame.profile-thumbnail img').attr('src', uri);
-                        }).error(
-                        function(){
-                            console.log('Image crop error!');
-                        }
-                    );
-
-                    //height = $('#image-crop').height();
-                    //width = $('#image-crop').width();
-
-                    $('.profile-crop-preview').hide();
-                });
-
-                function showPreview(coords){
+                /*function showPreview(coords){
                     var rx = 135 / coords.w;
                     var ry = 135 / coords.h;
 
@@ -583,7 +579,7 @@ angular.module('bgc.directives')
                         marginLeft: '-' + Math.round(rx * coords.x) + 'px',
                         marginTop: '-' + Math.round(ry * coords.y) + 'px'
                     });
-                }
+                }*/
             });
 
             uploader.init();
