@@ -611,8 +611,13 @@ ul.dropdown-menu li:last-child a {
 }
 
 .footer .logo {
-    border-right: 2px solid #b3b3b3;
     margin-top: 6px;
+}
+
+.footer .span8 {
+    border-left: 2px solid #b3b3b3;
+    margin-left: 0;
+    padding-left: 20px;
 }
 
 .footer .logo #shareIcons {
@@ -2203,4 +2208,35 @@ li.search-result.members{
 @-webkit-keyframes move{
 	0%{-webkit-transform: scale(1.2);opacity:1;}
 	100%{-webkit-transform: scale(0.7);opacity:0.1;}
+}
+
+.followers .form-container {
+    padding: 0;
+}
+
+.followers .form-container p {
+    padding: 10px 10px 0 20px;
+}
+
+.follower {
+    margin: 10px 0;
+    padding: 10px 10px 10px 20px;
+    border-top: 1px solid #cecece;
+}
+
+.follower:first-child {
+    border-top: none;
+    margin-top: 0;
+}
+
+.search-box .follower a {
+    margin-left: 40px;
+    margin-top: 8px;
+    display: inline-block;
+    text-decoration: none;
+    color: #eeaf00;
+}
+
+.follower .premium {
+    display: none;
 }

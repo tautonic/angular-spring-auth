@@ -43,8 +43,9 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
 
 function SiteSearchController($rootScope, $scope, $location){
     $scope.searchSite = function(){
-        //console.log('Search Site called');
         $location.path('/search/site/' + $scope.siteQuery);
+        openSearch();
+        $scope.siteQuery = '';
     };
 }
 

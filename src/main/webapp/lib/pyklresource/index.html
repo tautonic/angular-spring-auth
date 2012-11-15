@@ -1,5 +1,61 @@
 <div class="content container">
-    <div ng-include="'lib/pyklresource/partials/view.html'" ng-controller="ViewResource"></div>
+    <div class="row">
+        <div class="articles span9" >
+            <div id="curriculum-content">
+                <div ng-include="'lib/pyklresource/partials/list.html'"></div>
+            </div>
+        </div>
+
+        <div class="span3">
+            <div class="services-secondary-nav search-box content">
+                <div class="header">
+                    <h4>SERVICES & PROGRAMS</h4>
+                </div>
+                <ul class="secondary-nav-options">
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/'}" ng-href="#/content/">Curriculum Advisory Services</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/access'}" ng-href="#/content/service/access">Access to Babson Curriculum</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/facultydev'}" ng-href="#/content/service/facultydev">Faculty Development</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/nextopp'}" ng-href="#/content/service/nextopp">Next Opportunity</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/handbook'}" ng-href="#/content/service/handbook">Handbook</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/entrepreneurship'}" ng-href="#/content/service/entrepreneurship">Entrepreneurship Center Development</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/gceemsce'}" ng-href="#/content/service/gceemsce">GCEE MSCE</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/contact'}" ng-href="#/content/service/contact">Contact Information</a></li>
+                </ul>
+
+            </div>
+
+            <div class="services search-box content">
+                <div class="header">
+                    <h4>SEARCH THIS SECTION</h4>
+                </div>
+                <div class="form-container">
+                    <form ng-submit="search(searchTerm)">
+                        <div class="search-input">
+                            <input type="text" ng-model="searchTerm" placeholder="Search Articles...">
+                            <div class="btn-group-border"></div>
+                            <div class="search-lens read-more gradient">
+                                <div class="preview-lens"></div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments()"><label for="documents">Documents ({{countDocuments()}})</label>
+                        <div class="sub documents">
+                            <input type="checkbox" id="pdf" ng-model="filters.pdf" ng-change="search(searchTerm)"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{count('pdf')}})</label>
+                            <input type="checkbox" id="word" ng-model="filters.word" ng-change="search(searchTerm)"><label for="word"><span class="doc-type word"></span>Microsoft Word ({{count('word')}})</label>
+                            <input type="checkbox" id="powerpoint" ng-model="filters.ppt" ng-change="search(searchTerm)"><label for="powerpoint"><span class="doc-type ppt"></span>PowerPoint ({{count('powerpoint')}})</label>
+                            <input type="checkbox" id="excel" ng-model="filters.xls" ng-change="search(searchTerm)"><label for="excel"><span class="doc-type xls"></span>Excel Spreadsheet ({{count('excel')}})</label>
+                            <input type="checkbox" id="text" ng-model="filters.text" ng-change="search(searchTerm)"><label for="text"><span class="doc-type text"></span>Text File ({{count('text')}})</label>
+                            <input type="checkbox" id="rtf" ng-model="filters.rtf" ng-change="search(searchTerm)"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{count('rtf')}})</label>
+                        </div>
+                        <input type="checkbox" id="videos" ng-model="filters.video" ng-change="search(searchTerm)"><label for="videos"><span class="doc-type video"></span>Videos ({{count('videos')}})</label>
+                        <hr>
+                        <input type="checkbox" id="image" ng-model="filters.image" ng-change="search(searchTerm)"><label for="image"><span class="doc-type image"></span>Pictures ({{count('image')}})</label>
+                    </form>
+                    <a ng-href="#/admin/articles/create" ui-if="auth.isUserInRole('ROLE_ADMIN')" class="btn btn-info">Add Article</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div ng-include="'lib/pykldiscuss/partials/view.html'" ng-controller="ViewDiscussion"></div>
-<div ng-include="'lib/pykldiscuss/partials/new.html'" ng-controller="NewDiscussion"></div>

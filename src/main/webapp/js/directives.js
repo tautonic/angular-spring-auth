@@ -850,6 +850,7 @@ angular.module('bgc.directives').directive('streamItem', ['$http',
  * <div>content of tab2</div>
  * </li>
  */
+//todo: DELETE ME
 angular.module('bgc.directives').directive('uiTabs', ['$compile', function ($compile) {
 
     'use strict';

@@ -1,0 +1,26 @@
+<div ui-if="auth.isUserInRole('ROLE_ADMIN')">
+    <div class="admin services-secondary-nav search-box content">
+        <div class="header">
+            <h4>GCEE ADMINISTRATION</h4>
+        </div>
+        <ul class="secondary-nav-options">
+            <li class="nav-option"><a ng-href="#/admin/users">Users</a></li>
+            <li class="nav-option"><a ng-href="#/admin/articles">Articles</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="profile search-box members">
+    <div class="header">
+        <h4>SEARCH MEMBERS</h4>
+    </div>
+    <div class="form-container">
+        <form ng-controller="searchProfiles" ng-submit="searchProfiles()">
+            <input type="text" ng-model="profileSearchQuery" placeholder="Search Members...">
+            <div class="btn-group-border"></div>
+            <div class="search-lens read-more gradient">
+                <div class="preview-lens"></div>
+            </div>
+        </form>
+    </div>
+</div>

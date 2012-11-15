@@ -1,10 +1,12 @@
 <div id="gcee-network" class="content container">
     <div class="row">
         <div class="span12">
-            <div ui-tabs="{tab1: {label: 'DISCUSSIONS'}, tab2: {label: 'MEMBERS'}}">
-                <div ng-include="'lib/pykldiscuss/partials/list.html'" ng-controller="ListDiscussions"></div>
-                <div ng-include="'lib/profile/partials/list.html'" ng-controller="listProfiles"></div>
-            </div>
+            <ul class="nav nav-tabs ng-scope">
+                <li class="active"><a>DISCUSSIONS</a></li>
+                <li><a ng-href="#/network/members">MEMBERS</a></li>
+            </ul>
+
+            <div ng-include="'lib/pykldiscuss/partials/list.html'" ng-controller="ListDiscussions"></div>
         </div>
     </div>
 </div>

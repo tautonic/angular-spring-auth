@@ -224,6 +224,23 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         }
     );
 
+<<<<<<< HEAD
+    $scope.updateContactInfo = function(profile, scope){
+        Profile.update({profileId: profile._id}, profile, function(response){   console.log("UPDATE CONTACT INFO RESPONSE IS: ",response);
+            scope.$parent.showHideContact = false;
+            //$scope.profile = response;
+            $scope.responseContent = response;
+            $scope.master = angular.copy($scope.profile);
+        }, function(response){
+            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
+            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        });
+    };
+
+    $scope.cancelContactInfoUpdate = function(scope){
+        scope.$parent.showHideContact = false;
+        $scope.$parent.$parent.profile = $scope.master;
+=======
     $scope.edit = function(param) {
         $scope.editing[param] = !$scope.editing[param];  console.log("EDITING, MASTER IS: "+$scope.master.name.given);
     };
@@ -231,6 +248,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     $scope.cancelEditing = function(param) {
         $scope.editing[param] = false;
         $scope.profile = angular.copy($scope.master);
+>>>>>>> origin/develop
     };
 
     $scope.updateProfile = function(profile, section){

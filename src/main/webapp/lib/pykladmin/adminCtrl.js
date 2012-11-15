@@ -210,7 +210,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         }
 
         Article.update({articleId: article._id}, article, function(response){
-            $location.path('/content/' + article._id);
+            $location.path('/content/view/' + article._id);
         }, function(response){
             console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });

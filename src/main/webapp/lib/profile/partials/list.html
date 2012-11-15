@@ -1,142 +1,109 @@
-<div class="container">
+<div id="gcee-network" class="content container">
     <div class="row">
-        <div class="span9">
-            <div ui-modal class="fade profile-summary" ng-model="showModal">
-                <div class="profile-modal profile">
-                    <div class="left clearfix">
-                        <div class="new-picture-frame profile-thumbnail large counter-clockwise">
-                            <img class="profile-image large" ng-src="{{profileModal.thumbnail}}" alt="">
-                        </div>
-                    </div>
-                    <div class="center clearfix">
-                        <h3>{{profileModal.name}}</h3>
-                        <h5>{{profileModal.title}}</h5>
-                        <h5 class="muted">{{profileModal.institution.name}}</h5>
+        <div class="span12">
+            <ul class="nav nav-tabs ng-scope">
+                <li><a ng-href="#/network/discussion/list">DISCUSSIONS</a></li>
+                <li class="active"><a>MEMBERS</a></li>
+            </ul>
 
-                        <div ui-if="auth.isAuthenticated">
-                            <div ui-if="profileModal.cannotFollow">
-                                <div class="btn-group-border">
-                                    <div class="btn-group bgc">
-                                        <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
+            <div class="container">
+                <div class="row">
+                    <div class="span9">
+                        <div ui-modal class="fade profile-summary" ng-model="showModal">
+                            <div class="profile-modal profile">
+                                <div class="left clearfix">
+                                    <div class="new-picture-frame profile-thumbnail large counter-clockwise">
+                                        <img class="profile-image large" ng-src="{{profileModal.thumbnail}}" alt="">
                                     </div>
                                 </div>
-                            </div>
+                                <div class="center clearfix">
+                                    <h3>{{profileModal.name}}</h3>
+                                    <h5>{{profileModal.title}}</h5>
+                                    <h5 class="muted">{{profileModal.institution.name}}</h5>
 
-                            <div ui-if="!profileModal.cannotFollow">
-                                <div class="btn-group-border">
-                                    <div class="btn-group bgc">
-                                        <button class="btn btn-success" ng-click="followUser(profile._id, profileModal.index)">
-                                            <div ng-switch on=profileModal.isUserFollowing>
-                                                <div ng-switch-when=true>Unfollow</div>
-                                                <div ng-switch-default>Follow</div>
+                                    <div ui-if="auth.isAuthenticated">
+                                        <div ui-if="profileModal.cannotFollow">
+                                            <div class="btn-group-border">
+                                                <div class="btn-group bgc">
+                                                    <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
+                                                </div>
                                             </div>
-                                        </button>
-                                        <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                        </div>
 
-                        <div ui-if="!auth.isAuthenticated">
-                            <div class="btn-group-border">
-                                <div class="btn-group bgc">
-                                    <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h3 class="sans-serif">CONTACT</h3>
-                        <p><strong>Email: </strong>{{profileModal.contact.email}}</p>
-                        <p><strong>Website: </strong><a ng-href="{{profileModal.contact.website.url}}">{{profileModal.contact.website.title}}</a></p>
-
-                        <h3 class="sans-serif">INSTITUTION</h3>
-                        <p><strong>Title: </strong>{{profileModal.institution.name}}</p>
-                        <p><strong>Location: </strong>{{profileModal.institution.location}}</p>
-                        <p><strong>{{profileModal.institution.yearStarted}} - {{profileModal.institution.yearFinished}}</strong></p>
-
-                        <h3 class="sans-serif">EDUCATION</h3>
-                        <p><strong>Institution Name: </strong>{{profileModal.education.name}}</p>
-                        <p><strong>Field of Study: </strong>{{profileModal.education.fieldOfStudy}}</p>
-                        <p><strong>Country: </strong>{{profileModal.education.country}}</p>
-                        <p><strong>{{profileModal.education.yearFrom}} - {{profileModal.education.yearTo}}</strong></p>
-
-                        <p class="notes"><strong>Notes: </strong><i>{{profileModal.notes}}</i></p>
-
-                    </div>
-                    <div class="right clearfix">
-                        <div class="close-modal" ng-click="closeProfileModal()"></div>
-                        <h3 class="sans-serif">RECENT ACTIVITY</h3>
-                        <ul class="activity-list">
-                            <li class="update">
-                                <p><i ng-bind-html-unsafe=profileModal.activity.message></i></p>
-                                <p class="muted">about {{profileModal.activity.dateCreated | timeago}}</p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div ng-repeat="profile in profiles">
-                <div class="profile-list-item profile grey-gradient clearfix">
-                    <div thumbnail thumb=profile size="large" rotation="counter-clockwise" type="profile" />
-                    <div class="profile-left">
-                        <h3 ng-click="showProfileModal(profile, $index)">{{profile.name.given}} {{profile.name.surname}}</h3>
-                        <h5>{{profile.workHistory[0].title}}</h5>
-                        <h5 class="muted">{{profile.workHistory[0].businessName}}
-
-                        <div ui-if="auth.isAuthenticated">
-                            <div ui-if="profile.cannotFollow">
-                                <div class="btn-group-border">
-                                    <div class="btn-group bgc">
-                                        <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div ui-if="!profile.cannotFollow">
-                                <div class="btn-group-border">
-                                    <div class="btn-group bgc">
-                                        <button class="btn btn-success" ng-click="followUser(profile._id, $index)">
-                                            <div ng-switch on=profile.isUserFollowing>
-                                                <div ng-switch-when=true>Unfollow</div>
-                                                <div ng-switch-default>Follow</div>
+                                        <div ui-if="!profileModal.cannotFollow">
+                                            <div class="btn-group-border">
+                                                <div class="btn-group bgc">
+                                                    <button class="btn btn-success" ng-click="followUser(profile._id, profileModal.index)">
+                                                        <div ng-switch on=profileModal.isUserFollowing>
+                                                            <div ng-switch-when=true>Unfollow</div>
+                                                            <div ng-switch-default>Follow</div>
+                                                        </div>
+                                                    </button>
+                                                    <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
+                                                </div>
                                             </div>
-                                        </button>
-                                        <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
+                                        </div>
                                     </div>
+
+                                    <div ui-if="!auth.isAuthenticated">
+                                        <div class="btn-group-border">
+                                            <div class="btn-group bgc">
+                                                <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h3 class="sans-serif">CONTACT</h3>
+                                    <p><strong>Email: </strong>{{profileModal.contact.email}}</p>
+                                    <p><strong>Website: </strong><a ng-href="{{profileModal.contact.website.url}}">{{profileModal.contact.website.title}}</a></p>
+
+                                    <h3 class="sans-serif">INSTITUTION</h3>
+                                    <p><strong>Title: </strong>{{profileModal.institution.name}}</p>
+                                    <p><strong>Location: </strong>{{profileModal.institution.location}}</p>
+                                    <p><strong>{{profileModal.institution.yearStarted}} - {{profileModal.institution.yearFinished}}</strong></p>
+
+                                    <h3 class="sans-serif">EDUCATION</h3>
+                                    <p><strong>Institution Name: </strong>{{profileModal.education.name}}</p>
+                                    <p><strong>Field of Study: </strong>{{profileModal.education.fieldOfStudy}}</p>
+                                    <p><strong>Country: </strong>{{profileModal.education.country}}</p>
+                                    <p><strong>{{profileModal.education.yearFrom}} - {{profileModal.education.yearTo}}</strong></p>
+
+                                    <p class="notes"><strong>Notes: </strong><i>{{profileModal.notes}}</i></p>
+
+                                </div>
+                                <div class="right clearfix">
+                                    <div class="close-modal" ng-click="closeProfileModal()"></div>
+                                    <h3 class="sans-serif">RECENT ACTIVITY</h3>
+                                    <ul class="activity-list">
+                                        <li class="update">
+                                            <p><i ng-bind-html-unsafe=profileModal.activity.message></i></p>
+                                            <p class="muted">about {{profileModal.activity.dateCreated | timeago}}</p>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
 
-                        <div ui-if="!auth.isAuthenticated">
-                            <div class="btn-group-border">
-                                <div class="btn-group bgc">
-                                    <a class="btn btn-success" ng-href="#/profiles/view/{{profile._id}}">Profile</a>
-                                </div>
+                        <div ng-repeat="profile in profiles">
+                            <div ng-include="'lib/profile/partials/singleProfile.html'"></div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="search-box members">
+                            <div class="header">
+                                <h4>SEARCH MEMBERS</h4>
+                            </div>
+                            <div class="form-container">
+                                <form ng-controller="searchProfiles" ng-submit="searchProfiles()">
+                                    <input type="text" ng-model="profileSearchQuery" placeholder="Search Members...">
+                                    <div class="btn-group-border"></div>
+                                    <div class="search-lens read-more gradient">
+                                        <div class="preview-lens"></div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <div class="profile-right">
-                        <h3 class="sans-serif">LATEST ACTIVITY:</h3>
-                        <p><i ng-bind-html-unsafe=profile.activity.message></i></p>
-                        <p class="muted">about {{profile.activity.dateCreated | timeago}}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="span3">
-            <div class="search-box members">
-                <div class="header">
-                    <h4>SEARCH MEMBERS</h4>
-                </div>
-                <div class="form-container">
-                    <form ng-controller="searchProfiles" ng-submit="searchProfiles()">
-                        <input type="text" ng-model="profileSearchQuery" placeholder="Search Members...">
-                        <div class="btn-group-border"></div>
-                        <div class="search-lens read-more gradient">
-                            <div class="preview-lens"></div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>

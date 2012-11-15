@@ -1,7 +1,21 @@
 'use strict';
-function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
-    var sortBy = 'featured';
-    var url = "api/article/search?sort=" + sortBy;
+function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $location ) {
+    var sortBy = $routeParams.sortBy || 'featured';
+    var category = $routeParams.service || '';
+
+    $scope.tabs = {
+        featured: true,
+        recent: false,
+        popular: false
+    };
+
+    if( ($routeParams) && ($routeParams.sortBy) ) {
+        sortBy = $routeParams.sortBy;
+        $scope.tabs.featured = false;
+        $scope.tabs[sortBy] = true;
+    }
+
+    var url = "api/article/search?sort=" + sortBy + "&category=" + category;
     $scope.filters = {};
     $scope.paging = {
         size: 10
@@ -45,6 +59,8 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
         {
             return;
         }
+        $scope.tabs[sortBy] = false;
+        $scope.tabs[param] = true;
         sortBy = param;
 
         $scope.search($scope.searchTerm);
@@ -75,7 +91,7 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
         term = term || "";
         resetPaging();
 
-        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy;
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category;
 
         loadContent();
     };
@@ -87,7 +103,7 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
         }
         term = term || "";
         $scope.paging.from += $scope.paging.size;
-        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size + "&sort=" + sortBy;
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size + "&sort=" + sortBy + "&category=" + category;
 
 
         $http.get( url ).success( function (data) {
@@ -127,8 +143,9 @@ function ListResources( $rootScope, $scope, $auth, $http, $log, $location ) {
 
     $scope.count = count;
 
-        $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
     $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
+    $rootScope.$on($auth.event.signinConfirmed, function() { loadContent(); });
+
     $scope.$on('$routeChangeSuccess', function(){
         if($location.path() === '/admin/articles'){
             $rootScope.banner = 'none';
@@ -181,7 +198,6 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     function loadAttachment() {
         var id = $scope.article.attachments[attachmentIndex];
         $http.get( 'api/article/' + id ).success( function (data) {
-            console.log("attachment RETURNED: ",data);
             $scope.modal = {
                 document: {
                     title: data.title,
@@ -236,5 +252,5 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     loadContent();
 }
 
-ListResources.$inject = ['$rootScope', '$scope', '$auth', '$http', '$log', '$location'];
+ListResources.$inject = ['$rootScope', '$scope', '$routeParams', '$auth', '$http', '$log', '$location'];
 ViewResource.$inject = ['$rootScope', '$scope', '$routeParams', '$auth', '$http', '$log'];
