@@ -193,18 +193,40 @@ angular.module('bgc.directives')
             require: 'ngModel',
             link: function(scope, elm, attr, ctrl) {
                 var pwdWidget = elm.inheritedData('$formController')[attr.passwordValidator];
+                jQuery('#'+attr.id).tooltip({
+                    trigger: 'manual',
+                    placement: 'right',
+                    title: 'Your passwords do not match'
+                });
 
                 ctrl.$parsers.push(function(value) {
                     if (value === pwdWidget.$viewValue) {
                         ctrl.$setValidity('MATCH', true);
                         return value;
                     }
+                    jQuery('#'+attr.id).tooltip('hide');
                     ctrl.$setValidity('MATCH', false);
                 });
 
                 pwdWidget.$parsers.push(function(value) {
                     ctrl.$setValidity('MATCH', value === ctrl.$viewValue);
                     return value;
+                });
+
+                elm.bind('blur', function(event){
+                    if(ctrl.$invalid){
+                        jQuery('#'+attr.id).tooltip('show');
+                    }
+                });
+
+                elm.bind('focus', function(event){
+                    return scope.$apply(function(){
+                        jQuery('#'+attr.id).tooltip('hide');
+                    });
+                });
+
+                scope.$on('cancelEdit', function(){
+                    jQuery('.tooltip').remove();
                 });
             }
         };
@@ -567,7 +589,7 @@ angular.module('bgc.directives')
                     an email not associated with an account
                 */
                 ctrl.$parsers.push(function(value){
-                    if(scope.$parent.$parent.master && scope.$parent.$parent.master.accountEmail.address === value){
+                    if(scope.master && scope.master.accountEmail.address === value){
                         ctrl.$setValidity('emailValidator', true);
                         return value;
                     }
@@ -710,6 +732,10 @@ angular.module('bgc.directives')
                         jQuery('#'+attrs.id).tooltip('hide');
                     });
                 });
+
+                scope.$on('cancelEdit', function(){
+                    jQuery('.tooltip').remove();
+                });
             }
         }
     }]);
@@ -767,6 +793,12 @@ angular.module('bgc.directives')
                     }
                     if(error.maxlength){
                         return 'This field requires a maximum of ' + attrs.ngMaxlength + ' characters';
+                    }
+                    if(error.pattern &&
+                        (attrs.id === "institution-year-started" || attrs.id === "education-year-started"
+                            || attrs.id === "institution-year-finished" ||  attrs.id === "education-year-finished")
+                        ){
+                        return 'This field will only accept year values between 1900 - 2100';
                     }
                 }
             }

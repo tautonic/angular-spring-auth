@@ -172,6 +172,8 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
                 $location.path('/error/404');
             }else{
                 $scope.profile = profile.content;
+                $scope.profile.newPass = '';
+                $scope.profile.newPassRepeat = '';
 
                 if(!$scope.profile.websites){
                     $scope.profile.websites = [{
@@ -231,6 +233,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     $scope.cancelEditing = function(param) {
         $scope.editing[param] = false;
         $scope.profile = angular.copy($scope.master);
+        $scope.$broadcast('cancelEdit');
     };
 
     $scope.updateProfile = function(profile, section){
@@ -244,8 +247,8 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     };
 
     $scope.updateGeneralInfo = function(profile){
-        if($scope.profile.newPassword !== ''){
-            profile.password = $scope.profile.newPassword;
+        if($scope.profile.newPass !== ''){
+            profile.password = $scope.profile.newPass;
         }
         Profile.update({profileId: profile._id}, profile, function(response){
             $scope.editing.general = false;
