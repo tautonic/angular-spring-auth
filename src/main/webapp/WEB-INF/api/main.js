@@ -225,7 +225,7 @@ app.get('/discussions/all', function(req) {
  * Returns a single discussion, in threaded format
  */
 app.get('/discussions/:id', function(req, id) {
-    var result = getDiscussion(id);
+    var result = getDiscussion(id, req.params);
 
     if(!result.success) {
         return {
@@ -239,7 +239,7 @@ app.get('/discussions/:id', function(req, id) {
 });
 
 app.get('/discussions/byParent/:id', function(req, id) {
-    var result = getDiscussionByParent(id);
+    var result = getDiscussionByParent(id, req.params);
 
     if(!result.success) {
         return json(false);
