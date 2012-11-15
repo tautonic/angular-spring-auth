@@ -2240,3 +2240,7 @@ li.search-result.members{
 .follower .premium {
     display: none;
 }
+
+.discussion-btn.btn-group > .btn{
+    font-size: 12px;
+}
