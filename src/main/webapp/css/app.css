@@ -2244,3 +2244,11 @@ li.search-result.members{
 .discussion-btn.btn-group > .btn{
     font-size: 12px;
 }
+
+.profile-crop-preview .btn-group-border{
+    margin-top: 1em;
+}
+
+.info.image .upload-progress{
+    margin-bottom: 1em;
+}
