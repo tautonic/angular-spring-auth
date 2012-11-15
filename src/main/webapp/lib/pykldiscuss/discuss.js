@@ -73,6 +73,8 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
 
 function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
     var url = 'api/discussions/';
+    var parentId;
+    var dataType = "discussion";
 
     $scope.hide = ($routeParams.articleId === null);
 
@@ -89,11 +91,14 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
 
         if ($routeParams) {
             $scope.pageType = $routeParams.discussionId;
+            parentId = $routeParams.discussionId;
 
             //this check is needed to handle things like discussions connected with articles
             if ($routeParams.articleId) {
                 $scope.pageType = "byParent/" + $routeParams.articleId;
                 $scope.reply.title = '';
+                dataType = "comment";
+                parentId = $routeParams.articleId; console.log("WE'RE IN AN ARTICLE: ",$routeParams);
             }
 
             url = url + $scope.pageType;
@@ -146,24 +151,26 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
         var replyArgs = {
             reply: '',
             title: '',
-            id: ''
+            id: '',
+            parentId: parentId,
+            dataType: dataType
         };
 
         //if we're replying to a single, solitary post
         if(post !== undefined) {
             replyArgs.reply = post.reply.message;
             replyArgs.title = "";
-            replyArgs.id = post._id;
+            replyArgs.threadId = post._id;
 
         } else {
             //otherwise, we're replying to a larger discussion
             replyArgs.reply = $scope.reply.message;
             replyArgs.title = $scope.reply.title;
-            replyArgs.id = $scope.discussion.threadId;
+            replyArgs.threadId = $scope.discussion.threadId;
         }
 
         var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
-
+         console.log("REPLYING:",replyArgs);
         $http.post(replyUrl, replyArgs).success(function (data) {
             if(post !== undefined) {
                 post.reply.show = false;
@@ -207,7 +214,6 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
         delete post.edited;
         post.edit = false;
         $http.put(url + "/" + post._id, post).success(function (data) {
-            console.log("edit saved successfully to server");
         });
     };
 
@@ -275,7 +281,8 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $location) {
     $scope.createDiscussion = function () {
         var newPost = {
             title:$scope.reply.title || "Article Discussion",
-            parentId:($routeParams.articleId || null),
+            parentId: ($routeParams.articleId || null),
+            dataType: ($routeParams.articleId) ? "comment" : "discussion",
             posts:[
                 {
                     message:$scope.reply.message
