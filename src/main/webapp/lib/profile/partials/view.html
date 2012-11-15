@@ -308,6 +308,36 @@
                 <div class="edit"><i class="icon-pencil"></i> Edit Profile Image</div>
             </h3>
 
+            <div class="profile-crop-preview">
+                <div class="clearfix container">
+                    <div class="row">
+                        <div class="span6">
+                            <div class="jcrop-holder full-size">
+                                <img id="image-crop" src="" alt="">
+                            </div>
+                        </div>
+                        <div class="span3">
+                            <div class="preview">
+                                <img id="crop-preview" src="" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div id="container">
+                    <br>
+                    <div id="filelist"></div>
+                    <br />
+                </div>-->
+
+                <div class="btn-group-border">
+                    <div class="btn-group bgc">
+                        <button id="save-crop" class="btn btn-success"><i class="icon-ok-circle icon-white"></i> Crop Image</button>
+                        <button id="cancel-crop" class="btn btn-success"><i class="icon-ban-circle icon-white"></i> Cancel Crop</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="clearfix">
                 <div class="edit-profile-thumb" thumbnail thumb=profile size="large" rotation="none" type="profile" />
 
@@ -323,30 +353,6 @@
                         <div class="btn-group bgc">
                             <button id="choose-files" class="btn btn-success"><i class="icon-folder-open icon-white"></i> Browse</button>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="profile-crop-preview">
-                <div class="clearfix">
-                    <div class="jcrop-holder full-size">
-                        <img id="image-crop" src="" alt="">
-                    </div>
-                    <div class="preview">
-                        <img id="crop-preview" src="" alt="">
-                    </div>
-                </div>
-
-                <div id="container">
-                    <br>
-                    <div id="filelist"></div>
-                    <br />
-                </div>
-
-                <div class="btn-group-border">
-                    <div class="btn-group bgc">
-                        <button id="save-crop" class="btn btn-success"><i class="icon-ok-circle icon-white"></i> Crop Image</button>
-                        <button id="cancel-crop" class="btn btn-success"><i class="icon-ban-circle icon-white"></i> Cancel Crop</button>
                     </div>
                 </div>
             </div>

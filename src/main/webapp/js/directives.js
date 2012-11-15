@@ -415,10 +415,10 @@ angular.module('bgc.directives')
                 scope: scope,
                 runtimes: 'html5',
                 browse_button: 'choose-files',
-                container:'container',
+                //container:'container',
                 url: '/gc/api/profiles/images/upload/',
                 max_file_size:'100mb',
-                resize:{width:320, height:240, quality:90},
+                resize:{width:'100%', quality:90},
                 flash_swf_url:'../js/plupload.flash.swf',
                 silverlight_xap_url:'../js/plupload.silverlight.xap',
                 filters:[
@@ -442,9 +442,21 @@ angular.module('bgc.directives')
             var uploader = new plupload.Uploader(config);
 
             uploader.bind('FilesAdded', function (up, files) {
-                for (var i in files) {
+                /*for (var i in files) {
                     $$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
-                }
+                }*/
+
+                var progress = '<br><div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
+                                       <div id="block-2" class="little-block"></div> \
+                                       <div id="block-3" class="little-block"></div> \
+                                       <div id="block-4" class="little-block"></div> \
+                                       <div id="block-5" class="little-block"></div> \
+                                       <div id="block-6" class="little-block"></div> \
+                                       <div id="block-7" class="little-block"></div> \
+                                       <div id="block-8" class="little-block"></div> \
+                                       <div id="block-9" class="little-block"></div></div>'
+
+                jQuery('.info.image').prepend(progress);
 
                 setTimeout(function () {
                     uploader.start();
@@ -456,9 +468,9 @@ angular.module('bgc.directives')
             });
 
 
-            uploader.bind('UploadProgress', function (up, file) {
+            /*uploader.bind('UploadProgress', function (up, file) {
                 $$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-            });
+            });*/
 
             var url;
 
@@ -475,7 +487,7 @@ angular.module('bgc.directives')
 
             uploader.bind('UploadComplete', function(uploader, file){
                 //$('#image-crop').attr('src', url);
-
+                $('.upload-progress').hide();
                 $('.profile-crop-preview').show();
 
                 cancelCropBtn = angular.element('#cancel-crop');
@@ -485,12 +497,12 @@ angular.module('bgc.directives')
 
                 $('#image-crop').attr('src', url);
 
-                $('#crop-preview').attr('src', url);
+                //$('#crop-preview').attr('src', url);
 
                 $('#image-crop').Jcrop({
                     bgColor: '#fff',
-                    onChange: showPreview,
-                    onSelect: showPreview,
+                    //onChange: showPreview,
+                    //onSelect: showPreview,
                     aspectRatio: 1
                 }, function(){
                     jcropApi = this;
@@ -501,6 +513,7 @@ angular.module('bgc.directives')
                 });
 
                 saveCropBtn.bind('click', function(){
+                    $('.upload-progress').show();
                     var rxp = /^.*cms\//;
                     var assetKey = url;
 
@@ -523,10 +536,12 @@ angular.module('bgc.directives')
 
                     $http.post('/gc/api/profiles/images/crop/', data).success(
                         function(data, status, headers, config){
+                            $('.upload-progress').hide();
                             var uri = data.content.uri;
                             uri = uri.replace(/http:/, '');
                             profile.thumbnail = uri;
                             scope.$parent.updateThumbnailUri(profile);
+                            scope.apply();
                             //$('.new-picture-frame.profile-thumbnail img').attr('src', uri);
                         }).error(
                         function(){
@@ -534,16 +549,15 @@ angular.module('bgc.directives')
                         }
                     );
 
-
-                    height = $('#image-crop').height();
-                    width = $('#image-crop').width();
+                    //height = $('#image-crop').height();
+                    //width = $('#image-crop').width();
 
                     $('.profile-crop-preview').hide();
                 });
 
                 function showPreview(coords){
-                    var rx = 100 / coords.w;
-                    var ry = 100 / coords.h;
+                    var rx = 135 / coords.w;
+                    var ry = 135 / coords.h;
 
                     $('#crop-preview').css({
                         width: Math.round(rx * width) + 'px',
