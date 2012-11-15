@@ -208,9 +208,9 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         }
     );
 
-    $scope.updateContactInfo = function(profile){
+    $scope.updateContactInfo = function(profile, scope){
         Profile.update({profileId: profile._id}, profile, function(response){   console.log("UPDATE CONTACT INFO RESPONSE IS: ",response);
-            $scope.showHideContact = false;
+            scope.$parent.showHideContact = false;
             //$scope.profile = response;
             $scope.responseContent = response;
             $scope.master = angular.copy($scope.profile);
@@ -221,8 +221,8 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     };
 
     $scope.cancelContactInfoUpdate = function(scope){
-        scope.showHideContact = false;
-        $scope.profile = $scope.master;
+        scope.$parent.showHideContact = false;
+        $scope.$parent.$parent.profile = $scope.master;
     };
 
     $scope.updateGeneralInfo = function(profile){

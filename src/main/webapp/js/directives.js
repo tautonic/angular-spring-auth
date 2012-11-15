@@ -567,7 +567,7 @@ angular.module('bgc.directives')
                     an email not associated with an account
                 */
                 ctrl.$parsers.push(function(value){
-                    if(scope.master && scope.master.accountEmail.address === value){
+                    if(scope.$parent.$parent.master && scope.$parent.$parent.master.accountEmail.address === value){
                         ctrl.$setValidity('emailValidator', true);
                         return value;
                     }
@@ -623,7 +623,7 @@ angular.module('bgc.directives')
                     });
                 });
 
-                scope.$on('$routeChangeStart', function(){
+                scope.$on('cancelEdit', function(){
                     jQuery('.tooltip').remove();
                 });
             }
