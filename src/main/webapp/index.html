@@ -124,7 +124,7 @@
                 <a class="logo" ng-href="#/home"><img src="images/GCEE_image_GCEE.png"></a>
                 <ul class="gradient menu">
                     <li><a ng-href="#/home/" x-cms="menu_1">{{cms.content}}</a></li>
-                    <li><a ng-href="#/faculty/" x-cms="menu_2">{{cms.content}}</a></li>
+                    <li><a ng-href="#/summit/" x-cms="menu_2">{{cms.content}}</a></li>
                     <li><a ng-href="#/content/" x-cms="menu_3">{{cms.content}}</a></li>
                     <li><a ng-href="#/network/discussion/list" x-cms="menu_4">{{cms.content}}</a></li>
                     <pykl-login ng-controller="LoginWatch"></pykl-login>
@@ -144,8 +144,8 @@
 
             <div ng-switch on="banner">
                 <div ng-switch-when="none"></div>
-                <div ng-switch-when="faculty">
-                    <div ng-include src="'partials/faculty-fellows-banner.html'"></div>
+                <div ng-switch-when="summit">
+                    <div ng-include src="'partials/annual-summit-banner.html'"></div>
                 </div>
                 <div ng-switch-when="curriculum">
                     <div ng-include src="'partials/curriculum-content-banner.html'"></div>
@@ -166,6 +166,9 @@
 
 <div ng-switch on="about">
     <div ng-switch-when="none"></div>
+    <div ng-switch-when="summit">
+        <div ng-include src="'partials/annual-summit-about.html'" ng-controller="annualSummitController"></div>
+    </div>
     <div ng-switch-when="network">
         <div ng-include src="'partials/network-about.html'"></div>
     </div>

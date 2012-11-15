@@ -13,9 +13,12 @@
         $routeProvider.when( '/msce', {
 			templateUrl: 'partials/msce.html'
         } );
-        $routeProvider.when( '/faculty', {
-			templateUrl: 'partials/faculty.html',
-            controller: 'facultyFellows'
+
+        //the annual summit is actually a resource listing, but with a different about section and header stuff
+        //and the category is 'summit'
+        $routeProvider.when( '/summit', {
+            templateUrl: 'lib/pyklresource/index.html',
+            controller: 'ListResources'
         } );
 
         //services and programs section. mostly articles

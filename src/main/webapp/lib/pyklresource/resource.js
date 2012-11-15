@@ -35,7 +35,11 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         if($location.path() === '/admin/articles'){
             $rootScope.banner = 'none';
             $rootScope.about = 'none';
-        }else{
+        } else if($location.path() === '/summit') {
+            $rootScope.banner = 'summit';
+            $rootScope.about = 'summit';
+            category = 'summit';
+        } else {
             $rootScope.banner = 'curriculum';
             $rootScope.about = 'curriculum';
         }
@@ -150,7 +154,11 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         if($location.path() === '/admin/articles'){
             $rootScope.banner = 'none';
             $rootScope.about = 'none';
-        }else{
+        } else if($location.path() === '/summit') {
+            $rootScope.banner = 'summit';
+            $rootScope.about = 'summit';
+            category = 'summit';
+        } else {
             $rootScope.banner = 'curriculum';
             $rootScope.about = 'curriculum';
         }

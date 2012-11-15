@@ -55,11 +55,8 @@ function searchDiscussionsController($scope, $location){
     }
 }
 
-function facultyFellows($rootScope, $scope){
-    $scope.$on('$routeChangeSuccess', function(){
-        $rootScope.banner = 'faculty';
-        $rootScope.about = 'none';
-    });
+function annualSummitController($rootScope, $scope){
+    //add stuff to handle the gallery/lightbox type thing here
 }
 
 function errorController($rootScope, $scope){
