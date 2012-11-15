@@ -1,7 +1,12 @@
 'use strict';
 
 function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
-    var url = 'api/discussions/all';
+    $scope.paging = {
+        size: 5
+    };
+
+    resetPaging();
+    var url = "api/discussions/all?from=" + $scope.paging.from + "&size=" + $scope.paging.size;
 
     setupScope();
     loadContent();
@@ -28,7 +33,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
             return;
         }
         $http.get(url).success(function (data) {
-            if (data !== "false") {   console.log("DISCUSSIONS LOADED THIS: ",data);
+            if (data !== "false") {
                 $scope.discussion = data;
                 $scope.isLoaded = true;
             } else {
@@ -68,6 +73,35 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
         });
     };
 
+    $scope.loadMore = function(term) {
+        //if there's no more pages to load
+        if(!$scope.paging.more) {
+            return;
+        }
+        term = term || "";
+        $scope.paging.from += $scope.paging.size;
+        url = "api/discussions/all?from=" + $scope.paging.from + "&size=" + $scope.paging.size;
+
+
+        $http.get( url ).success( function (data) {
+            if(data !== "false") {
+                if(data.length === 0) {
+                    $scope.paging.more = false;
+                } else {
+                    $scope.discussion = $scope.discussion.concat(data);
+                }
+            } else {
+                $log.info("ERROR getting discussions.");
+            }
+        }).error(function(data, status) {
+                $log.info("ERROR retrieving discussions: "+data+" status: "+status);
+            });
+    };
+
+    function resetPaging() {
+        $scope.paging.from = 0;
+        $scope.paging.more = true;
+    }
 }
 
 

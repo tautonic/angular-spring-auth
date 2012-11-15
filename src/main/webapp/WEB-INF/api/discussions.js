@@ -81,9 +81,11 @@ var getDiscussionByParent = function(parentId) {
     return getDiscussion(threadId);
 };
 
-var getDiscussionList = function() {
+var getDiscussionList = function(params) {
+    var url = "http://localhost:9300/myapp/api/posts/?from=" + params.from + "&size=" + params.size;
+
     var opts = {
-        url: 'http://localhost:9300/myapp/api/posts/',
+        url: url,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -254,7 +256,6 @@ function countComments(post) {
 }
 
 function generateBasicAuthorization(user) {
-    log.debug("Hash Pass?: " + user.password);
     var header = user.username + ":" + user.password;
     var base64 = encode(header);
     return 'Basic ' + base64;

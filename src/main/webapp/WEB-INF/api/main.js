@@ -200,8 +200,8 @@ app.del('/admin/articles/:id', function(req, id){
 /**
  * Returns a list of discussion topics
  */
-app.get('/discussions/all', function(req, id) {
-    var discussions = getDiscussionList().content;
+app.get('/discussions/all', function(req) {
+    var discussions = getDiscussionList(req.params).content;
 
     discussions.forEach(function(discussion) {
         if(discussion.parentId) {
