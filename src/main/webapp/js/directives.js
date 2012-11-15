@@ -527,7 +527,7 @@ angular.module('bgc.directives')
                             uri = uri.replace(/http:/, '');
                             profile.thumbnail = uri;
                             scope.$parent.updateThumbnailUri(profile);
-                            $('.new-picture-frame.profile-thumbnail img').attr('src', uri);
+                            //$('.new-picture-frame.profile-thumbnail img').attr('src', uri);
                         }).error(
                         function(){
                             console.log('Image crop error!');
