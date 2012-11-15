@@ -200,8 +200,8 @@ app.del('/admin/articles/:id', function(req, id){
 /**
  * Returns a list of discussion topics
  */
-app.get('/discussions/all', function(req, id) {
-    var discussions = getDiscussionList().content;
+app.get('/discussions/all', function(req) {
+    var discussions = getDiscussionList(req.params).content;
 
     discussions.forEach(function(discussion) {
         if(discussion.parentId) {
@@ -225,7 +225,7 @@ app.get('/discussions/all', function(req, id) {
  * Returns a single discussion, in threaded format
  */
 app.get('/discussions/:id', function(req, id) {
-    var result = getDiscussion(id);
+    var result = getDiscussion(id, req.params);
 
     if(!result.success) {
         return {
@@ -239,7 +239,7 @@ app.get('/discussions/:id', function(req, id) {
 });
 
 app.get('/discussions/byParent/:id', function(req, id) {
-    var result = getDiscussionByParent(id);
+    var result = getDiscussionByParent(id, req.params);
 
     if(!result.success) {
         return json(false);

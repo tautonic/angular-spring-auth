@@ -2,7 +2,7 @@ var httpclient = require('ringo/httpclient');
 var {Headers} = require('ringo/utils/http');
 var {encode} = require('ringo/base64');
 
-var getDiscussion = function(id) {
+var getDiscussion = function(id, params) {
     if(id == "new")
     {
         return {
@@ -12,8 +12,15 @@ var getDiscussion = function(id) {
         }
     }
 
+    var url = "http://localhost:9300/myapp/api/posts/" + id + "/threads";
+
+    if((params.from) && (params.size))
+    {
+        url += "?from=" + params.from + "&size=" + params.size;
+    }
+
     var opts = {
-        url: "http://localhost:9300/myapp/api/posts/" + id + "/threads",
+        url: url,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -46,7 +53,7 @@ var getDiscussion = function(id) {
     };
 };
 
-var getDiscussionByParent = function(parentId) {
+var getDiscussionByParent = function(parentId, params) {
     var query = {
         "query": {
             "bool": {
@@ -57,6 +64,15 @@ var getDiscussionByParent = function(parentId) {
         },
         "sort": [ { "dateCreated": "desc" } ]
     };
+
+    var from = params.from;
+    var size = params.size;
+
+    if(from && size)
+    {
+        query.from = from;
+        query.size = size;
+    }
 
     var opts = {
         url: "http://localhost:9300/myapp/api/posts/search",
@@ -81,9 +97,11 @@ var getDiscussionByParent = function(parentId) {
     return getDiscussion(threadId);
 };
 
-var getDiscussionList = function() {
+var getDiscussionList = function(params) {
+    var url = "http://localhost:9300/myapp/api/posts/?from=" + params.from + "&size=" + params.size;
+
     var opts = {
-        url: 'http://localhost:9300/myapp/api/posts/',
+        url: url,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -254,7 +272,6 @@ function countComments(post) {
 }
 
 function generateBasicAuthorization(user) {
-    log.debug("Hash Pass?: " + user.password);
     var header = user.username + ":" + user.password;
     var base64 = encode(header);
     return 'Basic ' + base64;
