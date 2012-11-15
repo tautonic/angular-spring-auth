@@ -105,7 +105,7 @@ var getDiscussionList = function() {
     //number of replies/comments
     threads.forEach(function(thread){
         opts = {
-            url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread._id + '&types=discussion',
+            url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread._id + '&types=' + thread.type,
             method: 'GET',
             headers: Headers({ 'x-rt-index': 'gc' }),
             async: false
@@ -129,8 +129,9 @@ var addReply = function(parentId, reply, user) {
     var data = {
         "dataType": "posts",
         "dateCreated": "",
-        "threadId": reply.id,
-        "type": "discussion",
+        "threadId": reply.threadId,
+        "parentId": reply.parentId,
+        "type": reply.dataType,
         "creator":{
             "_id": user.principal.id,
             "username": user.username,
@@ -149,7 +150,7 @@ var addReply = function(parentId, reply, user) {
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/posts/'+reply.id,
+        url: 'http://localhost:9300/myapp/api/posts/'+reply.parentId,
         method: 'POST',
         data: JSON.stringify(data),
         headers: headers,
@@ -169,7 +170,7 @@ var createDiscussion = function(firstPost, user) {
         "dataType": "posts",
         "dateCreated": "",
         "parentId": firstPost.parentId,
-        "type": "discussion",
+        "type": firstPost.dataType,
         "creator":{
             "_id": user.principal.id,
             "username": user.username,
@@ -216,7 +217,7 @@ var editDiscussionPost = function(id, postId, postContent, user) {
         "dataType": "posts",
         "dateCreated": postContent.dateCreated,
         "parentId": postContent.parentId,
-        "type": "discussion",
+        "type": postContent.dataType,
         "creator": postContent.creator,
         "title": postContent.title,
         "message": postContent.message,

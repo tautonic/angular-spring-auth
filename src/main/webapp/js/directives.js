@@ -1016,7 +1016,9 @@ angular.module('bgc.directives').directive('reloadTwitterBtns', function(){
         compile: function compile() {
             return {
                 post: function(){
-                    twttr.widgets.load();
+                    if(twttr !== undefined) {
+                        twttr.widgets.load();
+                    }
                 }
             }
         }
