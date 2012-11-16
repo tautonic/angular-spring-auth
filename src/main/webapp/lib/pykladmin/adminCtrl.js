@@ -155,6 +155,7 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
 function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $location, Article){
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
+    $scope.resetStatus = "none";
 
     $scope.location = $location;
 
@@ -210,7 +211,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         }
 
         Article.update({articleId: article._id}, article, function(response){
-            $location.path('/content/view/' + article._id);
+            $scope.resetStatus = (response.success) ? "success" : "error";
         }, function(response){
             console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });

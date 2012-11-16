@@ -14,9 +14,11 @@ var getDiscussion = function(id, params) {
 
     var url = "http://localhost:9300/myapp/api/posts/" + id + "/threads";
 
-    if((params.from) && (params.size))
-    {
-        url += "?from=" + params.from + "&size=" + params.size;
+    if(params !== "undefined") {
+        if((params.from) && (params.size))
+        {
+            url += "?from=" + params.from + "&size=" + params.size;
+        }
     }
 
     var opts = {

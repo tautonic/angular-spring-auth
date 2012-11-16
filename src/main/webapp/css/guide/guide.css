@@ -825,6 +825,10 @@ textarea{
     position: relative;
 }
 
+.admin .profile-list-item.profile {
+    margin-bottom: 10px;
+}
+
 .profile-modal .center h3:nth-child(1),
 .edit-profile-header .right h3,
 .profile-list-item.profile .right h3{
