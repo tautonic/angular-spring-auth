@@ -838,11 +838,6 @@ ul.dropdown-menu li:last-child a {
     top: -0.6em;
 }
 
-.admin .profile-list-item .profile-thumbnail {
-    left: 10px;
-    top: 10px;
-}
-
 .profile-list-item .profile-right p{
     line-height: 20px;
     margin: 0;
@@ -880,6 +875,16 @@ ul.dropdown-menu li:last-child a {
     -webkit-transform: none;
     -o-transform: none;
     -moz-transform: none;
+}
+
+.admin .profile-list-item .profile-thumbnail.large {
+    width: 120px;
+    height: 130px;
+}
+
+.admin .profile-list-item .profile-thumbnail.large img {
+    width: 100px;
+    height: 100px;
 }
 
 .profile-thumbnail.large{    
