@@ -210,6 +210,8 @@ app.get('/discussions/all', function(req) {
             if(linked) {
                 discussion.linkedItem = linked.content;
                 discussion.linkedItem.exists = true;
+                discussion.commentCount = linked.content.comments;
+                discussion.link = "#/content/view/" + linked.content._id;
             } else {
                 discussion.linkedItem = { "exists": false };
             }
@@ -522,7 +524,8 @@ app.post('/profiles/', function(req){
         },
         "workHistory" : req.postParams.workHistory,
         "educationHistory" : req.postParams.educationHistory,
-        "thumbnail": req.postParams.thumbnail
+        "thumbnail": req.postParams.thumbnail,
+        "status": "unverified"
     };
 
     data.source = 'GC';

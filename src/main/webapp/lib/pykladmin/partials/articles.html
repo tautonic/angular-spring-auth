@@ -17,9 +17,9 @@
                                 <p class="article-brief">{{article.description}}</p>
 
                                 <ul class="article-stats">
-                                    <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
-                                    <li class="muted"><i class="views"></i> {{article.views}} Views</li>
-                                    <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
+                                    <li class="muted"><i class="likes"></i> {{article.likes | pluralize:'Like'}}</li>
+                                    <li class="muted"><i class="views"></i> {{article.views | pluralize:'View'}}</li>
+                                    <li class="muted"><i class="comments"></i> {{article.comments | pluralize:'Comment'}}</li>
                                     <li class="muted">Category: <a ng-href="#/content/service/{{article.category}}">{{article.category}}</a></li>
                                 </ul>
 

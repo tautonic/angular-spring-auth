@@ -6,7 +6,7 @@
                     <ul class="search-results-list">
                         <li class="search-result members" ng-repeat="profile in profiles">
                             <div class="profile-list-item profile grey-gradient clearfix">
-                                <div thumbnail thumb=profile._source size="medium" rotation="counter-clockwise" type="profile" />
+                                <div thumbnail thumb=profile._source size="large" rotation="counter-clockwise" type="profile" />
                                 <div class="profile-left">
                                     <a ng-href="#/profiles/view/{{profile._source._id}}"><h3>{{profile._source.name.given}} {{profile._source.name.surname}}</h3></a>
                                     <h5>{{profile._source.workHistory[0].title}}</h5>

@@ -5,14 +5,14 @@
                 <div class="discussion-stack-container" ng-hide="post.hidden">
                     <div discussion-stack comments={{post.commentCount}} class="discussion-item grey-gradient">
 
-                        <a ng-href="#/network/discussion/view/{{post._id}}" class="author"><h4>{{post.title}}</h4></a>
+                        <a ng-href="{{post.link}}" class="author"><h4>{{post.title}}</h4></a>
                         <h6>By <a ng-href="#/profiles/view/{{post.creator._id}}" class="author">{{post.creator.username}}</a>, {{post.dateCreated | asDate: 'fullDate'}}</h6>
                         <p class="muted" ng-show="post.linkedItem.exists"><strong>Document:</strong> <a href="#/content/view/{{post.linkedItem._id}}" class="author">{{post.linkedItem.title}}</a></p>
 
                         <ul class="article-stats">
-                            <li class="muted"><i class="likes"></i> {{post.likes}} Likes</li>
-                            <li class="muted"><i class="views"></i> {{post.views}} Views</li>
-                            <li class="muted"><i class="comments"></i> {{post.commentCount}} Comments</li>
+                            <li class="muted"><i class="likes"></i> {{post.likes | pluralize:'Like'}}</li>
+                            <li class="muted"><i class="views"></i> {{post.views | pluralize:'View'}}</li>
+                            <li class="muted"><i class="comments"></i> {{post.commentCount | pluralize:'Comment'}}</li>
                             <li class="muted"><spam objectid="{{post._id}}"></spam></li>
                         </ul>
                     </div>

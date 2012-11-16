@@ -14,12 +14,12 @@ var getDiscussion = function(id, params) {
 
     var url = "http://localhost:9300/myapp/api/posts/" + id + "/threads";
 
-    if(params !== "undefined") {
+    /*if(params !== "undefined") {
         if((params.from) && (params.size))
         {
             url += "?from=" + params.from + "&size=" + params.size;
         }
-    }
+    }*/
 
     var opts = {
         url: url,
@@ -100,7 +100,7 @@ var getDiscussionByParent = function(parentId, params) {
 };
 
 var getDiscussionList = function(params) {
-    var url = "http://localhost:9300/myapp/api/posts/?from=" + params.from + "&size=" + params.size;
+    var url = "http://localhost:9300/myapp/api/posts/filtered?from=" + params.from + "&size=" + params.size;
 
     var opts = {
         url: url,
@@ -112,17 +112,11 @@ var getDiscussionList = function(params) {
     var exchange = httpclient.request(opts);
 
     //this mostly filters discussions that don't have titles, which mostly relates to replies on discussions
-    var threads = JSON.parse(exchange.content).filter(function(element) {
-        return !(element.title === "");
-    });
-
-    //filters out spam threads
-    threads.forEach(function(element) {
-        element.hidden = (element.spam >= 3);
-    });
+    var threads = JSON.parse(exchange.content);
 
     //loop through each thread and add an attribute that contains the
     //number of replies/comments
+    //and hides spam threads
     threads.forEach(function(thread){
         opts = {
             url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread._id + '&types=' + thread.type,
@@ -133,7 +127,11 @@ var getDiscussionList = function(params) {
 
         exchange = httpclient.request(opts);
 
-        thread.commentCount = JSON.parse(exchange.content).count;//countComments(thread);
+        thread.commentCount = JSON.parse(exchange.content).count;
+
+        thread.hidden = (thread.spam >= 3);
+
+        thread.link = "#/network/discussion/view/" + thread._id;
     });
 
 
