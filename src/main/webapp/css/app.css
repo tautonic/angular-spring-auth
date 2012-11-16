@@ -2252,3 +2252,57 @@ li.search-result.members{
 .info.image .upload-progress{
     margin-bottom: 1em;
 }
+
+.summit-slide-show-container{
+    background: url("../images/GCEE_image_annualSummit_imageSlider_bg.jpg") no-repeat top left;
+    height: 335px;
+    padding-top: 2em;
+    /*border-left: 2px solid #006644;
+    border-right: 2px solid #006644*/;
+}
+
+.summit-slide-show{
+    position: relative;
+    width: 300px;
+    margin: 0 auto;
+    z-index: 20;
+}
+
+.transparent {
+    zoom: 1;
+    filter: alpha(opacity=50);
+    opacity: 0.2;
+}
+
+.about-section-mesh.summit{
+    padding-bottom: 0;
+}
+
+.summit-slide-description{
+    font-style: italic;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.slide-thumbnail img{
+    width: 280px;
+}
+
+.slide-navigation{
+    /*position: absolute;
+    top: -5em;
+    left: 26.7em;
+    z-index: -1;*/
+    width: 300px;
+}
+
+.slide-navigation .forward.read-more,
+.slide-navigation .backward.read-more{
+    height: 33px;
+    width: 1px;
+    float: right;
+}
+
+.slide-navigation .backward.read-more{
+    float: left;
+}
