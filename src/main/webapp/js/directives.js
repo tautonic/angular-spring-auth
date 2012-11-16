@@ -1203,6 +1203,31 @@ angular.module('bgc.directives').directive('adminDeleteUser', ['Profile', functi
     }
 }]);
 
+angular.module('bgc.directives').directive('adminDeactivateUser', ['Profile', function(Profile){
+    return {
+        restrict: 'A',
+        link: function(scope, elm, attrs){
+            var attrs = attrs;
+            var check = false;
+            elm.bind('click', function(){
+                if(!check) {
+                    elm.html('<i class="icon-question-sign icon-white"></i> Are You Sure?');
+                    check = true;
+                    return;
+                }
+
+                var user = JSON.parse(attrs.user);
+                user.status = "unverified";
+
+                //var userId = attrs.userid
+                var profile = Profile.update({profileId:user._id}, user, function(){
+                    elm.parents('.btn-group-border').removeClass('btn-group-border').html("<p>This user is now deactivated</p>");
+                });
+            });
+        }
+    }
+}]);
+
 angular.module('bgc.directives').directive('adminDeleteArticle', ['Article', function(Article){
     return {
         restrict: 'A',
@@ -1241,7 +1266,7 @@ angular.module('bgc.directives').directive('adminResetPassword', ['$http', funct
                 }
                 var data = {
                     profileEmail: attrs.email
-                }
+                };
 
                 $http.post('/gc/api/utility/resettoken/', data)
                     .success(function(data, status, headers, config){

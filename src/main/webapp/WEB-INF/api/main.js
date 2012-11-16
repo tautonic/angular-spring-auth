@@ -735,6 +735,13 @@ app.put('/profiles/:id', function(req, id){
     delete data.newPass;
     delete data.newPassRepeat;
 
+    if(req.postParams.status === "unverified") {
+        var servletRequest = req.env.servletRequest;
+        if(servletRequest.isUserInRole('ROLE_ADMIN')) {
+            data.status = "unverified";
+        }
+    }
+
     log.info('PROFILE UPDATE PARAMS ' + JSON.stringify(req.postParams, null, 4));
     var opts = {
         url: 'http://localhost:9300/myapp/api/profiles/' + id,
