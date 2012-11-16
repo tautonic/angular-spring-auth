@@ -1459,3 +1459,22 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
         }
     }
 }]);
+
+angular.module('bgc.directives').directive('slideShow', function(){
+    return{
+        restrict: 'A',
+        scope: {
+            //images: '='
+        },
+        templateUrl: 'partials/slideshow-template.html',
+        link: function(scope, elm, attrs){
+            $('.summit-slide-show').slides({
+                container: 'slides',
+                next: 'forward',
+                prev: 'backward',
+                pagination: false,
+                generatePagination: false
+            });
+        }
+    }
+});
