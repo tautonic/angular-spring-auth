@@ -5,7 +5,6 @@ var httpclient = require('ringo/httpclient');
 var {Headers} = require('ringo/utils/http');
 
 var {getArticle} = require('articles');
-var {getDiscussion} = require('discussions');
 
 var {trimpathString} = require('trimpath');
 
@@ -55,6 +54,28 @@ var text = {
     "notifications-activity.ufsp.profiles": "${actorLink} stopped following ${directLink}.",
     "notifications-activity.ufsp.services": "${actorLink} stopped following ${directLink}."
 };
+
+function getDiscussion(id) {
+    var opts = {
+        url: "http://localhost:9300/myapp/api/posts/" + id,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    if(Math.floor(exchange.status / 100) !== 2) { console.log("DSICSSISON NOT FOUND");
+        return {
+            'status': 404,
+            'content': JSON.parse(exchange.status),
+            'headers': exchange.headers,
+            'success': Math.floor(exchange.status / 100) === 2
+        }
+    }
+
+    return JSON.parse(exchange.content);
+}
 
 var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
     var result = {};
@@ -242,8 +263,8 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         if(about._id != about.parentId) {
                             // Get the discussion root
                             var discussion = getDiscussion(about.parentId);
-                            linkText = "a reply to " + discussion.content[0].title;
-                            linkId = discussion.content[0]._id
+                            linkText = "a reply to " + discussion.title;
+                            linkId = discussion._id
                         }
                         break;
                     default: break;
@@ -268,7 +289,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
 
                         if(linkText === ''){
                             var discussion = getDiscussion(direct._id);
-                            linkText = discussion.content[0].title;
+                            linkText = discussion.title;
                         }
 
                         // If the "about" object is a venture, this means the discussion is "private"
@@ -286,6 +307,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         } else if (about && about.dataType === "posts") {
                             // Get the discussion root
                             var discussion = getDiscussion(about._id);
+                            linkText = discussion.title;
                         }
                         break;
                     case 'ventures':
