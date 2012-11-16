@@ -2303,6 +2303,7 @@ li.search-result.members{
 
 .slide-thumbnail img{
     width: 280px;
+    padding-right: 1em;
 }
 
 .slide-navigation{
@@ -2310,7 +2311,7 @@ li.search-result.members{
     top: 6.2em;
     left: -1.4em;
     z-index: -1;
-    width: 334px;
+    width: 341px;
 }
 
 .slide-navigation .forward.read-more,
@@ -2324,11 +2325,22 @@ li.search-result.members{
 
 .backward .read-more-arrow{
     left: -1px;
+/*
     border-width: 5px 8.7px 5px 0;
+*/
+    -moz-transform: scale(1) rotate(180deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -webkit-transform: scale(1) rotate(180deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -o-transform: scale(1) rotate(180deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    -ms-transform: scale(1) rotate(180deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+    transform: scale(1) rotate(180deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
 }
 
 .slide-navigation .read-more-arrow{
     top: 17px;
+}
+
+.slide-navigation .forward .read-more-arrow{
+    right: 10px;
 }
 
 .slide-navigation .backward.read-more{

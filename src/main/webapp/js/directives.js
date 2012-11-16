@@ -1468,6 +1468,13 @@ angular.module('bgc.directives').directive('slideShow', function(){
         },
         templateUrl: 'partials/slideshow-template.html',
         link: function(scope, elm, attrs){
+            var options = scope.$eval(attrs.slideShow);
+            if(attrs.slideShow){
+                if(options.images){
+                    scope.images = options.images;
+                }
+            }
+            //scope.images =
             $('.summit-slide-show').slides({
                 container: 'slides',
                 next: 'forward',
