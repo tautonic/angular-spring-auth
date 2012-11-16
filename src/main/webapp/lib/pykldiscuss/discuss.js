@@ -118,7 +118,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
 
     $scope.hide = ($routeParams.articleId === null);
 
-    resetPaging();
+    //resetPaging();
     setupScope();
     loadContent();
 
