@@ -2304,6 +2304,7 @@ li.search-result.members{
 .slide-thumbnail img{
     width: 280px;
     padding-right: 1em;
+    cursor: pointer;
 }
 
 .slide-navigation{
@@ -2362,3 +2363,48 @@ li.search-result.members{
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
+
+.slideshow-modal{
+    padding: 1em;
+}
+
+.slideshow-thumbs{
+    margin: 1em 0 2em 0;
+}
+
+.slideshow-thumbs .thumbs{
+    margin: 0
+}
+
+.thumbs li{
+    float: left;
+    list-style-type: none;
+    margin-right: 15px;
+    width: 134px;
+    height: 100px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.thumbs li img{
+    max-width: 180%;
+}
+
+.thumbs li:last-child{
+    margin-right: 0;
+}
+
+.thumb.active-thumb{
+    border: solid 4px #eeaf00;
+}
+
+.slideshow-paging{
+    margin-top: 1em;
+    text-align: right;
+}
+
+.slideshow-modal p.modal-caption{
+    margin: 1em 0;
+    color: #000;
+}
+

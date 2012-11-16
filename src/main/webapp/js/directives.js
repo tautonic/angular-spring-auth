@@ -1460,7 +1460,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
     }
 }]);
 
-angular.module('bgc.directives').directive('slideShow', function(){
+angular.module('bgc.directives').directive('slideShow', ['$log', function($log){
     return{
         restrict: 'A',
         scope: {
@@ -1479,6 +1479,30 @@ angular.module('bgc.directives').directive('slideShow', function(){
                 container: 'slides',
                 next: 'forward',
                 prev: 'backward',
+                pagination: false,
+                generatePagination: false
+            });
+
+            scope.showSlideshowModal = false;
+
+            scope.slideshowModal = function(image){
+                $log.info('Showing modal with image: ' + image);
+                scope.showSlideshowModal = true;
+            }
+        }
+    }
+}]);
+
+angular.module('bgc.directives').directive('slideShowModal', function(){
+    return {
+        restrict: 'A',
+        scope: {},
+        templateUrl: 'partials/slideshow-modal-template.html',
+        link: function(scope, elm, attrs){
+            $('.slideshow-thumbs').slides({
+                container: 'slides',
+                next: 'modal-forward',
+                prev: 'modal-backward',
                 pagination: false,
                 generatePagination: false
             });
