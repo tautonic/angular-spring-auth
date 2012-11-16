@@ -42,7 +42,7 @@ var searchAllArticles = function(params) {
     }
 
     if(params.term) {
-            query = {
+        query = {
             "bool": {
                 "should": [
                     { "field": { "title": params.term } },
