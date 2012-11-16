@@ -210,6 +210,7 @@ app.get('/discussions/all', function(req) {
             if(linked) {
                 discussion.linkedItem = linked.content;
                 discussion.linkedItem.exists = true;
+                discussion.commentCount = linked.content.comments;
             } else {
                 discussion.linkedItem = { "exists": false };
             }
