@@ -10,8 +10,15 @@ angular.module('bgc.filters', [])
         }
     }).filter( 'timeago', function () {
         return function (dateInput) {
-            var date = new Date(dateInput);
-            return jQuery.timeago(date);
+            return jQuery.timeago(new Date(dateInput));
+        }
+    }).filter('pluralize', function() {
+        return function(number, text) {
+            if(number === 1) {
+                return (number + " " + text);
+            } else {
+                return (number + " " + text + "s");
+            }
         }
     });
 

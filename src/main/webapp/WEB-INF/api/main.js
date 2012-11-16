@@ -211,6 +211,7 @@ app.get('/discussions/all', function(req) {
                 discussion.linkedItem = linked.content;
                 discussion.linkedItem.exists = true;
                 discussion.commentCount = linked.content.comments;
+                discussion.link = "#/content/view/" + linked.content._id;
             } else {
                 discussion.linkedItem = { "exists": false };
             }

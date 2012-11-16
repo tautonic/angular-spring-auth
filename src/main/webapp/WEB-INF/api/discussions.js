@@ -130,6 +130,8 @@ var getDiscussionList = function(params) {
         thread.commentCount = JSON.parse(exchange.content).count;
 
         thread.hidden = (thread.spam >= 3);
+
+        thread.link = "#/network/discussion/view/" + thread._id;
     });
 
 

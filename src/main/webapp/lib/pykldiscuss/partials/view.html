@@ -3,9 +3,9 @@
         <div class="discussion-heading">
             <h3>{{discussion.title}}</h3>
             <ul class="article-stats">
-                <li class="muted"><i class="likes"></i> {{discussion.likes}} Likes</li>
-                <li class="muted"><i class="views"></i> {{discussion.views}} Views</li>
-                <li class="muted"><i class="comments"></i> {{discussion.commentCount}} Comments</li>
+                <li class="muted"><i class="likes"></i> {{discussion.likes | pluralize:'Like'}}</li>
+                <li class="muted"><i class="views"></i> {{discussion.views | pluralize:'View'}}</li>
+                <li class="muted"><i class="comments"></i> {{discussion.commentCount | pluralize:'Comment'}}</li>
                 <li class="muted"><spam objectid="{{discussion._id}}"></spam></li>
             </ul>
         </div>
@@ -56,7 +56,7 @@
                                 <input type="submit" value="Post" class="btn btn-success" ng-disabled="mainReplyForm.$invalid" ng-click="submitReply()">
                             </div>
                         </div>
-                        <span class="muted"><i class="add"></i> Add Image</span>
+                        <!--<span class="muted"><i class="add"></i> Add Image</span>-->
                     </div>
                 </fieldset>
             </form>
