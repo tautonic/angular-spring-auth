@@ -522,7 +522,8 @@ app.post('/profiles/', function(req){
         },
         "workHistory" : req.postParams.workHistory,
         "educationHistory" : req.postParams.educationHistory,
-        "thumbnail": req.postParams.thumbnail
+        "thumbnail": req.postParams.thumbnail,
+        "status": "unverified"
     };
 
     data.source = 'GC';
