@@ -838,6 +838,11 @@ ul.dropdown-menu li:last-child a {
     top: -0.6em;
 }
 
+.admin .profile-list-item .profile-thumbnail {
+    left: 10px;
+    top: 10px;
+}
+
 .profile-list-item .profile-right p{
     line-height: 20px;
     margin: 0;
@@ -1311,6 +1316,10 @@ li.search-result.members{
     border-left: solid 1px #C5C5C5;
     padding: 1em;
     min-height: 100px;
+}
+
+.admin .profile-list-item .profile-right {
+    min-height: 91px;
 }
 
 .profile-left h3,
