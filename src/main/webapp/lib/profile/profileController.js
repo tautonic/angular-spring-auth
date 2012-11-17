@@ -158,7 +158,8 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
         general: false,
         institution: false,
         education: false,
-        notes: false
+        notes: false,
+        image: false
     };
 
     $scope.$on('$routeChangeSuccess', function(){

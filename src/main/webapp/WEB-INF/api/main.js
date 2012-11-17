@@ -551,12 +551,22 @@ app.get('/profiles/:id', function(req, id){
 
     var exchange = httpclient.request(opts);
 
+    if(exchange.status === 400) {
+        opts.url = 'http://localhost:9300/myapp/api/profiles/byusername/' + id;
+
+        exchange = httpclient.request(opts);
+    }
+
     var result = {
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     };
+
+    if(!result.success) {
+        return json(result);
+    }
 
     result.status = exchange.status;
 
@@ -734,6 +744,13 @@ app.put('/profiles/:id', function(req, id){
 
     delete data.newPass;
     delete data.newPassRepeat;
+
+    if(req.postParams.status === "unverified") {
+        var servletRequest = req.env.servletRequest;
+        if(servletRequest.isUserInRole('ROLE_ADMIN')) {
+            data.status = "unverified";
+        }
+    }
 
     log.info('PROFILE UPDATE PARAMS ' + JSON.stringify(req.postParams, null, 4));
     var opts = {
