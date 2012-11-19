@@ -296,11 +296,6 @@ ul.menu li a {
     display: inline-block;
 }
 
-ul.menu li:last-child a {
-    margin: 8px 14px 10px;
-    background: none;
-}
-
 ul.menu li.dropdown a {
     margin-top: 8px;
 }
