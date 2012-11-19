@@ -23,6 +23,8 @@
         <store-version>1.0.6-SNAPSHOT</store-version>
         <springext-version>1.0.8</springext-version>
         <beanstalk-version>1.0.4</beanstalk-version>
+        <beanstalk.environment.name>${environment}-babson-gcee</beanstalk.environment.name>
+        <beanstalk.s3.name>${environment}.${project.groupId}.${project.artifactId}.images</beanstalk.s3.name>
     </properties>
 
     <prerequisites>
@@ -151,6 +153,20 @@
         <finalName>babson-gc</finalName>
 
         <plugins>
+
+            <plugin>
+                <groupId>org.pykl.maven.plugins</groupId>
+                <artifactId>maven-beanstalk-plugin</artifactId>
+                <version>1.0.4</version>
+                <configuration>
+                    <accessKey>${aws.access_key}</accessKey>
+                    <secretKey>${aws.secret_key}</secretKey>
+                    <applicationName>${project.groupId}:${project.artifactId}</applicationName>
+                    <environmentName>${beanstalk.environment.name}</environmentName>
+                    <s3Bucket>${beanstalk.s3.name}</s3Bucket>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
@@ -225,6 +241,7 @@
                 <environment>qa</environment>
                 <!-- The URL to access web services from the gcplatform. -->
                 <zociaUrl>http://qa-zocia.elasticbeanstalk.com/api</zociaUrl>
+                <localUrl>http://localhost/api</localUrl>
 
                 <!-- Hazelcast configuration
                      hz.name - Specifies a unique name for the hazelcast cluster.
@@ -268,9 +285,6 @@
                 -->
                 <aws.access_key>${babsongc.qa.aws.access_key}</aws.access_key>
                 <aws.secret_key>${babsongc.qa.aws.secret_key}</aws.secret_key>
-
-                <beanstalk.environment.name>${environment}-babson-gcee</beanstalk.environment.name>
-                <beanstalk.s3.name>${environment}.${project.groupId}.${project.artifactId}.images</beanstalk.s3.name>
             </properties>
         </profile>
     </profiles>
