@@ -1510,14 +1510,14 @@ angular.module('bgc.directives').directive('slideShow', ['$log', function($log){
 
             scope.showSlideshowModal = false;
 
-            scope.slideshowModal = function(image, elm, index){
+            scope.slideshowModal = function(image, elm, page){
                 $log.info('Showing modal with image: ' + image);
                 scope.modalImage = image;
 
                 //$('.thumb').removeClass('active-thumb');
                 //$(elm.parentElement).addClass('active-thumb');
 
-                scope.current = index;
+                //scope.page = page;
                 scope.$broadcast('chosenSlide');
 
                 scope.showSlideshowModal = true;
@@ -1540,6 +1540,7 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
         scope: {},
         //templateUrl: 'partials/slideshow-modal-template.html',
         link: function(scope, elm, attrs){
+            scope.page = 1;
             $('.slideshow-thumbs').slides({
                 container: 'modal-slides',
                 next: 'modal-forward',
@@ -1548,18 +1549,38 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
                 generatePagination: false,
                 effect: 'fade',
                 fadeSpeed: 350
+                //start: scope.$parent.page
             });
 
-            scope.showLargeImage = function(image, elm, index){
+            scope.showLargeImage = function(image, elm, page){
                 scope.$parent.modalImage = image;
+                /*$('.summit-modal-detail').fadeOut('slow');
+                $('.summit-modal-detail').fadeIn('slow');*/
                 $('.thumb').removeClass('active-thumb');
                 $(elm.parentElement).addClass('active-thumb');
-                scope.current = index;
+                //scope.page = page;
             }
 
             scope.$on('chosenSlide', function(){
-                scope.current = scope.$parent.current;
+                /*scope.page = scope.$parent.page;
+
+                page = Math.floor(scope.$parent.page / 5) + 1;
+                console.log(page);*/
             });
+
+            scope.incrementPage = function(){
+                if(scope.page === 5){
+                    scope.page = 0;
+                }
+                scope.page++;
+            }
+
+            scope.decrementPage = function(){
+                if(scope.page === 1){
+                    scope.page = 6;
+                }
+                scope.page--;
+            }
         }
     }
 });

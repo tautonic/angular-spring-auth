@@ -3,7 +3,7 @@
 
     <div class="slideshow-modal">
         <div style="text-align: center">
-            <img ng-src="images/annual_summit_images/{{modalImage}}" alt="">
+            <img class="summit-modal-detail" ng-src="images/annual_summit_images/{{modalImage}}" alt="">
         </div>
         <!--<p class="modal-caption">Lorem ipsizzle pimpin' mah nizzle amizzle, consectetuer adipiscing shit.
             Nullam sapien velizzle, fo shizzle mah nizzle fo rizzle, mah home g-dizzle volutpizzle,
@@ -19,30 +19,61 @@
                 <div class="modal-slides">
                     <div>
                         <ul class="thumbs clearfix">
-                            <li ng-click="showLargeImage('5420811288_9fddbe57b7_o.jpg', $event.target, 1)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/5420811288_9fddbe57b7_o_294x186.jpg" alt=""></li>
-                            <li ng-click="showLargeImage('6834576277_0d6c8853b9_o.jpg', $event.target, 2)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6834576277_0d6c8853b9_o_294x186.jpg" alt=""></li>
-                            <li ng-click="showLargeImage('6834577409_604e3acbd0_o.jpg', $event.target, 3)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6834577409_604e3acbd0_o_294x186.jpg" alt=""></li>
-                            <li ng-click="showLargeImage('6834577759_3004d8c566_o.jpg', $event.target, 4)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6834577759_3004d8c566_o_294x186.jpg" alt=""></li>
-                            <li ng-click="showLargeImage('6880216573_c7f3cc53fd_o.jpg', $event.target, 5)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880216573_c7f3cc53fd_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('5420811288_9fddbe57b7_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/5420811288_9fddbe57b7_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6834576277_0d6c8853b9_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6834576277_0d6c8853b9_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6834577409_604e3acbd0_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6834577409_604e3acbd0_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6834577759_3004d8c566_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6834577759_3004d8c566_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6880216573_c7f3cc53fd_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880216573_c7f3cc53fd_o_294x186.jpg" alt=""></li>
                         </ul>
                     </div>
+
                     <div>
                         <ul class="thumbs clearfix">
-                            <li ng-click="showLargeImage('6880219023_03062db3fd_o.jpg', $event.target, 6)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880219023_03062db3fd_o_294x186.jpg" alt=""></li>
-                            <li ng-click="showLargeImage('6880528691_d11c761251_o.jpg', $event.target, 7)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880528691_d11c761251_o_294x186.jpg" alt=""></li>
-                            <li ng-click="showLargeImage('6880530585_3b515292cd_o.jpg', $event.target, 8)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880530585_3b515292cd_o_294x186.jpg" alt=""></li>
-                            <li ng-click="showLargeImage('6880534605_4b814b084a_o.jpg', $event.target, 9)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880534605_4b814b084a_o_294x186.jpg" alt=""></li>
-                            <li ng-click="showLargeImage('6880757685_036b5fbd39_o.jpg', $event.target, 10)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880757685_036b5fbd39_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6880219023_03062db3fd_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880219023_03062db3fd_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6880528691_d11c761251_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880528691_d11c761251_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6880530585_3b515292cd_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880530585_3b515292cd_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6880534605_4b814b084a_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880534605_4b814b084a_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6880757685_036b5fbd39_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880757685_036b5fbd39_o_294x186.jpg" alt=""></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <ul class="thumbs clearfix">
+                            <li ng-click="showLargeImage('6880760371_ed7ef59955_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6880760371_ed7ef59955_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6881091581_e09939a627_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6881091581_e09939a627_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('6881094181_01b938b117_o.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/6881094181_01b938b117_o_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('citiesofthefuture.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/citiesofthefuture_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('citiesofthefuturegraphic.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/citiesofthefuturegraphic_294x186.jpg" alt=""></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <ul class="thumbs clearfix">
+                            <li ng-click="showLargeImage('economiccities.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/economiccities_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('eship_imperative_withlen.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/eship_imperative_withlen_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('eship_imperative_withlen2.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/eship_imperative_withlen2_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('eship_imperative_withlen3.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/eship_imperative_withlen3_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('innovationcompetitiveness.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/innovationcompetitiveness_294x186.jpg" alt=""></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <ul class="thumbs clearfix">
+                            <li ng-click="showLargeImage('innovationgraphic.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/innovationgraphic_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('King_Faisal_2012GCF.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/King_Faisal_2012GCF_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('lobby.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/lobby_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('newemplparadigngraphic.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/newemplparadigngraphic_294x186.jpg" alt=""></li>
+                            <li ng-click="showLargeImage('tonyblair.jpg', $event.target)" class="thumb"><img ng-src="images/annual_summit_images/thumbs/tonyblair_294x186.jpg" alt=""></li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="slideshow-paging">
-                    {{current}} of 10
+                    {{page}} of 5
                     <div class="btn-group-border">
                         <div class="btn-group bgc">
-                            <button class="btn btn-success modal-backward"><i class="icon-backward icon-white"></i></button>
-                            <button class="btn btn-success modal-forward"><i class="icon-forward icon-white"></i></button>
+                            <button ng-click="decrementPage()" class="btn btn-success modal-backward"><i class="icon-backward icon-white"></i></button>
+                            <button ng-click="incrementPage()" class="btn btn-success modal-forward"><i class="icon-forward icon-white"></i></button>
                         </div>
                     </div>
                 </div>
@@ -65,25 +96,151 @@
 
             <div class="new-picture-frame slide-thumbnail no-rotation">
                 <div style="overflow:hidden; height:210px;">
-                    <img alt="" ng-click="slideshowModal('5420811288_9fddbe57b7_o.jpg', $event.target, 1)" ng-src="images/annual_summit_images/thumbs/5420811288_9fddbe57b7_o_294x186.jpg">
+                    <img alt="" ng-click="slideshowModal('5420811288_9fddbe57b7_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/5420811288_9fddbe57b7_o_294x186.jpg">
                 </div>
             </div>
 
             <div class="new-picture-frame slide-thumbnail no-rotation">
                 <div style="overflow:hidden; height:210px;">
-                    <img alt="" ng-click="slideshowModal('6834576277_0d6c8853b9_o.jpg', $event.target, 2)" ng-src="images/annual_summit_images/thumbs/6834576277_0d6c8853b9_o_294x186.jpg">
+                    <img alt="" ng-click="slideshowModal('6834576277_0d6c8853b9_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6834576277_0d6c8853b9_o_294x186.jpg">
                 </div>
             </div>
 
             <div class="new-picture-frame slide-thumbnail no-rotation">
                 <div style="overflow:hidden; height:210px;">
-                    <img alt="" ng-click="slideshowModal('6834577409_604e3acbd0_o.jpg', $event.target, 3)" ng-src="images/annual_summit_images/thumbs/6834577409_604e3acbd0_o_294x186.jpg">
+                    <img alt="" ng-click="slideshowModal('6834577409_604e3acbd0_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6834577409_604e3acbd0_o_294x186.jpg">
                 </div>
             </div>
 
             <div class="new-picture-frame slide-thumbnail no-rotation">
                 <div style="overflow:hidden; height:210px;">
-                    <img alt="" ng-click="slideshowModal('6834577759_3004d8c566_o.jpg', $event.target, 4)" ng-src="images/annual_summit_images/thumbs/6834577759_3004d8c566_o_294x186.jpg">
+                    <img alt="" ng-click="slideshowModal('6834577759_3004d8c566_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6834577759_3004d8c566_o_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('6880216573_c7f3cc53fd_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6880219023_03062db3fd_o_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('6880219023_03062db3fd_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6880528691_d11c761251_o_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('6880528691_d11c761251_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6880528691_d11c761251_o_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('6880530585_3b515292cd_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6880530585_3b515292cd_o_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('6880534605_4b814b084a_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6880534605_4b814b084a_o_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('6880757685_036b5fbd39_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6880757685_036b5fbd39_o_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('6880760371_ed7ef59955_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6880760371_ed7ef59955_o_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('6881091581_e09939a627_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6881091581_e09939a627_o_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('6881094181_01b938b117_o.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/6881094181_01b938b117_o_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('citiesofthefuture.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/citiesofthefuture_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('citiesofthefuturegraphic.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/citiesofthefuturegraphic_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('economiccities.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/economiccities_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('eship_imperative_withlen.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/eship_imperative_withlen_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('eship_imperative_withlen2.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/eship_imperative_withlen2_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('eship_imperative_withlen3.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/eship_imperative_withlen3_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('innovationcompetitiveness.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/innovationcompetitiveness_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('innovationgraphic.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/innovationgraphic_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('King_Faisal_2012GCF.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/King_Faisal_2012GCF_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('lobby.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/lobby_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('newemplparadigngraphic.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/newemplparadigngraphic_294x186.jpg">
+                </div>
+            </div>
+
+            <div class="new-picture-frame slide-thumbnail no-rotation">
+                <div style="overflow:hidden; height:210px;">
+                    <img alt="" ng-click="slideshowModal('tonyblair.jpg', $event.target)" ng-src="images/annual_summit_images/thumbs/tonyblair_294x186.jpg">
                 </div>
             </div>
         </div>
