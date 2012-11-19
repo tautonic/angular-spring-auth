@@ -2265,8 +2265,8 @@ li.search-result.members{
 
 .summit-slide-show-container{
     background: url("../images/GCEE_image_annualSummit_imageSlider_bg.jpg") no-repeat top left;
-    height: 310px;
-    padding-top: 2em;
+    height: 267px;
+    padding-top: 5em;
     /*border-left: 2px solid #006644;
     border-right: 2px solid #006644*/;
 }
@@ -2377,11 +2377,15 @@ li.search-result.members{
     margin: 0
 }
 
+.thumbs{
+    width: 772px;
+}
+
 .thumbs li{
     float: left;
     list-style-type: none;
-    margin-right: 15px;
-    width: 134px;
+    margin-right: 14px;
+    width: 140px;
     height: 100px;
     overflow: hidden;
     cursor: pointer;

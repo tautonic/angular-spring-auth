@@ -1510,10 +1510,26 @@ angular.module('bgc.directives').directive('slideShow', ['$log', function($log){
 
             scope.showSlideshowModal = false;
 
-            scope.slideshowModal = function(image){
+            scope.slideshowModal = function(image, elm, index){
                 $log.info('Showing modal with image: ' + image);
+                scope.modalImage = image;
+
+                //$('.thumb').removeClass('active-thumb');
+                //$(elm.parentElement).addClass('active-thumb');
+
+                scope.current = index;
+                scope.$broadcast('chosenSlide');
+
                 scope.showSlideshowModal = true;
             }
+
+            scope.closeSummitModal = function(){
+                scope.showSlideshowModal = false;
+            }
+
+            scope.$on('hideModal', function(){
+                scope.showSlideshowModal = false;
+            });
         }
     }
 }]);
@@ -1522,14 +1538,27 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
     return {
         restrict: 'A',
         scope: {},
-        templateUrl: 'partials/slideshow-modal-template.html',
+        //templateUrl: 'partials/slideshow-modal-template.html',
         link: function(scope, elm, attrs){
             $('.slideshow-thumbs').slides({
-                container: 'slides',
+                container: 'modal-slides',
                 next: 'modal-forward',
                 prev: 'modal-backward',
                 pagination: false,
-                generatePagination: false
+                generatePagination: false,
+                effect: 'fade',
+                fadeSpeed: 350
+            });
+
+            scope.showLargeImage = function(image, elm, index){
+                scope.$parent.modalImage = image;
+                $('.thumb').removeClass('active-thumb');
+                $(elm.parentElement).addClass('active-thumb');
+                scope.current = index;
+            }
+
+            scope.$on('chosenSlide', function(){
+                scope.current = scope.$parent.current;
             });
         }
     }
