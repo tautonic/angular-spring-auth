@@ -1485,9 +1485,16 @@ angular.module('bgc.directives').directive('slideShow', ['$log', function($log){
 
             scope.showSlideshowModal = false;
 
-            scope.slideshowModal = function(image){
+            scope.slideshowModal = function(image, elm, index){
                 $log.info('Showing modal with image: ' + image);
                 scope.modalImage = image;
+
+                //$('.thumb').removeClass('active-thumb');
+                //$(elm.parentElement).addClass('active-thumb');
+
+                scope.current = index;
+                scope.$broadcast('chosenSlide');
+
                 scope.showSlideshowModal = true;
             }
 
@@ -1514,6 +1521,17 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
                 prev: 'modal-backward',
                 pagination: false,
                 generatePagination: false
+            });
+
+            scope.showLargeImage = function(image, elm, index){
+                scope.$parent.modalImage = image;
+                $('.thumb').removeClass('active-thumb');
+                $(elm.parentElement).addClass('active-thumb');
+                scope.current = index;
+            }
+
+            scope.$on('chosenSlide', function(){
+                scope.current = scope.$parent.current;
             });
         }
     }
