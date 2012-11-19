@@ -2384,7 +2384,7 @@ li.search-result.members{
 .thumbs li{
     float: left;
     list-style-type: none;
-    margin-right: 14px;
+    margin-right: 16px;
     width: 140px;
     height: 100px;
     overflow: hidden;
@@ -2411,5 +2411,9 @@ li.search-result.members{
 .slideshow-modal p.modal-caption{
     margin: 1em 0;
     color: #000;
+}
+
+.modal-slides{
+    height: 118px;
 }
 
