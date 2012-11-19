@@ -11,26 +11,58 @@
 
                     <hr>
 
-                    <ul class="search-results-list">
-                        <li class="search-result members" ng-repeat="result in results">
-                            <div class="profile-list-item profile grey-gradient clearfix">
-                                <!--<div class="new-picture-frame profile-thumbnail large counter-clockwise">
-                                    <img class="profile-image large" src="images/rosie.jpeg">
-                                </div>-->
-                                <div thumbnail thumb=result._source size="large" rotation="counter-clockwise" type="profile" />
-                                <div class="profile-left">
-                                    <h3>{{result._source.name.given}} {{result._source.name.surname}}</h3>
-                                    <h5>{{result._source.workHistory[0].title}}</h5>
-                                    <h5 class="muted">{{result._source.workHistory[0].businessName}}</h5>
-                                </div>
-                                <div class="profile-right">
-                                    <h3 class="sans-serif">LATEST ACTIVITY:</h3>
-                                    <p><i ng-bind-html-unsafe=result._source.activity.message></i></p>
-                                    <p class="muted">about {{result._source.activity.dateCreated | timeago}}</p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                    <div ng-switch on="auth.isUserInRole('ROLE_ADMIN')">
+                        <div ng-switch-when=true>
+                            <ul class="search-results-list">
+                                <li class="search-result members" ng-repeat="result in results">
+                                    <div class="profile-list-item profile grey-gradient clearfix">
+                                        <div thumbnail thumb=result._source size="large" rotation="counter-clockwise" type="profile" />
+                                        <div class="profile-left">
+                                            <a ng-href="#/profiles/view/{{result._source._id}}"><h3>{{result._source.name.given}} {{result._source.name.surname}}</h3></a>
+                                            <h5>{{result._source.workHistory[0].title}}</h5>
+                                            <h5 class="muted">{{result._source.workHistory[0].businessName}}</h5>
+
+                                            <div class="btn-group-border">
+                                                <div class="btn-group bgc">
+                                                    <a class="btn btn-success" ng-href="#/profiles/view/{{result._source._id}}"><i class="icon-pencil icon-white"></i> Update</a>
+                                                    <button ui-if="result._source.status != 'unverified'" class="btn btn-danger" admin-deactivate-user user={{result._source}}><i class="icon-lock icon-white"></i> Deactivate</button>
+                                                    <button class="btn btn-danger" admin-delete-user userId={{result._source._id}}><i class="icon-trash icon-white"></i> Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-right">
+                                            <h3 class="sans-serif">LATEST ACTIVITY:</h3>
+                                            <p><i ng-bind-html-unsafe=result._source.activity.message></i></p>
+                                            <p class="muted">about {{result._source.activity.dateCreated | timeago}}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div ng-switch-default>
+                            <ul class="search-results-list">
+                                <li class="search-result members" ng-repeat="result in results">
+                                    <div class="profile-list-item profile grey-gradient clearfix">
+                                        <!--<div class="new-picture-frame profile-thumbnail large counter-clockwise">
+                                            <img class="profile-image large" src="images/rosie.jpeg">
+                                        </div>-->
+                                        <div thumbnail thumb=result._source size="large" rotation="counter-clockwise" type="profile" />
+                                        <div class="profile-left">
+                                            <a ng-href="#/profiles/view/{{result._source._id}}"><h3>{{result._source.name.given}} {{result._source.name.surname}}</h3></a>
+                                            <h5>{{result._source.workHistory[0].title}}</h5>
+                                            <h5 class="muted">{{result._source.workHistory[0].businessName}}</h5>
+                                        </div>
+                                        <div class="profile-right">
+                                            <h3 class="sans-serif">LATEST ACTIVITY:</h3>
+                                            <p><i ng-bind-html-unsafe=result._source.activity.message></i></p>
+                                            <p class="muted">about {{result._source.activity.dateCreated | timeago}}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,6 +79,14 @@
                             <div class="preview-lens"></div>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <div ui-if="auth.isUserInRole('ROLE_ADMIN')">
+                <div class="profile search-box btn-group-border">
+                    <div class="btn-group bgc">
+                        <a class="btn btn-success" ng-href="#/admin/users">Back To Admin Page</a>
+                    </div>
                 </div>
             </div>
         </div>

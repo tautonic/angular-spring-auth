@@ -141,6 +141,8 @@ function SearchDiscussions($rootScope, $scope, $routeParams, $location, Search) 
 }
 
 function SearchProfiles($rootScope, $scope, $routeParams, $location, Search) {
+    $scope.isAdmin = $rootScope.auth.isUserInRole("ROLE_ADMIN");
+
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 
