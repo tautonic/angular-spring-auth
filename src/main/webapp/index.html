@@ -128,14 +128,16 @@
                     <li><a ng-href="#/content/" x-cms="menu_3">{{cms.content}}</a></li>
                     <li><a ng-href="#/network/discussion/list" x-cms="menu_4">{{cms.content}}</a></li>
                     <pykl-login ng-controller="LoginWatch"></pykl-login>
-                    <li><a onclick="openSearch()"><img src="images/GCEE_images_header_searchIcon.png"></a></li>
+                    <!--<li id="search-menu-item"><a onclick="openSearch()"><img src="images/GCEE_images_header_searchIcon.png"></a></li>-->
                 </ul>
-                <div id="searchSite">
+                <div id="searchSite" class="gradient">
                     <form class="form-horizontal form-search" ng-submit="searchSite()" ng-controller="SiteSearchController" class="form-search gradient">
                         <div class="control-group">
                             <input id="site-query" ng-model="siteQuery" type="text" class="input-medium search-query" placeholder="Search Site...">
                         </div>
                     </form>
+                    <a onclick="openSearch()" class="right">
+                    <img src="images/GCEE_images_header_searchIcon.png"></a>
                 </div>
             </div>
         </div>
