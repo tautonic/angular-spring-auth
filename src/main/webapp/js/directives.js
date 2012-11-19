@@ -1520,7 +1520,9 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
                 next: 'modal-forward',
                 prev: 'modal-backward',
                 pagination: false,
-                generatePagination: false
+                generatePagination: false,
+                effect: 'fade',
+                fadeSpeed: 350
             });
 
             scope.showLargeImage = function(image, elm, index){
