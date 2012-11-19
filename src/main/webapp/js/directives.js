@@ -1506,7 +1506,7 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
     return {
         restrict: 'A',
         scope: {},
-        templateUrl: 'partials/slideshow-modal-template.html',
+        //templateUrl: 'partials/slideshow-modal-template.html',
         link: function(scope, elm, attrs){
             $('.slideshow-thumbs').slides({
                 container: 'modal-slides',

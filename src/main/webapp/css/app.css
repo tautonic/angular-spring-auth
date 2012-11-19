@@ -2376,11 +2376,15 @@ li.search-result.members{
     margin: 0
 }
 
+.thumbs{
+    width: 772px;
+}
+
 .thumbs li{
     float: left;
     list-style-type: none;
-    margin-right: 15px;
-    width: 134px;
+    margin-right: 18px;
+    width: 140px;
     height: 100px;
     overflow: hidden;
     cursor: pointer;
