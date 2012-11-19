@@ -1487,6 +1487,7 @@ angular.module('bgc.directives').directive('slideShow', ['$log', function($log){
 
             scope.slideshowModal = function(image){
                 $log.info('Showing modal with image: ' + image);
+                scope.modalImage = image;
                 scope.showSlideshowModal = true;
             }
 
