@@ -1500,7 +1500,7 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
         templateUrl: 'partials/slideshow-modal-template.html',
         link: function(scope, elm, attrs){
             $('.slideshow-thumbs').slides({
-                container: 'slides',
+                container: 'modal-slides',
                 next: 'modal-forward',
                 prev: 'modal-backward',
                 pagination: false,
