@@ -1325,6 +1325,7 @@ app.post('/search/site/', function(req){
 });
 
 app.post('/search/faculty/', function(req){
+    var user = getUserDetails();
     var url = 'http://localhost:9300/myapp/api/search/';
 
     var queryParams = [
