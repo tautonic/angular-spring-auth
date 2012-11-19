@@ -1489,6 +1489,14 @@ angular.module('bgc.directives').directive('slideShow', ['$log', function($log){
                 $log.info('Showing modal with image: ' + image);
                 scope.showSlideshowModal = true;
             }
+
+            scope.closeSummitModal = function(){
+                scope.showSlideshowModal = false;
+            }
+
+            scope.$on('hideModal', function(){
+                scope.showSlideshowModal = false;
+            });
         }
     }
 }]);
