@@ -154,6 +154,11 @@
             controller: 'error500Controller'
         } );
 
+        $routeProvider.when( '/maintenance', {
+            templateUrl: 'partials/maintenance.html',
+            controller: 'maintenanceController'
+        } );
+
         //stuff related to login and account management
         $routeProvider.when( '/login', {
             templateUrl: 'lib/pyklsecurity/partials/signin-form.html',

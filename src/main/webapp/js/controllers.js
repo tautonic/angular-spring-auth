@@ -14,8 +14,12 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     });
 
     $http.get('api/article/all/news').success(function(data) {
-        $scope.articles = data;
-    })
+        if(typeof(data) === "object") {
+            $scope.articles = data;
+        } else {
+            $location.path('/maintenance');
+        }
+    });
 
     var options = {
         data: JSON.stringify({
@@ -55,10 +59,6 @@ function searchDiscussionsController($scope, $location){
     }
 }
 
-function annualSummitController($rootScope, $scope){
-    //add stuff to handle the gallery/lightbox type thing here
-}
-
 function errorController($rootScope, $scope){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
@@ -70,6 +70,13 @@ function error500Controller($rootScope, $scope){
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
         $rootScope.about = '500';
+    });
+}
+
+function maintenanceController($rootScope, $scope){
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+        $rootScope.about = 'maintenance';
     });
 }
 
@@ -115,7 +122,7 @@ function forgotPasswordController($rootScope, $scope, $location, $http){
     $scope.send = function(){
         var data = {
             profileEmail: $scope.email
-        }
+        };
 
         $http.post('api/utility/resettoken/', data)
             .success(function(data, status, headers, config){
@@ -142,7 +149,7 @@ function resetPasswordController($rootScope, $scope, $routeParams, $http){
 
     var data = {
         token: $routeParams.token
-    }
+    };
 
     $http.post('api/utility/resetpassword/', data)
         .success(function(data, status, headers, config){
