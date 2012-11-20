@@ -146,7 +146,7 @@ app.post('/admin/articles', function(req){
 
     req.postParams.format = 'article';
     req.postParams.locale = 'en';
-    req.postParams.roles = ['ROLE_ANONYMOUS'];
+    delete req.postParams.premium;
 
     var opts = {
         url: getZociaUrl(req) + '/resources/',
@@ -169,6 +169,9 @@ app.put('/admin/articles/:id', function(req, id){
             body:[]
         };
     }
+
+    delete req.postParams.doctype;
+    delete req.postParams.premium;
 
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
