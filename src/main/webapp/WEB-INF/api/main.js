@@ -111,7 +111,7 @@ app.get('/article/:id', function(req, id) {
 
     if(article.success) {
         var servletRequest = req.env.servletRequest;
-        if( (article.content.premium) && (!servletRequest.isUserInRole('ROLE_PREMIUM')) )
+        if( (article.content.premium) && !((servletRequest.isUserInRole('ROLE_PREMIUM')) || (servletRequest.isUserInRole('ROLE_ADMIN')) ))
         {
             log.info("User does not have access to full article content.");
             delete article.content.content;

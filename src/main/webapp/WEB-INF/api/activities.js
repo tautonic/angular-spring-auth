@@ -36,7 +36,7 @@ var text = {
     "notifications-activity.ms.spams": "${actorLink} flagged a post as spam.",
     "notifications-activity.no.results": "No recent activity results.",
     "notifications-activity.r.discussions": "${actorLink} replied to a discussion titled ${directLink}.",
-    "notifications-activity.r.comment": "${actorLink} replied to a discussion titled ${directLink}.",
+    "notifications-activity.r.comment": "${actorLink} commented on an article titled ${directLink}.",
     "notifications-activity.recent-activity": "Recent Activity",
     "notifications-activity.spmessages.error": "(could not retrieve this message)",
     "notifications-activity.u.accomplish": "${actorLink} updated the accomplishments for ${directLink}",
@@ -241,13 +241,6 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                     case 'ventures':
                         linkId = about.username;
                         linkText = about.fullName || about.username;
-                        if (about.idea) {
-                            linkType = "ideas";
-                        } else if (about.serviceProvider) {
-                            linkType = "services";
-                        } else {
-                            linkType = "companies";
-                        }
                         break;
                     case 'resources':
                         linkId = about._id;
@@ -286,23 +279,36 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                     case 'posts':
                         linkId = direct._id;
                         linkText = direct.title;
-                        linkType = (type == "discussions") ? ('#/network/discussion/view') : ('#/content/view');	// fix the URL
-
+                        linkType = '#/network/discussion/view';
+                        var discussion;
                         if(linkText === ''){
-                            var discussion = getDiscussion(request, direct._id);
+                            discussion = getDiscussion(request, direct._id);
                             linkText = discussion.title;
                         }
 
-                        // If the "about" object is a venture, this means the discussion is "private"
+                        //if the user commented on an article
                         if (type === "comment") {
-                            var discussion = getDiscussion(request, direct._id);
-                            linkId = discussion.parentId;
+                            discussion = getDiscussion(request, direct._id);
+                            var article;
+                            if(discussion._id !== discussion.threadId) {
+                                discussion = getDiscussion(request, discussion.threadId);
+                            }
+                            article = getArticle(request, discussion.parentId);
+
+                            linkId = article.content._id;
+                            linkText = article.content.title;
+                            linkType = '#/content/view';
 
                             // Otherwise we have to look up the post info
                         } else if (about && about.dataType === "posts") {
                             // Get the discussion root
-                            var discussion = getDiscussion(request, about._id);
+                            discussion = getDiscussion(request, about._id);
+
+                            if(discussion._id !== discussion.threadId) {
+                                discussion = getDiscussion(request, discussion.threadId);
+                            }
                             linkText = discussion.title;
+                            linkId = discussion.threadId;
                         }
                         break;
                     case 'ventures':
