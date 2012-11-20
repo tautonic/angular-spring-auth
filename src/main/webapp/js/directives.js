@@ -1584,3 +1584,26 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
         }
     }
 });
+
+angular.module('bgc.directives').directive('userRoleToggle', ['Profile', '$compile', function(Profile, $compile){
+    return {
+        restrict: 'A',
+        //replace: true,
+        link: function(scope, elm, attrs){
+            attrs.$observe('roles', function(roles){
+                //console.log('Profile: ' + user);
+                /*if(roles.indexOf('ROLE_ADMIN') !== -1){
+                    $('#role-admin').button('toggle');
+                }
+                if(roles.indexOf('ROLE_MEMBER') !== -1){
+                    $('#role-member').button('toggle');
+                }
+                if(roles.indexOf('ROLE_USER') !== -1){
+                    $('#role-user').button('toggle');
+                }*/
+            });
+
+            //scope.$apply();
+        }
+    }
+}]);
