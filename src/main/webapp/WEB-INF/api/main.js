@@ -74,7 +74,7 @@ app.get( '/index.html', function ( req ) {
 
 /********** Articles and resources *********/
 
-app.get('/article/all/news', function(req) { log.info("ZOCIA URL IS: "+getZociaUrl(req));
+app.get('/article/all/news', function(req) {
     return articles(req, "articles", 3);
 });
 
@@ -83,7 +83,7 @@ app.get('/article/all', function(req) {
 });
 
 function articles(req, type, max) {
-    var articles = getAllArticles(type, max);
+    var articles = getAllArticles(req, type, max);
 
     if(articles.success) {
         return json(articles.content);
@@ -92,13 +92,13 @@ function articles(req, type, max) {
 }
 
 app.get('/article/search', function(req) {
-    var articles = searchAllArticles(req.params);
+    var articles = searchAllArticles(req, req.params);
 
     return json(articles);
 });
 
 app.get('/article/all/bycategory/:category', function(req, category) {
-    var articles = getArticlesByCategory(category);
+    var articles = getArticlesByCategory(req, category);
 
     if(articles.success) {
         return json(articles.content);
@@ -107,7 +107,7 @@ app.get('/article/all/bycategory/:category', function(req, category) {
 });
 
 app.get('/article/:id', function(req, id) {
-    var article = getArticle(id);
+    var article = getArticle(req, id);
 
     if(article.success) {
         var servletRequest = req.env.servletRequest;
@@ -162,7 +162,7 @@ app.post('/admin/articles', function(req){
 app.put('/admin/articles/:id', function(req, id){
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
-    {     log.info("USER IS NOT ADMIN");
+    {
         return {
             status:401,
             headers:{"Content-Type":'text/html'},
@@ -202,11 +202,11 @@ app.del('/admin/articles/:id', function(req, id){
  * Returns a list of discussion topics
  */
 app.get('/discussions/all', function(req) {
-    var discussions = getDiscussionList(req.params).content;
+    var discussions = getDiscussionList(req, req.params).content;
 
     discussions.forEach(function(discussion) {
         if(discussion.parentId) {
-            var linked = getArticle(discussion.parentId);
+            var linked = getArticle(req, discussion.parentId);
 
             if(linked) {
                 discussion.linkedItem = linked.content;
@@ -228,7 +228,7 @@ app.get('/discussions/all', function(req) {
  * Returns a single discussion, in threaded format
  */
 app.get('/discussions/:id', function(req, id) {
-    var result = getDiscussion(id, req.params);
+    var result = getDiscussion(req, id, req.params);
 
     if(!result.success) {
         return {
@@ -242,7 +242,7 @@ app.get('/discussions/:id', function(req, id) {
 });
 
 app.get('/discussions/byParent/:id', function(req, id) {
-    var result = getDiscussionByParent(id, req.params);
+    var result = getDiscussionByParent(req, id, req.params);
 
     if(!result.success) {
         return json(false);
@@ -257,7 +257,7 @@ app.get('/discussions/byParent/:id', function(req, id) {
 app.put('/discussions/:id/:post', function(req, id, post) {
     var editedPost = req.params;
 
-    return json(editDiscussionPost(id, post, editedPost, getUserDetails()));
+    return json(editDiscussionPost(req, id, post, editedPost, getUserDetails()));
 });
 
 /**
@@ -271,7 +271,7 @@ app.post('/discussions/new', function(req) {
         discussion = discussion["0"];
     }
 
-    var result = createDiscussion(discussion, getUserDetails());
+    var result = createDiscussion(req, discussion, getUserDetails());
 
     if(result != false) {
         if(result.title !== "") {
@@ -298,7 +298,7 @@ app.post('/discussions/:id', function(req, id) {
         };
     }
 
-    return json(addReply(id, req.params, getUserDetails()));
+    return json(addReply(req, id, req.params, getUserDetails()));
 });
 /****** End discussion posts ********/
 

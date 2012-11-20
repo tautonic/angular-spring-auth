@@ -5,7 +5,7 @@ var httpclient = require('ringo/httpclient');
 var {Headers} = require('ringo/utils/http');
 
 var {getArticle} = require('articles');
-
+var {getZociaUrl, getLocalUrl} = require('utility/getUrls');
 var {trimpathString} = require('trimpath');
 
 var text = {
@@ -55,9 +55,9 @@ var text = {
     "notifications-activity.ufsp.services": "${actorLink} stopped following ${directLink}."
 };
 
-function getDiscussion(id) {
+function getDiscussion(req, id) {
     var opts = {
-        url: "http://localhost:9300/myapp/api/posts/" + id,
+        url: getZociaUrl(req) + "/posts/" + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -65,7 +65,7 @@ function getDiscussion(id) {
 
     var exchange = httpclient.request(opts);
 
-    if(Math.floor(exchange.status / 100) !== 2) { console.log("DSICSSISON NOT FOUND");
+    if(Math.floor(exchange.status / 100) !== 2) {
         return {
             'status': 404,
             'content': JSON.parse(exchange.status),
@@ -162,7 +162,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                 }
 
                 // Determine if a post is a "reply" or not - if activity parentId prop resolves, it's a reply
-                //var thread = getDiscussion(direct.parentId);
+                //var thread = getDiscussion(request, direct.parentId);
                 //if (thread) {
                     //verb = 'r';	// for "reply"
                 //}
@@ -251,7 +251,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                     case 'resources':
                         linkId = about._id;
                         // Need to get the title here
-                        var resource = getArticle(about._id, request.locale);
+                        var resource = getArticle(request, about._id, request.locale);
                         linkText = resource.content.title;
                         linkType = '#/content';
                         break;
@@ -262,7 +262,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
 
                         if(about._id != about.parentId) {
                             // Get the discussion root
-                            var discussion = getDiscussion(about.parentId);
+                            var discussion = getDiscussion(request, about.parentId);
                             linkText = "a reply to " + discussion.title;
                             linkId = discussion._id
                         }
@@ -288,7 +288,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         linkType = '#/network';	// fix the URL
 
                         if(linkText === ''){
-                            var discussion = getDiscussion(direct._id);
+                            var discussion = getDiscussion(request, direct._id);
                             linkText = discussion.title;
                         }
 
@@ -306,7 +306,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                             // Otherwise we have to look up the post info
                         } else if (about && about.dataType === "posts") {
                             // Get the discussion root
-                            var discussion = getDiscussion(about._id);
+                            var discussion = getDiscussion(request, about._id);
                             linkText = discussion.title;
                         }
                         break;
@@ -360,7 +360,7 @@ var getLatestActivity = function(request, profile, context, userId) {
         filteredActivities = filteredActivities.replace(activity, '');
     });
 
-    var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
+    var url = getZociaUrl(request) + '/activities/byactor/' + profile._id;
 
     var opts = {
         url: url,

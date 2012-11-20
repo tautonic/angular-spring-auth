@@ -1,11 +1,11 @@
 
-//gets the Zocia URL (this includes the /api part). Requires request object
+//gets the Zocia URL. For instance: http://localhost:9300/myapp/api
 var getZociaUrl = function(request) {
     var configParams = request.env.servlet.getBean('configParams');
     return configParams.get('zociaUrl');
 };
 
-//gets the base URL for Zocia. For instance: http://localhost:9300/
+//gets the base URL for Zocia. For instance: http://localhost:9300/ (this is mostly here for future use, in case it ever ends up being needed)
 var getZociaBase = function(request) {
     var configParams = request.env.servlet.getBean('configParams');
     return configParams.get('zociaBase');

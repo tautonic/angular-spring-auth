@@ -1,6 +1,7 @@
 var httpclient = require('ringo/httpclient');
 var {Headers} = require('ringo/utils/http');
 var {encode} = require('ringo/base64');
+var {getZociaUrl, getLocalUrl} = require('utility/getUrls');
 
 var log = require( 'ringo/logging' ).getLogger( module.id );
 
@@ -22,7 +23,7 @@ function ajax(url) {
     };
 }
 
-var searchAllArticles = function(params) {
+var searchAllArticles = function(req, params) {
     var query;
     var from = params.from || 0;
     var size = params.size || 10;
@@ -105,7 +106,7 @@ var searchAllArticles = function(params) {
     }
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/resources/search',
+        url: getZociaUrl(req) + '/resources/search',
         method: 'POST',
         data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', "Content-Type": "application/json" }),
@@ -125,24 +126,24 @@ var searchAllArticles = function(params) {
     return result;
 };
 
-var getAllArticles = function(type, max) {
-    var result = ajax('http://localhost:9300/myapp/api/resources/' + type + '/' + max);
-
-    result.content.forEach(configureArticles);
-
-    return result;
-}
-
-var getArticlesByCategory = function(category) {
-    var result = ajax('http://localhost:9300/myapp/api/resources/bycategory/' + category);
+var getAllArticles = function(req, type, max) {
+    var result = ajax(getZociaUrl(req) + '/resources/' + type + '/' + max);
 
     result.content.forEach(configureArticles);
 
     return result;
 };
 
-var getArticle = function(id) {
-    var result = ajax('http://localhost:9300/myapp/api/resources/' + id);
+var getArticlesByCategory = function(req, category) {
+    var result = ajax(getZociaUrl(req) + '/resources/bycategory/' + category);
+
+    result.content.forEach(configureArticles);
+
+    return result;
+};
+
+var getArticle = function(req, id) {
+    var result = ajax(getZociaUrl(req) + '/resources/' + id);
 
     if(!result.success) {
         return false;
