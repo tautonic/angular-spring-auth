@@ -36,6 +36,7 @@ var text = {
     "notifications-activity.ms.spams": "${actorLink} flagged a post as spam.",
     "notifications-activity.no.results": "No recent activity results.",
     "notifications-activity.r.discussions": "${actorLink} replied to a discussion titled ${directLink}.",
+    "notifications-activity.r.comment": "${actorLink} replied to a discussion titled ${directLink}.",
     "notifications-activity.recent-activity": "Recent Activity",
     "notifications-activity.spmessages.error": "(could not retrieve this message)",
     "notifications-activity.u.accomplish": "${actorLink} updated the accomplishments for ${directLink}",
@@ -253,7 +254,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         // Need to get the title here
                         var resource = getArticle(request, about._id, request.locale);
                         linkText = resource.content.title;
-                        linkType = '#/content';
+                        linkType = '#/content/view';
                         break;
                     case 'posts':
                         linkText = about.title;
@@ -285,7 +286,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                     case 'posts':
                         linkId = direct._id;
                         linkText = direct.title;
-                        linkType = '#/network';	// fix the URL
+                        linkType = (type == "discussions") ? ('#/network/discussion/view') : ('#/content/view');	// fix the URL
 
                         if(linkText === ''){
                             var discussion = getDiscussion(request, direct._id);
@@ -293,15 +294,9 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                         }
 
                         // If the "about" object is a venture, this means the discussion is "private"
-                        if (about && about.dataType === 'ventures') {
-                            linkId = about.username + '/private/discussions/' + linkId;
-                            if (about.idea) {
-                                linkType = 'ideas';
-                            } else if (about.serviceProvider) {
-                                linkType = 'services';
-                            } else {
-                                linkType = 'companies';
-                            }
+                        if (type === "comment") {
+                            var discussion = getDiscussion(request, direct._id);
+                            linkId = discussion.parentId;
 
                             // Otherwise we have to look up the post info
                         } else if (about && about.dataType === "posts") {
