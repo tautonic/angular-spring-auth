@@ -124,13 +124,13 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
 
     $scope.followUser = function(id, index) {
         if($scope.profiles[index].isUserFollowing === true){
-            $http.delete('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
+            $http.delete('api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
                 //$scope.profileModal.isUserFollowing = data.success === 1 ? true : false;
                 $scope.profiles[index].isUserFollowing = false;
                 $scope.profileModal.isUserFollowing = false;
             });
         }else if($scope.profiles[index].isUserFollowing === false){
-            $http.post('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
+            $http.post('api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
                 //$scope.profileModal.isUserFollowing = data.success === 1 ? true : false;
                 $scope.profiles[index].isUserFollowing = true;
                 $scope.profileModal.isUserFollowing = true;
@@ -280,7 +280,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             profileEmail: email
         };
 
-        $http.post('/gc/api/utility/resettoken/', data)
+        $http.post('api/utility/resettoken/', data)
             .success(function(data, status, headers, config){
                 if(data.success) {
                     $location.path('/passswordsendsuccess');
@@ -291,7 +291,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     };
 
     $scope.followUser = function(id) {
-        $http.post('/gc/api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
+        $http.post('api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
             $scope.profile.isUserFollowing = data.success;
         });
     };
@@ -342,7 +342,7 @@ function createProfile($rootScope, $scope, $routeParams, $location, $http, Profi
                 profileId: response.content._id
             };
 
-            $http.post('/gc/api/utility/verifyprofile/', data)
+            $http.post('api/utility/verifyprofile/', data)
                 .success(function(data, status, headers, config){
                     //$scope.showResetForm = false;
                     //$scope.showSuccess = true;

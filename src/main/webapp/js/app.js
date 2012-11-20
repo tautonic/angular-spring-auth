@@ -4,6 +4,11 @@
 (function () {
 
 	function routeProvider( $routeProvider ) {
+        $routeProvider.when( '/', {
+            templateUrl: 'partials/homepage.html',
+            controller: 'HomepageController'
+        } );
+
         $routeProvider.when( '/home', {
             templateUrl: 'partials/homepage.html',
             controller: 'HomepageController'
