@@ -58,10 +58,22 @@ angular.module( 'bgc.directives', [] )
                 thumb: '='
             },
             link: function(scope, elm, attr){
+                scope.defaultImage = 'images/GCEE_image_profileMale_135x135.jpeg';
+
                 scope.thumbnail = {
                     image: 'images/GCEE_image_profileFemale_135x135.jpeg',
                     text: 'Read More',
                     style: 'profile-thumbnail large counter-clockwise'
+                }
+
+                scope.togglePortrait = function(){
+                    if(scope.defaultImage === 'images/GCEE_image_profileMale_135x135.jpeg'){
+                        scope.defaultImage = 'images/GCEE_image_profileFemale_135x135.jpeg';
+                    }else if(scope.defaultImage === 'images/GCEE_image_profileFemale_135x135.jpeg'){
+                        scope.defaultImage = 'images/GCEE_image_profileMale_135x135.jpeg';
+                    }
+
+                    scope.$emit('togglePortrait');
                 }
 
                 if(attr.type === 'profile' || !attr.type){
@@ -1583,4 +1595,101 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
             }
         }
     }
+});
+
+angular.module('bgc.directives').directive('roleToggleAdmin', ['Profile', function(Profile){
+    return {
+        restrict: 'A',
+        replace: true,
+        link: function(scope, elm, attrs){
+            var profile;
+            attrs.$observe('user', function(user){
+                //console.log('Profile: ' + user);
+                profile = scope.$eval(user);
+                if(profile.roles.indexOf('ROLE_ADMIN') !== -1){
+                    elm.button('toggle');
+                }
+            });
+
+            elm.bind('click', function(){
+                if(profile.roles.indexOf('ROLE_ADMIN') !== -1){
+                    profile.roles.splice(profile.roles.indexOf('ROLE_ADMIN'), 1);
+                }else{
+                    profile.roles.push('ROLE_ADMIN');
+                }
+
+                Profile.update({profileId: profile._id}, profile, function(response){
+
+                }, function(response){
+                    log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+                });
+            });
+        }
+    }
+}]);
+
+angular.module('bgc.directives').directive('roleToggleUser', ['Profile', function(Profile){
+    return {
+        restrict: 'A',
+        replace: true,
+        link: function(scope, elm, attrs){
+            var profile;
+            attrs.$observe('user', function(user){
+                //console.log('Profile: ' + user);
+                profile = scope.$eval(user);
+                if(profile.roles.indexOf('ROLE_USER') !== -1){
+                    elm.button('toggle');
+                }
+            });
+
+            elm.bind('click', function(){
+                if(profile.roles.indexOf('ROLE_USER') !== -1){
+                    profile.roles.splice(profile.roles.indexOf('ROLE_USER'), 1);
+                }else{
+                    profile.roles.push('ROLE_USER');
+                }
+
+                Profile.update({profileId: profile._id}, profile, function(response){
+
+                }, function(response){
+                    log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+                });
+            });
+        }
+    }
+}]);
+
+angular.module('bgc.directives').directive('roleToggleMember', ['Profile', function(Profile){
+    return {
+        restrict: 'A',
+        replace: true,
+        link: function(scope, elm, attrs){
+            var profile;
+            attrs.$observe('user', function(user){
+                //console.log('Profile: ' + user);
+                profile = scope.$eval(user);
+                if(profile.roles.indexOf('ROLE_MEMBER') !== -1 || profile.roles.indexOf('ROLE_ADMIN') !== -1){
+                    elm.button('toggle');
+                }
+            });
+
+            elm.bind('click', function(){
+                if(profile.roles.indexOf('ROLE_MEMBER') !== -1){
+                    profile.roles.splice(profile.roles.indexOf('ROLE_MEMBER'), 1);
+                }else{
+                    profile.roles.push('ROLE_MEMBER');
+                }
+
+                Profile.update({profileId: profile._id}, profile, function(response){
+
+                }, function(response){
+                    log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+                });
+            });
+        }
+    }
+}]);
+
+angular.module('bgc.directives').directive('toggleMaleFemalePortrait', function(){
+
 });

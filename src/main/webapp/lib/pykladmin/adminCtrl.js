@@ -147,6 +147,14 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
         });
     };
 
+    $scope.$on('togglePortrait', function(){
+        if($scope.profile.thumbnail === 'images/GCEE_image_profileMale_135x135.jpeg'){
+            $scope.profile.thumbnail = 'images/GCEE_image_profileFemale_135x135.jpeg';
+        }else if($scope.profile.thumbnail === 'images/GCEE_image_profileFemale_135x135.jpeg'){
+            $scope.profile.thumbnail = 'images/GCEE_image_profileMale_135x135.jpeg';
+        }
+    });
+
     $scope.cancel = function(){
         $location.path('/admin/users');
     }
