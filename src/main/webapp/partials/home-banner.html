@@ -4,38 +4,38 @@
             <img src="{{cms.thumbnail}}" alt="{{cms.title}}">
             <a ng-href="#/summit">
                 <div read-more-hover class="read-more gradient">
-                    <p x-cms="read_more">{{cms.content}}</p>
+                    <p x-cms="read_more"><span ng-bind-html-unsafe="cms.content" /></p>
                     <div class="read-more-arrow"></div>
                 </div>
             </a>
         </div>
         <h3>{{cms.title}}</h3>
-        <p>{{cms.content}}</p>
+        <p ng-bind-html-unsafe="cms.content"/>
     </div>
     <div class="span4" x-cms="home_banner_col2">
         <div class="new-picture-frame banner-3-col">
             <img src="{{cms.thumbnail}}" alt="{{cms.title}}">
             <a ng-href="#/content">
                 <div read-more-hover class="read-more gradient">
-                    <p x-cms="read_more">{{cms.content}}</p>
+                    <p x-cms="read_more"><span ng-bind-html-unsafe="cms.content" /></p>
                     <div class="read-more-arrow"></div>
                 </div>
             </a>
         </div>
         <h3>{{cms.title}}</h3>
-        <p>{{cms.content}}</p>
+        <p ng-bind-html-unsafe="cms.content"/>
     </div>
     <div class="span4" x-cms="home_banner_col3">
         <div class="new-picture-frame banner-3-col">
             <img src="{{cms.thumbnail}}" alt="{{cms.title}}">
             <a ng-href="#/network/discussion/list">
                 <div read-more-hover class="read-more gradient">
-                    <p x-cms="read_more">{{cms.content}}</p>
+                    <p x-cms="read_more"><span ng-bind-html-unsafe="cms.content" /></p>
                     <div class="read-more-arrow"></div>
                 </div>
             </a>
         </div>
         <h3>{{cms.title}}</h3>
-        <p>{{cms.content}}</p>
+        <p ng-bind-html-unsafe="cms.content"/>
     </div>
 </div>

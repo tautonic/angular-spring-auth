@@ -270,7 +270,7 @@ var pykl = window.pykl || {};
                     }
 
                     function displayOnAuth() {
-                        console.log('Auth', $auth, 'Editor? ', $auth.isUserInRole('ROLE_EDITOR'));
+                        $log.info('Auth', $auth, 'Editor? ', $auth.isUserInRole('ROLE_EDITOR'));
                         if ($auth.isUserInRole('ROLE_EDITOR')) showEdit(); else hideEdit();
                     }
 
@@ -314,9 +314,10 @@ var pykl = window.pykl || {};
 
                                 // Create the edit button and add a handler that will trigger the modal
                                 // edit dialog
-                                attachEdit(element).click(function () {
+                                attachEdit(element).click(function (e) {
                                     $log.info('Edit clicked, broadcasting: ', CMS_EDIT_EVENT, lookup);
                                     $rootScope.$broadcast(CMS_EDIT_EVENT, lookup);
+                                    e.preventDefault();
                                 });
 
                                 displayOnAuth();
