@@ -264,7 +264,7 @@ angular.module('bgc.directives')
                     runtimes: 'html5',
                     browse_button: 'choose-files',
                     container:'container',
-                    url: '/gc/api/profiles/images/upload/',
+                    url: 'api/profiles/images/upload/',
                     max_file_size:'100mb',
                     resize:{width:320, height:240, quality:90},
                     flash_swf_url:'../js/plupload.flash.swf',
@@ -365,7 +365,7 @@ angular.module('bgc.directives')
 
                         var scope = config.scope;
 
-                        $http.post('/gc/api/profiles/images/crop/', data).success(
+                        $http.post('api/profiles/images/crop/', data).success(
                             function(data, status, headers, config){
                                 var uri = data.response.uri;
                                 uri = uri.replace(/http:/, '');
@@ -419,7 +419,7 @@ angular.module('bgc.directives')
                 runtimes: 'html5',
                 browse_button: 'choose-files',
                 //container:'container',
-                url: '/gc/api/profiles/images/upload/',
+                url: 'api/profiles/images/upload/',
                 max_file_size:'100mb',
                 resize:{width:'100%', quality:90},
                 flash_swf_url:'../js/plupload.flash.swf',
@@ -528,7 +528,7 @@ angular.module('bgc.directives')
                 var scope = config.scope;
                 var profile = scope.$parent.profile;
 
-                $http.post('/gc/api/profiles/images/crop/', data).success(
+                $http.post('api/profiles/images/crop/', data).success(
                     function(data, status, headers, config){
                         $('.upload-progress').remove();
                         var uri = data.content.uri;
@@ -1268,7 +1268,7 @@ angular.module('bgc.directives').directive('adminResetPassword', ['$http', funct
                     profileEmail: attrs.email
                 };
 
-                $http.post('/gc/api/utility/resettoken/', data)
+                $http.post('api/utility/resettoken/', data)
                     .success(function(data, status, headers, config){
                         if(data.success) {
                             elm.parents('.btn-group-border').fadeOut('fast', function(){
@@ -1294,7 +1294,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
                 runtimes: 'html5',
                 browse_button: 'choose-files',
                 container:'container',
-                url: '/gc/api/profiles/images/upload/',
+                url: 'api/profiles/images/upload/',
                 max_file_size:'100mb',
                 resize:{width:320, height:240, quality:90},
                 //flash_swf_url:'../js/plupload.flash.swf',
@@ -1430,7 +1430,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
 
                         var attachmentId;
 
-                        $http.post('/gc/api/attachments', attachment)
+                        $http.post('api/attachments', attachment)
                             .success(function(data, status){
                                 var date = new Date();
                                 date = date.getMonth()+1 +'/'+date.getDate()+'/'+date.getFullYear();
