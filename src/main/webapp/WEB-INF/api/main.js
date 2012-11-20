@@ -16,6 +16,7 @@ var {Application} = require( 'stick' );
 var {ajax, searchAllArticles, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle, returnRandomQuote} = require('articles');
 var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
 var {convertActivity, getLatestActivity} = require('activities');
+var {getZociaUrl, getLocalUrl} = require('utility/getUrls');
 
 var {encode} = require('ringo/base64');
 
@@ -82,7 +83,7 @@ app.get('/article/all', function(req) {
 });
 
 function articles(req, type, max) {
-    var articles = getAllArticles(type, max);
+    var articles = getAllArticles(req, type, max);
 
     if(articles.success) {
         return json(articles.content);
@@ -91,13 +92,13 @@ function articles(req, type, max) {
 }
 
 app.get('/article/search', function(req) {
-    var articles = searchAllArticles(req.params);
+    var articles = searchAllArticles(req, req.params);
 
     return json(articles);
 });
 
 app.get('/article/all/bycategory/:category', function(req, category) {
-    var articles = getArticlesByCategory(category);
+    var articles = getArticlesByCategory(req, category);
 
     if(articles.success) {
         return json(articles.content);
@@ -106,7 +107,7 @@ app.get('/article/all/bycategory/:category', function(req, category) {
 });
 
 app.get('/article/:id', function(req, id) {
-    var article = getArticle(id);
+    var article = getArticle(req, id);
 
     if(article.success) {
         var servletRequest = req.env.servletRequest;
@@ -148,7 +149,7 @@ app.post('/admin/articles', function(req){
     req.postParams.roles = ['ROLE_ANONYMOUS'];
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/resources/',
+        url: getZociaUrl(req) + '/resources/',
         method: 'POST',
         data: JSON.stringify(req.postParams),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
@@ -161,7 +162,7 @@ app.post('/admin/articles', function(req){
 app.put('/admin/articles/:id', function(req, id){
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
-    {     log.info("USER IS NOT ADMIN");
+    {
         return {
             status:401,
             headers:{"Content-Type":'text/html'},
@@ -172,7 +173,7 @@ app.put('/admin/articles/:id', function(req, id){
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/resources/' + id,
+        url: getZociaUrl(req) + '/resources/' + id,
         method: 'PUT',
         data: JSON.stringify(req.postParams),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
@@ -185,7 +186,7 @@ app.put('/admin/articles/:id', function(req, id){
 app.del('/admin/articles/:id', function(req, id){
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
     var opts = {
-        url: 'http://localhost:9300/myapp/api/resources/' + id,
+        url: getZociaUrl(req) + '/resources/' + id,
         method: 'DELETE',
         data: JSON.stringify(req.postParams),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
@@ -201,11 +202,11 @@ app.del('/admin/articles/:id', function(req, id){
  * Returns a list of discussion topics
  */
 app.get('/discussions/all', function(req) {
-    var discussions = getDiscussionList(req.params).content;
+    var discussions = getDiscussionList(req, req.params).content;
 
     discussions.forEach(function(discussion) {
         if(discussion.parentId) {
-            var linked = getArticle(discussion.parentId);
+            var linked = getArticle(req, discussion.parentId);
 
             if(linked) {
                 discussion.linkedItem = linked.content;
@@ -227,7 +228,7 @@ app.get('/discussions/all', function(req) {
  * Returns a single discussion, in threaded format
  */
 app.get('/discussions/:id', function(req, id) {
-    var result = getDiscussion(id, req.params);
+    var result = getDiscussion(req, id, req.params);
 
     if(!result.success) {
         return {
@@ -241,7 +242,7 @@ app.get('/discussions/:id', function(req, id) {
 });
 
 app.get('/discussions/byParent/:id', function(req, id) {
-    var result = getDiscussionByParent(id, req.params);
+    var result = getDiscussionByParent(req, id, req.params);
 
     if(!result.success) {
         return json(false);
@@ -256,7 +257,7 @@ app.get('/discussions/byParent/:id', function(req, id) {
 app.put('/discussions/:id/:post', function(req, id, post) {
     var editedPost = req.params;
 
-    return json(editDiscussionPost(id, post, editedPost, getUserDetails()));
+    return json(editDiscussionPost(req, id, post, editedPost, getUserDetails()));
 });
 
 /**
@@ -270,7 +271,7 @@ app.post('/discussions/new', function(req) {
         discussion = discussion["0"];
     }
 
-    var result = createDiscussion(discussion, getUserDetails());
+    var result = createDiscussion(req, discussion, getUserDetails());
 
     if(result != false) {
         if(result.title !== "") {
@@ -297,7 +298,7 @@ app.post('/discussions/:id', function(req, id) {
         };
     }
 
-    return json(addReply(id, req.params, getUserDetails()));
+    return json(addReply(req, id, req.params, getUserDetails()));
 });
 /****** End discussion posts ********/
 
@@ -327,7 +328,7 @@ app.get('/notifications', function(req) {
         filteredActivities = filteredActivities.replace(activity, '');
     });
 
-    var url = 'http://localhost:9300/myapp/api/activities/streams/' + profile.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ',');
+    var url = getZociaUrl(req) + '/activities/streams/' + profile.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ',');
 
     // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
     var exchange = ajax(url);
@@ -378,7 +379,7 @@ app.post('/follow/:followedById/:entityId', function(req, followedById, entityId
     var user = getUserDetails();
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/follow/' + followedById + "/" + entityId,
+        url: getZociaUrl(req) + '/follow/' + followedById + "/" + entityId,
         method: 'POST',
         data: {},
         headers: Headers({ "Authorization": _generateBasicAuthorization(user.username, user.password), 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
@@ -392,7 +393,7 @@ app.del('/follow/:followedById/:entityId', function(req, followedById, entityId)
     var user = getUserDetails();
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/follow/' + followedById + "/" + entityId,
+        url: getZociaUrl(req) + '/follow/' + followedById + "/" + entityId,
         method: 'DELETE',
         data: {},
         headers: Headers({ "Authorization": _generateBasicAuthorization(user.username, user.password), 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
@@ -404,7 +405,7 @@ app.del('/follow/:followedById/:entityId', function(req, followedById, entityId)
 
 app.get('/following/:userId', function(req, userId, params) {
     var opts = {
-        url: 'http://localhost:9300/myapp/api/follow/byUser/' + userId,
+        url: getZociaUrl(req) + '/follow/byUser/' + userId,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
@@ -433,7 +434,7 @@ app.get('/following/:userId', function(req, userId, params) {
 
 app.get('/followers/:userId', function(req, userId, params) {
     var opts = {
-        url: 'http://localhost:9300/myapp/api/follow/byEntity/' + userId,
+        url: getZociaUrl(req) + '/follow/byEntity/' + userId,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
@@ -463,7 +464,7 @@ app.get('/followers/:userId', function(req, userId, params) {
 function getUser(req, id) {
     var user = getUserDetails();
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        url: getZociaUrl(req) + '/profiles/' + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -473,7 +474,7 @@ function getUser(req, id) {
 
     var profile = JSON.parse(exchange.content);
 
-    profile.isUserFollowing = isUserFollowing(profile._id);
+    profile.isUserFollowing = isUserFollowing(req, profile._id);
     profile.facultyFellow = profile.roles.some(function(role) {
         return role == "ROLE_PREMIUM";
     });
@@ -483,11 +484,11 @@ function getUser(req, id) {
     return profile;
 }
 
-function isUserFollowing(id) {
+function isUserFollowing(req, id) {
     var user = getUserDetails();
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/follow/' + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + '/follow/' + user.principal.id + "/" + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
@@ -531,7 +532,7 @@ app.post('/profiles/', function(req){
     data.source = 'GC';
     data.accountEmail.status = 'unverified';
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/',
+        url: getZociaUrl(req) + '/profiles/',
         method: 'POST',
         data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
@@ -543,7 +544,7 @@ app.post('/profiles/', function(req){
 
 app.get('/profiles/:id', function(req, id){
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        url: getZociaUrl(req) + '/profiles/' + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -552,7 +553,7 @@ app.get('/profiles/:id', function(req, id){
     var exchange = httpclient.request(opts);
 
     if(exchange.status === 400) {
-        opts.url = 'http://localhost:9300/myapp/api/profiles/byusername/' + id;
+        opts.url = getZociaUrl(req) + '/profiles/byusername/' + id;
 
         exchange = httpclient.request(opts);
     }
@@ -570,7 +571,7 @@ app.get('/profiles/:id', function(req, id){
 
     result.status = exchange.status;
 
-    result.content.isUserFollowing = isUserFollowing(result.content._id);
+    result.content.isUserFollowing = isUserFollowing(req, result.content._id);
     result.content.facultyFellow = result.content.roles.some(function(role) {
         return role == "ROLE_PREMIUM";
     });
@@ -582,7 +583,7 @@ app.get('/profiles/admin', function(req){
     var user = getUserDetails();
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/gc/admin',
+        url: getZociaUrl(req) + '/profiles/gc/admin',
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -610,7 +611,7 @@ app.get('/profiles/admin', function(req){
     profiles.forEach(function(profile){
         profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);
 
-        profile.isUserFollowing = isUserFollowing(profile._id);
+        profile.isUserFollowing = isUserFollowing(req, profile._id);
 
         profile.facultyFellow = profile._source.roles.some(function(role) {
             return role == "ROLE_PREMIUM";
@@ -635,7 +636,7 @@ app.post('/profiles/admin/status', function(req){
     var data = req.postParams;
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/gc/admin/status',
+        url: getZociaUrl(req) + '/profiles/gc/admin/status',
         data: JSON.stringify(data),
         method: 'POST',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
@@ -657,7 +658,7 @@ app.post('/profiles/admin/status', function(req){
     profiles.forEach(function(profile){
         profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);;
 
-        profile.isUserFollowing = isUserFollowing(profile._id);
+        profile.isUserFollowing = isUserFollowing(req, profile._id);
 
         profile.facultyFellow = profile._source.roles.some(function(role) {
             return role == "ROLE_PREMIUM";
@@ -680,7 +681,7 @@ app.get('/profiles/', function(req){
     var user = getUserDetails();
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/',
+        url: getZociaUrl(req) + '/profiles/',
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -695,7 +696,7 @@ app.get('/profiles/', function(req){
     profiles.forEach(function(profile){
         profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);
 
-        profile.isUserFollowing = isUserFollowing(profile._id);
+        profile.isUserFollowing = isUserFollowing(req, profile._id);
 
         if(profile._id === user.principal.id){
             profile.cannotFollow = true;
@@ -754,7 +755,7 @@ app.put('/profiles/:id', function(req, id){
 
     log.info('PROFILE UPDATE PARAMS ' + JSON.stringify(req.postParams, null, 4));
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        url: getZociaUrl(req) + '/profiles/' + id,
         method: 'PUT',
         data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
@@ -767,7 +768,7 @@ app.put('/profiles/:id', function(req, id){
 app.del('/profiles/:id', function(req, id){
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        url: getZociaUrl(req) + '/profiles/' + id,
         method: 'DELETE',
         data: JSON.stringify(req.postParams),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
@@ -779,7 +780,7 @@ app.del('/profiles/:id', function(req, id){
 
 app.get('/profiles/byprimaryemail/:email', function(req, email){
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/byprimaryemail/' + email,
+        url: getZociaUrl(req) + '/profiles/byprimaryemail/' + email,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -790,7 +791,7 @@ app.get('/profiles/byprimaryemail/:email', function(req, email){
 
 app.get('/profiles/byusername/:username', function(req, username){
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/byusername/' + username,
+        url: getZociaUrl(req) + '/profiles/byusername/' + username,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -847,7 +848,7 @@ app.post('/profiles/images/upload/', function (req) {
             }
 
             var opts = {
-                "url": 'http://localhost:9300/myapp/api/files/upload/',
+                "url": getZociaUrl(req) + '/files/upload/',
                 "headers": headers,
                 "data": params.file.value,
                 "method": 'PUT'
@@ -919,7 +920,7 @@ app.post('/profiles/images/crop/', function (req) {
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
     var opts = {
-        "url": 'http://localhost:9300/myapp/api/files/crop/' + params.assetKey,
+        "url": getZociaUrl(req) + '/files/crop/' + params.assetKey,
         "headers": {
             'x-rt-index': 'gc',
             'Authorization': auth
@@ -933,7 +934,7 @@ app.post('/profiles/images/crop/', function (req) {
 
 app.get('/profiles/images/', function(req, id){
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/' + id,
+        url: getZociaUrl(req) + '/profiles/' + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -981,7 +982,7 @@ app.get('/profiles/images/', function(req, id){
 
 app.post('/attachments', function(req, id){
     var opts = {
-        url: 'http://localhost:9300/myapp/api/resources/',
+        url: getZociaUrl(req) + '/resources/',
         method: 'POST',
         data: JSON.stringify(req.postParams),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
@@ -1005,7 +1006,7 @@ app.get('/utility/getquote', function(req) {
 // increments view count for an object
 app.post('/utility/view/:id', function(req, id) {
     var opts = {
-        url: "http://localhost:9300/myapp/api/views/" + id,
+        url: getZociaUrl(req) + "/views/" + id,
         method: 'POST',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -1021,7 +1022,7 @@ app.post('/utility/like/:id', function(req, id) {
     var user = getUserDetails();
 
     var opts = {
-        url: "http://localhost:9300/myapp/api/likes/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/likes/" + user.principal.id + "/" + id,
         method: 'POST',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -1037,7 +1038,7 @@ app.get('/utility/like/:id', function(req, id) {
     var user = getUserDetails();
 
     var opts = {
-        url: "http://localhost:9300/myapp/api/likes/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/likes/" + user.principal.id + "/" + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -1058,7 +1059,7 @@ app.post('/utility/unlike/:id', function(req, id) {
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
     var opts = {
-        url: "http://localhost:9300/myapp/api/likes/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/likes/" + user.principal.id + "/" + id,
         method: 'DELETE',
         headers: Headers({ 'x-rt-index': 'gc', 'Authorization': auth }),
         async: false
@@ -1074,7 +1075,7 @@ app.post('/utility/spam/:id', function(req, id) {
     var user = getUserDetails();
 
     var opts = {
-        url: "http://localhost:9300/myapp/api/spams/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/spams/" + user.principal.id + "/" + id,
         method: 'POST',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -1091,7 +1092,7 @@ app.get('/utility/spam/:id', function(req, id) {
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
     var opts = {
-        url: "http://localhost:9300/myapp/api/spams/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/spams/" + user.principal.id + "/" + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Authorization': auth }),
         async: false
@@ -1112,7 +1113,7 @@ app.post('/utility/unspam/:id', function(req, id) {
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
     var opts = {
-        url: "http://localhost:9300/myapp/api/spams/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/spams/" + user.principal.id + "/" + id,
         method: 'DELETE',
         headers: Headers({ 'x-rt-index': 'gc', 'Authorization': auth }),
         async: false
@@ -1128,12 +1129,12 @@ app.post('/utility/unspam/:id', function(req, id) {
  */
 app.post('/utility/resettoken/', function(req){
     var data = req.postParams;
-    data.callback = 'http://localhost:9300/myapp/api/';
+    data.callback = getZociaUrl(req) + '/';
 
     log.info('SEND PASSWORD POST DATA!!! ', JSON.stringify(data, null, 4));
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/email/resettoken',
+        url: getZociaUrl(req) + '/email/resettoken',
         method: 'POST',
         data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
@@ -1150,7 +1151,7 @@ app.post('/utility/resetpassword/', function(req){
     var data = req.postParams;
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/email/resetpassword',
+        url: getZociaUrl(req) + '/email/resetpassword',
         method: 'POST',
         data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
@@ -1165,7 +1166,7 @@ app.post('/utility/verifyprofile', function(req){
     log.info('Profile id {}', params.profileId);
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/email/resendverifyprofile/' + params.profileId,
+        url: getZociaUrl(req) + '/email/resendverifyprofile/' + params.profileId,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
@@ -1179,7 +1180,7 @@ app.post('/utility/verifyprofile', function(req){
  */
 app.get('/utility/verifyemail/:token', function(req, token){
     var opts = {
-        url: 'http://localhost:9300/myapp/api/email/verifyprofile/' + token,
+        url: getZociaUrl(req) + '/email/verifyprofile/' + token,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
@@ -1193,7 +1194,7 @@ app.get('/utility/verifyemail/:token', function(req, token){
  */
 app.get('/utility/resendvalidationcode/:email', function(req, email){
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/byprimaryemail/' + email,
+        url: getZociaUrl(req) + '/profiles/byprimaryemail/' + email,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
@@ -1208,7 +1209,7 @@ app.get('/utility/resendvalidationcode/:email', function(req, email){
     var id = JSON.parse(exchange.content)._id;
 
     opts = {
-        url: 'http://localhost:9300/myapp/api/email/resendverifyprofile/' + id,
+        url: getZociaUrl(req) + '/email/resendverifyprofile/' + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
@@ -1219,7 +1220,7 @@ app.get('/utility/resendvalidationcode/:email', function(req, email){
 
 app.post('/utility/sendusername/:email', function(req, email){
     var opts = {
-        url: 'http://localhost:9300/myapp/api/email/sendusername/' + email,
+        url: getZociaUrl(req) + '/email/sendusername/' + email,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
@@ -1230,7 +1231,7 @@ app.post('/utility/sendusername/:email', function(req, email){
 
 // GCEE global search
 app.post('/search/site/', function(req){
-    var url = 'http://localhost:9300/myapp/api/search/';
+    var url = getZociaUrl(req) + '/search/';
 
     log.info('Request params {}', JSON.stringify(req.postParams, null, 4));
     var dataType = 'posts,resources,profiles';
@@ -1294,7 +1295,7 @@ app.post('/search/site/', function(req){
             log.info('Filtered discussion object {}', JSON.stringify(object._source, null, 4));
 
             var opts = {
-                url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + object._id + '&types=discussion',
+                url: getZociaUrl(req) + '/posts/byentities/count?ids[]=' + object._id + '&types=discussion',
                 method: 'GET',
                 headers: Headers({ 'x-rt-index': 'gc' }),
                 async: false
@@ -1326,7 +1327,7 @@ app.post('/search/site/', function(req){
 
 app.post('/search/faculty/', function(req){
     var user = getUserDetails();
-    var url = 'http://localhost:9300/myapp/api/search/';
+    var url = getZociaUrl(req) + '/search/';
 
     var queryParams = [
         'q=' + encodeURIComponent(req.postParams.q),
@@ -1373,7 +1374,7 @@ app.post('/search/faculty/', function(req){
 });
 
 app.post('/search/content/', function(req){
-    var url = 'http://localhost:9300/myapp/api/search/';
+    var url = getZociaUrl(req) + '/search/';
 
     var queryParams = [
         'q=' + encodeURIComponent(req.postParams.q),
@@ -1397,7 +1398,7 @@ app.post('/search/content/', function(req){
 });
 
 app.post('/search/discussions/', function(req){
-    var url = 'http://localhost:9300/myapp/api/search/';
+    var url = getZociaUrl(req) + '/search/';
 
     var queryParams = [
         'q=' + encodeURIComponent(req.postParams.q),
@@ -1430,7 +1431,7 @@ app.post('/search/discussions/', function(req){
     //number of replies/comments
     threads.forEach(function(thread){
         opts = {
-            url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread._id + '&types=discussion',
+            url: getZociaUrl(req) + '/posts/byentities/count?ids[]=' + thread._id + '&types=discussion',
             method: 'GET',
             headers: Headers({ 'x-rt-index': 'gc' }),
             async: false
@@ -1459,7 +1460,7 @@ app.post('/search/discussions/', function(req){
  *
  ************************/
 app.get('/admin/users', function(req) {
-    var url = 'http://localhost:9300/myapp/api/profiles/';
+    var url = getZociaUrl(req) + '/profiles/';
 
     var opts = {
         url: url,
@@ -1486,7 +1487,7 @@ app.put('/admin/users', function(req) {
     };
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/profiles/' + req.postParams._id,
+        url: getZociaUrl(req) + '/profiles/' + req.postParams._id,
         method: 'PUT',
         data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),

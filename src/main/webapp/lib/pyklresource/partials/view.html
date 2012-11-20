@@ -45,7 +45,7 @@
                 <span class="doc-type {{article.doctype}}"></span>
                 <span class="premium" ng-show="article.premium"></span>
                 <div class="article-tweet-button" reload-twitter-btns>
-                    <a href="https://twitter.com/share" data-url="http://localhost:8080/gc/#/content/{{article._id}}" data-text="Babson GC: {{article.title}}" class="twitter-share-button" data-lang="en">Tweet</a>
+                    <a href="https://twitter.com/share" data-url="{{url}}" data-text="Babson GC: {{article.title}}" class="twitter-share-button" data-lang="en">Tweet</a>
                 </div>
                 <span class="muted"><like objectid="{{article._id}}"></like> ({{article.likes}})</span>
             </p>

@@ -3,7 +3,7 @@
         <div thumbnail thumb=post.creator size="medium" rotation="counter-clockwise" type="profile" />
     </div>
     <h4>{{post.title}}</h4>
-    <h6><a ng-href="#/profile/{{post.creator._id}}">{{post.creator.username}}</a></h6>
+    <h6><a ng-href="#/profiles/view/{{post.creator._id}}">{{post.creator.username}}</a></h6>
     <h6>{{post.dateCreated | asDate: 'fullDate'}}</h6>
 
     <p ng-bind-html-unsafe="post.message" ng-show="!post.edit"></p>

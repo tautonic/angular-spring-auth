@@ -35,9 +35,16 @@
     <link rel="stylesheet" href="lib/angularui/select2/select2.css"/>
 
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-    function openSearch() {
-        $("#searchSite").toggleClass('slideout');
-    }
+
+        function openSearch() {
+            $("#searchSite").toggleClass('slideout');
+        }
+        var baseUrl = function() {
+            var result = window.location.protocol + '//' + window.location.hostname;
+            result += (window.location.port != 80) ? (':' + window.location.port) : '';
+            result += window.location.pathname;
+            return result;
+        }();
     </script>
 </head>
 <body>

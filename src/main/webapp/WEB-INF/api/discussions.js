@@ -1,8 +1,9 @@
 var httpclient = require('ringo/httpclient');
 var {Headers} = require('ringo/utils/http');
 var {encode} = require('ringo/base64');
+var {getZociaUrl, getLocalUrl} = require('utility/getUrls');
 
-var getDiscussion = function(id, params) {
+var getDiscussion = function(req, id, params) {
     if(id == "new")
     {
         return {
@@ -12,7 +13,7 @@ var getDiscussion = function(id, params) {
         }
     }
 
-    var url = "http://localhost:9300/myapp/api/posts/" + id + "/threads";
+    var url = getZociaUrl(req) + "/posts/" + id + "/threads";
 
     /*if(params !== "undefined") {
         if((params.from) && (params.size))
@@ -55,7 +56,7 @@ var getDiscussion = function(id, params) {
     };
 };
 
-var getDiscussionByParent = function(parentId, params) {
+var getDiscussionByParent = function(req, parentId, params) {
     var query = {
         "query": {
             "bool": {
@@ -77,7 +78,7 @@ var getDiscussionByParent = function(parentId, params) {
     }
 
     var opts = {
-        url: "http://localhost:9300/myapp/api/posts/search",
+        url: getZociaUrl(req) + "/posts/search",
         method: 'POST',
         data: JSON.stringify(query),
         headers: Headers({ "x-rt-index": "gc", "Content-Type": "application/json" }),
@@ -96,11 +97,11 @@ var getDiscussionByParent = function(parentId, params) {
         threadId = "new";
     }
 
-    return getDiscussion(threadId);
+    return getDiscussion(req, threadId);
 };
 
-var getDiscussionList = function(params) {
-    var url = "http://localhost:9300/myapp/api/posts/filtered?from=" + params.from + "&size=" + params.size;
+var getDiscussionList = function(req, params) {
+    var url = getZociaUrl(req) + "/posts/filtered?from=" + params.from + "&size=" + params.size;
 
     var opts = {
         url: url,
@@ -119,7 +120,7 @@ var getDiscussionList = function(params) {
     //and hides spam threads
     threads.forEach(function(thread){
         opts = {
-            url: 'http://localhost:9300/myapp/api/posts/byentities/count?ids[]=' + thread._id + '&types=' + thread.type,
+            url: getZociaUrl(req) + '/posts/byentities/count?ids[]=' + thread._id + '&types=' + thread.type,
             method: 'GET',
             headers: Headers({ 'x-rt-index': 'gc' }),
             async: false
@@ -143,7 +144,7 @@ var getDiscussionList = function(params) {
     };
 };
 
-var addReply = function(parentId, reply, user) {
+var addReply = function(req, parentId, reply, user) {
     var data = {
         "dataType": "posts",
         "dateCreated": "",
@@ -168,7 +169,7 @@ var addReply = function(parentId, reply, user) {
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/posts/'+reply.parentId,
+        url: getZociaUrl(req) + '/posts/'+reply.parentId,
         method: 'POST',
         data: JSON.stringify(data),
         headers: headers,
@@ -182,7 +183,7 @@ var addReply = function(parentId, reply, user) {
 
 var log = require( 'ringo/logging' ).getLogger( module.id );
 
-var createDiscussion = function(firstPost, user) {
+var createDiscussion = function(req, firstPost, user) {
 
     var data = {
         "dataType": "posts",
@@ -204,7 +205,7 @@ var createDiscussion = function(firstPost, user) {
         "active": true
     };
 
-    var url = 'http://localhost:9300/myapp/api/posts/';
+    var url = getZociaUrl(req) + '/posts/';
     if(firstPost.parentId !== null) {
         url += firstPost.parentId.toString();
     }
@@ -229,7 +230,7 @@ var createDiscussion = function(firstPost, user) {
     return false;
 };
 
-var editDiscussionPost = function(id, postId, postContent, user) {
+var editDiscussionPost = function(req, id, postId, postContent, user) {
 
     var data = {
         "dataType": "posts",
@@ -250,7 +251,7 @@ var editDiscussionPost = function(id, postId, postContent, user) {
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
-        url: 'http://localhost:9300/myapp/api/posts/'+postId,
+        url: getZociaUrl(req) + '/posts/'+postId,
         method: 'PUT',
         data: JSON.stringify(data),
         headers: headers,

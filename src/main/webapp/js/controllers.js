@@ -117,7 +117,7 @@ function forgotPasswordController($rootScope, $scope, $location, $http){
             profileEmail: $scope.email
         }
 
-        $http.post('/gc/api/utility/resettoken/', data)
+        $http.post('api/utility/resettoken/', data)
             .success(function(data, status, headers, config){
                 if(data.success) {
                     $location.path('/passswordsendsuccess');
@@ -144,7 +144,7 @@ function resetPasswordController($rootScope, $scope, $routeParams, $http){
         token: $routeParams.token
     }
 
-    $http.post('/gc/api/utility/resetpassword/', data)
+    $http.post('api/utility/resetpassword/', data)
         .success(function(data, status, headers, config){
             if(data.success) {
                 $scope.resetStatus = "success";
@@ -171,7 +171,7 @@ function activateAccountController($rootScope, $scope, $location, $http){
     }
 
     $scope.resend = function() {
-        $http.get('/gc/api/utility/resendvalidationcode/' + $scope.email)
+        $http.get('api/utility/resendvalidationcode/' + $scope.email)
             .success(function(data){
                 if(data.success) {
                     $scope.resetStatus = "success";

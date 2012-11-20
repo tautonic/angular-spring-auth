@@ -60,7 +60,7 @@ angular.module('pykl.directives').directive('pyklUpload', ['pykl.config', functi
             var config = {
                 container:'container',
                 max_file_size:'10mb',
-                url:'/gc/api/profiles/pics/1',
+                url:'api/profiles/pics/1',
                 resize:{width:320, height:240, quality:90},
                 flash_swf_url:'../js/plupload.flash.swf',
                 silverlight_xap_url:'../js/plupload.silverlight.xap',

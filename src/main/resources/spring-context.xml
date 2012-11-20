@@ -2,8 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                             http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                            http://www.springframework.org/schema/util
+                            http://www.springframework.org/schema/util/spring-util-2.0.xsd
                             http://www.springframework.org/schema/task
                             http://www.springframework.org/schema/task/spring-task-3.0.xsd
         ">
@@ -19,6 +22,12 @@
         </property>
     </bean>
 
+    <util:map id="configParams" key-type="java.lang.String" value-type="java.lang.String">
+        <entry key="zociaUrl" value="${zociaUrl}"/>
+        <entry key="zociaBase" value="${zociaBase}"/>
+        <entry key="webappUrl" value="${webappUrl}"/>
+        <entry key="version" value="${buildnum}"/>
+    </util:map>
 
     <!-- *************************************************************************************** -->
     <!-- Hazelcast Configuration                                                                 -->
@@ -58,9 +67,6 @@
     <task:scheduled-tasks scheduler="gc-tasks">
         <task:scheduled ref="atStartup" method="run"  cron="0/15 * * * * *" />
     </task:scheduled-tasks>
-
-
-
 
 </beans>
 

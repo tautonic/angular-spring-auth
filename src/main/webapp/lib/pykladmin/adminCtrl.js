@@ -17,7 +17,7 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
         $scope.profiles = profiles.content;
     });*/
 
-    $http.get('/gc/api/profiles/admin').
+    $http.get('api/profiles/admin').
         success(function(data, status, headers, config){
             console.log(data);
             $scope.profiles = data.content;
@@ -133,7 +133,7 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
                 profileId: response.content._id
             }
 
-            $http.post('/gc/api/utility/verifyprofile/', data)
+            $http.post('api/utility/verifyprofile/', data)
                 .success(function(data, status, headers, config){
 
                 })
@@ -246,7 +246,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         //alert("Field_Name: " + field_name + " nURL: " + url + " nType: " + type + " nWin: " + win); // debug/testing
 
         tinyMCE.activeEditor.windowManager.open({
-            file : '../../../../../gc/partials/tinymceuploads.html',
+            file : baseUrl + 'partials/tinymceuploads.html',
             title : 'Babson GCEE Insert/Upload',
             width : 600,  // Your dimensions may differ - toy around with them!
             height : 220,
@@ -371,7 +371,7 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         //alert("Field_Name: " + field_name + " nURL: " + url + " nType: " + type + " nWin: " + win); // debug/testing
 
         tinyMCE.activeEditor.windowManager.open({
-            file : '../../../../../gc/partials/tinymceuploads.html',
+            file : baseUrl + 'partials/tinymceuploads.html',
             title : 'Babson GCEE Insert/Upload',
             width : 600,  // Your dimensions may differ - toy around with them!
             height : 220,

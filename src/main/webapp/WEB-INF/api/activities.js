@@ -5,7 +5,7 @@ var httpclient = require('ringo/httpclient');
 var {Headers} = require('ringo/utils/http');
 
 var {getArticle} = require('articles');
-
+var {getZociaUrl, getLocalUrl} = require('utility/getUrls');
 var {trimpathString} = require('trimpath');
 
 var text = {
@@ -36,6 +36,7 @@ var text = {
     "notifications-activity.ms.spams": "${actorLink} flagged a post as spam.",
     "notifications-activity.no.results": "No recent activity results.",
     "notifications-activity.r.discussions": "${actorLink} replied to a discussion titled ${directLink}.",
+    "notifications-activity.r.comment": "${actorLink} replied to a discussion titled ${directLink}.",
     "notifications-activity.recent-activity": "Recent Activity",
     "notifications-activity.spmessages.error": "(could not retrieve this message)",
     "notifications-activity.u.accomplish": "${actorLink} updated the accomplishments for ${directLink}",
@@ -55,9 +56,9 @@ var text = {
     "notifications-activity.ufsp.services": "${actorLink} stopped following ${directLink}."
 };
 
-function getDiscussion(id) {
+function getDiscussion(req, id) {
     var opts = {
-        url: "http://localhost:9300/myapp/api/posts/" + id,
+        url: getZociaUrl(req) + "/posts/" + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -65,7 +66,7 @@ function getDiscussion(id) {
 
     var exchange = httpclient.request(opts);
 
-    if(Math.floor(exchange.status / 100) !== 2) { console.log("DSICSSISON NOT FOUND");
+    if(Math.floor(exchange.status / 100) !== 2) {
         return {
             'status': 404,
             'content': JSON.parse(exchange.status),
@@ -162,7 +163,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                 }
 
                 // Determine if a post is a "reply" or not - if activity parentId prop resolves, it's a reply
-                //var thread = getDiscussion(direct.parentId);
+                //var thread = getDiscussion(request, direct.parentId);
                 //if (thread) {
                     //verb = 'r';	// for "reply"
                 //}
@@ -251,9 +252,9 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                     case 'resources':
                         linkId = about._id;
                         // Need to get the title here
-                        var resource = getArticle(about._id, request.locale);
+                        var resource = getArticle(request, about._id, request.locale);
                         linkText = resource.content.title;
-                        linkType = '#/content';
+                        linkType = '#/content/view';
                         break;
                     case 'posts':
                         linkText = about.title;
@@ -262,7 +263,7 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
 
                         if(about._id != about.parentId) {
                             // Get the discussion root
-                            var discussion = getDiscussion(about.parentId);
+                            var discussion = getDiscussion(request, about.parentId);
                             linkText = "a reply to " + discussion.title;
                             linkId = discussion._id
                         }
@@ -285,28 +286,22 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
                     case 'posts':
                         linkId = direct._id;
                         linkText = direct.title;
-                        linkType = '#/network';	// fix the URL
+                        linkType = (type == "discussions") ? ('#/network/discussion/view') : ('#/content/view');	// fix the URL
 
                         if(linkText === ''){
-                            var discussion = getDiscussion(direct._id);
+                            var discussion = getDiscussion(request, direct._id);
                             linkText = discussion.title;
                         }
 
                         // If the "about" object is a venture, this means the discussion is "private"
-                        if (about && about.dataType === 'ventures') {
-                            linkId = about.username + '/private/discussions/' + linkId;
-                            if (about.idea) {
-                                linkType = 'ideas';
-                            } else if (about.serviceProvider) {
-                                linkType = 'services';
-                            } else {
-                                linkType = 'companies';
-                            }
+                        if (type === "comment") {
+                            var discussion = getDiscussion(request, direct._id);
+                            linkId = discussion.parentId;
 
                             // Otherwise we have to look up the post info
                         } else if (about && about.dataType === "posts") {
                             // Get the discussion root
-                            var discussion = getDiscussion(about._id);
+                            var discussion = getDiscussion(request, about._id);
                             linkText = discussion.title;
                         }
                         break;
@@ -360,7 +355,7 @@ var getLatestActivity = function(request, profile, context, userId) {
         filteredActivities = filteredActivities.replace(activity, '');
     });
 
-    var url = 'http://localhost:9300/myapp/api/activities/byactor/' + profile._id;
+    var url = getZociaUrl(request) + '/activities/byactor/' + profile._id;
 
     var opts = {
         url: url,

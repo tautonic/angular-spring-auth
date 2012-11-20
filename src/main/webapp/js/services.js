@@ -8,7 +8,7 @@
 // This is a service that creates a resource called Profile
 angular.module( 'bgc.services', ['ngResource'] )
     .factory('Profile', function($resource){
-        return $resource('/gc/api/profiles/:profileId',
+        return $resource('api/profiles/:profileId',
             {},
             {
                 update:     { method: 'PUT', isArray: false },
@@ -19,7 +19,7 @@ angular.module( 'bgc.services', ['ngResource'] )
         );
     })
     .factory('Search', function($resource){
-        return $resource('/gc/api/search/:type',
+        return $resource('api/search/:type',
             {},
             {
                 site:     { method: 'POST', isArray: false },
@@ -30,7 +30,7 @@ angular.module( 'bgc.services', ['ngResource'] )
         );
     })
     .factory('Article', function($resource){
-        return $resource('/gc/api/admin/articles/:articleId',
+        return $resource('api/admin/articles/:articleId',
             {},
             {
                 update: { method: 'PUT', isArray: false },

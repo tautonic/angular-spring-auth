@@ -176,6 +176,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     var attachmentIndex = 0;
     $scope.filters = {};
     $scope.showModal = false;
+    $scope.url = baseUrl + '/#/content/view/' + $routeParams.articleId;
 
     function loadContent() {
         $http.get( url ).success( function (data) {
