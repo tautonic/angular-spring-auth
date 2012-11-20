@@ -143,7 +143,6 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
             }
 
             url = url + $scope.pageType;// + "?from=" + $scope.paging.from + "&size=" + $scope.paging.size;
-            $scope.pageType = "single";
 
             $scope.$on('$routeChangeSuccess', function(){
                 $rootScope.banner = 'none';
@@ -215,17 +214,19 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
             replyArgs.threadId = $scope.discussion.threadId;
         }
 
-        var replyUrl = 'api/discussions/' + $scope.discussion.threadId;
+        var replyUrl = 'api/discussions/' + replyArgs.threadId;
 
-        $http.post(replyUrl, replyArgs).success(function (data) {
+        $http.post(replyUrl, replyArgs).success(function (data) { console.log("post is: ",post); console.log("reply resulting data is: ",data);
             if(post !== undefined) {
                 post.reply.show = false;
                 post.reply.message = '';
+                data.children = [];
                 post.children.unshift(data);
             } else {
                 $scope.reply.show = false;
                 $scope.reply.message = '';
                 $scope.reply.title = '';
+                data.children = [];
                 $scope.discussion.children.unshift(data);
             }
 

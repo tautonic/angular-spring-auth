@@ -144,7 +144,7 @@ var getDiscussionList = function(req, params) {
     };
 };
 
-var addReply = function(req, parentId, reply, user) {
+var addReply = function(req, reply, user) {
     var data = {
         "dataType": "posts",
         "dateCreated": "",
@@ -169,7 +169,7 @@ var addReply = function(req, parentId, reply, user) {
     var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
-        url: getZociaUrl(req) + '/posts/'+reply.parentId,
+        url: getZociaUrl(req) + '/posts/'+reply.threadId,
         method: 'POST',
         data: JSON.stringify(data),
         headers: headers,
