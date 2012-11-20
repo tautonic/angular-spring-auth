@@ -23,9 +23,9 @@
 
                                     <div class="btn-group-border role-toggle">
                                         <div class="btn-group bgc" data-toggle="buttons-checkbox">
-                                            <button user-role-toggle roles={{profile._source.roles}} id="role-user" type="button" class="btn btn-success">User</button>
-                                            <button user-role-toggle roles={{profile._source.roles}} id="role-member" type="button" class="btn btn-success">Member</button>
-                                            <button user-role-toggle roles={{profile._source.roles}} id="role-admin" type="button" class="btn btn-success">Admin</button>
+                                            <button role-toggle-user user={{profile._source}} type="button" class="btn btn-success">User</button>
+                                            <button role-toggle-member user={{profile._source}} type="button" class="btn btn-success">Member</button>
+                                            <button role-toggle-admin user={{profile._source}} type="button" class="btn btn-success">Admin</button>
                                         </div>
                                     </div>
                                 </div>

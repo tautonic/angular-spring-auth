@@ -61,6 +61,10 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
                 console.log('Error! Search request was successful');
             });
     };
+
+    $scope.toggleRole = function(role){
+
+    }
 }
 
 function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location, Profile){

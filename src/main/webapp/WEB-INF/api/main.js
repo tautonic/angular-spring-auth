@@ -722,7 +722,7 @@ app.get('/profiles/', function(req){
 app.put('/profiles/:id', function(req, id){
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
-    var data = {
+    /*var data = {
         "username" : req.postParams.username,
         "name" : {
             "given": req.postParams.name.given,
@@ -737,7 +737,9 @@ app.put('/profiles/:id', function(req, id){
         "workHistory" : req.postParams.workHistory,
         "thumbnail": req.postParams.thumbnail,
         "about": req.postParams.about
-    };
+    };*/
+
+    var data = req.postParams;
 
     if(req.postParams.newPass && req.postParams.newPass !== ''){
         data.password = digest(req.postParams.newPass).toLowerCase();
