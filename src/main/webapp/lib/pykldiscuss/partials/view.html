@@ -14,7 +14,7 @@
             <div class="user">
                 <div thumbnail thumb=discussion.creator size="large" rotation="counter-clockwise" type="profile" />
             </div>
-            <h3><a ng-href="#/profile/{{discussion.creator._id}}">{{discussion.creator.username}}</a></h3>
+            <h3><a ng-href="#/profiles/view/{{discussion.creator._id}}">{{discussion.creator.username}}</a></h3>
             <h5>{{discussion.dateCreated | asDate: 'fullDate'}}</h5>
             <p ng-bind-html-unsafe="discussion.message" ng-show="!discussion.edit"></p>
             <!-- edit form -->
