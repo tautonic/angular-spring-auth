@@ -58,10 +58,22 @@ angular.module( 'bgc.directives', [] )
                 thumb: '='
             },
             link: function(scope, elm, attr){
+                scope.defaultImage = 'images/GCEE_image_profileMale_135x135.jpeg';
+
                 scope.thumbnail = {
                     image: 'images/GCEE_image_profileFemale_135x135.jpeg',
                     text: 'Read More',
                     style: 'profile-thumbnail large counter-clockwise'
+                }
+
+                scope.togglePortrait = function(){
+                    if(scope.defaultImage === 'images/GCEE_image_profileMale_135x135.jpeg'){
+                        scope.defaultImage = 'images/GCEE_image_profileFemale_135x135.jpeg';
+                    }else if(scope.defaultImage === 'images/GCEE_image_profileFemale_135x135.jpeg'){
+                        scope.defaultImage = 'images/GCEE_image_profileMale_135x135.jpeg';
+                    }
+
+                    scope.$emit('togglePortrait');
                 }
 
                 if(attr.type === 'profile' || !attr.type){
@@ -1677,3 +1689,7 @@ angular.module('bgc.directives').directive('roleToggleMember', ['Profile', funct
         }
     }
 }]);
+
+angular.module('bgc.directives').directive('toggleMaleFemalePortrait', function(){
+
+});

@@ -6,6 +6,16 @@
         <h5 class="muted">{{profile.workHistory[0].businessName}}</h5>
         <br>
 
+        <div ui-if="auth.isUserInRole('ROLE_ADMIN')">
+            <div class="btn-group-border role-toggle">
+                <div class="btn-group bgc" data-toggle="buttons-checkbox">
+                    <button role-toggle-user user={{profile}} type="button" class="btn btn-success">User</button>
+                    <button role-toggle-member user={{profile}} type="button" class="btn btn-success">Member</button>
+                    <button role-toggle-admin user={{profile}} type="button" class="btn btn-success">Admin</button>
+                </div>
+            </div>
+        </div>
+
         <div ui-if=false>
             <div class="btn-group-border">
                 <div class="btn-group bgc">
