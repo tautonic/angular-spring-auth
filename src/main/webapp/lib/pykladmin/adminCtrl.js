@@ -1,9 +1,5 @@
 'use strict';
 
-function AdminCtrl($rootScope, $scope, $routeParams, $http, $log, $location, Profile) {
-
-}
-
 function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location, Profile){
     $scope.adminUsers = true;
     $scope.adminArticles = false;
@@ -203,12 +199,13 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         });
 
     $scope.update = function(article){
-        var date = new Date();
+        article.roles = ['ROLE_ANONYMOUS'];
 
-        delete article.doctype;
-        delete article.premium;
+        if(article.premium) {
+            article.roles.push('ROLE_PREMIUM');
+        }
 
-        //article.lastModifiedDate = ISODateString(date);
+        //article.lastModifiedDate = ISODateString(new Date());
         article.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
 
         var thumbnail = /<\s*img [^\>]*src\s*=\s*(["\'])(.*?)\1/.exec(article.content);
@@ -223,7 +220,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         }, function(response){
             console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
-    }
+    };
 
     $scope.cancel = function(){
         $location.path('/admin/articles');
@@ -237,7 +234,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             result = resultArray.join(" ") + " ...";
         }
         return result;
-    };
+    }
 
     function ISODateString(d){
         function pad(n){return n<10 ? '0'+n : n}
@@ -293,7 +290,7 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         theme_advanced_toolbar_location : "top",
 
         file_browser_callback: bgcFileBrowser
-    }
+    };
 
     $scope.article = {
         title: '',
@@ -307,8 +304,9 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         comments: 0,
         views: 0,
         rating: 0,
-        attachments: []
-    }
+        attachments: [],
+        premium: false
+    };
 
     $log.info('Current user\'s username: ' + JSON.stringify($rootScope.auth.username));
 
@@ -339,6 +337,14 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
             $scope.newArticle.thumbnail = 'images/row-of-columns.jpg'
         }
 
+        $scope.newArticle.roles = ['ROLE_ANONYMOUS'];
+
+        if(article.premium) {
+            $scope.newArticle.roles.push('ROLE_PREMIUM');
+        }
+
+        delete article.premium;
+
         $scope.newArticle.$save(
             function(response){
                 $location.path('/content/view/' + response.content._id);
@@ -348,7 +354,7 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
                 console.log('ARTICLE SAVE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
             }
         );
-    }
+    };
 
     $scope.cancel = function(){
         $location.path('/admin/articles');

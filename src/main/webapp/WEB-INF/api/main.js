@@ -111,7 +111,7 @@ app.get('/article/:id', function(req, id) {
 
     if(article.success) {
         var servletRequest = req.env.servletRequest;
-        if( (article.content.premium) && (!servletRequest.isUserInRole('ROLE_PREMIUM')) )
+        if( (article.content.premium) && !((servletRequest.isUserInRole('ROLE_PREMIUM')) || (servletRequest.isUserInRole('ROLE_ADMIN')) ))
         {
             log.info("User does not have access to full article content.");
             delete article.content.content;
@@ -146,7 +146,7 @@ app.post('/admin/articles', function(req){
 
     req.postParams.format = 'article';
     req.postParams.locale = 'en';
-    req.postParams.roles = ['ROLE_ANONYMOUS'];
+    delete req.postParams.premium;
 
     var opts = {
         url: getZociaUrl(req) + '/resources/',
@@ -169,6 +169,9 @@ app.put('/admin/articles/:id', function(req, id){
             body:[]
         };
     }
+
+    delete req.postParams.doctype;
+    delete req.postParams.premium;
 
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
@@ -298,7 +301,7 @@ app.post('/discussions/:id', function(req, id) {
         };
     }
 
-    return json(addReply(req, id, req.params, getUserDetails()));
+    return json(addReply(req, req.params, getUserDetails()));
 });
 /****** End discussion posts ********/
 

@@ -15,7 +15,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $scope.tabs[sortBy] = true;
     }
 
-    var url = "api/article/search?sort=" + sortBy + "&category=" + category;
+    var url;
     $scope.filters = {};
     $scope.paging = {
         size: 10
@@ -43,6 +43,8 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
             $rootScope.banner = 'curriculum';
             $rootScope.about = 'curriculum';
         }
+
+        url = "api/article/search?sort=" + sortBy + "&category=" + category;
 
         $http.get( url ).success( function (data) {
             if(data !== "false") {

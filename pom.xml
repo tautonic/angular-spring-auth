@@ -210,7 +210,7 @@
             <properties>
                 <environment>qa</environment>
                 <!-- The URL to access web services from the gcplatform. -->
-                <zociaUrl>http://pykl.babsongc-qa/api</zociaUrl>
+                <zociaUrl>http://babson-zocia-qa.elasticbeanstalk.com/api</zociaUrl>
 
                 <!-- Hazelcast configuration
                      hz.name - Specifies a unique name for the hazelcast cluster.
@@ -234,7 +234,7 @@
             <properties>
                 <environment>prod</environment>
                 <!-- The URL to access web services from the gcplatform. -->
-                <zociaUrl>http://pykl.babsongc-prod/api</zociaUrl>
+                <zociaUrl>http://babson-zocia-prod.elasticbeanstalk.com/api</zociaUrl>
 
                 <!-- Hazelcast configuration
                      hz.name - Specifies a unique name for the hazelcast cluster.
