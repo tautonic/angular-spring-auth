@@ -172,6 +172,14 @@ input, button, select, textarea {
     overflow: hidden;
 }
 
+/* firefox adds some extra space below the full size picture headers, this removes it (as a side effect, it slightly shrinks the images) */
+@-moz-document url-prefix() {
+    .image-container {
+        display: block;
+    }
+}
+
+
 .no-bottom-border{
     border-bottom: none;
 }
