@@ -133,11 +133,15 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
             return 0;
         }
 
-        var result = $scope.articles.filter(function(article) {
-            return (article.doctype === what);
-        });
+        var result = 0;
 
-        return result.length;
+        for(var i =0; i < $scope.articles.length; i++){
+            if($scope.articles[i].doctype === what) {
+                result++;
+            }
+        }
+
+        return result;
     }
 
     $scope.countDocuments = function() {
