@@ -58,7 +58,7 @@ angular.module( 'bgc.directives', [] )
                 thumb: '='
             },
             link: function(scope, elm, attr){
-                scope.defaultImage = 'images/GCEE_image_profileMale_135x135.jpeg';
+                scope.defaultImage = 'images/GCEE_image_defaultMale.jpeg';
 
                 scope.thumbnail = {
                     image: 'images/GCEE_image_profileFemale_135x135.jpeg',
@@ -67,10 +67,10 @@ angular.module( 'bgc.directives', [] )
                 }
 
                 scope.togglePortrait = function(){
-                    if(scope.defaultImage === 'images/GCEE_image_profileMale_135x135.jpeg'){
-                        scope.defaultImage = 'images/GCEE_image_profileFemale_135x135.jpeg';
-                    }else if(scope.defaultImage === 'images/GCEE_image_profileFemale_135x135.jpeg'){
-                        scope.defaultImage = 'images/GCEE_image_profileMale_135x135.jpeg';
+                    if(scope.defaultImage === 'images/GCEE_image_defaultMale.jpeg'){
+                        scope.defaultImage = 'images/GCEE_image_defaultFemale.jpeg';
+                    }else if(scope.defaultImage === 'images/GCEE_image_defaultFemale.jpeg'){
+                        scope.defaultImage = 'images/GCEE_image_defaultMale.jpeg';
                     }
 
                     scope.$emit('togglePortrait');
@@ -1618,6 +1618,11 @@ angular.module('bgc.directives').directive('roleToggleAdmin', ['Profile', functi
                     profile.roles.push('ROLE_ADMIN');
                 }
 
+                delete profile.facultyFellow;
+                delete profile.isUserFollowing;
+                delete profile.newPass;
+                delete profile.newPassRepeat;
+
                 Profile.update({profileId: profile._id}, profile, function(response){
 
                 }, function(response){
@@ -1648,6 +1653,11 @@ angular.module('bgc.directives').directive('roleToggleUser', ['Profile', functio
                 }else{
                     profile.roles.push('ROLE_USER');
                 }
+
+                delete profile.facultyFellow;
+                delete profile.isUserFollowing;
+                delete profile.newPass;
+                delete profile.newPassRepeat;
 
                 Profile.update({profileId: profile._id}, profile, function(response){
 
@@ -1680,6 +1690,11 @@ angular.module('bgc.directives').directive('roleToggleMember', ['Profile', funct
                     profile.roles.push('ROLE_MEMBER');
                 }
 
+                delete profile.facultyFellow;
+                delete profile.isUserFollowing;
+                delete profile.newPass;
+                delete profile.newPassRepeat;
+
                 Profile.update({profileId: profile._id}, profile, function(response){
 
                 }, function(response){
@@ -1689,7 +1704,3 @@ angular.module('bgc.directives').directive('roleToggleMember', ['Profile', funct
         }
     }
 }]);
-
-angular.module('bgc.directives').directive('toggleMaleFemalePortrait', function(){
-
-});

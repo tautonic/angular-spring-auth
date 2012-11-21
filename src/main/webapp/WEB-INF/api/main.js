@@ -1477,7 +1477,7 @@ app.get('/admin/users', function(req) {
 app.put('/admin/users', function(req) {
     var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
-    var data = {
+    /*var data = {
         "username" : req.postParams.username,
         "name" : {
             "fullName": req.postParams.name.fullName
@@ -1486,7 +1486,9 @@ app.put('/admin/users', function(req) {
             "address"  : req.postParams.accountEmail.address
         },
         "workHistory" : req.postParams.workHistory
-    };
+    };*/
+
+    var data = req.postParams
 
     var opts = {
         url: getZociaUrl(req) + '/profiles/' + req.postParams._id,
