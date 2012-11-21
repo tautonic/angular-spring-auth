@@ -127,15 +127,15 @@ var pykl = window.pykl || {};
          * The user has submitted the
          */
         $scope.submit = function() {
-            $log.info('Updated values: ', $scope.resources);
+//            $log.info('Updated values: ', $scope.resources);
             var modifiedResources = $scope.resources.filter(modified);
 
             var updateSuccess = function(resource) {
-                $log.info('Successful update', arguments);
+//                $log.info('Successful update', arguments);
 
                 // broadcast the successful update of a resource
                 var eventName = CMS_UPDATE_EVENT + '-' + resource.key + '@' + resource.locale;
-                $log.warn('RootScope:', $rootScope);
+//                $log.warn('RootScope:', $rootScope);
                 $rootScope.$broadcast(eventName, resource);
 
                 $scope.showError = false;
@@ -143,7 +143,7 @@ var pykl = window.pykl || {};
             };
 
             var updateFailure = function() {
-                $log.info('Error update', arguments);
+//                $log.info('Error update', arguments);
                 $scope.showError = true;
             };
 
@@ -157,7 +157,7 @@ var pykl = window.pykl || {};
         };
 
         $scope.cancel = function() {
-            $log.info('Cancel pressed');
+//            $log.info('Cancel pressed');
             $scope.showError = false;
             $scope.modalShown = false;
         };
@@ -194,7 +194,7 @@ var pykl = window.pykl || {};
              * @param data
              */
             var initDialog = function(data) {
-                $log.info('Received content for key', lookup, data);
+//                $log.info('Received content for key', lookup, data);
                 // todo: To simplify things for the time being, we are forcing only a single english resource
                 data = data.filter(function (resource) {
                     return resource.locale === 'en';
@@ -204,7 +204,7 @@ var pykl = window.pykl || {};
                 $scope.modalShown = true;
             };
 
-            $log.info('CMS Edit event captured, fetching all resources for key:', key);
+//            $log.info('CMS Edit event captured, fetching all resources for key:', key);
             $cms.getResources(key, initDialog);
         });
     };
@@ -215,7 +215,7 @@ var pykl = window.pykl || {};
      * @name pykl.content:cms
      *
      * @description
-     * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
+     * The `cms` directive will perform a lookup of CMS content from the server, and substitute this
      * resulting content within the element it is associated. Any content within the associated element
      * will be replaced so content is not strictly necessary, however it can be helpful to include
      * placeholder content for documentation and static web development tools.
@@ -270,7 +270,7 @@ var pykl = window.pykl || {};
                     }
 
                     function displayOnAuth() {
-                        $log.info('Auth', $auth, 'Editor? ', $auth.isUserInRole('ROLE_EDITOR'));
+//                        $log.info('Auth', $auth, 'Editor? ', $auth.isUserInRole('ROLE_EDITOR'));
                         if ($auth.isUserInRole('ROLE_EDITOR')) showEdit(); else hideEdit();
                     }
 
@@ -308,20 +308,20 @@ var pykl = window.pykl || {};
                                 // contains the name of the lookup to keep bind listeners to a minimum.
                                 var eventName = CMS_UPDATE_EVENT + '-' + lookup;
                                 scope.$on(eventName, function(event, newValue) {
-                                    $log.info('Event captured:', eventName, ', lookup:', lookup, ', value: ', newValue);
+//                                    $log.info('Event captured:', eventName, ', lookup:', lookup, ', value: ', newValue);
                                     scope.cms = newValue;
                                 });
 
                                 // Create the edit button and add a handler that will trigger the modal
                                 // edit dialog
                                 attachEdit(element).click(function (e) {
-                                    $log.info('Edit clicked, broadcasting: ', CMS_EDIT_EVENT, lookup);
+//                                    $log.info('Edit clicked, broadcasting: ', CMS_EDIT_EVENT, lookup);
                                     $rootScope.$broadcast(CMS_EDIT_EVENT, lookup);
                                     e.preventDefault();
                                 });
 
                                 displayOnAuth();
-                                $log.info('CMS Directive, loaded resource {}', lookup);
+//                                $log.info('CMS Directive, loaded resource {}', lookup);
                             } else {
                                 scope.cms = {
                                     title: 'CMS CONTENT NOT FOUND!',
@@ -331,7 +331,7 @@ var pykl = window.pykl || {};
                             }
                         };
 
-                        $log.info('CMS Directive, fetching resource {}', lookup);
+//                        $log.info('CMS Directive, fetching resource {}', lookup);
                         $cms.getResources(lookup, initScope);
                     }
                 }

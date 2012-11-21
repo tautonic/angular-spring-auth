@@ -38,32 +38,9 @@
 
                 <br />
 
-                <label class="control-label" for="cms-{{resource.locale}}-thumbnail">Image</label>
-                <div id="cms-{{resource.locale}}-thumbnail" ppykl-upload="{dropTarget:'cms-{{resource.locale}}-drop-target'}">
-                    <img src="{{resource.thumbnail}}" id="cms-{{resource.locale}}-drop-target"  alt="drop target"/>
-                </div>
-
-                <div class="modal hide fade">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h3>Crop your image</h3>
-                    </div>
-                    <div class="modal-body">
-                        <img id="{{resource.locale}}-image-crop" src="" alt="">
-                    </div>
-                    <div class="modal-footer">
-                        <button id="{{resource.locale}}-cancel-crop" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</button>
-                        <button id="{{resource.locale}}-save-crop" class="btn btn-success"><i class="icon-ok icon-white"></i> Crop</button>
-                    </div>
-                </div>
-
-                <div id="{{resource.locale}}-container">
-                    <br />
-                    <div id="{{resource.locale}}-filelist"></div>
-                    <br />
-                    <button class="btn btn-primary" id="{{resource.locale}}-choose-files"><i class="icon-folder-open icon-white"></i> Browse</button>
-                    <!--<button class="btn btn-success" id="upload-files"><i class="icon-upload icon-white"></i> Upload files</button>-->
-                </div>
+                <label class="control-label">Image</label>
+                <img upload="{ max_file_size: '3mb', resize: { width: 320, height: 240 } }"
+                     src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
             </fieldset>
         </form>
     </div>
