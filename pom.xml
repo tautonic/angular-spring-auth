@@ -210,7 +210,7 @@
             <properties>
                 <environment>qa</environment>
                 <!-- The URL to access web services from the gcplatform. -->
-                <zociaUrl>http://babson-zocia-qa.elasticbeanstalk.com/api</zociaUrl>
+                <zociaUrl>http://babson-zocia-qa2.elasticbeanstalk.com/api</zociaUrl>
 
                 <!-- Hazelcast configuration
                      hz.name - Specifies a unique name for the hazelcast cluster.

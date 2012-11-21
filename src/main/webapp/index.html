@@ -176,7 +176,7 @@
 <div ng-switch on="about">
     <div ng-switch-when="none"></div>
     <div ng-switch-when="summit">
-        <div ng-include src="'partials/annual-summit-about.html'" ng-controller="annualSummitController"></div>
+        <div ng-include src="'partials/annual-summit-about.html'"></div>
     </div>
     <div ng-switch-when="network">
         <div ng-include src="'partials/network-about.html'"></div>
@@ -192,6 +192,9 @@
     </div>
     <div ng-switch-when="500">
         <div ng-include src="'partials/500_error_page.html'"></div>
+    </div>
+    <div ng-switch-when="maintenance">
+        <div ng-include src="'partials/maintenance_error_page.html'"></div>
     </div>
     <div ng-switch-when="signin">
         <div ng-include src="'partials/signin.html'"></div>

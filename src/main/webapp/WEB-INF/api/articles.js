@@ -6,12 +6,21 @@ var {getZociaUrl, getLocalUrl} = require('utility/getUrls');
 var log = require( 'ringo/logging' ).getLogger( module.id );
 
 function ajax(url) {
+    try {
     var opts = {
         url: url,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
     };
+    } catch(e) { log.info("THERE WAS A TERRIBLE ERROR");
+        return {
+            'status': 404,
+            'content': '',
+            'headers': 404,
+            'success': false
+        }
+    }
 
     var exchange = httpclient.request(opts);
 
@@ -129,7 +138,11 @@ var searchAllArticles = function(req, params) {
 var getAllArticles = function(req, type, max) {
     var result = ajax(getZociaUrl(req) + '/resources/' + type + '/' + max);
 
-    result.content.forEach(configureArticles);
+    if(result.success) {
+        result.content.forEach(configureArticles);
+    } else {
+        return false;
+    }
 
     return result;
 };
