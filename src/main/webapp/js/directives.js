@@ -1064,7 +1064,7 @@ angular.module('bgc.directives').directive('whenScrolled', function() {
         angular.element(window).bind('scroll', function() {
             var rectObject = raw.getBoundingClientRect();
             //229 is the value of the footer height and some other things. it's possible this might need to be an option passed in though
-            if (rectObject.bottom === window.innerHeight - 150 - offset) {
+            if (Math.floor(rectObject.bottom) === window.innerHeight - 150 - offset) {
                 scope.$apply(attr.whenScrolled);
             }
 

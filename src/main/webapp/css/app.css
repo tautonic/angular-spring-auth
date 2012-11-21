@@ -275,7 +275,7 @@ ul.menu {
     position: relative;
     z-index: 2;
     list-style-type: none;
-    margin: 13px 105px 0 150px;
+    margin: 13px 100px 0 150px;
     height: 40px;
     border: 1px solid black;
     border-right: none;
@@ -1197,7 +1197,7 @@ i.globe{
 #searchSite{
     position: absolute;
     top: 13px;
-    right: 60px;
+    right: 50px;
     z-index: 0;
     height: 35px;
     padding: 5px 4px 0 15px;
@@ -1231,31 +1231,31 @@ i.globe{
 
 @-webkit-keyframes slideout {
   from {
-    right: 60px;
+    right: 50px;
   }
 
   to {
-    right: -120px;
+    right: -125px;
   }
 }
 
 @-moz-keyframes slideout {
   from {
-    right: 60px;
+    right: 50px;
   }
 
   to {
-    right: -120px;
+    right: -125px;
   }
 }
 
 @keyframes slideout {
   from {
-    right: 60px;
+    right: 50px;
   }
 
   to {
-    right: -120px;
+    right: -125px;
   }
 }
 

@@ -4,7 +4,7 @@
     <li ng-class="{active:tabs.popular}"><a ng-click="sortBy('popular')" class="ng-binding">MOST POPULAR</a></li>
 </ul>
 
-<div when-scrolled="loadMore(searchTerm)" offset="96">
+<div when-scrolled="loadMore(searchTerm)" offset="92">
     <div class="article row" ng-repeat="article in articles">
         <div class="span2">
             <div thumbnail thumb=article size="medium" text="Preview" type="content" />
