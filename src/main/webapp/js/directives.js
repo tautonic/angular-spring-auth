@@ -1205,7 +1205,7 @@ angular.module('bgc.directives').directive('adminDeleteUser', ['Profile', functi
                     return;
                 }
                 //var userId = attrs.userid
-                var profile = Profile.delete({profileId:attrs.userid}, function(){
+                var profile = Profile['delete']({"profileId": attrs.userid}, function(){
                     elm.parents('.profile-list-item.profile').fadeOut('slow', function(){
                         $(this).remove();
                     });
@@ -1253,7 +1253,7 @@ angular.module('bgc.directives').directive('adminDeleteArticle', ['Article', fun
                     return;
                 }
                 //var articleId = attrs.articleid
-                var profile = Article.delete({articleId:attrs.articleid}, function(){
+                var profile = Article['delete']({ "articleId": attrs.articleid}, function(){
                     elm.parents('.article.admin.row').fadeOut('slow', function(){
                         $(this).remove();
                     });

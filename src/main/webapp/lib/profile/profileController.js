@@ -123,14 +123,16 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
     };
 
     $scope.followUser = function(id, index) {
+        var url = 'api/follow/'+$rootScope.auth.principal.id + '/' + id;
+
         if($scope.profiles[index].isUserFollowing === true){
-            $http.delete('api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
+            $http['delete'](url).success(function(data) {
                 //$scope.profileModal.isUserFollowing = data.success === 1 ? true : false;
                 $scope.profiles[index].isUserFollowing = false;
                 $scope.profileModal.isUserFollowing = false;
             });
         }else if($scope.profiles[index].isUserFollowing === false){
-            $http.post('api/follow/'+$rootScope.auth.principal.id + '/' + id).success(function(data) {
+            $http.post(url).success(function(data) {
                 //$scope.profileModal.isUserFollowing = data.success === 1 ? true : false;
                 $scope.profiles[index].isUserFollowing = true;
                 $scope.profileModal.isUserFollowing = true;
