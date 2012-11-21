@@ -55,7 +55,7 @@
             <div class="control-group">
                 <label class="control-label" for="website-url">Website Url:</label>
                 <div class="controls">
-                    <input type="text" id="website-url" ng-model="profile.websites[0].url" placeholder="Website">
+                    <input type="url" ng-minlength="6" id="website-url" ng-model="profile.websites[0].url" placeholder="Website">
                 </div>
             </div>
 

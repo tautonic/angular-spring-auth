@@ -2012,7 +2012,8 @@ li.search-result.members{
     margin-top: 3em;
 }
 
-.profile-full form{
+.profile-full form,
+.profile-full .new-user-fields{
     border-top: 1px solid #E8E8E8;
     border-bottom: 1px solid #E8E8E8;
     margin-top: 2em;
@@ -2025,6 +2026,10 @@ li.search-result.members{
     background: -ms-linear-gradient(top,  rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* IE10+ */
     background: linear-gradient(to bottom,  rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
+}
+
+.profile-full .new-user-fields{
+    padding-top: 0;
 }
 
 .ui-show {

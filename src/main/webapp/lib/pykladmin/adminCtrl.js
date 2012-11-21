@@ -60,6 +60,8 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
 }
 
 function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location, Profile){
+    $scope.isDisabled = true;
+
     $scope.adminUsers = false;
     $scope.adminArticles = false;
 
@@ -121,6 +123,9 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
         }
     }];
 
+    $scope.profile.password = '';
+    $scope.profile.passRepeat = '';
+
     $scope.save = function(profile){
         $scope.newProfile = new Profile(profile);
 
@@ -144,10 +149,10 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
     };
 
     $scope.$on('togglePortrait', function(){
-        if($scope.profile.thumbnail === 'images/GCEE_image_profileMale_135x135.jpeg' || $scope.profile.thumbnail === 'images/GCEE_image_defaultMale.jpeg'){
-            $scope.profile.thumbnail = 'images/GCEE_image_profileFemale_135x135.jpeg';
-        }else if($scope.profile.thumbnail === 'images/GCEE_image_profileFemale_135x135.jpeg'){
-            $scope.profile.thumbnail = 'images/GCEE_image_profileMale_135x135.jpeg';
+        if($scope.profile.thumbnail === 'images/GCEE_image_defaultMale.jpeg'){
+            $scope.profile.thumbnail = 'images/GCEE_image_defaultFemale.jpeg';
+        }else if($scope.profile.thumbnail === 'images/GCEE_image_defaultFemale.jpeg'){
+            $scope.profile.thumbnail = 'images/GCEE_image_defaultMale.jpeg';
         }
     });
 
