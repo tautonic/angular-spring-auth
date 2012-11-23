@@ -186,9 +186,9 @@ var pykl = window.pykl || {};
             return false;
         };
 
-        var isUser = $rootScope.auth.isUser = function(id) {
+        $rootScope.auth.isUser = function(id) {
             return ($rootScope.auth.id === id);
-        }
+        };
 
         $rootScope.$on(EVENT_INTERNAL_SIGNIN_CONFIRMED, function () {
             getAuth().then(function () {
@@ -205,7 +205,7 @@ var pykl = window.pykl || {};
 
         // Return the service onject for direct invocations
         var result = {
-            isUserInRole:isUserInRole,
+            isUserInRole: isUserInRole,
             event:{
                 signinRequired:EVENT_SIGNIN_REQUIRED,
                 signinRequest:EVENT_SIGNIN_REQUEST,
@@ -215,21 +215,36 @@ var pykl = window.pykl || {};
                 signoutConfirmed:EVENT_SIGNOUT_CONFIRMED
             }
         };
-        Object.defineProperty(result, 'isAuthenticated', {
-            get:function () {
+
+        //IE8 doesn't support Object.defineProperty()
+        try {
+            Object.defineProperty(result, 'isAuthenticated', {
+                get:function () {
+                    return $rootScope.auth.isAuthenticated;
+                }
+            });
+            Object.defineProperty(result, 'principal', {
+                get:function () {
+                    return $rootScope.auth.username;
+                }
+            });
+            Object.defineProperty(result, 'id', {
+                get:function () {
+                    return $rootScope.auth.id;
+                }
+            });
+        } catch(e) {
+            result.isAuthenticated = function () {
                 return $rootScope.auth.isAuthenticated;
-            }
-        });
-        Object.defineProperty(result, 'principal', {
-            get:function () {
+            };
+            result.principal = function () {
                 return $rootScope.auth.username;
-            }
-        });
-        Object.defineProperty(result, 'id', {
-            get:function () {
+            };
+            result.id = function () {
                 return $rootScope.auth.id;
-            }
-        });
+            };
+        }
+
         return result;
     }]);
 
@@ -247,7 +262,7 @@ var pykl = window.pykl || {};
      * @param {function} directiveFactory An injectable directive factroy function. See {@link guide/directive} for more
      *                info.
      */
-    pyklSecurity.directive('pyklLogin', ['$auth', function (auth) {
+    pyklSecurity.directive('pyklLogin', function () {
         return {
             restrict:'ACME',
             template:'<li>\
@@ -267,7 +282,7 @@ var pykl = window.pykl || {};
         </li>',
             replace:true
         }
-    }]);
+    });
 
     pyklSecurity.controller('LoginWatch', ['$rootScope', '$scope', '$location', '$log',
         function ($rootScope, $scope, $location, $log) {
@@ -312,9 +327,9 @@ var pykl = window.pykl || {};
                     function error(response) {
                         var status = response.status;
 
-                        $log.error( 'Error, status: ' + status + ', response: '
-                         + JSON.stringify( response ) );
+                        $log.error( 'Error, status: ' + status + ', response: ' + JSON.stringify( response ) );
                         if (status === 401) {
+                            //there seems to be a bug relating to the defer() function in IE8. This does not appear to affect anything major, though, so will not be fixed at this time
                             var deferred = $q.defer();
                             var req = {
                                 config:response.config,
@@ -322,6 +337,7 @@ var pykl = window.pykl || {};
                             };
                             $rootScope.requests401.push(req);
                             $rootScope.$broadcast(EVENT_SIGNIN_REQUIRED);
+
                             return deferred.promise;
                         }
                         if (status === 404) {

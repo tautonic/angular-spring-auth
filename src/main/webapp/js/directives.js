@@ -1,5 +1,44 @@
 'use strict';
 
+//adding these to allow support for IE8
+if ( !Array.prototype.forEach ) {
+    Array.prototype.forEach = function(fn, scope) {
+        for(var i = 0, len = this.length; i < len; ++i) {
+            fn.call(scope, this[i], i, this);
+        }
+    }
+}
+
+if (!Array.prototype.filter)
+{
+    Array.prototype.filter = function(fun /*, thisp */)
+    {
+        "use strict";
+
+        if (this == null)
+            throw new TypeError();
+
+        var t = Object(this);
+        var len = t.length >>> 0;
+        if (typeof fun != "function")
+            throw new TypeError();
+
+        var res = [];
+        var thisp = arguments[1];
+        for (var i = 0; i < len; i++)
+        {
+            if (i in t)
+            {
+                var val = t[i]; // in case fun mutates this
+                if (fun.call(thisp, val, i, t))
+                    res.push(val);
+            }
+        }
+
+        return res;
+    };
+}
+
 /* Directives */
 
 /**
@@ -1068,7 +1107,7 @@ angular.module('bgc.directives').directive('whenScrolled', function() {
         angular.element(window).bind('scroll', function() {
             var rectObject = raw.getBoundingClientRect();
             //229 is the value of the footer height and some other things. it's possible this might need to be an option passed in though
-            if (rectObject.bottom === window.innerHeight - 150 - offset) {
+            if (Math.floor(rectObject.bottom) === $(window).height() - 150 - offset) {
                 scope.$apply(attr.whenScrolled);
             }
 
@@ -1209,7 +1248,7 @@ angular.module('bgc.directives').directive('adminDeleteUser', ['Profile', functi
                     return;
                 }
                 //var userId = attrs.userid
-                var profile = Profile.delete({profileId:attrs.userid}, function(){
+                var profile = Profile['delete']({"profileId": attrs.userid}, function(){
                     elm.parents('.profile-list-item.profile').fadeOut('slow', function(){
                         $(this).remove();
                     });
@@ -1257,7 +1296,7 @@ angular.module('bgc.directives').directive('adminDeleteArticle', ['Article', fun
                     return;
                 }
                 //var articleId = attrs.articleid
-                var profile = Article.delete({articleId:attrs.articleid}, function(){
+                var profile = Article['delete']({ "articleId": attrs.articleid}, function(){
                     elm.parents('.article.admin.row').fadeOut('slow', function(){
                         $(this).remove();
                     });

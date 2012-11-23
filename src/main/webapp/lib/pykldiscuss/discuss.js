@@ -158,9 +158,9 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
                 $scope.isLoaded = true;
                 $scope.hide = false;
 
-                if($scope.discussion.children.length < $scope.paging.size) {
+                /*if($scope.discussion.children.length < $scope.paging.size) {
                     $scope.paging.more = false;
-                }
+                }*/
 
                 $http.post("api/utility/view/" + $scope.discussion._id).success(function(data) {
                     $scope.discussion.views = data.views;
@@ -216,7 +216,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
 
         var replyUrl = 'api/discussions/' + replyArgs.threadId;
 
-        $http.post(replyUrl, replyArgs).success(function (data) { console.log("post is: ",post); console.log("reply resulting data is: ",data);
+        $http.post(replyUrl, replyArgs).success(function (data) {
             if(post !== undefined) {
                 post.reply.show = false;
                 post.reply.message = '';

@@ -133,8 +133,8 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
             return 0;
         }
 
-        var result = $scope.articles.filter(function(article) {
-            return (article.doctype === what);
+        var result = $scope.articles.filter(function(element) {
+            return (element.doctype === what);
         });
 
         return result.length;
