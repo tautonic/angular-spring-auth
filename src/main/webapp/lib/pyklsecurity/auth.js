@@ -329,6 +329,7 @@ var pykl = window.pykl || {};
 
                         $log.error( 'Error, status: ' + status + ', response: ' + JSON.stringify( response ) );
                         if (status === 401) {
+                            //there seems to be a bug relating to the defer() function in IE8. This does not appear to affect anything major, though, so will not be fixed at this time
                             var deferred = $q.defer();
                             var req = {
                                 config:response.config,
@@ -336,6 +337,7 @@ var pykl = window.pykl || {};
                             };
                             $rootScope.requests401.push(req);
                             $rootScope.$broadcast(EVENT_SIGNIN_REQUIRED);
+
                             return deferred.promise;
                         }
                         if (status === 404) {
