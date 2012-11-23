@@ -1597,6 +1597,16 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
     }
 });
 
+angular.module('bgc.directives').directive('roleToggleUser', ['Profile', function(Profile){
+    return {
+        restrict: 'A',
+        replace: true,
+        link: function(scope, elm, attrs){
+            elm.button('toggle');
+        }
+    }
+}]);
+
 angular.module('bgc.directives').directive('roleToggleAdmin', ['Profile', function(Profile){
     return {
         restrict: 'A',
@@ -1604,10 +1614,11 @@ angular.module('bgc.directives').directive('roleToggleAdmin', ['Profile', functi
         link: function(scope, elm, attrs){
             var profile;
             attrs.$observe('user', function(user){
-                //console.log('Profile: ' + user);
-                profile = scope.$eval(user);
-                if(profile.roles.indexOf('ROLE_ADMIN') !== -1){
-                    elm.button('toggle');
+                if(user !== '{}'){
+                    profile = scope.$eval(user);
+                    if(profile.roles.indexOf('ROLE_ADMIN') !== -1){
+                        elm.button('toggle');
+                    }
                 }
             });
 
@@ -1633,41 +1644,6 @@ angular.module('bgc.directives').directive('roleToggleAdmin', ['Profile', functi
     }
 }]);
 
-angular.module('bgc.directives').directive('roleToggleUser', ['Profile', function(Profile){
-    return {
-        restrict: 'A',
-        replace: true,
-        link: function(scope, elm, attrs){
-            var profile;
-            attrs.$observe('user', function(user){
-                profile = scope.$eval(user);
-                if(profile.roles.indexOf('ROLE_USER') !== -1 && profile){
-                    elm.button('toggle');
-                }
-            });
-
-            elm.bind('click', function(){
-                if(profile.roles.indexOf('ROLE_USER') !== -1){
-                    profile.roles.splice(profile.roles.indexOf('ROLE_USER'), 1);
-                }else{
-                    profile.roles.push('ROLE_USER');
-                }
-
-                delete profile.facultyFellow;
-                delete profile.isUserFollowing;
-                delete profile.newPass;
-                delete profile.newPassRepeat;
-
-                Profile.update({profileId: profile._id}, profile, function(response){
-
-                }, function(response){
-                    log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-                });
-            });
-        }
-    }
-}]);
-
 angular.module('bgc.directives').directive('roleToggleMember', ['Profile', function(Profile){
     return {
         restrict: 'A',
@@ -1675,9 +1651,11 @@ angular.module('bgc.directives').directive('roleToggleMember', ['Profile', funct
         link: function(scope, elm, attrs){
             var profile;
             attrs.$observe('user', function(user){
-                profile = scope.$eval(user);
-                if(profile.roles.indexOf('ROLE_MEMBER') !== -1 || profile.roles.indexOf('ROLE_ADMIN') !== -1 && profile){
-                    elm.button('toggle');
+                if(user !== '{}'){
+                    profile = scope.$eval(user);
+                    if(profile.roles.indexOf('ROLE_MEMBER') !== -1 || profile.roles.indexOf('ROLE_ADMIN') !== -1 && profile){
+                        elm.button('toggle');
+                    }
                 }
             });
 
