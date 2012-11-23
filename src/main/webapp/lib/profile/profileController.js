@@ -332,7 +332,7 @@ function createProfile($rootScope, $scope, $routeParams, $location, $http, Profi
 
     $scope.save = function(profile){
         $scope.newProfile = new Profile(profile);
-        $scope.newProfile.thumbnail = 'images/GCEE_image_profileMale_135x135.jpeg';
+        $scope.newProfile.thumbnail = 'images/GCEE_image_defaultMale.jpeg';
 
         $scope.newProfile.$save(function(response){
             //$scope.profile._id = response.content._id;

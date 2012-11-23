@@ -127,6 +127,12 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
     $scope.profile.passRepeat = '';
 
     $scope.save = function(profile){
+        if(profile.thumbnail === 'images/GCEE_image_defaultMale.jpeg'){
+            profile.thumbnail = 'images/GCEE_image_profileMale_135x135.jpeg';
+        }else if(profile.thumbnail === 'images/GCEE_image_defaultFemale.jpeg'){
+            profile.thumbnail = 'images/GCEE_image_profileFemale_135x135.jpeg';
+        }
+
         $scope.newProfile = new Profile(profile);
 
         $scope.newProfile.$save(function(response){

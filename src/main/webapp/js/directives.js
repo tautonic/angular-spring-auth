@@ -61,7 +61,7 @@ angular.module( 'bgc.directives', [] )
                 scope.defaultImage = 'images/GCEE_image_defaultMale.jpeg';
 
                 scope.thumbnail = {
-                    image: 'images/GCEE_image_profileFemale_135x135.jpeg',
+                    //image: 'images/GCEE_image_profileFemale_135x135.jpeg',
                     text: 'Read More',
                     style: 'profile-thumbnail large counter-clockwise'
                 }
@@ -1640,9 +1640,8 @@ angular.module('bgc.directives').directive('roleToggleUser', ['Profile', functio
         link: function(scope, elm, attrs){
             var profile;
             attrs.$observe('user', function(user){
-                //console.log('Profile: ' + user);
                 profile = scope.$eval(user);
-                if(profile.roles.indexOf('ROLE_USER') !== -1){
+                if(profile.roles.indexOf('ROLE_USER') !== -1 && profile){
                     elm.button('toggle');
                 }
             });
@@ -1676,9 +1675,8 @@ angular.module('bgc.directives').directive('roleToggleMember', ['Profile', funct
         link: function(scope, elm, attrs){
             var profile;
             attrs.$observe('user', function(user){
-                //console.log('Profile: ' + user);
                 profile = scope.$eval(user);
-                if(profile.roles.indexOf('ROLE_MEMBER') !== -1 || profile.roles.indexOf('ROLE_ADMIN') !== -1){
+                if(profile.roles.indexOf('ROLE_MEMBER') !== -1 || profile.roles.indexOf('ROLE_ADMIN') !== -1 && profile){
                     elm.button('toggle');
                 }
             });
