@@ -545,6 +545,10 @@ angular.module('bgc.directives')
                         $('.upload-progress').remove();
                         var uri = data.content.uri;
                         uri = uri.replace(/http:/, '');
+
+                        delete profile.isUserFollowing;
+                        delete profile.facultyFellow;
+
                         profile.thumbnail = uri;
                         scope.$parent.updateThumbnailUri(profile);
                         //scope.$digest();

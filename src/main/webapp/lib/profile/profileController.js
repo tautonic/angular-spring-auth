@@ -238,6 +238,9 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     };
 
     $scope.updateProfile = function(profile, section){
+        delete profile.isUserFollowing;
+        delete profile.facultyFellow;
+
         Profile.update({profileId: profile._id}, profile, function(response){
             $scope.editing[section] = false;
 
@@ -377,6 +380,7 @@ function updateProfile($scope, $routeParams, $location, Profile){
     $scope.profile.newPassRepeat = '';
 
     $scope.update = function(profile){
+
         if($scope.thumbnailURI !== ''){
             profile.thumbnail = $scope.thumbnailURI;
         }
