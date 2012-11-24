@@ -5,10 +5,11 @@
     <meta name="fragment" content="!"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Babson Global Consortium</title>
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="lib/jquery-ui/css/smoothness/jquery-ui-1.9.1.custom.css">
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/guide/guide.css">
     <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="lib/pykl-angular-ui/css/default.css">
 
     <!--[if IE 8]>
     <link href="css/ie8.css" rel="stylesheet" type="text/css" />
@@ -50,10 +51,9 @@
     </style>
     <![endif]-->
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+    <script src="lib/jquery-ui/js/jquery-1.8.2.js"></script>
+    <script src="lib/jquery-ui/js/jquery-ui-1.9.1.custom.js"></script>
     <script src="lib/angular/angular.js"></script>
-
     <script src="lib/angularui/angular-ui.js"></script>
 
     <script src="lib/angularui/tinymce/jquery.tinymce.js"></script>
@@ -61,13 +61,16 @@
     <script src="lib/angularui/select2/select2.js"></script>
 
     <script src="lib/pykl-angular-ui/pykl-angular-ui.js"></script>
-    <script src="lib/pykl-angular-ui/plupload/js/plupload.js"></script>
-    <script src="lib/pykl-angular-ui/plupload/js/plupload.gears.js"></script>
-    <script src="lib/pykl-angular-ui/plupload/js/plupload.silverlight.js"></script>
-    <script src="lib/pykl-angular-ui/plupload/js/plupload.flash.js"></script>
-    <script src="lib/pykl-angular-ui/plupload/js/plupload.browserplus.js"></script>
-    <script src="lib/pykl-angular-ui/plupload/js/plupload.html4.js"></script>
-    <script src="lib/pykl-angular-ui/plupload/js/plupload.html5.js"></script>
+    <script src="lib/pykl-angular-ui/plupload/js/plupload.full.tmp.js"></script>
+    <!--
+        <script src="lib/pykl-angular-ui/plupload/js/plupload.js"></script>
+        <script src="lib/pykl-angular-ui/plupload/js/plupload.gears.js"></script>
+        <script src="lib/pykl-angular-ui/plupload/js/plupload.silverlight.js"></script>
+        <script src="lib/pykl-angular-ui/plupload/js/plupload.flash.js"></script>
+        <script src="lib/pykl-angular-ui/plupload/js/plupload.browserplus.js"></script>
+        <script src="lib/pykl-angular-ui/plupload/js/plupload.html4.js"></script>
+        <script src="lib/pykl-angular-ui/plupload/js/plupload.html5.js"></script>
+    -->
 
     <script src="lib/jquery.Jcrop.min.js"></script>
 
@@ -176,8 +179,6 @@
     </div>
 </div>
 
-<div abc>Test</div>
-
 <div class="ng-view"></div>
 
 <div class="footer">
@@ -205,7 +206,7 @@
 </div>
 
 <script src="lib/angular/angular-resource.js"></script>
-<script src="http://code.angularjs.org/1.0.1/angular-sanitize-1.0.1.js "></script>
+<script src="lib/angular/angular-sanitize.js"></script>
 
 <script src="js/directives.js"></script>
 <script src="js/filters.js"></script>

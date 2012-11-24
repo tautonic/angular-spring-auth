@@ -38,9 +38,23 @@
 
                 <br />
 
+                <label class="control-label">Upload</label>
+                <div class="controls">
+                    <div id="container" x-img-upload>
+                        <div id="target" style="width:300px; height:200px; border: 1px solid blue;"></div>
+                        <img class="imgUpload" src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
+                    </div>
+                </div>
+
+                <br />
+
+<!--
                 <label class="control-label">Image</label>
-                <img upload="{ max_file_size: '3mb', resize: { width: 320, height: 240 } }"
-                     src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
+                <div class="controls"
+                     x-img-upload="{ max_file_size: '3mb', resize: { width: 320, height: 240 } }">
+                    <img id="drop" class="imgUpload" src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
+                </div>
+-->
             </fieldset>
         </form>
     </div>
