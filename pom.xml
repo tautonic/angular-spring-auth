@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.pyklstudios</groupId>
-    <artifactId>babson-gc</artifactId>
+    <groupId>com.pykl</groupId>
+    <artifactId>babson.gcee</artifactId>
     <packaging>war</packaging>
     <version>0.9-SNAPSHOT</version>
 
@@ -22,6 +22,7 @@
         <springsec-version>3.1.1.RELEASE</springsec-version>
         <store-version>1.0.6-SNAPSHOT</store-version>
         <springext-version>1.0.8</springext-version>
+        <beanstalk-version>1.0.4</beanstalk-version>
     </properties>
 
     <prerequisites>
@@ -170,6 +171,19 @@
                     <stopPort>8081</stopPort>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.pykl.maven.plugins</groupId>
+                <artifactId>maven-beanstalk-plugin</artifactId>
+                <version>${beanstalk-version}</version>
+                <configuration>
+                    <accessKey>${aws.access_key}</accessKey>
+                    <secretKey>${aws.secret_key}</secretKey>
+                    <applicationName>${project.groupId}.${project.artifactId}</applicationName>
+                    <environmentName>${beanstalk.environment.name}</environmentName>
+                    <s3Bucket>${beanstalk.s3.name}</s3Bucket>
+                </configuration>
+            </plugin>
         </plugins>
 
         <!-- Allow property substitution filtering on all files in src/main/resources -->
@@ -210,7 +224,7 @@
             <properties>
                 <environment>qa</environment>
                 <!-- The URL to access web services from the gcplatform. -->
-                <zociaUrl>http://babson-zocia-qa2.elasticbeanstalk.com/api</zociaUrl>
+                <zociaUrl>http://qa-zocia.elasticbeanstalk.com/api</zociaUrl>
 
                 <!-- Hazelcast configuration
                      hz.name - Specifies a unique name for the hazelcast cluster.
@@ -227,6 +241,9 @@
                 -->
                 <aws.access_key>${babsongc.qa.aws.access_key}</aws.access_key>
                 <aws.secret_key>${babsongc.qa.aws.secret_key}</aws.secret_key>
+
+                <beanstalk.environment.name>${environment}-babson-gcee</beanstalk.environment.name>
+                <beanstalk.s3.name>${environment}.${project.groupId}.${project.artifactId}.images</beanstalk.s3.name>
             </properties>
         </profile>
         <profile>
@@ -234,7 +251,7 @@
             <properties>
                 <environment>prod</environment>
                 <!-- The URL to access web services from the gcplatform. -->
-                <zociaUrl>http://babson-zocia-prod.elasticbeanstalk.com/api</zociaUrl>
+                <zociaUrl>http://prod-zocia.elasticbeanstalk.com/api</zociaUrl>
 
                 <!-- Hazelcast configuration
                      hz.name - Specifies a unique name for the hazelcast cluster.
@@ -251,6 +268,9 @@
                 -->
                 <aws.access_key>${babsongc.qa.aws.access_key}</aws.access_key>
                 <aws.secret_key>${babsongc.qa.aws.secret_key}</aws.secret_key>
+
+                <beanstalk.environment.name>${environment}-babson-gcee</beanstalk.environment.name>
+                <beanstalk.s3.name>${environment}.${project.groupId}.${project.artifactId}.images</beanstalk.s3.name>
             </properties>
         </profile>
     </profiles>
