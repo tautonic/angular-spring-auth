@@ -16,12 +16,12 @@ var {Application} = require( 'stick' );
 var {ajax, searchAllArticles, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle, returnRandomQuote} = require('articles');
 var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
 var {convertActivity, getLatestActivity} = require('activities');
-var {getZociaUrl, getLocalUrl} = require('utility/getUrls');
+var {getZociaUrl} = require('utility/getUrls');
 
 var {encode} = require('ringo/base64');
 
 var app = exports.app = Application();
-app.configure( 'notfound', 'params', 'mount', 'route' );
+app.configure( 'error', 'notfound', 'params', 'mount', 'route' );
 
 app.mount('/cms', require('./cms'));
 app.mount('/seedcms', require('./seedcms'));

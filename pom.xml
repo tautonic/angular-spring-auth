@@ -12,16 +12,17 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j-version>1.6.6</slf4j-version>
+        <slf4j-version>1.7.2</slf4j-version>
+        <aws-version>1.3.26</aws-version>
         <log4j-version>1.2.17</log4j-version>
         <jetty-version>8.1.5.v20120716</jetty-version>
         <ringo-version>0.9.0-alpha-6</ringo-version>
         <stick-version>0.1.0-alpha-7</stick-version>
         <trimpath-version>1.0.7</trimpath-version>
-        <spring-version>3.1.2.RELEASE</spring-version>
-        <springsec-version>3.1.1.RELEASE</springsec-version>
+        <spring-version>3.1.3.RELEASE</spring-version>
+        <springsec-version>3.1.3.RELEASE</springsec-version>
         <store-version>1.0.6-SNAPSHOT</store-version>
-        <springext-version>1.0.8</springext-version>
+        <springext-version>1.0.9</springext-version>
         <beanstalk-version>1.0.4</beanstalk-version>
         <beanstalk.environment.name>${environment}-babson-gcee</beanstalk.environment.name>
         <beanstalk.s3.name>${environment}.${project.groupId}.${project.artifactId}.images</beanstalk.s3.name>
@@ -78,6 +79,23 @@
             <version>${jetty-version}</version>
         </dependency>
 
+        <!-- Amazon AWS SDK -->
+
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>${aws-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <!-- Logging -->
 
         <dependency>
@@ -233,6 +251,10 @@
                 <hz.name>hz-com.pykl.babsongc-${environment}</hz.name>
                 <hz.multicast.enabled>false</hz.multicast.enabled>
                 <hz.aws.enabled>false</hz.aws.enabled>
+
+                <aws.s3.access_key>AKIAIO5RYV6PBMMEM5IA</aws.s3.access_key>
+                <aws.s3.secret_key>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</aws.s3.secret_key>
+                <aws.s3.bucket>qa.zocia.upload.files</aws.s3.bucket>
             </properties>
         </profile>
         <profile>
@@ -258,6 +280,10 @@
                 -->
                 <aws.access_key>${babsongc.qa.aws.access_key}</aws.access_key>
                 <aws.secret_key>${babsongc.qa.aws.secret_key}</aws.secret_key>
+
+                <aws.s3.access_key>AKIAIO5RYV6PBMMEM5IA</aws.s3.access_key>
+                <aws.s3.secret_key>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</aws.s3.secret_key>
+                <aws.s3.bucket>qa.zocia.upload.files</aws.s3.bucket>
 
                 <beanstalk.environment.name>${environment}-babson-gcee</beanstalk.environment.name>
                 <beanstalk.s3.name>${environment}.${project.groupId}.${project.artifactId}.images</beanstalk.s3.name>

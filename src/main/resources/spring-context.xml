@@ -27,6 +27,9 @@
         <entry key="zociaBase" value="${zociaBase}"/>
         <entry key="webappUrl" value="${webappUrl}"/>
         <entry key="version" value="${buildnum}"/>
+        <entry key="s3AccessKey" value="${aws.s3.access_key}"/>
+        <entry key="s3SecretKey" value="${aws.s3.secret_key}"/>
+        <entry key="s3Bucket" value="${aws.s3.bucket}"/>
     </util:map>
 
     <!-- *************************************************************************************** -->

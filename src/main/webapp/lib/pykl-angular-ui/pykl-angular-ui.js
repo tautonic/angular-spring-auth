@@ -89,6 +89,7 @@ var pykl = window.pykl || {};
                 link: function (scope, elm, attrs) {
                     var options = attrs.imgUpload ? scope.$eval(attrs.imgUpload) : {};
                     options = angular.extend({
+                        url: './api/cms/upload/image',
                         runtimes: 'html5',
                         browse_button: 'pickfiles',
                         drop_element: 'target',
@@ -117,11 +118,17 @@ var pykl = window.pykl || {};
                     // Start the upload process when a file is added to the queue.
                     uploader.bind('FilesAdded', function (up, files) {
                         $log.info('FilesAdded', arguments);
-                        up.start();
+                        setTimeout(function () {
+                            up.start();
+                        }, 0);
                     });
 
-                    uploader.bind('FilesAdded', function (up, files) {
-                        $log.info('FilesAdded', arguments);
+                    uploader.bind('FileUploaded', function (up, file, response) {
+                        $log.info('FileUploaded', arguments);
+                    });
+
+                    uploader.bind('UploadProgress', function (up, file) {
+                        $log.info('UploadProgress', arguments);
                     });
 
                     uploader.init();

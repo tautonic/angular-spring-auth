@@ -99,19 +99,13 @@
  *
  */
 
-/********************
- Requires
- *********************/
-
-var {Application} = require('stick');
+var log = require('ringo/logging').getLogger(module.id);
 var store = require('store-js');
 var {json} = require('utility/extendedResponse');
-var log = require( 'ringo/logging' ).getLogger( module.id );
+var {getConfigParam} = require('utility/getUrls');
+var {handleUpload, S3PassthroughStream} = require('utility/upload');
 
-
-/********************
- Global Vars
- *********************/
+var {Application} = require('stick');
 var app = exports.app = Application();
 app.configure('route', locale);
 
@@ -168,7 +162,7 @@ app.post('/', function (req) {
     var resource = req.postParams;
 
     if (!resource) return json({message: 'Invalid request, must provide JSON resource in body.' }, 400,
-            {"Content-Type": 'text/html'});
+        {"Content-Type": 'text/html'});
 
     if (!resource.locale) {
         resource.locale = req.locale;
@@ -176,9 +170,9 @@ app.post('/', function (req) {
 
     // Resource has several required properties
     if (!resource.locale) return json({message: 'Invalid request, must provide a locale.' }, 400,
-            {"Content-Type": 'text/html'});
+        {"Content-Type": 'text/html'});
     if (!resource.key) return json({message: 'Invalid request, must provide a key.' }, 400,
-            {"Content-Type": 'text/html'});
+        {"Content-Type": 'text/html'});
 
     // Write the new resource into the map using the key/locale as the map key
     var lookup = resource.key + '@' + resource.locale;
@@ -198,7 +192,7 @@ app.post('/', function (req) {
  *         not include all required attributes of a resource object.
  *
  */
-app.put('/:id', function(req, id) {
+app.put('/:id', function (req, id) {
     log.debug('POST /api/cms, locale: {}', req.locale);
 
     // Get the JSON object holding the payload
@@ -220,6 +214,53 @@ app.put('/:id', function(req, id) {
 
     return json(resource, 204, {});
 });
+
+
+/**
+ * @function
+ * @name POST /upload/image
+ * @description Uploads images to S3
+ *
+ * @param {JsgiRequest} request
+ * @returns {JsgiResponse} A JSON string with upload results
+ */
+app.post('/upload/image', function (req) {
+    try {
+        // All uploaded cms imagery will be stored with a unique key and in the 'cms' folder.
+        var key = 'cms/' + store.generateId(false);
+
+        // Read in the configuration parameters for the S3 upload
+        var s3AccessKey = getConfigParam(req, 's3AccessKey');
+        var s3SecretKey = getConfigParam(req, 's3SecretKey');
+        var s3Bucket = getConfigParam(req, 's3Bucket');
+
+        // Create a stream factory that will write the request's input stream to S3 as efficiently as possible.
+        var s3Lib = require('utility/s3');
+        var s3 = s3Lib.connect(s3AccessKey, s3SecretKey);
+        var s3Stream = new S3PassthroughStream(s3, s3Bucket, key);
+
+        // Handle the upload
+        var result = handleUpload(req, s3Stream.streamFactory);
+
+        // It can take some time for files to be uploaded to S3
+        s3Stream.waitForDone();
+
+        // Uploads to S3 can fail
+        if (!result.file) throw {
+            message: 'Failed to upload file to Amazon S3.'
+        };
+
+        // Get the S3 location for the new file and return it in the result
+        result.file.uri = s3Stream.getURI();
+        return json(result);
+    } catch (e) {
+        return json({
+            status: e.status || 500,
+            message: e.message
+        }, e.status || 500);
+    }
+});
+
 
 /**
  * Middleware component for Stick to inject a locale property based on the Accept-Language header.
