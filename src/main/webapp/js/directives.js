@@ -86,7 +86,9 @@ if (!Array.prototype.filter)
     image="images/homepage-article-image-one.jpg" />
  </example>
   */
-angular.module( 'bgc.directives', [] )
+angular.module( 'bgc.directives', [] );
+
+angular.module( 'bgc.directives')
     .directive('thumbnail', function(){
 
         return{

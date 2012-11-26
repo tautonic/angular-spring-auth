@@ -1,0 +1,70 @@
+<div ui-modal class="modal fade cms-edit" ng-controller="pykl.cmsCtrl" ng-model="modalShown">
+    <div class="modal-header">
+        <h2>CMS Editor</h2>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-error" ng-show="showError">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>Error!</strong> There was a server problem saving your changes. Try again later.
+        </div>
+        <form name="editCMS" class="form-horizontal" novalidate>
+            <fieldset ng-repeat="resource in resources">
+                <label class="control-label" for="cms-{{resource.locale}}-title">Title</label>
+                <div class="controls">
+                    <input type="text"
+                           ng-model="resource.title"
+                           class="input-xlarge"
+                           id="cms-{{resource.locale}}-title"
+                           name="cms-{{resource.locale}}-title"
+                           validation-tooltip />
+                </div>
+
+                <br />
+
+                <label class="control-label" for="cms-{{resource.locale}}-body">Body</label>
+                <div class="controls">
+                    <textarea
+                            rows="10"
+                            cols="100"
+                            ng-model="resource.content"
+                            class="input-xlarge"
+                            id="cms-{{resource.locale}}-body"
+                            name="cms-{{resource.locale}}-body"
+                            validation-tooltip
+                            required
+                            ui-tinymce>
+                    </textarea>
+                </div>
+
+                <br />
+
+                <label class="control-label">Upload</label>
+                <div class="controls">
+                    <div id="container" x-img-upload>
+                        <div id="target" style="width:300px; height:200px; border: 1px solid blue;"></div>
+                        <img class="imgUpload" src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
+                    </div>
+                </div>
+
+                <br />
+
+<!--
+                <label class="control-label">Image</label>
+                <div class="controls"
+                     x-img-upload="{ max_file_size: '3mb', resize: { width: 320, height: 240 } }">
+                    <img id="drop" class="imgUpload" src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
+                </div>
+-->
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a ng-click="cancel()" class="btn btn-warning">
+            <i class="icon-ban-circle icon-white"></i> Cancel
+        </a>
+
+        <button ng-click="submit()" ng-disabled="false" class="btn btn-success" >
+            <i class="icon-pencil icon-white"></i> Update
+        </button>
+    </div>
+</div>

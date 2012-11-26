@@ -14,6 +14,8 @@ var pykl = window.pykl || {};
     var EVENT_SIGNOUT_REQUEST = 'event:signoutRequest';
     var EVENT_SIGNOUT_CONFIRMED = 'event:signoutConfirmed';
 
+    var pyklSecurity = angular.module('pykl.security', []);
+
     /**
      * @ngdoc object
      * @name pykl.$auth
@@ -31,122 +33,8 @@ var pykl = window.pykl || {};
      * # Binding in Angular scope
      *
      * The
-     * <pre>
-     *    // Define CreditCard class
-     *    var CreditCard = $resource('/user/:userId/card/:cardId',
-     *     {userId:123, cardId:'@id'}, {
-     *      charge: {method:'POST', params:{charge:true}}
-     *     });
-     *
-     *    // We can retrieve a collection from the server
-     *    var cards = CreditCard.query(function() {
-     *      // GET: /user/123/card
-     *      // server returns: [ {id:456, number:'1234', name:'Smith'} ];
-
-     var card = cards[0];
-     // each item is an instance of CreditCard
-     expect(card instanceof CreditCard).toEqual(true);
-     card.name = "J. Smith";
-     // non GET methods are mapped onto the instances
-     card.$save();
-     // POST: /user/123/card/456 {id:456, number:'1234', name:'J. Smith'}
-     // server returns: {id:456, number:'1234', name: 'J. Smith'};
-
-     // our custom method is mapped as well.
-     card.$charge({amount:9.99});
-     // POST: /user/123/card/456?amount=9.99&charge=true {id:456, number:'1234', name:'J. Smith'}
-     });
-
-     // we can create an instance as well
-     var newCard = new CreditCard({number:'0123'});
-     newCard.name = "Mike Smith";
-     newCard.$save();
-     // POST: /user/123/card {number:'0123', name:'Mike Smith'}
-     // server returns: {id:789, number:'01234', name: 'Mike Smith'};
-     expect(newCard.id).toEqual(789);
-     * </pre>
-     *
-     * The object returned from this function execution is a resource "class" which has "static" method
-     * for each action in the definition.
-     *
-     * Calling these methods invoke `$http` on the `url` template with the given `method` and `params`.
-     * When the data is returned from the server then the object is an instance of the resource type and
-     * all of the non-GET methods are available with `$` prefix. This allows you to easily support CRUD
-     * operations (create, read, update, delete) on server-side data.
-
-     <pre>
-     var User = $resource('/user/:userId', {userId:'@id'});
-     var user = User.get({userId:123}, function() {
-     user.abc = true;
-     user.$save();
-     });
-     </pre>
-     *
-     *     It's worth noting that the success callback for `get`, `query` and other method gets passed
-     *     in the response that came from the server as well as $http header getter function, so one
-     *     could rewrite the above example and get access to http headers as:
-     *
-     <pre>
-     var User = $resource('/user/:userId', {userId:'@id'});
-     User.get({userId:123}, function(u, getResponseHeaders){
-     u.abc = true;
-     u.$save(function(u, putResponseHeaders) {
-     //u => saved user object
-     //putResponseHeaders => $http header getter
-     });
-     });
-     </pre>
-
-     * # Buzz client
-
-     Let's look at what a buzz client created with the `$resource` service looks like:
-     <doc:example>
-     <doc:source jsfiddle="false">
-     <script>
-     function BuzzController($resource) {
-     this.userId = 'googlebuzz';
-     this.Activity = $resource(
-     'https://www.googleapis.com/buzz/v1/activities/:userId/:visibility/:activityId/:comments',
-     {alt:'json', callback:'JSON_CALLBACK'},
-     {get:{method:'JSONP', params:{visibility:'@self'}}, replies: {method:'JSONP', params:{visibility:'@self', comments:'@comments'}}}
-     );
-     }
-
-     BuzzController.prototype = {
-     fetch: function() {
-     this.activities = this.Activity.get({userId:this.userId});
-     },
-     expandReplies: function(activity) {
-     activity.replies = this.Activity.replies({userId:this.userId, activityId:activity.id});
-     }
-     };
-     BuzzController.$inject = ['$resource'];
-     </script>
-
-     <div ng-controller="BuzzController">
-     <input ng-model="userId"/>
-     <button ng-click="fetch()">fetch</button>
-     <hr/>
-     <div ng-repeat="item in activities.data.items">
-     <h1 style="font-size: 15px;">
-     <img src="{{item.actor.thumbnailUrl}}" style="max-height:30px;max-width:30px;"/>
-     <a href="{{item.actor.profileUrl}}">{{item.actor.name}}</a>
-     <a href ng-click="expandReplies(item)" style="float: right;">Expand replies: {{item.links.replies[0].count}}</a>
-     </h1>
-     {{item.object.content | html}}
-     <div ng-repeat="reply in item.replies.data.items" style="margin-left: 20px;">
-     <img src="{{reply.actor.thumbnailUrl}}" style="max-height:30px;max-width:30px;"/>
-     <a href="{{reply.actor.profileUrl}}">{{reply.actor.name}}</a>: {{reply.content | html}}
-     </div>
-     </div>
-     </div>
-     </doc:source>
-     <doc:scenario>
-     </doc:scenario>
-     </doc:example>
      */
-    var pyklSecurity = angular.module('pykl', [])
-        .factory('$auth', ['$rootScope', '$http', '$log', function ($rootScope, $http, $log) {
+    pyklSecurity.factory('$auth', ['$rootScope', '$http', '$log', function ($rootScope, $http, $log) {
         var roles = [];
 
         function initAuth() {

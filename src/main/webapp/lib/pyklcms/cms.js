@@ -17,6 +17,7 @@ var pykl = window.pykl || {};
     var pyklCms = ng.module('pykl.cms', []);
 
     var CMS_EDIT_EVENT = '$pykl.cms-edit';
+    var CMS_UPDATE_EVENT = '$pykl.cms-update';
 
     /**
      * @ngdoc object
@@ -106,40 +107,61 @@ var pykl = window.pykl || {};
      * @param $scope
      * @param $http
      */
-    pykl.cmsCtrl = function($scope, $cms, $http) {
-        // Stores the original array of incoming data. This object is used to diff against the updated set of resources
-        // to determine whether a persist needs to take place.
+    pykl.cmsCtrl = function($rootScope, $scope, $cms, $log) {
+        // Stores the original array of incoming data. This object is used to diff
+        // against the updated set of resources to determine whether a persist needs
+        // to take place.
         var origData;
 
         // Controls whether the CMS dialog box is visible or not.
         $scope.modalShown = false;
 
-        // resources is an array that contains the various versions (locales) for the given 'key' value.
+        // resources is an array that contains the various versions (locales) for the
+        // given 'key' value.
         $scope.resources = [];
+
+        // Controls whether the error dialog is visible or not.
+        $scope.showError = false;
 
         /**
          * The user has submitted the
          */
         $scope.submit = function() {
-            console.log('Updated values: ', $scope.resources);
+//            $log.info('Updated values: ', $scope.resources);
             var modifiedResources = $scope.resources.filter(modified);
+
+            var updateSuccess = function(resource) {
+//                $log.info('Successful update', arguments);
+
+                // broadcast the successful update of a resource
+                var eventName = CMS_UPDATE_EVENT + '-' + resource.key + '@' + resource.locale;
+//                $log.warn('RootScope:', $rootScope);
+                $rootScope.$broadcast(eventName, resource);
+
+                $scope.showError = false;
+                $scope.modalShown = false;
+            };
+
+            var updateFailure = function() {
+//                $log.info('Error update', arguments);
+                $scope.showError = true;
+            };
+
+            var persist = function(resource) {
+                $cms.putResource(resource, function() {
+                    updateSuccess(resource);
+                }, updateFailure);
+            };
+
             ng.forEach(modifiedResources, persist);
-            $scope.modalShown = false;
         };
 
         $scope.cancel = function() {
-            console.log('Cancel pressed');
+//            $log.info('Cancel pressed');
+            $scope.showError = false;
             $scope.modalShown = false;
         };
 
-
-        /**
-         * Makes an update request to the server to modify a modified resource.
-         * @param resource
-         */
-        function persist(resource) {
-            $cms.putResource(resource);
-        }
 
         /**
          * Determines if the potentially user-modified resource has the same key values as the original one did.
@@ -156,16 +178,23 @@ var pykl = window.pykl || {};
                 && resource.thumbnailUrl === old.thumbnailUrl);
         }
 
-        // dispScope.cms is the object bound to the existing display component the user is wanting to
-        // edit. At the end of the edit process, this object should be updated to reflect the changes.
-        $scope.$on(CMS_EDIT_EVENT, function(event, key, locale, dispScope) {
+        // The edit event is invoked with the lookup key consisting of a concatenation of resource key and
+        // locale. Becase we support multilingual editing of resources, we want to fetch all of the locales
+        // for a specific key. So, we will have to break up the lookup value into key/locale by splitting on
+        // the '@' symbol which joins them.
+        $scope.$on(CMS_EDIT_EVENT, function(event, lookup) {
+
+            var tokens = lookup.split('@');
+            var key = tokens[0];
+            var locale = tokens.length > 1 && tokens[1];
+
             /**
              * Function called with an array of all resources (regardless of locale) containing the key.
              * todo: Eventually add support for multiple locales
              * @param data
              */
-            var update = function(data) {
-                console.log('Received content for key', key, data);
+            var initDialog = function(data) {
+//                $log.info('Received content for key', lookup, data);
                 // todo: To simplify things for the time being, we are forcing only a single english resource
                 data = data.filter(function (resource) {
                     return resource.locale === 'en';
@@ -175,18 +204,18 @@ var pykl = window.pykl || {};
                 $scope.modalShown = true;
             };
 
-            $cms.getResources(key, update);
-
+//            $log.info('CMS Edit event captured, fetching all resources for key:', key);
+            $cms.getResources(key, initDialog);
         });
     };
-    pykl.cmsCtrl.$inject = ['$scope', 'pykl.$cms', '$http'];
+    pykl.cmsCtrl.$inject = ['$rootScope', '$scope', 'pykl.$cms', '$log'];
 
     /**
      * @ngdoc directive
      * @name pykl.content:cms
      *
      * @description
-     * The `cms` directive will perform a lookup of CMS content from the serve, and substitute this
+     * The `cms` directive will perform a lookup of CMS content from the server, and substitute this
      * resulting content within the element it is associated. Any content within the associated element
      * will be replaced so content is not strictly necessary, however it can be helpful to include
      * placeholder content for documentation and static web development tools.
@@ -209,8 +238,8 @@ var pykl = window.pykl || {};
      <th x-cms="name-title"/>
      </example>
      */
-    pyklCms.directive('cms', ['$rootScope', '$http', 'pykl.$cms', '$window', '$auth',
-        function ($rootScope, $http, $cms, $window, $auth) {
+    pyklCms.directive('cms', ['$rootScope', '$http', 'pykl.$cms', '$window', '$auth', '$log',
+        function ($rootScope, $http, $cms, $window, $auth, $log) {
             return {
                 // Is applied as an element's attribute
                 restrict: 'A',
@@ -241,7 +270,7 @@ var pykl = window.pykl || {};
                     }
 
                     function displayOnAuth() {
-                        console.log('Auth', $auth, 'Editor? ', $auth.isUserInRole('ROLE_EDITOR'));
+//                        $log.info('Auth', $auth, 'Editor? ', $auth.isUserInRole('ROLE_EDITOR'));
                         if ($auth.isUserInRole('ROLE_EDITOR')) showEdit(); else hideEdit();
                     }
 
@@ -249,37 +278,61 @@ var pykl = window.pykl || {};
                     $rootScope.$on( $auth.event.signoutConfirmed, hideEdit);
 
                     return function (scope, element, attrs) {
+                        // The cms property contains the lookup key with an optional locale that can be forced
+                        var tokens = attrs.cms.split('@');
+                        var key = tokens[0];
+                        var locale = tokens.length > 1 && tokens[1];
 
-                        // The cms property contains the lookup key
-                        var key = attrs.cms;
-                        // todo Override the $local service or provide a new service that can detect user's
-                        // locale using cookies or server-side call w/ callback
-                        var locale = $window.navigator.userLanguage || $window.navigator.language || 'en';
+                        // todo Angular's $locale provider doesn't allow dynamic updating of locales. Need to
+                        // rewrite to allow users to select locales themselves and use cookies (or other) to maintain.
+                        locale = locale || $window.navigator.userLanguage || $window.navigator.language || 'en';
 
-                        // Create the edit button and add a handler that will trigger the modal edit dialog
-                        attachEdit(element).click(function () {
-                            console.log('Edit clicked, root scope: ', $rootScope,
-                                'broadcasting: ', CMS_EDIT_EVENT, key);
-                            $rootScope.$broadcast(CMS_EDIT_EVENT, key, locale, scope);
-                        });
-                        displayOnAuth();
+                        // The lookup value for this CMS content is a composite key fromed by the key and locale
+                        var lookup = key;
+                        if (locale) lookup += '@' + locale;
 
-                        var updateScope = function(data) {
+                        var initScope = function(data) {
                             // If the HTTP response is an array and the first element contains a content
                             // property, then we found what we were looking for.
                             var contentFound = data && data.length && data[0] && data[0].content;
+
                             if (contentFound) {
-                                // Populate the HTML element with content
+                                // It is important to create the lookup values for editing and updating in this
+                                // handler because the requested locale may not match the returned resource. It
+                                // is eminently possible that a user requesting 'es_CA' may get the 'es' locale
+                                // returned.
                                 scope.cms = data[0];
+                                lookup = data[0].key + '@' + data[0].locale;
+
+                                // A custom event will fire if this lookup is ever updated. The event name
+                                // contains the name of the lookup to keep bind listeners to a minimum.
+                                var eventName = CMS_UPDATE_EVENT + '-' + lookup;
+                                scope.$on(eventName, function(event, newValue) {
+//                                    $log.info('Event captured:', eventName, ', lookup:', lookup, ', value: ', newValue);
+                                    scope.cms = newValue;
+                                });
+
+                                // Create the edit button and add a handler that will trigger the modal
+                                // edit dialog
+                                attachEdit(element).click(function (e) {
+//                                    $log.info('Edit clicked, broadcasting: ', CMS_EDIT_EVENT, lookup);
+                                    $rootScope.$broadcast(CMS_EDIT_EVENT, lookup);
+                                    e.preventDefault();
+                                });
+
+                                displayOnAuth();
+//                                $log.info('CMS Directive, loaded resource {}', lookup);
                             } else {
-                                scope.cms = 'CMS CONTENT NOT FOUND!';
+                                scope.cms = {
+                                    title: 'CMS CONTENT NOT FOUND!',
+                                    description: 'CMS CONTENT NOT FOUND!',
+                                    thumbnail: 'CMS CONTENT NOT FOUND!'
+                                };
                             }
                         };
 
-                        var lookup = key;
-                        if (locale) lookup += '@' + locale;
-                        console.log('CMS Directive, fetching resource {}', lookup);
-                        $cms.getResources(lookup, updateScope);
+//                        $log.info('CMS Directive, fetching resource {}', lookup);
+                        $cms.getResources(lookup, initScope);
                     }
                 }
             }

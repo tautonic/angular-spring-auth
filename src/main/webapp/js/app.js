@@ -216,8 +216,9 @@
     }
 
 	// Declare app level module which depends on filters, and services
-	var app = angular.module( 'myApp',
-	    ['bgc.directives', 'bgc.services', 'bgc.filters', 'ngSanitize', 'ui', 'pykl', 'pykl.cms'] )
+	var app = angular.module( 'myApp', [
+        'bgc.directives', 'bgc.services', 'bgc.filters', 'ngSanitize', 'ui',
+        'pykl.security', 'pykl.cms', 'pykl-ui'] )
         .config( ['$routeProvider', routeProvider] );
 
     app.value('ui.config', {

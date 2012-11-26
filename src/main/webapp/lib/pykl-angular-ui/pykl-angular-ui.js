@@ -5,106 +5,137 @@
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-angular.module('pykl.config', []).value('pykl.config', {});
-angular.module('pykl.filters', ['pykl.config']);
-angular.module('pykl.directives', ['pykl.config']);
-angular.module('pykl', ['pykl.directives', 'pykl.config']);
+var pykl = window.pykl || {};
 
-/**
- * Async email validation
- */
-angular.module('pykl.directives').directive('pyklEmailValidator', ['pykl.config', '$http', function(pyklConfig, $http){
+(function (window, angular, undefined) {
+
     'use strict';
 
-    pyklConfig.asyncEmail = pyklConfig.asyncEmail || {};
+    angular.module('pykl-ui.config', []).value('pykl-ui.config', {});
+    angular.module('pykl-ui.filters', ['pykl-ui.config']);
+    angular.module('pykl-ui.directives', ['pykl-ui.config']);
 
-    return {
-        require: 'ngModel',
-        link: function(scope, elm, attrs, ctrl){
+    angular.module('pykl-ui', ['pykl-ui.directives', 'pykl-ui.config']);
 
-            ctrl.$parsers.unshift(function(viewValue){
-                $http.get(pyklConfig.asyncEmail.url + viewValue).success(function(data){
-                    console.log(data);
-                    if(data === 'true'){
-                        ctrl.$setValidity('pyklEmailValidator', true);
-                        return viewValue;
-                    }else{
-                        ctrl.$setValidity('pyklEmailValidator', false);
-                        return undefined;
-                    }
-                }).error(function(data, status){
-                        console.log(status);
+
+    /**
+     * @ngdoc directive
+     * @name pykl-ui.directives:imgUpload
+     *
+     * @description
+     * Simplifies the use of image upload by making it dead simple to integrate on the
+     * page. There is some config that must be set up, but sensible defaults and the
+     * uploading of a single file reduces the options significantly.
+     *
+     * @element ANY
+     * @param {expression} Contains a config object that controls the capabilities of the plupload plugin.
+     *
+     * @example
+     * <example>
+     *    <img x-img-upload="{ max_file_size: '3mb', resize: { width: 320, height: 240 } }" src="{{thumbnail_url}}" />
+     * </example>
+     *
+     */
+    angular.module('pykl-ui.directives').directive('imgUpload',
+        ['pykl-ui.config', '$log', function (pyklConfig, $log) {
+            var overlay;
+
+            var browseButton = angular.element('<button id="pickfiles">Browse</button>');
+
+            function addOverlay(elm) {
+                // The overlay will be absolutely positioned above the image element. In order
+                // to accomplish this, we must set the elm to relative positioning.
+                elm.css('position', 'relative');
+
+                // Locate the image tag within the directive scope that will be updated (hint: it
+                // contains the imgUpload class.
+                var img = $('img.imgUpload', elm)
+                    .css('position', 'relative');
+
+                overlay = angular.element('<div class="overlay"></div>')
+                    .css({
+                        position: 'absolute',
+                        zIndex: 2,
+                        opacity: 1,
+                        width: 200, height: 200
+                    })
+                    .append(browseButton)
+                    .prependTo(elm)
+                    .hover(
+                        function () { $(this).animate({opacity: 1}, 150) },
+                        function () { $(this).animate({opacity: 0}, 150) });
+
+                // Once the image loads, we will know its positioning and size, so the overlay
+                // can then be positioned.
+                img.load(function (e) {
+                    var $this = $(this);
+                    var opts = {
+                        top: $this.position().top + (($this.outerHeight(true) - $this.height()) >> 1),
+                        left: $this.position().left + (($this.outerWidth(true) - $this.width()) >> 1),
+                        width: $this.width(),
+                        height: $this.height()
+                    };
+                    $log.info('On image load', opts);
+                    overlay.css(opts);
+                });
+            }
+
+            function updateOverlay(acceptDragAndDrop) {
+                if (acceptDragAndDrop) overlay.prepend('<h1>Drag and Drop or</h1>');
+            }
+
+            return {
+                restrict: 'A',
+                link: function (scope, elm, attrs) {
+                    var options = attrs.imgUpload ? scope.$eval(attrs.imgUpload) : {};
+                    options = angular.extend({
+                        url: './api/cms/upload/image',
+                        runtimes: 'html5',
+                        browse_button: 'pickfiles',
+                        drop_element: 'target',
+//                        container: 'container',
+                        max_file_size: '10mb',
+                        filters: [
+                            {title: "Image files", extensions: "jpg,gif,png"},
+                            {title: "Zip files", extensions: "zip"}
+                        ],
+                        resize: {width: 320, height: 240, quality: 90}
+
+                    }, pyklConfig.imgUpload, options);
+
+                    addOverlay(elm);
+
+                    // Initialize the plupload upload library (http://www.plupload.com/documentation.php#configuration)
+                    var uploader = new plupload.Uploader(options);
+                    $log.info('Uploader options', options);
+
+                    // Update the overlay with the appropriate messaging if drag & drop is supported.
+                    uploader.bind('Init', function (up) {
+                        $log.info('Init', arguments);
+                        updateOverlay(up.features.dragdrop);
                     });
-            });
-        }
-    }
-}]);
-/**
- * Pykl Studios directives and filters
- */
 
-/**
- * Adds file upload functionality using the Plupload plugin
- */
-angular.module('pykl.directives').directive('pyklUpload', ['pykl.config', function(pyklConfig){
-    'use strict';
-    alert('Upload Directive!');
+                    // Start the upload process when a file is added to the queue.
+                    uploader.bind('FilesAdded', function (up, files) {
+                        $log.info('FilesAdded', arguments);
+                        setTimeout(function () {
+                            up.start();
+                        }, 0);
+                    });
 
-    pyklConfig.upload = pyklConfig.upload || {};
+                    uploader.bind('FileUploaded', function (up, file, response) {
+                        $log.info('FileUploaded', arguments);
+                    });
 
-    return{
-        restrict: 'A',
-        link:function (scope, elm, attrs) {
-            var options = {};
+                    uploader.bind('UploadProgress', function (up, file) {
+                        $log.info('UploadProgress', arguments);
+                    });
 
-            var config = {
-                container:'container',
-                max_file_size:'10mb',
-                url:'api/profiles/pics/1',
-                resize:{width:320, height:240, quality:90},
-                flash_swf_url:'../js/plupload.flash.swf',
-                silverlight_xap_url:'../js/plupload.silverlight.xap',
-                filters:[
-                    {title:"Image files", extensions:"jpg,gif,png"},
-                    {title:"Zip files", extensions:"zip"}
-                ]
-            };
+                    uploader.init();
 
-            if (attrs.pyklUpload) {
-                options = scope.$eval(attrs.pyklUpload);
-                if (options.dropTarget) {
-                    config.drop_element = options.dropTarget;
+                    $log.info('Plupload is using runtime:', uploader.runtime);
                 }
             }
+        }]);
+})(window, window.angular);
 
-            config = angular.extend({}, config, pyklConfig.upload);
-
-            function $(id) {
-                return document.getElementById(id);
-            }
-
-            var uploader = new plupload.Uploader(config);
-
-            uploader.bind('FilesAdded', function (up, files) {
-                for (var i in files) {
-                    $('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
-                }
-
-                setTimeout(function () {
-                    uploader.start();
-                }, 500);
-            });
-
-            uploader.bind('UploadProgress', function (up, file) {
-                $(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-            });
-
-            uploader.bind('FileUploaded', function (uploader, file, response) {
-                console.log(uploader, file, response);
-                $(config.drop_element).src = response.response;
-            });
-
-            uploader.init();
-        }
-    }
-}]);
