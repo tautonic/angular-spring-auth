@@ -7,7 +7,7 @@ angular.module('bgc.filters', [])
         return function (dateInput) {
 
             var date = new Date(dateInput);
-            if(isNaN(date.getMonth())) {
+            if(isNaN(date.getMonth()) && dateInput !== undefined) {
                 //IE8 does not support the '-' character in the Date() argument
                 dateInput = dateInput.replace('-', '/').replace('.000Z', '');
                 date = new Date(dateInput);
@@ -18,7 +18,7 @@ angular.module('bgc.filters', [])
         return function (dateInput) {
 
             var date = new Date(dateInput);
-            if(isNaN(date.getMonth())) {
+            if(isNaN(date.getMonth()) && dateInput !== undefined) {
                 //IE8 does not support the '-' character in the Date() argument
                 dateInput = dateInput.replace('-', '/').replace('.000Z', '');
                 date = new Date(dateInput);
