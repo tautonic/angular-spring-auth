@@ -1953,6 +1953,7 @@ li.search-result.members{
 
 .profile-full .name-title{
     margin-left: 13em;
+    min-height: 98px;
 }
 
 .profile-full .profile-thumbnail{
