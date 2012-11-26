@@ -27,6 +27,9 @@
         <entry key="zociaBase" value="${zociaBase}"/>
         <entry key="webappUrl" value="${webappUrl}"/>
         <entry key="version" value="${buildnum}"/>
+        <entry key="s3AccessKey" value="${aws.s3.access_key}"/>
+        <entry key="s3SecretKey" value="${aws.s3.secret_key}"/>
+        <entry key="s3Bucket" value="${aws.s3.bucket}"/>
     </util:map>
 
     <!-- *************************************************************************************** -->
@@ -60,7 +63,7 @@
     <bean id="atStartup" class="com.zocia.roundtable.scheduling.DistributedWebCronJob"
             depends-on="hzServer">
         <property name="index" value="gc" />
-        <property name="localUrl" value="http://localhost:8080/gc/api/seedcms/cms" />
+        <property name="localUrl" value="${localUrl}/seedcms/cms" />
         <property name="seconds" value="1000000000000" />
     </bean>
 

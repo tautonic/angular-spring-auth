@@ -367,8 +367,7 @@ public class ZociaMapPersistence implements MapPersistence, InitializingBean {
             exchange.waitForDone();
             int status = exchange.getResponseStatus();
             if (status == 200) {
-                LOG.debug("Respon" +
-                        "se for key: {}. headers: {} > {}",
+                LOG.debug("Response for key: {}. headers: {} > {}",
                         new Object[] {k, exchange.getRequestFields(), exchange.getResponseContent()});
                 return exchange.getResponseContent();
             }
