@@ -97,6 +97,11 @@ function writeProps(props, locale) {
 }
 
 function propExists(key, locale) {
+    // If a flag has been set to allow the "forcing" of (overwriting of existing) CMS
+    // content, then we will always indicate the property does not exist.
+    var force = java.lang.System.getProperty('forceCMS') === 'true';
+    if (force) return false;
+
     var lookup = key;
     if (locale) lookup +=  '@' + locale;
     var resources = map.get(lookup);
