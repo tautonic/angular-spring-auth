@@ -240,6 +240,7 @@
 
                 <!-- The URL to access web services from the gc platform. -->
                 <zociaUrl>http://localhost:9300/myapp/api</zociaUrl>
+                <localUrl>http://localhost:8080/gc/api</localUrl>
 
                 <!-- Hazelcast configuration
                      hz.name - Specifies a unique name for the hazelcast cluster.

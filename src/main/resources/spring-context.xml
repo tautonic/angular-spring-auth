@@ -63,7 +63,7 @@
     <bean id="atStartup" class="com.zocia.roundtable.scheduling.DistributedWebCronJob"
             depends-on="hzServer">
         <property name="index" value="gc" />
-        <property name="localUrl" value="http://localhost:8080/gc/api/seedcms/cms" />
+        <property name="localUrl" value="${localUrl}/seedcms/cms" />
         <property name="seconds" value="1000000000000" />
     </bean>
 
