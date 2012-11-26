@@ -523,9 +523,10 @@ app.post('/profiles/', function(req){
             "surname": req.postParams.name.surname
         },
         "password" : digest(req.postParams.password).toLowerCase(),
-        "accountEmail" : {
+        /*"accountEmail" : {
             "address"  : req.postParams.accountEmail.address
-        },
+        },*/
+        "accountEmail" : req.postParams.accountEmail,
         "workHistory" : req.postParams.workHistory,
         "educationHistory" : req.postParams.educationHistory,
         "thumbnail": req.postParams.thumbnail,
