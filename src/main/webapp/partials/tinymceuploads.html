@@ -22,6 +22,18 @@
     <script src="../lib/pykl-angular-ui/plupload/js/plupload.html5.js"></script>
 
     <script src="../lib/angularui/tinymce/tiny_mce_popup.js"></script>
+
+    <script type="text/javascript">
+        function openSearch() {
+            $("#searchSite").toggleClass('slideout');
+        }
+        var baseUrl = function() {
+            var result = window.location.protocol + '//' + window.location.hostname;
+            result += (window.location.port != 80) ? (':' + window.location.port) : '';
+            //result += window.location.pathname;
+            return result;
+        }();
+    </script>
 </head>
 <body>
     <div class="image-upload tinymce">
@@ -50,7 +62,7 @@
             browse_button: 'choose-files',
             container:'container',
             drop_element: 'profile-thumb-drop-target',
-            url: 'api/profiles/images/upload/',
+            url: baseUrl + '/gc/api/profiles/images/upload/',
             max_file_size:'100mb',
             resize:{width:320, height:240, quality:90},
             flash_swf_url:'../js/plupload.flash.swf',
