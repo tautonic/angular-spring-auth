@@ -309,7 +309,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
 function createProfile($rootScope, $scope, $routeParams, $location, $http, Profile){
     var address = '';
 
-    if($routeParams.email !== 'undefined'){
+    if($routeParams.email !== undefined){
         address = $routeParams.email;
     }
 
