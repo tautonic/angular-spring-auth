@@ -314,14 +314,14 @@ angular.module('bgc.directives')
 
                 var config = {
                     scope: scope,
-                    runtimes: 'html5',
+                    runtimes: 'html5, flash, silverlight, browserplus',
                     browse_button: 'choose-files',
                     container:'container',
                     url: 'api/profiles/images/upload/',
                     max_file_size:'100mb',
                     resize:{width:320, height:240, quality:90},
-                    flash_swf_url:'../js/plupload.flash.swf',
-                    silverlight_xap_url:'../js/plupload.silverlight.xap',
+                    flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
+                    silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
                     filters:[
                         {title:"Image files", extensions:"jpg,gif,png,jpeg"},
                         {title:"Zip files", extensions:"zip"}
@@ -469,14 +469,14 @@ angular.module('bgc.directives')
 
             var config = {
                 scope: scope,
-                runtimes: 'html5',
+                runtimes: 'html5, flash, silverlight, browserplus',
                 browse_button: 'choose-files',
                 //container:'container',
                 url: 'api/profiles/images/upload/',
                 max_file_size:'100mb',
-                resize:{width:'100%', quality:90},
-                flash_swf_url:'../js/plupload.flash.swf',
-                silverlight_xap_url:'../js/plupload.silverlight.xap',
+                resize:{"width":'100%', "quality":90},
+                flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
+                silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
                 filters:[
                     {title:"Image files", extensions:"jpg,gif,png,jpeg"},
                     {title:"Zip files", extensions:"zip"}
@@ -1348,14 +1348,14 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
         link: function(scope, elm, attrs){
             var config = {
                 scope: scope,
-                runtimes: 'html5',
+                runtimes: 'html5, flash, silverlight, browserplus',
                 browse_button: 'choose-files',
                 container:'container',
                 url: 'api/profiles/images/upload/',
                 max_file_size:'100mb',
-                resize:{width:320, height:240, quality:90},
-                //flash_swf_url:'../js/plupload.flash.swf',
-                //silverlight_xap_url:'../js/plupload.silverlight.xap',
+                resize:{"width":320, "height":240, "quality":90},
+                flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
+                silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
                 filters:[
                     {title : "Image files", extensions : "pdf,doc,ppt,txt,jpg,jpeg"},
                     {title:"Zip files", extensions:"zip"}

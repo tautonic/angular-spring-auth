@@ -318,11 +318,11 @@
                 <div class="edit" ng-click="edit('image')" class="edit"><i class="icon-pencil"></i> Edit Profile Image</div>
             </h3>
 
-            <div class="profile-crop-preview" ui-toggle="editing.image">
+            <div class="profile-crop-preview">
                 <div class="clearfix container">
                     <div class="row">
                         <div class="span9">
-                            <div class="jcrop-holder"></div>
+                            <div class="jcrop-holder"><img/></div>
                         </div>
                     </div>
                 </div>
@@ -344,7 +344,7 @@
             <div class="clearfix">
                 <div class="edit-profile-thumb" thumbnail thumb=profile size="large" rotation="none" type="profile" />
 
-                <div class="image-upload" ui-toggle="editing.image">
+                <div class="image-upload">
                     <div class="clearfix" id="update" pykl-profile-image-upload="{dropTarget:'profile-thumb-drop-target'}">
                         <!--<img src="{{profile.thumbnail}}" id="drop-target" />-->
                         <div id="profile-thumb-drop-target">

@@ -163,13 +163,13 @@ body {
 }
 
 .gradient {
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#51a463), to(#127551));
-    background-image: -webkit-linear-gradient(top, #51a463, #127551);
-    background-image: -moz-linear-gradient(top, #51a463, #127551);
-    background-image: -ms-linear-gradient(top, #51a463, #127551);
-    background-image: -o-linear-gradient(top, #51a463, #127551);
-    background: linear-gradient(to bottom, #51a463, #127551);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#51a463', endColorstr='#127551',GradientType=0 ); /* IE6-8 */
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#569a61), to(#005037));
+    background-image: -webkit-linear-gradient(top, #569a61, #005037);
+    background-image: -moz-linear-gradient(top, #569a61, #005037);
+    background-image: -ms-linear-gradient(top, #569a61, #005037);
+    background-image: -o-linear-gradient(top, #569a61, #005037);
+    background: linear-gradient(to bottom, #569a61, #005037);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#569a61', endColorstr='#005037',GradientType=0 ); /* IE6-8 */
 }
 
 .picture-frame {
