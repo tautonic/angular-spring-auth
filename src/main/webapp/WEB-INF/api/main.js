@@ -536,6 +536,7 @@ app.post('/profiles/', function(req){
     delete req.postParams.newPassRepeat;
     var data = req.postParams;
 
+    data.password = digest(req.postParams.password).toLowerCase();
     data.source = 'GC';
     data.accountEmail.status = 'unverified';
 
