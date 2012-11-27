@@ -1342,7 +1342,7 @@ angular.module('bgc.directives').directive('adminResetPassword', ['$http', funct
     }
 }]);
 
-angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$auth', function($http, $auth){
+angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log', function($http, $log){
     return {
         restrict: 'A',
         link: function(scope, elm, attrs){
@@ -1458,7 +1458,6 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
                 }
 
                 // get the element in the array of attachments and create a new request object
-
                 scope.attachments.forEach(function(attachment, index, array){
                     if(attachment.file_id === file.id){
                         // make an xhr and create a resource for this attachment
@@ -1498,20 +1497,24 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
                                 scope.attachments.splice(index, 1);
 
                                 var attachmentDiv = '<div class="discussion-stack-container attachment" style="top:'+ attachmentDivPos+'em;"> \
-                                    <div class="discussion-item grey-gradient"> \
-                                        <h4>'+ data.content.title +'</h4> \
-                                        <h6>By '+ data.content.author +', '+ date +'</h6> \
-                                        <p class="muted">'+ data.content.description +'</p> \
-                                    </div> \
-                                    \
-                                    <div class="paper-clip"></div> \
-                                    <div class="attached-doc"> \
-                                        <div class="new-picture-frame small content-thumbnail attachment"> \
-                                            <span class="doc-type '+ getMimeType(data.content.mimetype) +'"></span> \
-                                            <img src="images/document-default.jpg" alt=""> \
-                                            </div> \
-                                        </div> \
-                                    </div>'
+                                                        <div class="discussion-item grey-gradient"> \
+                                                            <h4>'+ data.content.title +'</h4> \
+                                                            <h6>By '+ data.content.author +', '+ date +'</h6> \
+                                                            <p class="muted">'+ data.content.description +'</p> \
+                                                        </div> \
+                                                        \
+                                                        <div class="btn-group-border">\
+                                                            <div class="btn-group bgc">\
+                                                                <button id="attachment-'+ data.content._id +'" data-attachment="'+ data.content._id +'" class="btn btn-success"><i class="icon-remove-circle icon-white"></i> Remove</button>\
+                                                            </div>\
+                                                        </div>\
+                                                        <div class="paper-clip"></div> \
+                                                        <div class="attached-doc"> \
+                                                            <div class="new-picture-frame small content-thumbnail attachment"> \
+                                                                <span class="doc-type '+ getMimeType(data.content.mimetype) +'"></span> \
+                                                                <img src="images/document-default.jpg" alt="">\
+                                                            </div>\
+                                                        </div>';
 
                                 attachmentDivPos -= 3;
 
@@ -1520,7 +1523,23 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
                                 jQuery('.discussion-stack-container.attachment').last().click(function(){
                                     $('.discussion-stack-container.attachment').css('z-index', '1');
                                     $(this).css('z-index', '20');
-                                })
+                                });
+
+                                var attachmentId = data.content._id;
+
+                                jQuery('#attachment-' + data.content._id).click(function(){
+                                    var _this = $(this);
+                                    $http.delete('api/attachments/' + $(this).data('attachment'))
+                                        .success(function(data, status){
+                                            scope.article.attachments.splice(scope.article.attachments.indexOf($(this).data('attachment')), 1);
+                                            _this.parents('.discussion-stack-container.attachment').fadeOut(function(){
+                                                _this.parents('.discussion-stack-container.attachment').remove();
+                                                attachmentDivPos += 3;
+                                            });
+                                        });
+
+                                    //$log.info('Attachment id: ' + $(this).data('attachment'));
+                                });
 
                             })
                             .error(function(data, status){

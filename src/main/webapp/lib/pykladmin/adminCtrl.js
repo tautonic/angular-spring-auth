@@ -371,6 +371,10 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         $location.path('/admin/articles');
     }
 
+    $scope.removeAttachment = function(id){
+        $log.info('This file attachment has an id of: ' + id);
+    }
+
     function ISODateString(d){
         function pad(n){return n<10 ? '0'+n : n}
         return d.getUTCFullYear()+'-'

@@ -993,12 +993,28 @@ app.get('/profiles/images/', function(req, id){
     }
 });
 
-app.post('/attachments', function(req, id){
+app.post('/attachments', function(req){
     var opts = {
         url: getZociaUrl(req) + '/resources/',
         method: 'POST',
         data: JSON.stringify(req.postParams),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
+});
+
+app.del('/attachments/:id', function(req, id){
+    var user = getUserDetails();
+
+    var opts = {
+        url: getZociaUrl(req) + '/resources/' + id,
+        method: 'DELETE',
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc',
+                            'Content-Type': 'application/json',
+                            'Authorization': _generateBasicAuthorization(user.username, user.password) }),
         async: false
     };
 
