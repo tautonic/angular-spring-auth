@@ -26,7 +26,7 @@ var text = {
     "notifications-activity.c.self.self.profiles": "You created your profile",
     "notifications-activity.c.spmessages": "${aboutLink}: ${message}",
     "notifications-activity.fsp.profiles": "${actorLink} started following ${directLink}.",
-    "notifications-activity.fsp.self.profiles": "${actorLink} started following yourself. THIS SHOULDN'T HAPPEN.",
+    "notifications-activity.fsp.self.profiles": "${actorLink} started following yourself.", //this should never be used, if it did, something went horribly wrong, or the user cheated.
     "notifications-activity.l.discussions": "${actorLink} liked ${aboutLink}",
     "notifications-activity.l.ideas": "${actorLink} liked ${aboutLink}",
     "notifications-activity.l.resources": "${actorLink} liked ${aboutLink}",
