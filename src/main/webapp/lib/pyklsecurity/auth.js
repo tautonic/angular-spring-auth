@@ -199,6 +199,7 @@ var pykl = window.pykl || {};
 
             $scope.signout = function () {
                 $rootScope.$broadcast(EVENT_SIGNOUT_REQUEST);
+                $location.path('/home');
             };
         }]
     );
