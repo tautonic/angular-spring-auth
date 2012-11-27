@@ -177,7 +177,10 @@ var pykl = window.pykl || {};
             var referral;
 
             function gotoLoginPage() {
-                referral = $location.path();
+                referral = $location.path(); console.log("REFERRAL IS "+referral);
+                if((referral === '/login') || (referral === '/signup')) {
+                    referral = '/home';
+                }
                 $location.path('login');
             }
 
