@@ -1,12 +1,3 @@
-.header {
-    z-index: 0;
-}
-
-ul.menu li {
-    z-index: 3000;
-    overflow: visible;
-}
-
 #searchSite.slideout {
     right: -120px;
 }

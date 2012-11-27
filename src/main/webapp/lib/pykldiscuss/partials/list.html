@@ -41,7 +41,7 @@
                     <a ng-href="#/network/discussion/new">Start new discussion</a>
                 </div>
                 <div ng-show="!auth.isAuthenticated">
-                    <a ng-click="auth.requestLogin()">Login to start a discussion.</a>
+                    <a ng-click="auth.requestLogin()">Log In to start a discussion.</a>
                 </div>
             </div>
 
@@ -71,7 +71,7 @@
                     </div>
                     <div ui-if="!auth.isAuthenticated">
                         <div class="discussion-btn btn-group bgc">
-                            <a class="btn btn-success" ng-href="#/login">Login to start a discussion</a>
+                            <a class="btn btn-success" ng-href="#/login">Log In to start a discussion</a>
                         </div>
                         <!--<a ng-href="#/network/discussion/new" class="btn btn-primary">Start new discussion</a>-->
                     </div>

@@ -307,7 +307,7 @@ var pykl = window.pykl || {};
 
             //todo: sign in only provides an error on failure, it does not provide a reason for the failure
             $rootScope.$on(EVENT_INTERNAL_SIGNIN_FAILED, function(event, reason) {
-                $log.info("ERROR logging in: Login attempt returned: "+reason);
+                $log.info("ERROR logging in: Log In attempt returned: "+reason);
                 if(reason === "AUTH_INACTIVE") {
                     $location.path('activateAccount');
                 } else if(reason === "AUTH_BAD_CREDENTIALS") {
