@@ -571,6 +571,10 @@ angular.module('bgc.directives')
                 scope.$on('cancelEdit', function(){
                     jQuery('.tooltip').remove();
                 });
+
+                scope.$on('$routeChangeStart', function(){
+                    jQuery('.tooltip').remove();
+                });
             }
         }
     }]);
@@ -659,6 +663,10 @@ angular.module('bgc.directives')
                 scope.$on('cancelEdit', function(){
                     jQuery('.tooltip').remove();
                 });
+
+                scope.$on('$routeChangeStart', function(){
+                    jQuery('.tooltip').remove();
+                });
             }
         }
     }]);
@@ -724,6 +732,10 @@ angular.module('bgc.directives')
                         return 'This field will only accept year values between 1900 - 2100';
                     }
                 }
+
+                scope.$on('$routeChangeStart', function(){
+                    jQuery('.tooltip').remove();
+                });
             }
         }
     });
