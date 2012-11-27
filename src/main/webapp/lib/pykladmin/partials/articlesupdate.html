@@ -36,6 +36,13 @@
                             </div>
 
                             <div class="control-group">
+                                <label class="control-label">Tags:</label>
+                                <div class="controls" ng-repeat="tag in article.taggable">
+                                    <input type="text" ng-model="tag.text" placeholder="Tag" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
                                 <label class="control-label"></label>
                                 <div class="controls">
                                     <div class="btn-group-border">

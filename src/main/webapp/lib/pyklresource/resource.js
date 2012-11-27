@@ -2,6 +2,7 @@
 function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $location ) {
     var sortBy = $routeParams.sortBy || 'featured';
     var category = $routeParams.service || '';
+    var tagFilter = '';
 
     $scope.tabs = {
         featured: true,
@@ -15,7 +16,19 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $scope.tabs[sortBy] = true;
     }
 
-    var url;
+    if($location.path() === '/admin/articles'){
+        $rootScope.banner = 'none';
+        $rootScope.about = 'none';
+    } else if($location.path() === '/summit') {
+        $rootScope.banner = 'summit';
+        $rootScope.about = 'summit';
+        category = 'summit';
+    } else {
+        $rootScope.banner = 'curriculum';
+        $rootScope.about = 'curriculum';
+    }
+
+    var url = "api/article/search?sort=" + sortBy + "&category=" + category;
     $scope.filters = {};
     $scope.paging = {
         size: 10
@@ -32,20 +45,6 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
 
         $scope.location = $location;
 
-        if($location.path() === '/admin/articles'){
-            $rootScope.banner = 'none';
-            $rootScope.about = 'none';
-        } else if($location.path() === '/summit') {
-            $rootScope.banner = 'summit';
-            $rootScope.about = 'summit';
-            category = 'summit';
-        } else {
-            $rootScope.banner = 'curriculum';
-            $rootScope.about = 'curriculum';
-        }
-
-        url = "api/article/search?sort=" + sortBy + "&category=" + category;
-
         $http.get( url ).success( function (data) {
             if(data !== "false") {
                 $scope.articles = data;
@@ -59,6 +58,15 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
     }
+
+    $scope.filterByTag = function(tag) {  console.log("search by tag");
+        tagFilter = '&tag=' + tag;
+        resetPaging();
+
+        url = "api/article/search/?filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category + tagFilter;
+
+        loadContent();
+    };
 
     $scope.sortBy = function(param) {
         if(sortBy === param)
@@ -97,7 +105,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         term = term || "";
         resetPaging();
 
-        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category;
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category + tagFilter;
 
         loadContent();
     };
@@ -109,7 +117,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         }
         term = term || "";
         $scope.paging.from += $scope.paging.size;
-        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size + "&sort=" + sortBy + "&category=" + category;
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size + "&sort=" + sortBy + "&category=" + category + tagFilter;
 
 
         $http.get( url ).success( function (data) {
