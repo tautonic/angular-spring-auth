@@ -150,8 +150,6 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
 }
 
 function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $http, Profile, $auth, $log){
-    $log.info('Current path is: ' + $location.path());
-
     $scope.profile = {};
     $scope.master = {};
 
