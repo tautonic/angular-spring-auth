@@ -100,6 +100,10 @@ var searchAllArticles = function(req, params) {
         data.query.filtered.filter.and.push({ "term": { "category": params.category } });
     }
 
+    if((params.tag) && (params.tag !== '')) {
+        data.query.filtered.filter.and.push({ "term": { "taggable": params.tag } });
+    }
+
     if(params.filters) {
         var mimetypeFilters = [];
         var filters = params.filters.split(',');

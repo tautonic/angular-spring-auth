@@ -204,6 +204,11 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         .success( function (data) {
             console.log("ARTICLE RETURNED: ",data);
             $scope.article = data;
+            var tags = [];
+            $scope.article.taggable.forEach(function(tag) {
+                tags.push({ "text": tag });
+            });
+            $scope.article.taggable = tags;
         })
         .error(function(data, status) {
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
@@ -226,8 +231,20 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             article.thumbnail = thumbnail[2];
         }
 
+        var tags = [];
+        $scope.article.taggable.forEach(function(tag) {
+            tags.push(tag.text);
+        });
+        $scope.article.taggable = tags;
+
         Article.update({articleId: article._id}, article, function(response){
             $scope.resetStatus = (response.success) ? "success" : "error";
+
+            var tags = [];
+            $scope.article.taggable.forEach(function(tag) {
+                tags.push({ "text": tag });
+            });
+            $scope.article.taggable = tags;
         }, function(response){
             console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
