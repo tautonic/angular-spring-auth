@@ -149,8 +149,8 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
     });
 }
 
-function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $http, Profile, $auth){
-    console.log('Is user authenticated: ' + $auth.isAuthenticated);
+function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $http, Profile, $auth, $log){
+    $log.info('Current path is: ' + $location.path());
 
     $scope.profile = {};
     $scope.master = {};
@@ -346,9 +346,6 @@ function createProfile($rootScope, $scope, $routeParams, $location, $http, Profi
         $scope.newProfile.thumbnail = 'images/GCEE_image_defaultMale.jpeg';
 
         $scope.newProfile.$save(function(response){
-            //$scope.profile._id = response.content._id;
-            //$scope.profile.thumbnail = response.content.thumbnail;
-
             var data = {
                 profileId: response.content._id
             };
@@ -365,7 +362,8 @@ function createProfile($rootScope, $scope, $routeParams, $location, $http, Profi
             //$location.path('/network');
             $scope.responseContent = response.content;
         }, function(response){
-            console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+            //console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+            $location.path("error/500");
         });
     };
 

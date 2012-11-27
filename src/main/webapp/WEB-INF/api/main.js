@@ -1553,12 +1553,25 @@ function _simpleHTTPRequest(opts) {
 
     log.info('EXCHANGE STATUS!!! ', exchange.status);
 
-    return json({
+    var result = json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
+
+    //result.status = exchange.status;
+
+    /*var result = json({
+        'status': profileExchange.status,
+        'content': profiles,
+        'headers': profileExchange.headers,
+        'success': Math.floor(profileExchange.status / 100) === 2
+    });
+
+    result.status = profileExchange.status;*/
+
+    return result;
 }
 
 function getUserDetails() {
