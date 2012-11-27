@@ -217,6 +217,7 @@ var pykl = window.pykl || {};
                         var status = response.status;
 
                         $log.error( 'Error, status: ' + status + ', response: ' + JSON.stringify( response ) );
+
                         if (status === 401) {
                             //there seems to be a bug relating to the defer() function in IE8. This does not appear to affect anything major, though, so will not be fixed at this time
                             var deferred = $q.defer();
@@ -229,7 +230,11 @@ var pykl = window.pykl || {};
 
                             return deferred.promise;
                         }
-                        if (status === 404) {
+                        if (status === 404
+                            && $location.path().indexOf('/profiles/view') === -1
+                            && $location.path() !== '/signup'
+                            && $location.path() !== '/admin/users/new')
+                        {
                             $location.path("error/404");
                         }
                         if (status === 500) {

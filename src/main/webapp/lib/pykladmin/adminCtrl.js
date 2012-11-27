@@ -60,6 +60,8 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
 }
 
 function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location, Profile){
+    $log.info('Current path is: ' + $location.path());
+
     $scope.isDisabled = true;
 
     $scope.adminUsers = false;
@@ -145,12 +147,13 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
 
                 })
                 .error(function(data, status, headers, config){
-                    console.log('POST VERIFY PROFILE ERROR!!!');
+                    $location.path("error/500");
                 });
 
             $location.path('/profiles/view/' + response.content._id);
         }, function(response){
-            console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+            //console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+            $location.path("error/500");
         });
     };
 
