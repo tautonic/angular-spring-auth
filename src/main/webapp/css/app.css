@@ -1444,6 +1444,21 @@ li.search-result.members{
     z-index: 2;
 }
 
+.attachment .paper-clip{
+    right: 11.25em;
+}
+
+.attachment .attached-doc{
+    right: 10em;
+}
+
+.attachment .btn-group-border{
+    position: relative;
+    right:  1em;
+    top: -4em;
+    float: right;
+}
+
 .content-thumbnail.small{
     width: 72px;
     height: 96px;

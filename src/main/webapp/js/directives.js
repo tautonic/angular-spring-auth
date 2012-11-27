@@ -1498,20 +1498,24 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$aut
                                 scope.attachments.splice(index, 1);
 
                                 var attachmentDiv = '<div class="discussion-stack-container attachment" style="top:'+ attachmentDivPos+'em;"> \
-                                    <div class="discussion-item grey-gradient"> \
-                                        <h4>'+ data.content.title +'</h4> \
-                                        <h6>By '+ data.content.author +', '+ date +'</h6> \
-                                        <p class="muted">'+ data.content.description +'</p> \
-                                    </div> \
-                                    \
-                                    <div class="paper-clip"></div> \
-                                    <div class="attached-doc"> \
-                                        <div class="new-picture-frame small content-thumbnail attachment"> \
-                                            <span class="doc-type '+ getMimeType(data.content.mimetype) +'"></span> \
-                                            <img src="images/document-default.jpg" alt=""> \
-                                            </div> \
-                                        </div> \
-                                    </div>'
+                                                        <div class="discussion-item grey-gradient"> \
+                                                            <h4>'+ data.content.title +'</h4> \
+                                                            <h6>By '+ data.content.author +', '+ date +'</h6> \
+                                                            <p class="muted">'+ data.content.description +'</p> \
+                                                        </div> \
+                                                        \
+                                                        <div class="btn-group-border">\
+                                                            <div class="btn-group bgc">\
+                                                                <button ng-click="removeAttachment()" btn btn-warning"><i class="icon-remove-circle icon-white"></i> Remove</button>\
+                                                            </div>\
+                                                        </div>\
+                                                        <div class="paper-clip"></div> \
+                                                        <div class="attached-doc"> \
+                                                            <div class="new-picture-frame small content-thumbnail attachment"> \
+                                                                <span class="doc-type '+ getMimeType(data.content.mimetype) +'"></span> \
+                                                                <img src="images/document-default.jpg" alt="">\
+                                                            </div>\
+                                                        </div>';
 
                                 attachmentDivPos -= 3;
 
