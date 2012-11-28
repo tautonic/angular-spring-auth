@@ -12,9 +12,9 @@
         <div class="span7 content">
             <h3><a ng-href="#/content/view/{{article._id}}">{{article.title}}</a></h3>
             <p class="article-meta"><span class="doc-type {{article.doctype}}"></span><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
-            <div class="tags">
+            <!--<div class="tags">
                 <span ng-repeat="tag in article.taggable"><a ng-click="filterByTag(tag)">{{tag}}</a><span ng-show="!$last">, </span></span>
-            </div>
+            </div>-->
             <p class="article-brief">{{article.description}}</p>
             <ul class="article-stats">
                 <li class="muted"><i class="likes"></i> {{article.likes | pluralize:'Like'}}</li>

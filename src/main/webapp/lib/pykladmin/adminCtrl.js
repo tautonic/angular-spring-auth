@@ -236,7 +236,9 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
 
         var tags = [];
         $scope.article.taggable.forEach(function(tag) {
-            tags.push(tag.text);
+            if(tag.text !== '') {
+                tags.push(tag.text);
+            }
         });
         $scope.article.taggable = tags;
 
@@ -251,6 +253,10 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         }, function(response){
             console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
+    };
+
+    $scope.addTag = function() {
+        $scope.article.taggable.push({"text": ""});
     };
 
     $scope.cancel = function(){
