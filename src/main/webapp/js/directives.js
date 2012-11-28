@@ -1438,6 +1438,82 @@ angular.module('bgc.directives').directive('roleToggleUser', ['Profile', functio
     }
 }]);
 
+angular.module('bgc.directives').directive('roleTogglePremium', ['Profile', function(Profile){
+    return {
+        restrict: 'A',
+        replace: true,
+        link: function(scope, elm, attrs){
+            var profile;
+            attrs.$observe('user', function(user){
+                if(user !== '{}'){
+                    profile = scope.$eval(user);
+                    if(profile.roles.indexOf('ROLE_PREMIUM') !== -1)
+                    {
+                        elm.button('toggle');
+                    }
+                }
+            });
+
+            elm.bind('click', function(){
+                if(profile.roles.indexOf('ROLE_PREMIUM') !== -1){
+                    profile.roles.splice(profile.roles.indexOf('ROLE_PREMIUM'), 1);
+                }else{
+                    profile.roles.push('ROLE_PREMIUM');
+                }
+
+                delete profile.facultyFellow;
+                delete profile.isUserFollowing;
+                delete profile.newPass;
+                delete profile.newPassRepeat;
+
+                Profile.update({profileId: profile._id}, profile, function(response){
+
+                }, function(response){
+                    log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+                });
+            });
+        }
+    }
+}]);
+
+angular.module('bgc.directives').directive('roleToggleEditor', ['Profile', function(Profile){
+    return {
+        restrict: 'A',
+        replace: true,
+        link: function(scope, elm, attrs){
+            var profile;
+            attrs.$observe('user', function(user){
+                if(user !== '{}'){
+                    profile = scope.$eval(user);
+                    if(profile.roles.indexOf('ROLE_EDITOR') !== -1)
+                    {
+                        elm.button('toggle');
+                    }
+                }
+            });
+
+            elm.bind('click', function(){
+                if(profile.roles.indexOf('ROLE_EDITOR') !== -1){
+                    profile.roles.splice(profile.roles.indexOf('ROLE_EDITOR'), 1);
+                }else{
+                    profile.roles.push('ROLE_EDITOR');
+                }
+
+                delete profile.facultyFellow;
+                delete profile.isUserFollowing;
+                delete profile.newPass;
+                delete profile.newPassRepeat;
+
+                Profile.update({profileId: profile._id}, profile, function(response){
+
+                }, function(response){
+                    log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+                });
+            });
+        }
+    }
+}]);
+
 angular.module('bgc.directives').directive('roleToggleAdmin', ['Profile', function(Profile){
     return {
         restrict: 'A',
@@ -1458,43 +1534,6 @@ angular.module('bgc.directives').directive('roleToggleAdmin', ['Profile', functi
                     profile.roles.splice(profile.roles.indexOf('ROLE_ADMIN'), 1);
                 }else{
                     profile.roles.push('ROLE_ADMIN');
-                }
-
-                delete profile.facultyFellow;
-                delete profile.isUserFollowing;
-                delete profile.newPass;
-                delete profile.newPassRepeat;
-
-                Profile.update({profileId: profile._id}, profile, function(response){
-
-                }, function(response){
-                    log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
-                });
-            });
-        }
-    }
-}]);
-
-angular.module('bgc.directives').directive('roleToggleMember', ['Profile', function(Profile){
-    return {
-        restrict: 'A',
-        replace: true,
-        link: function(scope, elm, attrs){
-            var profile;
-            attrs.$observe('user', function(user){
-                if(user !== '{}'){
-                    profile = scope.$eval(user);
-                    if(profile.roles.indexOf('ROLE_MEMBER') !== -1 || profile.roles.indexOf('ROLE_ADMIN') !== -1 && profile){
-                        elm.button('toggle');
-                    }
-                }
-            });
-
-            elm.bind('click', function(){
-                if(profile.roles.indexOf('ROLE_MEMBER') !== -1){
-                    profile.roles.splice(profile.roles.indexOf('ROLE_MEMBER'), 1);
-                }else{
-                    profile.roles.push('ROLE_MEMBER');
                 }
 
                 delete profile.facultyFellow;
