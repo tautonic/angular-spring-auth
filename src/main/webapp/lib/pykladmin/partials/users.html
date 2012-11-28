@@ -24,7 +24,7 @@
                                     <div class="btn-group-border role-toggle">
                                         <div class="btn-group bgc" data-toggle="buttons-checkbox">
                                             <button data-toggle="button" role-toggle-user user={{profile._source}} type="button" class="btn btn-success">User</button>
-                                            <button role-toggle-premuim user={{profile._source}} type="button" class="btn btn-success">Premium</button>
+                                            <button role-toggle-premium user={{profile._source}} type="button" class="btn btn-success">Premium</button>
                                             <button role-toggle-editor user={{profile._source}} type="button" class="btn btn-success">Editor</button>
                                             <button role-toggle-admin user={{profile._source}} type="button" class="btn btn-success">Admin</button>
                                         </div>
@@ -80,11 +80,21 @@
                         </div>
                         <div class="form-container">
                             <form ng-controller="SiteSearchController" ng-submit="searchSite()">
-                                <p>Filter users by type</p>
+                                <p>Filter users by status</p>
 
                                 <div class="sub documents">
-                                    <div ng-repeat="facet in facets">
-                                        <input type="checkbox" ng-model=facet.selected ng-click="filtered($event.target.checked, facet.term)" id="{{facet.term}}"><label for="{{facet.term}}"></span>{{facet.term}} ({{facet.count}})</label>
+                                    <div ng-repeat="statusFacet in statusFacets">
+                                        <input type="checkbox" ng-model=statusFacet.selected ng-click="filtered('status')" id="{{statusFacet.term}}"><label for="{{statusFacet.term}}"></span>{{statusFacet.term}} ({{statusFacet.count}})</label>
+                                    </div>
+                                </div>
+
+                                <p>Filter users by role</p>
+
+                                <div class="sub documents">
+                                    <div ng-repeat="roleFacet in roleFacets">
+                                        <div ui-if=!$first>
+                                            <input type="checkbox" ng-model=roleFacet.selected ng-click="filtered('role')" id="{{roleFacet.term}}"><label for="{{roleFacet.term}}"></span>{{roleFacet.term|inflector:humanize}} ({{roleFacet.count}})</label>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
