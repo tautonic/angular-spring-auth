@@ -287,7 +287,7 @@ angular.module('bgc.directives')
 
 
 angular.module('bgc.directives')
-    .directive('pyklProfileImageUpload', ['$http', function($http){
+    .directive('pyklProfileImageUpload', ['$http', '$log', function($http, $log){
 
     //alert('Upload Directive!');
 
@@ -383,7 +383,7 @@ angular.module('bgc.directives')
                 $('.jcrop-holder').empty();
                 $('.profile-crop-preview').hide();
                 //jcropApi.destroy();
-                console.log('Files in queue: ' + uploader.files.length)
+                $log.info('Files in queue: ' + uploader.files.length)
             });
 
             saveCropBtn.bind('click', function(){
@@ -434,7 +434,7 @@ angular.module('bgc.directives')
                         //$('.new-picture-frame.profile-thumbnail img').attr('src', uri);
                     }).error(
                     function(){
-                        console.log('Image crop error!');
+                        $log.info('Image crop error!');
                     }
                 );
 
@@ -797,7 +797,6 @@ angular.module('bgc.directives').directive('streamItem', ['$http',
             templateUrl: 'partials/activityStreamItem.html',
             link: function(scope, elm, attrs){
                 scope.thumbsize = attrs.thumbsize || "small";
-                //console.log(attrs.ngModel);
             }
         }
     }
@@ -1407,8 +1406,7 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
             scope.$on('chosenSlide', function(){
                 /*scope.page = scope.$parent.page;
 
-                page = Math.floor(scope.$parent.page / 5) + 1;
-                console.log(page);*/
+                page = Math.floor(scope.$parent.page / 5) + 1;*/
             });
 
             scope.incrementPage = function(){
