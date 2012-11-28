@@ -263,6 +263,10 @@ var editDiscussionPost = function(req, id, postId, postContent, user) {
     return (Math.floor(exchange.status/100) === 2);
 };
 
+var deletePost = function(req, id, user) {
+    return true;
+};
+
 function countComments(post) {
     var length = post.children.length;
     for(var i = 0; i < post.children.length; i++) {
@@ -278,4 +282,4 @@ function generateBasicAuthorization(user) {
     return 'Basic ' + base64;
 }
 
-export('getDiscussion', 'getDiscussionByParent', 'getDiscussionList', 'addReply', 'createDiscussion', 'editDiscussionPost');
+export('getDiscussion', 'getDiscussionByParent', 'getDiscussionList', 'addReply', 'createDiscussion', 'editDiscussionPost', 'deletePost');

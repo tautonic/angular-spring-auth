@@ -305,6 +305,18 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
         });
     };
 
+    $scope.deleteDiscussion = function() {
+        $http['delete']('api/discussions/'+$scope.discussion._id).success(function(data) {
+            console.log("ENTIRE DISUCSISOSN DELETED");
+        })
+    };
+
+    $scope.deletePost = function(post) {
+        $http['delete']('api/discussions/'+post._id).success(function(data) {
+            console.log("SINGLE POST DELETED");
+        })
+    };
+
     /* infinite scroll here has been removed because there's issues in the backend that prevent it from being feasible. See BGC-173 for details
     $scope.loadMore = function(term) {
         //if there's no more pages to load
