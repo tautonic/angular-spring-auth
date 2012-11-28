@@ -112,7 +112,6 @@ var getDiscussionList = function(req, params) {
 
     var exchange = httpclient.request(opts);
 
-    //this mostly filters discussions that don't have titles, which mostly relates to replies on discussions
     var threads = JSON.parse(exchange.content);
 
     //loop through each thread and add an attribute that contains the
@@ -221,7 +220,6 @@ var createDiscussion = function(req, firstPost, user) {
 
     var exchange = httpclient.request(opts);
 
-    log.info("creating new discussion: exchange content: "+exchange.content);
     if(Math.floor(exchange.status/100) === 2)
     {
         return JSON.parse(exchange.content);
@@ -264,7 +262,18 @@ var editDiscussionPost = function(req, id, postId, postContent, user) {
 };
 
 var deletePost = function(req, id, user) {
-    return true;
+    var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
+
+    var opts = {
+        url: getZociaUrl(req) + '/posts/'+id,
+        method: 'DELETE',
+        headers: headers,
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    return (Math.floor(exchange.status/100) === 2);
 };
 
 function countComments(post) {

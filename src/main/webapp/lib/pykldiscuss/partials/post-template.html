@@ -22,7 +22,7 @@
 </div>
 <div class="discussion-post-stats grey-gradient" ng-show="!post.reply.show">
         <div ui-if="auth.isUserInRole('ROLE_ADMIN')" class="btn-group bgc" style="float: right">
-            <button ng-click="deletePost(post)" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete Post</button>
+            <button ng-click="deletePost(post, $index)" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete Post</button>
         </div>
         <span class="btn-group-border" ng-hide="post.hidden">
             <div class="btn-group bgc">

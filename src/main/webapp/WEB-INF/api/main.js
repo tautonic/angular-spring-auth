@@ -322,6 +322,14 @@ app.del('/discussions/:id', function(req, id) {
         };
     }
 
+    if(req.params.threadId === id) {
+        var thread = getDiscussion(req, id).content[0];
+
+        thread.children.forEach(function(post) {
+            deletePost(req, post._id, getUserDetails());
+        });
+    }
+
     return json(deletePost(req, id, getUserDetails()));
 });
 /****** End discussion posts ********/
