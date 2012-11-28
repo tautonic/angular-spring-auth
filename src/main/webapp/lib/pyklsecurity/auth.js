@@ -178,6 +178,9 @@ var pykl = window.pykl || {};
 
             function gotoLoginPage() {
                 referral = $location.path();
+                if((referral === '/login') || (referral === '/signup')) {
+                    referral = '/home';
+                }
                 $location.path('login');
             }
 

@@ -607,15 +607,11 @@ app.get('/profiles/admin', function(req){
     var profiles = JSON.parse(profileExchange.content);
     //log.info('Facets returned from Zocia {}', JSON.stringify(profiles.facets, null, 4));
     // we'll be using  the raw elasticsearch result facets
-    var facets = profiles.facets.status.terms;
+    var facets = profiles.facets;
 
     // we're really only interested in the hits property of the hits object returned from
     // the query
     profiles = profiles.hits.hits;
-
-    /*var profileExchange = httpclient.request(opts);
-
-    var profiles = JSON.parse(profileExchange.content);*/
 
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
@@ -642,12 +638,12 @@ app.get('/profiles/admin', function(req){
     return result;
 });
 
-app.post('/profiles/admin/status', function(req){
+app.post('/profiles/admin/filter', function(req){
     var user = getUserDetails();
     var data = req.postParams;
 
     var opts = {
-        url: getZociaUrl(req) + '/profiles/gc/admin/status',
+        url: getZociaUrl(req) + '/profiles/gc/admin/filter',
         data: JSON.stringify(data),
         method: 'POST',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),

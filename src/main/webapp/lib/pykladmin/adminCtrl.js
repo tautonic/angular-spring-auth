@@ -15,40 +15,64 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
 
     $http.get('api/profiles/admin').
         success(function(data, status, headers, config){
-            console.log(data);
             $scope.profiles = data.content;
-            $scope.facets = data.facets;
+            $scope.statusFacets = data.facets.status.terms;
+            $scope.roleFacets = data.facets.types.terms;
 
-            // create a scope object for each facet term
-            for(var facet in $scope.facets){
-                //var term =
-                $scope.facets[facet].selected = false;
+            // create a scope object for each status facet term
+            for(var facets in $scope.statusFacets){
+                $scope.statusFacets[facets].selected = false;
+            }
+
+            // create a scope object for each role facet term
+            for(var facets in $scope.roleFacets){
+                $scope.roleFacets[facets].selected = false;
             }
         }).
         error(function(data, status, headers, config){
 
         });
 
-    $scope.filtered = function(checked, id){
+    $scope.filtered = function(filter){
         var status = [];
+        var roles = [];
+        var data = {};
+        var terms = '';
 
-        $scope.allTypes = false;
-        console.log('search ' + id + ' is ' + checked);
+        //$scope.allTypes = false;
 
-        for(var facet in $scope.facets){
-            if($scope.facets[facet].selected === true){
-                status.push($scope.facets[facet].term);
+        if(filter === 'status'){
+            for(var facet in $scope.statusFacets){
+                if($scope.statusFacets[facet].selected === true){
+                    status.push($scope.statusFacets[facet].term);
+                }
+            }
+
+            terms = status.join(' ');
+
+            if(terms === ''){
+                terms = 'verfied candidate';
+            }
+        }else{
+            for(var facet in $scope.roleFacets){
+                if($scope.roleFacets[facet].selected === true){
+                    roles.push($scope.roleFacets[facet].term);
+                }
+            }
+
+            terms = roles.join(' ');
+
+            if(terms === ''){
+                terms = 'ROLE_USER ROLE_PREMIUM ROLE_EDITOR ROLE_ADMIN';
             }
         }
 
-        status = status.join(' ');
-
-        var data = {
-            status: status
+        data = {
+            field: filter,
+            terms: terms
         };
 
-        //dataType = [];
-        $http.post('api/profiles/admin/status/', data)
+        $http.post('api/profiles/admin/filter/', data)
             .success(function(response){
                 console.log('Success! Search request was successful');
                 $scope.profiles = response.content;
@@ -236,7 +260,9 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
 
         var tags = [];
         $scope.article.taggable.forEach(function(tag) {
-            tags.push(tag.text);
+            if(tag.text !== '') {
+                tags.push(tag.text);
+            }
         });
         $scope.article.taggable = tags;
 
@@ -251,6 +277,10 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         }, function(response){
             console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
+    };
+
+    $scope.addTag = function() {
+        $scope.article.taggable.push({"text": ""});
     };
 
     $scope.cancel = function(){
