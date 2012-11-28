@@ -90,13 +90,12 @@ public class RoundtableUser implements UserDetails {
 		return username;
 	}
 
-    /**
-     * Returns the username used to authenticate the user. Cannot return <code>null</code>.
-     *
-     * @return the username (never <code>null</code>)
-     */
     public String getThumbnail() {
         return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     /**

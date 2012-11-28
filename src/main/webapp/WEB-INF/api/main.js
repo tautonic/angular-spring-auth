@@ -731,12 +731,16 @@ app.put('/profiles/:id', function(req, id){
 
     var data = req.postParams;
 
+    setUserDetails(req.postParams.thumbnail);
+
     if(req.postParams.newPass && req.postParams.newPass !== ''){
         data.password = digest(req.postParams.newPass).toLowerCase();
     }
 
     delete data.newPass;
     delete data.newPassRepeat;
+    delete data.isUserFollowing;
+    delete data.facultyFellow;
 
     if(req.postParams.status === "unverified") {
         var servletRequest = req.env.servletRequest;
@@ -1591,4 +1595,14 @@ function getUserDetails() {
     }
 
     return result;
+}
+
+function setUserDetails(thumbnail){
+    var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
+    var auth = SecurityContextHolder.context.authentication;
+
+    // principal can be a simple string or a spring security user object
+    var principal = (typeof auth.principal === 'string') ? auth.principal : auth.principal;
+
+    principal.thumbnail = thumbnail;
 }
