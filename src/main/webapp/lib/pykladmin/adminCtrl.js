@@ -244,10 +244,12 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             console.log("ARTICLE RETURNED: ",data);
             $scope.article = data;
             var tags = [];
-            $scope.article.taggable.forEach(function(tag) {
-                tags.push({ "text": tag });
-            });
-            $scope.article.taggable = tags;
+            if($scope.article.taggable){
+                $scope.article.taggable.forEach(function(tag) {
+                    tags.push({ "text": tag });
+                });
+                $scope.article.taggable = tags;
+            }
         })
         .error(function(data, status) {
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
@@ -255,6 +257,11 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
 
     $scope.update = function(article){
         article.roles = ['ROLE_ANONYMOUS'];
+
+        delete article._index;
+        delete article._score;
+        delete article._type;
+        delete article._version;
 
         if(article.premium) {
             article.roles.push('ROLE_PREMIUM');
@@ -271,12 +278,15 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         }
 
         var tags = [];
-        $scope.article.taggable.forEach(function(tag) {
-            if(tag.text !== '') {
-                tags.push(tag.text);
-            }
-        });
-        $scope.article.taggable = tags;
+        if($scope.article.taggable){
+            $scope.article.taggable.forEach(function(tag) {
+                if(tag.text !== '') {
+                    tags.push(tag.text);
+                }
+            });
+
+            $scope.article.taggable = tags;
+        }
 
         Article.update({articleId: article._id}, article, function(response){
             $scope.resetStatus = (response.success) ? "success" : "error";
