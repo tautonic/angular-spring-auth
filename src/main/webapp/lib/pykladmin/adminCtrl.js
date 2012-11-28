@@ -41,7 +41,7 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
 
         //$scope.allTypes = false;
 
-        if(filter === status){
+        if(filter === 'status'){
             for(var facet in $scope.statusFacets){
                 if($scope.statusFacets[facet].selected === true){
                     status.push($scope.statusFacets[facet].term);
@@ -49,6 +49,10 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
             }
 
             terms = status.join(' ');
+
+            if(terms === ''){
+                terms = 'verfied candidate';
+            }
         }else{
             for(var facet in $scope.roleFacets){
                 if($scope.roleFacets[facet].selected === true){
@@ -57,10 +61,15 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
             }
 
             terms = roles.join(' ');
+
+            if(terms === ''){
+                terms = 'ROLE_USER ROLE_PREMIUM ROLE_EDITOR ROLE_ADMIN';
+            }
         }
 
         data = {
-            filter: terms
+            field: filter,
+            terms: terms
         };
 
         $http.post('api/profiles/admin/filter/', data)

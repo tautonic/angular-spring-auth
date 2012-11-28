@@ -80,7 +80,7 @@
                         </div>
                         <div class="form-container">
                             <form ng-controller="SiteSearchController" ng-submit="searchSite()">
-                                <p>Filter users by status</p>
+                                <p><strong>Filter users by status</strong></p>
 
                                 <div class="sub documents">
                                     <div ng-repeat="statusFacet in statusFacets">
@@ -88,12 +88,12 @@
                                     </div>
                                 </div>
 
-                                <p>Filter users by role</p>
+                                <p><strong>Filter users by role</strong></p>
 
                                 <div class="sub documents">
                                     <div ng-repeat="roleFacet in roleFacets">
                                         <div ui-if=!$first>
-                                            <input type="checkbox" ng-model=roleFacet.selected ng-click="filtered('role')" id="{{roleFacet.term}}"><label for="{{roleFacet.term}}"></span>{{roleFacet.term|inflector:humanize}} ({{roleFacet.count}})</label>
+                                            <input type="checkbox" ng-model=roleFacet.selected ng-click="filtered('roles')" id="{{roleFacet.term}}"><label for="{{roleFacet.term}}"></span>{{roleFacet.term|inflector:humanize}} ({{roleFacet.count}})</label>
                                         </div>
                                     </div>
                                 </div>
