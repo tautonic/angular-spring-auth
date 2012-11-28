@@ -42,29 +42,9 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
         //$scope.allTypes = false;
 
         if(filter === 'status'){
-            for(var facet in $scope.statusFacets){
-                if($scope.statusFacets[facet].selected === true){
-                    status.push($scope.statusFacets[facet].term);
-                }
-            }
-
-            terms = status.join(' ');
-
-            if(terms === ''){
-                terms = 'verfied candidate';
-            }
+            filterByStatus();
         }else{
-            for(var facet in $scope.roleFacets){
-                if($scope.roleFacets[facet].selected === true){
-                    roles.push($scope.roleFacets[facet].term);
-                }
-            }
-
-            terms = roles.join(' ');
-
-            if(terms === ''){
-                terms = 'ROLE_USER ROLE_PREMIUM ROLE_EDITOR ROLE_ADMIN';
-            }
+            filterByRole();
         }
 
         data = {
@@ -80,6 +60,38 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
             .error(function(){
                 console.log('Error! Search request was successful');
             });
+
+        function filterByRole(){
+            for(var facet in $scope.roleFacets){
+                if($scope.roleFacets[facet].selected === true){
+                    roles.push($scope.roleFacets[facet].term);
+                }
+            }
+
+            terms = roles.join(' ');
+
+            if(terms === ''){
+                // we should check and see of any options for filtering by status
+                // have been selected
+                terms = 'ROLE_USER ROLE_PREMIUM ROLE_EDITOR ROLE_ADMIN';
+            }
+        }
+
+        function filterByStatus(){
+            for(var facet in $scope.statusFacets){
+                if($scope.statusFacets[facet].selected === true){
+                    status.push($scope.statusFacets[facet].term);
+                }
+            }
+
+            terms = status.join(' ');
+
+            if(terms === ''){
+                // we should check and see of any options for filtering by role
+                // have been selected
+                terms = 'verfied candidate';
+            }
+        }
     };
 }
 

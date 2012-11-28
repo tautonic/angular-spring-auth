@@ -727,26 +727,9 @@ app.get('/profiles/', function(req){
 });
 
 app.put('/profiles/:id', function(req, id){
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+    var user = getUserDetails();
 
-    var data = {
-        "username" : req.postParams.username,
-        "name" : {
-            "given": req.postParams.name.given,
-            "pre": req.postParams.name.pre,
-            "surname": req.postParams.name.surname
-        },
-        "accountEmail" : {
-            "address"  : req.postParams.accountEmail.address
-        },
-        "educationHistory" : req.postParams.educationHistory,
-        "websites" : req.postParams.websites,
-        "workHistory" : req.postParams.workHistory,
-        "thumbnail": req.postParams.thumbnail,
-        "about": req.postParams.about
-    };
-
-    //var data = req.postParams;
+    var data = req.postParams;
 
     if(req.postParams.newPass && req.postParams.newPass !== ''){
         data.password = digest(req.postParams.newPass).toLowerCase();
@@ -767,7 +750,9 @@ app.put('/profiles/:id', function(req, id){
         url: getZociaUrl(req) + '/profiles/' + id,
         method: 'PUT',
         data: JSON.stringify(data),
-        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
+        headers: Headers({ 'x-rt-index': 'gc',
+            'Content-Type': 'application/json',
+            'Authorization': _generateBasicAuthorization(user.username, user.password)}),
         async: false
     };
 
