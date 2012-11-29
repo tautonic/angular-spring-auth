@@ -94,6 +94,15 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
             }
         }
     };
+
+    $scope.activateUser = function(user) {
+        //user = JSON.parse(user);
+        user.status = "verified";
+
+        //var userId = attrs.userid
+        user = Profile.update({profileId:user._id}, user, function(){
+        });
+    };
 }
 
 function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location, Profile){
