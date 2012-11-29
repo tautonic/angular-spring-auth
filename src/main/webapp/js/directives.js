@@ -102,11 +102,11 @@ angular.module( 'bgc.directives')
                 scope.defaultImage = 'images/GCEE_image_defaultMale.jpeg';
 
                 scope.thumbnail = {
-                    //image: 'images/GCEE_image_profileFemale_135x135.jpeg',
                     text: 'Read More',
                     style: 'profile-thumbnail large counter-clockwise'
-                }
+                };
 
+                //allows the user to switch between the "male" and "female" default portraits
                 scope.togglePortrait = function(){
                     if(scope.defaultImage === 'images/GCEE_image_defaultMale.jpeg'){
                         scope.defaultImage = 'images/GCEE_image_defaultFemale.jpeg';
@@ -115,43 +115,26 @@ angular.module( 'bgc.directives')
                     }
 
                     scope.$emit('togglePortrait');
-                }
+                };
 
                 if(attr.type === 'profile' || !attr.type){
                     scope.thumbnail.type = attr.type;
 
-                    if(attr.size && attr.rotation){
-                        scope.thumbnail.style = 'profile-thumbnail ' + attr.size + ' ' + attr.rotation;
-                        return;
-                    }
-
-                    if(attr.size){
-                        scope.thumbnail.style = 'profile-thumbnail ' + attr.size + ' counter-clockwise';
-                        return;
-                    }
-
-                    if(attr.rotation){
-                        scope.thumbnail.style = 'profile-thumbnail large ' + attr.rotation;
-                        return;
-                    }
+                    //set the style based on size and rotation, if they exist, otherwise use default values
+                    scope.thumbnail.style = 'profile-thumbnail ' +
+                        ((attr.size) ? attr.size : 'large') + ' ' +
+                        ((attr.rotation) ? attr.rotation : 'counter-clockwise');
 
                     return;
                 }
 
                 if(attr.type === 'article' || attr.type === 'content'){
-                    scope.thumbnail.type = 'content';
-                    scope.thumbnail.style = 'content-thumbnail no-rotation';
-
-                    if(attr.type === 'article'){
-                        scope.thumbnail.type = 'article';
-                        scope.thumbnail.style = 'article-thumbnail no-rotation';
-                    }
+                    scope.thumbnail.type = attr.type;
+                    scope.thumbnail.style = attr.type + '-thumbnail no-rotation';
 
                     if(attr.text){
                         scope.thumbnail.text = attr.text;
                     }
-
-                    return;
                 }
             }
         }
@@ -215,7 +198,7 @@ angular.module('bgc.directives')
                 var isGoogleDoc = false;
 
                 if(attrs.googleDoc){
-                    isGoogleDoc = (attrs.googleDoc == 'true') ? true : false;
+                    isGoogleDoc = (attrs.googleDoc === "true");
                 }
 
                 if(isGoogleDoc){
@@ -345,7 +328,7 @@ angular.module('bgc.directives')
                                        <div id="block-6" class="little-block"></div> \
                                        <div id="block-7" class="little-block"></div> \
                                        <div id="block-8" class="little-block"></div> \
-                                       <div id="block-9" class="little-block"></div></div>'
+                                       <div id="block-9" class="little-block"></div></div>';
 
                 jQuery('.info.image h3').after(progress);
 
@@ -395,7 +378,7 @@ angular.module('bgc.directives')
                                        <div id="block-6" class="little-block"></div> \
                                        <div id="block-7" class="little-block"></div> \
                                        <div id="block-8" class="little-block"></div> \
-                                       <div id="block-9" class="little-block"></div></div>'
+                                       <div id="block-9" class="little-block"></div></div>';
 
                 jQuery('.info.image h3').after(progress);
 
@@ -480,7 +463,7 @@ angular.module('bgc.directives')
             uploader.init();
         }
     }
-}])
+}]);
 
 /**
  * @ngdoc directive
@@ -524,7 +507,7 @@ angular.module('bgc.directives')
                                     valid = true;
                                 }else{
                                     ctrl.$setValidity('emailValidator', false);
-                                    message = 'This email address is already in use.'
+                                    message = 'This email address is already in use.';
                                     return undefined;
                                 }
                             });
@@ -1192,7 +1175,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                                        <div id="block-6" class="little-block"></div> \
                                        <div id="block-7" class="little-block"></div> \
                                        <div id="block-8" class="little-block"></div> \
-                                       <div id="block-9" class="little-block"></div></div>'
+                                       <div id="block-9" class="little-block"></div></div>';
 
                         jQuery('#container').append(progress);
 
@@ -1215,11 +1198,11 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                         case 'text/plain':
                             return 'txt';
                         case 'application/pdf':
-                            return 'pdf'
+                            return 'pdf';
                         case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                            return 'word'
+                            return 'word';
                         case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-                            return 'ppt'
+                            return 'ppt';
                     }
                 }
 
@@ -1363,11 +1346,11 @@ angular.module('bgc.directives').directive('slideShow', ['$log', function($log){
                 scope.$broadcast('chosenSlide');
 
                 scope.showSlideshowModal = true;
-            }
+            };
 
             scope.closeSummitModal = function(){
                 scope.showSlideshowModal = false;
-            }
+            };
 
             scope.$on('hideModal', function(){
                 scope.showSlideshowModal = false;
@@ -1401,7 +1384,7 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
                 $('.thumb').removeClass('active-thumb');
                 $(elm.parentElement).addClass('active-thumb');
                 //scope.page = page;
-            }
+            };
 
             scope.$on('chosenSlide', function(){
                 /*scope.page = scope.$parent.page;
@@ -1414,7 +1397,7 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
                     scope.page = 0;
                 }
                 scope.page++;
-            }
+            };
 
             scope.decrementPage = function(){
                 if(scope.page === 1){
