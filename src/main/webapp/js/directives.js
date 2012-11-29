@@ -39,6 +39,31 @@ if (!Array.prototype.filter)
     };
 }
 
+var animation = false,
+    domPrefixes = 'Webkit Moz O ms Khtml'.split(' ');
+
+if( document.body.style.animationName ) { animation = true; }
+
+if( animation === false ) {
+    for( var i = 0; i < domPrefixes.length; i++ ) {
+        if( document.body.style[ domPrefixes[i] + 'AnimationName' ] !== undefined ) {
+            animation = true;
+            break;
+        }
+    }
+}
+
+var ajaxLoader = (animation) ? '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
+                                       <div id="block-2" class="little-block"></div> \
+                                       <div id="block-3" class="little-block"></div> \
+                                       <div id="block-4" class="little-block"></div> \
+                                       <div id="block-5" class="little-block"></div> \
+                                       <div id="block-6" class="little-block"></div> \
+                                       <div id="block-7" class="little-block"></div> \
+                                       <div id="block-8" class="little-block"></div> \
+                                       <div id="block-9" class="little-block"></div></div>' :
+                                '<div class="upload-progress clearfix"><img src="images/ie-loader.gif"></div>';
+
 /* Directives */
 
 /**
@@ -320,17 +345,7 @@ angular.module('bgc.directives')
 
             uploader.bind('FilesAdded', function (up, files) {
                 $('.jcrop-holder').empty();
-                var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
-                                       <div id="block-2" class="little-block"></div> \
-                                       <div id="block-3" class="little-block"></div> \
-                                       <div id="block-4" class="little-block"></div> \
-                                       <div id="block-5" class="little-block"></div> \
-                                       <div id="block-6" class="little-block"></div> \
-                                       <div id="block-7" class="little-block"></div> \
-                                       <div id="block-8" class="little-block"></div> \
-                                       <div id="block-9" class="little-block"></div></div>';
-
-                jQuery('.info.image h3').after(progress);
+                jQuery('.info.image h3').after(ajaxLoader);
 
                 $('.jcrop-holder').append('<img id="image-crop" src="" alt="">');
 
@@ -370,17 +385,7 @@ angular.module('bgc.directives')
             });
 
             saveCropBtn.bind('click', function(){
-                var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
-                                       <div id="block-2" class="little-block"></div> \
-                                       <div id="block-3" class="little-block"></div> \
-                                       <div id="block-4" class="little-block"></div> \
-                                       <div id="block-5" class="little-block"></div> \
-                                       <div id="block-6" class="little-block"></div> \
-                                       <div id="block-7" class="little-block"></div> \
-                                       <div id="block-8" class="little-block"></div> \
-                                       <div id="block-9" class="little-block"></div></div>';
-
-                jQuery('.info.image h3').after(progress);
+                jQuery('.info.image h3').after(ajaxLoader);
 
                 var rxp = /^.*cms\//;
                 var assetKey = url;
@@ -1167,17 +1172,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                         // Remove all form fields related to attachments
                         jQuery('.attachment-fields').remove();
 
-                        var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
-                                       <div id="block-2" class="little-block"></div> \
-                                       <div id="block-3" class="little-block"></div> \
-                                       <div id="block-4" class="little-block"></div> \
-                                       <div id="block-5" class="little-block"></div> \
-                                       <div id="block-6" class="little-block"></div> \
-                                       <div id="block-7" class="little-block"></div> \
-                                       <div id="block-8" class="little-block"></div> \
-                                       <div id="block-9" class="little-block"></div></div>';
-
-                        jQuery('#container').append(progress);
+                        jQuery('#container').append(ajaxLoader);
 
                         uploader.start();
                     });
@@ -1218,7 +1213,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                         //$scope.newArticle.key = ;
                         var title = attachment.title === '' ? 'This attachment doesn\'t have a title' : attachment.title;
                         var description = attachment.description === '' ? 'This attachment doesn\'t have a description' : attachment.description;
-                        var attachment = {
+                        var attachmentObj = {
                             dataType: 'resources',
                             title: title,
                             description: description,
@@ -1235,7 +1230,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
                         var attachmentId;
 
-                        $http.post('api/attachments', attachment)
+                        $http.post('api/attachments', attachmentObj)
                             .success(function(data, status){
                                 var date = new Date();
                                 date = date.getMonth()+1 +'/'+date.getDate()+'/'+date.getFullYear();

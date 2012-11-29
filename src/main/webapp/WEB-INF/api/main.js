@@ -113,10 +113,8 @@ app.get('/article/:id', function(req, id) {
         var servletRequest = req.env.servletRequest;
         if( (article.content.premium) && !((servletRequest.isUserInRole('ROLE_PREMIUM')) || (servletRequest.isUserInRole('ROLE_ADMIN')) ))
         {
-            log.info("User does not have access to full article content.");
             delete article.content.content;
         } else {
-            log.info("Full article content should be returned");
             //todo: make this replacement actually replace things properly. this solution is not feasible for long term
             /*var newUrl = "http://localhost:8080" + ctx("/#/article/");
 
@@ -338,7 +336,6 @@ app.get('/notifications', function(req) {
     var params = req.params;
 
     if(req.auth.principal.id === undefined) {
-        log.info("User not found or not logged in. Exiting");
         return json({
             itemCount: 0,
             currentPage: 0,

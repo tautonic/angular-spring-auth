@@ -11,8 +11,12 @@
         <form name="editForm" ng-submit="editPost(post)">
             <fieldset class="control-group">
                 <textarea style="width: 100%; height: 50px;" ng-model="post.edited" ui-tinymce required></textarea>
-                <input type="submit" value="Save" class="btn btn-success" ng-disabled="editFormInvalid(this)">
-                <input type="button" ng-click="cancelEdit(post)" value="Cancel" class="btn btn-success">
+                <span class="btn-group-border">
+                    <div class="btn-group bgc">
+                        <input type="submit" value="Save" class="btn btn-success" ng-disabled="editFormInvalid(this)">
+                        <input type="button" ng-click="cancelEdit(post)" value="Cancel" class="btn btn-success">
+                    </div>
+                </span>
             </fieldset>
         </form>
     </div>
