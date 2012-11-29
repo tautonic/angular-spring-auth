@@ -1223,6 +1223,10 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                     }
                 }
 
+                scope.editAttachment = function(){
+                    $log.info('Edit attachments clicked!');
+                }
+
                 // get the element in the array of attachments and create a new request object
                 scope.attachments.forEach(function(attachment, index, array){
                     if(attachment.file_id === file.id){
@@ -1271,7 +1275,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                                                         \
                                                         <div class="btn-group-border">\
                                                             <div class="btn-group bgc">\
-                                                                <button edit-attachment attachment={{data.content}} class="btn btn-success"><i class="icon-pencil icon-white"></i> Edit</button>\
+                                                                <button ng-click="editAttachment(data.content_.id)" class="btn btn-success"><i class="icon-pencil icon-white"></i> Edit</button>\
                                                             </div>\
                                                         </div>\
                                                         <div class="btn-group-border">\
@@ -1328,45 +1332,6 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
             });
 
             uploader.init();
-        }
-    }
-}]);
-
-angular.module('bgc.directives').directive('removeAttachment', ['$http', function($http){
-    return{
-        restrict: 'A',
-        //scope: {},
-        link: function(scope, elm, attrs){
-            var attachment;
-
-            attrs.$observe('attachment', function(value) {
-                attachment = value
-            });
-
-            elm.bind('click', function(){
-                console.log('Remove Attachment Button Clicked!');
-
-                /*$http.delete('api/attachments/' + attachment._id)
-                    .success(function(data, status){
-                        scope.article.attachments.splice(scope.article.attachments.indexOf($(this).data('attachment')), 1);
-                        _this.parents('.discussion-stack-container.attachment').fadeOut(function(){
-                            _this.parents('.discussion-stack-container.attachment').remove();
-                            attachmentDivPos += 3;
-                        });
-                    });*/
-            });
-        }
-    }
-}]);
-
-angular.module('bgc.directives').directive('editAttachment', ['$http', function($http){
-    return{
-        restrict: 'A',
-        scope: {},
-        link: function(scope, elm, attrs){
-            elm.bind('click', function(){
-                console.log('Edit Attachment Button Clicked!');
-            });
         }
     }
 }]);
