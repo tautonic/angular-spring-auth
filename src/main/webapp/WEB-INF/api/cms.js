@@ -268,21 +268,19 @@ app.post('/upload/image', function (req) {
  * Note;
  * @return {Function}
  */
-function locale() {
-    return function (next) {
-        return function (req) {
-            Object.defineProperty(req, "locale", {
-                get: function () {
-                    if (!!req.headers['x-cms-no-locale']) return null;
+function locale(next) {
+    return function (req) {
+        Object.defineProperty(req, "locale", {
+            get: function () {
+                if (!!req.headers['x-cms-no-locale']) return null;
 
-                    var locale = req.env.servletRequest.getLocale();
-                    if (!locale) return 'en';
+                var locale = req.env.servletRequest.getLocale();
+                if (!locale) return 'en';
 
-                    return locale;
-                }
-            });
+                return locale;
+            }
+        });
 
-            return next(req);
-        }
+        return next(req);
     }
 }

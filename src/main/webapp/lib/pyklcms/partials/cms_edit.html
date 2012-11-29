@@ -40,21 +40,13 @@
 
                 <label class="control-label">Image Upload:</label>
                 <div class="controls">
-                    <div id="container" x-img-upload>
-                        <img ui-if="resource.thumbnail != undefined" class="imgUpload" src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
-                        <div id="target" class="overlay"><button class="btn btn-success" id="pickfiles">Browse</button></div>
+                    <div id="container" x-img-upload ng-model="resource.thumbnail">
+                        <img class="imgUpload" alt="{{resource.title}}"/>
                     </div>
                 </div>
 
                 <br />
 
-<!--
-                <label class="control-label">Image</label>
-                <div class="controls"
-                     x-img-upload="{ max_file_size: '3mb', resize: { width: 320, height: 240 } }">
-                    <img id="drop" class="imgUpload" src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
-                </div>
--->
             </fieldset>
         </form>
 
