@@ -51,9 +51,9 @@ angular.module('ui.directives').directive('uiPupload', function(){
             });
 
             uploader.bind('FileUploaded', function (uploader, file, response) {
-                console.log(uploader, file, response);
+                //console.log(uploader, file, response);
                 $(config.drop_element).src = response.response;
-            })
+            });
 
             uploader.init();
         }

@@ -15,6 +15,7 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
 
     $http.get('api/profiles/admin').
         success(function(data, status, headers, config){
+            $log.info(data);
             $scope.profiles = data.content;
             $scope.statusFacets = data.facets.status.terms;
             $scope.roleFacets = data.facets.types.terms;
@@ -54,11 +55,11 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
 
         $http.post('api/profiles/admin/filter/', data)
             .success(function(response){
-                console.log('Success! Search request was successful');
+                $log.info('Success! Search request was successful');
                 $scope.profiles = response.content;
             })
             .error(function(){
-                console.log('Error! Search request was successful');
+                $log.info('Error! Search request was successful');
             });
 
         function filterByRole(){
@@ -188,7 +189,7 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
 
             $location.path('/profiles/view/' + response.content._id);
         }, function(response){
-            //console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+            //$log.info('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
             $location.path("error/500");
         });
     };
@@ -241,7 +242,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
     );*/
     $http.get( 'api/article/' + $routeParams.articleId )
         .success( function (data) {
-            console.log("ARTICLE RETURNED: ",data);
+            $log.info("ARTICLE RETURNED: ",data);
             $scope.article = data;
             var tags = [];
             if($scope.article.taggable){
@@ -271,7 +272,6 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         article.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
 
         var thumbnail = /<\s*img [^\>]*src\s*=\s*(["\'])(.*?)\1/.exec(article.content);
-        console.log(thumbnail);
 
         if(thumbnail){
             article.thumbnail = thumbnail[2];
@@ -297,7 +297,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             });
             $scope.article.taggable = tags;
         }, function(response){
-            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+            $log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
     };
 
@@ -409,10 +409,9 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         $scope.newArticle.key = 'article-key-' + utc_timestamp;
 
         $scope.newArticle.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
-        //console.log('Content with stripped tags' + article.content.replace(/<(?:.|\n)*?>/gm, ''));
+        //$log.info('Content with stripped tags' + article.content.replace(/<(?:.|\n)*?>/gm, ''));
 
         var thumbnail = /<\s*img [^\>]*src\s*=\s*(["\'])(.*?)\1/.exec(article.content);
-        console.log(thumbnail);
 
         if(thumbnail){
             $scope.newArticle.thumbnail = thumbnail[2];
@@ -431,21 +430,21 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         $scope.newArticle.$save(
             function(response){
                 $location.path('/content/view/' + response.content._id);
-                console.log('ARTICLE SUCCESSFULLY SAVED!!!', 'STATUS CODE: ' + response.status);
+                $log.info('ARTICLE SUCCESSFULLY SAVED!!!', 'STATUS CODE: ' + response.status);
             },
             function(response){
-                console.log('ARTICLE SAVE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+                $log.info('ARTICLE SAVE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
             }
         );
     };
 
     $scope.cancel = function(){
         $location.path('/admin/articles');
-    }
+    };
 
     $scope.removeAttachment = function(id){
         $log.info('This file attachment has an id of: ' + id);
-    }
+    };
 
     function ISODateString(d){
         function pad(n){return n<10 ? '0'+n : n}

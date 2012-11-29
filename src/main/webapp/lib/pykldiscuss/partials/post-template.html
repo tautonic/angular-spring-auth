@@ -21,11 +21,14 @@
     <p class="spammed">This post has been flagged as spam.</p>
 </div>
 <div class="discussion-post-stats grey-gradient" ng-show="!post.reply.show">
+        <div ui-if="auth.isUserInRole('ROLE_ADMIN')" class="btn-group bgc" style="float: right">
+            <button ng-click="deletePost(post, $index)" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete Post</button>
+        </div>
         <span class="btn-group-border" ng-hide="post.hidden">
             <div class="btn-group bgc">
-                <input type="submit" value="Reply" class="btn btn-success" ng-click="replyTo(post)">
-                <input type="submit" value="Edit" class="btn btn-success" ng-click="edit(post)" ng-show="canEdit(post)">
-                <input type="submit" value="Quote" class="btn btn-success" ng-click="replyTo(post, true)">
+                <button class="btn btn-success" ng-click="replyTo(post)"><i class="icon-share-alt icon-white"></i> Reply</button>
+                <button class="btn btn-success" ng-click="edit(post)" ng-show="canEdit(post)"><i class="icon-edit icon-white"></i> Edit</button>
+                <button class="btn btn-success" ng-click="replyTo(post, true)"><i class="icon-share icon-white"></i> Quote</button>
             </div>
         </span>
     <span class="muted" ng-hide="post.hidden"><like objectid="{{post._id}}"></like></span>

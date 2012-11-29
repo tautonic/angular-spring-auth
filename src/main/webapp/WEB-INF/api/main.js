@@ -14,7 +14,7 @@ var {digest} = require('ringo/utils/strings');
 
 var {Application} = require( 'stick' );
 var {ajax, searchAllArticles, getAllArticles, getArticlesByCategory, getArticle, linkDiscussionToArticle, returnRandomQuote} = require('articles');
-var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost} = require('discussions');
+var {getDiscussion, getDiscussionByParent, getDiscussionList, addReply, createDiscussion, editDiscussionPost, deletePost} = require('discussions');
 var {convertActivity, getLatestActivity} = require('activities');
 var {getZociaUrl} = require('utility/getUrls');
 
@@ -173,13 +173,11 @@ app.put('/admin/articles/:id', function(req, id){
     delete req.postParams.doctype;
     delete req.postParams.premium;
 
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
-
     var opts = {
         url: getZociaUrl(req) + '/resources/' + id,
         method: 'PUT',
         data: JSON.stringify(req.postParams),
-        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
     };
 
@@ -187,12 +185,21 @@ app.put('/admin/articles/:id', function(req, id){
 });
 
 app.del('/admin/articles/:id', function(req, id){
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
+
     var opts = {
         url: getZociaUrl(req) + '/resources/' + id,
         method: 'DELETE',
         data: JSON.stringify(req.postParams),
-        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
     };
 
@@ -303,6 +310,28 @@ app.post('/discussions/:id', function(req, id) {
 
     return json(addReply(req, req.params, getUserDetails()));
 });
+
+app.del('/discussions/:id', function(req, id) {
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
+
+    if(req.params.threadId === id) {
+        var thread = getDiscussion(req, id).content[0];
+
+        thread.children.forEach(function(post) {
+            deletePost(req, post._id, getUserDetails());
+        });
+    }
+
+    return json(deletePost(req, id, getUserDetails()));
+});
 /****** End discussion posts ********/
 
 app.get('/notifications', function(req) {
@@ -385,7 +414,7 @@ app.post('/follow/:followedById/:entityId', function(req, followedById, entityId
         url: getZociaUrl(req) + '/follow/' + followedById + "/" + entityId,
         method: 'POST',
         data: {},
-        headers: Headers({ "Authorization": _generateBasicAuthorization(user.username, user.password), 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        headers: Headers({ "Authorization": _generateBasicAuthorization('backdoor', 'Backd00r'), 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
     };
 
@@ -399,7 +428,7 @@ app.del('/follow/:followedById/:entityId', function(req, followedById, entityId)
         url: getZociaUrl(req) + '/follow/' + followedById + "/" + entityId,
         method: 'DELETE',
         data: {},
-        headers: Headers({ "Authorization": _generateBasicAuthorization(user.username, user.password), 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        headers: Headers({ "Authorization": _generateBasicAuthorization('backdoor', 'Backd00r'), 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
     };
 
@@ -767,12 +796,11 @@ app.put('/profiles/:id', function(req, id){
 });
 
 app.del('/profiles/:id', function(req, id){
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
     var opts = {
         url: getZociaUrl(req) + '/profiles/' + id,
         method: 'DELETE',
         data: JSON.stringify(req.postParams),
-        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
     };
 
@@ -827,14 +855,12 @@ app.post('/profiles/images/upload/', function (req) {
         var exchange;
 
         if(params.file){
-            var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
-
             // as a workaround we're only adding a upload-size to the
             // header if the file is over a certain size
             if(params.size >= 131072){
                 headers = {
                     'x-rt-index': 'gc',
-                    'Authorization': auth,
+                    'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r'),
                     'x-rt-upload-name': params.file.filename,
                     'x-rt-upload-content-type': params.file.contentType,
                     'x-rt-upload-size': params.size
@@ -842,7 +868,7 @@ app.post('/profiles/images/upload/', function (req) {
             }else{
                 headers = {
                     'x-rt-index': 'gc',
-                    'Authorization': auth,
+                    'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r'),
                     'x-rt-upload-name': params.file.filename,
                     'x-rt-upload-content-type': params.file.contentType
                 }
@@ -918,13 +944,11 @@ app.post('/profiles/images/upload/', function (req) {
 app.post('/profiles/images/crop/', function (req) {
     var params = req.params;
 
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
-
     var opts = {
         "url": getZociaUrl(req) + '/files/crop/' + params.assetKey,
         "headers": {
             'x-rt-index': 'gc',
-            'Authorization': auth
+            'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r')
         },
         "data": params,
         "method": 'PUT'
@@ -1002,7 +1026,7 @@ app.del('/attachments/:id', function(req, id){
         data: JSON.stringify(req.postParams),
         headers: Headers({ 'x-rt-index': 'gc',
                             'Content-Type': 'application/json',
-                            'Authorization': _generateBasicAuthorization(user.username, user.password) }),
+                            'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
     };
 
@@ -1073,12 +1097,11 @@ app.get('/utility/like/:id', function(req, id) {
 //deletes a like relationship, effectively decreasing total likes by one
 app.post('/utility/unlike/:id', function(req, id) {
     var user = getUserDetails();
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
     var opts = {
         url: getZociaUrl(req) + "/likes/" + user.principal.id + "/" + id,
         method: 'DELETE',
-        headers: Headers({ 'x-rt-index': 'gc', 'Authorization': auth }),
+        headers: Headers({ 'x-rt-index': 'gc', 'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
     };
 
@@ -1106,12 +1129,11 @@ app.post('/utility/spam/:id', function(req, id) {
 //checks to see if a user has already marked this particular object as spam, if so, returns true, otherwise, returns false
 app.get('/utility/spam/:id', function(req, id) {
     var user = getUserDetails();
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
     var opts = {
         url: getZociaUrl(req) + "/spams/" + user.principal.id + "/" + id,
         method: 'GET',
-        headers: Headers({ 'x-rt-index': 'gc', 'Authorization': auth }),
+        headers: Headers({ 'x-rt-index': 'gc', 'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
     };
 
@@ -1127,12 +1149,11 @@ app.get('/utility/spam/:id', function(req, id) {
 //deletes a spam relationship, effectively decreasing total spam count by one
 app.post('/utility/unspam/:id', function(req, id) {
     var user = getUserDetails();
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
     var opts = {
         url: getZociaUrl(req) + "/spams/" + user.principal.id + "/" + id,
         method: 'DELETE',
-        headers: Headers({ 'x-rt-index': 'gc', 'Authorization': auth }),
+        headers: Headers({ 'x-rt-index': 'gc', 'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
     };
 
@@ -1490,7 +1511,6 @@ app.get('/admin/users', function(req) {
 });
 
 app.put('/admin/users', function(req) {
-    var auth = _generateBasicAuthorization('backdoor', 'Backd00r');
 
     /*var data = {
         "username" : req.postParams.username,
@@ -1509,7 +1529,7 @@ app.put('/admin/users', function(req) {
         url: getZociaUrl(req) + '/profiles/' + req.postParams._id,
         method: 'PUT',
         data: JSON.stringify(data),
-        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': auth}),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json', 'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
     };
 

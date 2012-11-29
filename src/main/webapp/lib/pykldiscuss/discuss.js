@@ -107,7 +107,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
     }
 }
 
-function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
+function ViewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location, $log) {
     $scope.paging = {
         size: 5
     };
@@ -305,6 +305,42 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $log, $auth) {
         });
     };
 
+    $scope.deleteDiscussion = function() {
+        $http['delete']('api/discussions/'+$scope.discussion._id+"?threadId="+$scope.discussion.threadId).success(function(data) {
+            $location.path('network/discussion/list');
+        });
+    };
+
+    $scope.deletePost = function(post, index) {
+        $http['delete']('api/discussions/'+post._id+"?threadId="+post.threadId).success(function(data) {
+            if($scope.discussion.children[index]._id === post._id) {
+                $scope.discussion.children.splice(index, 1);
+                return;
+            }
+
+            function removePost(children) {
+                if(children === undefined) {
+                    return;
+                }
+                children.forEach(function(childPost) {
+                    if( (childPost.children === undefined) || (childPost.children[index] === undefined)) {
+                        return;
+                    }
+
+                    if(childPost.children[index]._id === post._id) {
+                        childPost.children.splice(index, 1);
+                        return;
+                    }
+                    for(var i = 0; i < childPost.children.length; i++) {
+                        removePost(childPost.children);
+                    }
+                });
+            }
+
+            removePost($scope.discussion.children);
+        });
+    };
+
     /* infinite scroll here has been removed because there's issues in the backend that prevent it from being feasible. See BGC-173 for details
     $scope.loadMore = function(term) {
         //if there's no more pages to load
@@ -401,5 +437,5 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $location) {
 }
 
 ListDiscussions.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log'];
-ViewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log', '$auth'];
+ViewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$auth', '$location', '$log'];
 NewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$location'];

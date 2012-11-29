@@ -33,7 +33,6 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
 
     $scope.$on('$routeChangeStart', function(event){
         event.currentScope.showModal = false;
-        //console.log('Route change start event fired!!!');
     });
 
     $scope.showProfileModal = function(profile, index){
@@ -228,7 +227,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     );
 
     $scope.edit = function(param) {
-        $scope.editing[param] = !$scope.editing[param];  console.log("EDITING, MASTER IS: "+$scope.master.name.given);
+        $scope.editing[param] = !$scope.editing[param];
     };
 
     $scope.cancelEditing = function(param) {
@@ -261,7 +260,6 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             $scope.master = angular.copy($scope.profile);
         }, function(response){
             $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
-            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
     };
 
@@ -273,12 +271,10 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
             $scope.master = angular.copy($scope.profile);
         }, function(response){
             $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
-            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
     };
 
     $scope.resetPassword = function(email){
-        console.log('User email address ' + email );
         var data = {
             profileEmail: email
         };
@@ -304,7 +300,7 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     };
 }
 
-function createProfile($rootScope, $scope, $routeParams, $location, $http, Profile){
+function createProfile($rootScope, $scope, $routeParams, $location, $http, Profile, $log){
     var address = '';
 
     if($routeParams.email !== undefined){
@@ -355,12 +351,11 @@ function createProfile($rootScope, $scope, $routeParams, $location, $http, Profi
                     $scope.signupSuccess = true;
                 })
                 .error(function(data, status, headers, config){
-                    console.log('POST VERIFY PROFILE ERROR!!!');
+                    $log.info('POST VERIFY PROFILE ERROR!!!');
                 });
             //$location.path('/network');
             $scope.responseContent = response.content;
         }, function(response){
-            //console.log('POST ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
             $location.path("error/500");
         });
     };
@@ -395,7 +390,6 @@ function updateProfile($scope, $routeParams, $location, Profile){
             $location.path('/profiles/view/' + profile._id);
         }, function(response){
             $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
-            console.log('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
     };
 

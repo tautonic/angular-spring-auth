@@ -5,7 +5,7 @@
  * Time: 5:20 PM
  * To change this template use File | Settings | File Templates.
  */
-function SearchSite($rootScope, $scope, $routeParams, $location, Search, $http) {
+function SearchSite($rootScope, $scope, $routeParams, $location, Search, $http, $log) {
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 
@@ -45,14 +45,13 @@ function SearchSite($rootScope, $scope, $routeParams, $location, Search, $http) 
 
         $scope.query = $routeParams.query;
     }, function(response){
-        console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        $log.info('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
 
     $scope.filteredSearch = function(checked, id){
         var dataType = [];
 
         $scope.allTypes = false;
-        console.log('search ' + id + ' is ' + checked);
 
         for(var facet in $scope.facets){
             if($scope.facets[facet].selected === true){
@@ -70,11 +69,10 @@ function SearchSite($rootScope, $scope, $routeParams, $location, Search, $http) 
         //dataType = [];
         $http.post('api/search/site/', data)
             .success(function(response){
-                console.log('Success! Search request was successful');
                 $scope.results = response.content;
             })
             .error(function(){
-                console.log('Error! Search request was successful');
+                $log.info('Error! Search request was successful');
             });
     }
 
@@ -88,10 +86,9 @@ function SearchSite($rootScope, $scope, $routeParams, $location, Search, $http) 
             $http.post('api/search/site/', data)
                 .success(function(response){
                     $scope.results = response.content;
-                    console.log('Success! Search request was successful');
                 })
                 .error(function(){
-                    console.log('Error! Search request was successful');
+                    $log.info('Error! Search request was successful');
                 });
 
             $scope.allTypes = true;
@@ -105,7 +102,7 @@ function SearchSite($rootScope, $scope, $routeParams, $location, Search, $http) 
     }
 }
 
-function SearchContent($scope, $routeParams, $location, Search) {
+function SearchContent($scope, $routeParams, $location, Search, $log) {
     $scope.results = {};
 
     var data = {
@@ -117,11 +114,11 @@ function SearchContent($scope, $routeParams, $location, Search) {
         $scope.resultLength = response.content.length;
         $scope.query = $routeParams.query;
     }, function(response){
-        console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        $log.info('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
 }
 
-function SearchDiscussions($rootScope, $scope, $routeParams, $location, Search) {
+function SearchDiscussions($rootScope, $scope, $routeParams, $location, Search, $log) {
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 
@@ -136,11 +133,11 @@ function SearchDiscussions($rootScope, $scope, $routeParams, $location, Search) 
         $scope.resultLength = response.content.length;
         $scope.query = $routeParams.query;
     }, function(response){
-        console.log('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        $log.info('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
 }
 
-function SearchProfiles($rootScope, $scope, $routeParams, $location, Search) {
+function SearchProfiles($rootScope, $scope, $routeParams, $location, Search, $log) {
     $scope.isAdmin = $rootScope.auth.isUserInRole("ROLE_ADMIN");
 
     $rootScope.banner = 'none';
@@ -157,6 +154,6 @@ function SearchProfiles($rootScope, $scope, $routeParams, $location, Search) {
         $scope.resultLength = response.content.length;
         $scope.query = $routeParams.query;
     }, function(response){
-        console.log('Faculty search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        $log.info('Faculty search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
     });
 }

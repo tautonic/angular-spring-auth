@@ -29,6 +29,9 @@
             </div>
         </div>
         <div class="discussion-first-post-stats grey-gradient">
+            <div ui-if="auth.isUserInRole('ROLE_ADMIN')" class="btn-group bgc" style="float: right">
+                <button ng-click="deleteDiscussion()" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete Discussion</button>
+            </div>
             <ul class="article-stats">
                 <li class="muted"><like objectid="{{discussion._id}}"></like></li>
                 <li class="muted"><spam objectid="{{discussion._id}}"></spam></li>

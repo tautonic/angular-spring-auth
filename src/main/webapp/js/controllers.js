@@ -80,7 +80,7 @@ function maintenanceController($rootScope, $scope){
     });
 }
 
-function verifyEmailController($rootScope, $scope, $routeParams, $http){
+function verifyEmailController($rootScope, $scope, $routeParams, $http, $log){
     $rootScope.banner = 'none';
     $rootScope.about = 'signup';
 
@@ -89,11 +89,11 @@ function verifyEmailController($rootScope, $scope, $routeParams, $http){
 
         })
         .error(function(data, status, headers, config){
-            console.log('TOKEN VERIFICATION ERROR!!!');
+            $log.info('TOKEN VERIFICATION ERROR!!!');
         });
 }
 
-function forgotUsernameController($rootScope, $scope, $location, $http){
+function forgotUsernameController($rootScope, $scope, $location, $http, $log){
     $rootScope.banner = 'none';
     $rootScope.about = 'signup';
 
@@ -103,7 +103,7 @@ function forgotUsernameController($rootScope, $scope, $location, $http){
                 $location.path('/usernamesendsuccess');
             })
             .error(function(data, status, headers, config){
-                console.log('SEND USERNAME ERROR!');
+                $log.info('SEND USERNAME ERROR!');
             });
     }
 }

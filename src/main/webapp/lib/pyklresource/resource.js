@@ -59,7 +59,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         });
     }
 
-    $scope.filterByTag = function(tag) {  console.log("search by tag");
+    $scope.filterByTag = function(tag) {
         tagFilter = '&tag=' + tag;
         resetPaging();
 
@@ -190,7 +190,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
 
     function loadContent() {
         $http.get( url ).success( function (data) {
-            console.log("ARTICLE RETURNED: ",data);
+            $log.info("ARTICLE RETURNED: ",data);
             $scope.article = data;
             $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
             $http.post("api/utility/view/" + $scope.article._id);
