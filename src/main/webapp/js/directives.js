@@ -1119,6 +1119,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 container:'attachment-upload',
                 url: 'api/profiles/images/upload/',
                 max_file_size:'100mb',
+                multi_selection:false,
                 resize:{"width":320, "height":240, "quality":90},
                 flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
                 silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
@@ -1134,9 +1135,9 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
             var uploader = new plupload.Uploader(config);
 
-            uploader.bind('FilesAdded', function (up, files) {
-                var scope = config.scope;
+            var scope = config.scope;
 
+            uploader.bind('FilesAdded', function (up, files) {
                 var attachment = {
                     title: '',
                     description: '',
@@ -1146,15 +1147,19 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 for (var i in files) {
                     attachment.file_id = files[i].id;
                     scope.attachments.push(attachment);
-                    scope.$apply();
-                    //$$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
-                    var attachmentFields = jQuery('.attachment-fields').last();
-                    attachmentFields.children('.filename').children('.control-group').children('.controls').html(files[i].name + ' (' + plupload.formatSize(files[i].size) + ')');
-                }
 
-                /*setTimeout(function () {
-                    uploader.start();
-                }, 500);*/
+                    scope.$apply();
+
+                    var attachmentFields = jQuery('.attachment-fields').last();
+                    attachmentFields.children('.filename').children('.control-group').children('.controls').html(files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <button id="file-'+files[i].id+'" data-fileid="'+files[i].id+'" class="close">&times; Remove from queue</button>');
+
+                    $('#file-' + files[i].id).click(function(){
+                        up.removeFile(up.getFile($(this).data('fileid')));
+                        $(this).parents('.attachment-fields').fadeOut(function(){
+                            $(this).remove();
+                        });
+                    });
+                }
             });
 
             uploader.bind('BeforeUpload', function(upload, file){
@@ -1170,7 +1175,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 //jQuery('.attachment-fields').last().children('.progress').children('.bar').css('width', file.percent + '%');
             });
 
-            uploader.bind('QueueChanged', function(uploader){
+            /*uploader.bind('QueueChanged', function(uploader){
                 if(uploader.files.length > 0 && !scope.showUploadBtn){
                     scope.showUploadBtn = true;
                     scope.$digest();
@@ -1192,14 +1197,17 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                                        <div id="block-6" class="little-block"></div> \
                                        <div id="block-7" class="little-block"></div> \
                                        <div id="block-8" class="little-block"></div> \
-                                       <div id="block-9" class="little-block"></div></div>'
+                                       <div id="block-9" class="little-block"></div></div>';
 
                         jQuery('#container').append(progress);
 
                         uploader.start();
                     });
+                }else if(uploader.files.length == 0){
+                    scope.showUploadBtn = false;
+                    scope.$digest();
                 }
-            });
+            });*/
 
             var content;
 
@@ -1209,62 +1217,55 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 content = scope.$eval("(" + response.response + ")");
                 content = scope.$eval("(" + content.content + ")");
 
-                function getMimeType(mimetype){
-                    switch (mimetype)
-                    {
-                        case 'text/plain':
-                            return 'txt';
-                        case 'application/pdf':
-                            return 'pdf'
-                        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                            return 'word'
-                        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-                            return 'ppt'
-                    }
-                }
-
-                scope.editAttachment = function(){
-                    $log.info('Edit attachments clicked!');
-                }
-
                 // get the element in the array of attachments and create a new request object
                 scope.attachments.forEach(function(attachment, index, array){
+                    var date = new Date();
+
+                    var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
+                        date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+
+                    //$scope.newArticle.key = ;
+                    var title = attachment.title === '' ? 'This attachment doesn\'t have a title' : attachment.title;
+                    var description = attachment.description === '' ? 'This attachment doesn\'t have a description' : attachment.description;
+                    var attachment = {
+                        dataType: 'resources',
+                        title: title,
+                        description: description,
+                        key: 'attachment-key-' + utc_timestamp,
+                        author: scope.$parent.$root.auth.principal.username,
+                        format: 'attachment',
+                        mimetype: content.mimetype,
+                        uri: content.uri,
+                        views: 0,
+                        likes: 0,
+                        comments: 0,
+                        rating: 0
+                    };
+
+                    $http.post('api/attachments', attachment)
+                        .success(function(data, status){
+                            scope.article.attachments.push(data.content._id);
+                        });
+
+/*
                     if(attachment.file_id === file.id){
                         // make an xhr and create a resource for this attachment
-                        var date = new Date();
 
-                        var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
-                            date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
 
-                        //$scope.newArticle.key = ;
-                        var title = attachment.title === '' ? 'This attachment doesn\'t have a title' : attachment.title;
-                        var description = attachment.description === '' ? 'This attachment doesn\'t have a description' : attachment.description;
-                        var attachment = {
-                            dataType: 'resources',
-                            title: title,
-                            description: description,
-                            key: 'attachment-key-' + utc_timestamp,
-                            author: scope.$parent.$root.auth.principal.username,
-                            format: 'attachment',
-                            mimetype: content.mimetype,
-                            uri: content.uri,
-                            views: 0,
-                            likes: 0,
-                            comments: 0,
-                            rating: 0
-                        };
-
-                        var attachmentId;
+                        //var attachmentId;
 
                         $http.post('api/attachments', attachment)
                             .success(function(data, status){
-                                var date = new Date();
-                                date = date.getMonth()+1 +'/'+date.getDate()+'/'+date.getFullYear();
+                                //var date = new Date();
+                                //date = date.getMonth()+1 +'/'+date.getDate()+'/'+date.getFullYear();
 
                                 // remove this attachment from the attachments array
-                                attachmentId = data.content._id;
+                                */
+/*attachmentId = data.content._id;
                                 scope.article.attachments.push(attachmentId);
                                 scope.attachments.splice(index, 1);
+
+                                scope.attachmentTitle = data.content.title
 
                                 var attachmentDiv = '<div class="discussion-stack-container attachment" style="top:'+ attachmentDivPos+'em;"> \
                                                         <div class="discussion-item grey-gradient"> \
@@ -1275,12 +1276,12 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                                                         \
                                                         <div class="btn-group-border">\
                                                             <div class="btn-group bgc">\
-                                                                <button ng-click="editAttachment(data.content_.id)" class="btn btn-success"><i class="icon-pencil icon-white"></i> Edit</button>\
+                                                                <button id="edit-attachment-'+attachmentId+'" data-attachment="'+attachmentId+'" class="btn btn-success"><i class="icon-pencil icon-white"></i> Edit</button>\
                                                             </div>\
                                                         </div>\
                                                         <div class="btn-group-border">\
                                                             <div class="btn-group bgc">\
-                                                                <button remove-attachment attachment={{data.content}} class="btn btn-success"><i class="icon-remove-circle icon-white"></i> Remove</button>\
+                                                                <button id="remove-attachment-'+attachmentId+'" data-attachment="'+attachmentId+'" class="btn btn-success"><i class="icon-remove-circle icon-white"></i> Remove</button>\
                                                             </div>\
                                                         </div>\
                                                         <div class="paper-clip"></div> \
@@ -1293,16 +1294,16 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
                                 attachmentDivPos -= 3;
 
-                                jQuery('#attachment-list').append($compile(attachmentDiv)(scope));
+                                jQuery('#attachment-list').append(attachmentDiv);
 
                                 jQuery('.discussion-stack-container.attachment').last().click(function(){
                                     $('.discussion-stack-container.attachment').css('z-index', '1');
                                     $(this).css('z-index', '20');
-                                });
+                                });*//*
 
-                                var attachmentId = data.content._id;
 
-                                /*jQuery('#attachment-' + data.content._id).click(function(){
+                                */
+/*jQuery('#remove-attachment-' + data.content._id).click(function(){
                                     var _this = $(this);
                                     $http.delete('api/attachments/' + $(this).data('attachment'))
                                         .success(function(data, status){
@@ -1314,22 +1315,27 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                                         });
 
                                     //$log.info('Attachment id: ' + $(this).data('attachment'));
-                                });*/
+                                });
+
+                                jQuery('#edit-attachment-' + data.content._id).click(function(){
+                                    $log.info('What\'s in the scope?');
+                                });*//*
+
 
                             })
                             .error(function(data, status){
 
                             });
-                        return;
                     }
+*/
                 });
 
             });
 
-            uploader.bind('UploadComplete', function(uploader, file){
+            /*uploader.bind('UploadComplete', function(uploader, file){
                 jQuery('.upload-progress').remove();
                 scope.showUploadBtn = false;
-            });
+            });*/
 
             uploader.init();
         }

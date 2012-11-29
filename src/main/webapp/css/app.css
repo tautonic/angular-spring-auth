@@ -2464,3 +2464,7 @@ li.search-result.members{
 .profile-list-item.profile .profile-left .btn-group-border.role-toggle{
     margin-bottom: 1em;
 }
+
+.attachment-fields .close{
+    font-size: 12px;
+}
