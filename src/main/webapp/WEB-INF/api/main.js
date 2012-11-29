@@ -1673,13 +1673,13 @@ function auth(next) {
                 email: p.email,
                 country: p.country,
                 profileType: p.profileType,
-                accountType: p.accountType
+                accountType: p.accountType,
                 thumbnail: p.thumbnail
             };
 
             // todo: Need to take gender into consideration or generate a unisex thumbnail
             req.auth.principal.thumbnail =
-                (p.thumbnail === 'profiles-0000-0000-0000-000000000001' || pykl.thumbnail === '')
+                (p.thumbnail === 'profiles-0000-0000-0000-000000000001' || p.thumbnail === '')
                     ? 'images/GCEE_image_profileMale_135x135.jpeg'
                     : p.thumbnail
         }

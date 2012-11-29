@@ -21,7 +21,7 @@
                                     <h5>{{profileModal.title}}</h5>
                                     <h5 class="muted">{{profileModal.institution.name}}</h5>
 
-                                    <div ui-if="auth.isAuthenticated">
+                                    <!--<div ui-if="auth.isAuthenticated">-->
                                         <div ui-if="profileModal.cannotFollow">
                                             <div class="btn-group-border">
                                                 <div class="btn-group bgc">
@@ -43,7 +43,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    <!--</div>
 
                                     <div ui-if="!auth.isAuthenticated">
                                         <div class="btn-group-border">
@@ -51,7 +51,7 @@
                                                 <a class="btn btn-success" ng-href="#/profiles/view/{{profileModal._id}}">Profile</a>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <h3 class="sans-serif">CONTACT</h3>
                                     <p><strong>Email: </strong>{{profileModal.contact.email}}</p>
