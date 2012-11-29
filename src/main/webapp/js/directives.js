@@ -1109,7 +1109,7 @@ angular.module('bgc.directives').directive('adminResetPassword', ['$http', funct
     }
 }]);
 
-angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log', function($http, $log){
+angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log', '$compile', function($http, $log, $compile){
     return {
         restrict: 'A',
         link: function(scope, elm, attrs){
@@ -1272,7 +1272,12 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                                                         \
                                                         <div class="btn-group-border">\
                                                             <div class="btn-group bgc">\
-                                                                <button id="attachment-'+ data.content._id +'" data-attachment="'+ data.content._id +'" class="btn btn-success"><i class="icon-remove-circle icon-white"></i> Remove</button>\
+                                                                <button edit-attachment attachment={{data.content}} class="btn btn-success"><i class="icon-pencil icon-white"></i> Edit</button>\
+                                                            </div>\
+                                                        </div>\
+                                                        <div class="btn-group-border">\
+                                                            <div class="btn-group bgc">\
+                                                                <button remove-attachment attachment={{data.content}} class="btn btn-success"><i class="icon-remove-circle icon-white"></i> Remove</button>\
                                                             </div>\
                                                         </div>\
                                                         <div class="paper-clip"></div> \
@@ -1285,7 +1290,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
                                 attachmentDivPos -= 3;
 
-                                jQuery('#attachment-list').append(attachmentDiv);
+                                jQuery('#attachment-list').append($compile(attachmentDiv)(scope));
 
                                 jQuery('.discussion-stack-container.attachment').last().click(function(){
                                     $('.discussion-stack-container.attachment').css('z-index', '1');
@@ -1294,7 +1299,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
                                 var attachmentId = data.content._id;
 
-                                jQuery('#attachment-' + data.content._id).click(function(){
+                                /*jQuery('#attachment-' + data.content._id).click(function(){
                                     var _this = $(this);
                                     $http.delete('api/attachments/' + $(this).data('attachment'))
                                         .success(function(data, status){
@@ -1306,7 +1311,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                                         });
 
                                     //$log.info('Attachment id: ' + $(this).data('attachment'));
-                                });
+                                });*/
 
                             })
                             .error(function(data, status){
@@ -1324,6 +1329,45 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
             });
 
             uploader.init();
+        }
+    }
+}]);
+
+angular.module('bgc.directives').directive('removeAttachment', ['$http', function($http){
+    return{
+        restrict: 'A',
+        //scope: {},
+        link: function(scope, elm, attrs){
+            var attachment;
+
+            attrs.$observe('attachment', function(value) {
+                attachment = value
+            });
+
+            elm.bind('click', function(){
+                console.log('Remove Attachment Button Clicked!');
+
+                /*$http.delete('api/attachments/' + attachment._id)
+                    .success(function(data, status){
+                        scope.article.attachments.splice(scope.article.attachments.indexOf($(this).data('attachment')), 1);
+                        _this.parents('.discussion-stack-container.attachment').fadeOut(function(){
+                            _this.parents('.discussion-stack-container.attachment').remove();
+                            attachmentDivPos += 3;
+                        });
+                    });*/
+            });
+        }
+    }
+}]);
+
+angular.module('bgc.directives').directive('editAttachment', ['$http', function($http){
+    return{
+        restrict: 'A',
+        scope: {},
+        link: function(scope, elm, attrs){
+            elm.bind('click', function(){
+                console.log('Edit Attachment Button Clicked!');
+            });
         }
     }
 }]);
