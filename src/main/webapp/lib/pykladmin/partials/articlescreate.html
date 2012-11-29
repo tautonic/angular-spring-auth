@@ -34,12 +34,40 @@
                             </div>
 
                             <div id="attachment-upload" pykl-file-attachment>
+                                <div id="container">
+                                    <br>
+                                    <div ng-repeat="attachment in attachments">
+                                        <div class="attachment-fields">
+                                            <div class="filename">
+                                                <div class="control-group">
+                                                    <label class="control-label"></label>
+                                                    <div class="controls"></div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="attachment-title">Title:</label>
+                                                <div class="controls">
+                                                    <input type="text" ng-model="attachment.title" id="attachment-title" placeholder="Title" />
+                                                </div>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <label class="control-label" for="attachment-description">Description:</label>
+                                                <div class="controls">
+                                                    <textarea ng-model="attachment.description" id="attachment-description"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="attachment-list"></div>
                                 <div class="control-group">
                                     <label class="control-label"></label>
                                     <div class="controls">
                                         <div class="btn-group-border">
                                             <div class="btn-group bgc">
-                                                <button ng-click="save(article)" class="btn btn-success">Save</button>
+                                                <button ng-click="save(article)" class="btn btn-success">Save Article</button>
                                                 <button ng-click="cancel()" class="btn btn-success">Cancel</button>
                                             </div>
                                         </div>
@@ -50,46 +78,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div id="container">
-                                        <br>
-                                        <div ng-repeat="attachment in attachments">
-                                            <div class="attachment-fields">
-                                                <div class="filename">
-                                                    <div class="control-group">
-                                                        <label class="control-label"></label>
-                                                        <div class="controls"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label" for="attachment-title">Title:</label>
-                                                    <div class="controls">
-                                                        <input type="text" ng-model="attachment.title" id="attachment-title" placeholder="Title" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="control-group">
-                                                    <label class="control-label" for="attachment-description">Description:</label>
-                                                    <div class="controls">
-                                                        <textarea ng-model="attachment.description" id="attachment-description"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!--<div ui-if=showUploadBtn class="upload-btn">
-                                            <label class="control-label"></label>
-                                            <div class="controls">
-                                                <div class="btn-group-border">
-                                                    <div class="btn-group bgc">
-                                                        <button id="upload-files" class="btn btn-success"><i class="icon-upload icon-white"></i> Upload attachments</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>-->
-                                    </div>
-
-                                    <div id="attachment-list"></div>
                                 </div>
                             </div>
                         </ng-form>

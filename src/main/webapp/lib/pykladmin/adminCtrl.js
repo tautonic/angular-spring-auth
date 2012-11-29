@@ -396,46 +396,50 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     //dateCreated: "2011-01-17T23:07:32.000Z"
 
     $scope.save = function(article){
-        $scope.newArticle = new Article(article);
+        $scope.$broadcast('saveArticle');
 
-        var date = new Date();
+        $scope.$on('attachmentUploadComplete', function(){
+            $scope.newArticle = new Article(article);
 
-        $scope.newArticle.lastModifiedDate = ISODateString(date);
-        $scope.newArticle.dateCreated = ISODateString(date);
+            var date = new Date();
 
-        var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
-            date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+            $scope.newArticle.lastModifiedDate = ISODateString(date);
+            $scope.newArticle.dateCreated = ISODateString(date);
 
-        $scope.newArticle.key = 'article-key-' + utc_timestamp;
+            var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
+                date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
 
-        $scope.newArticle.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
-        //$log.info('Content with stripped tags' + article.content.replace(/<(?:.|\n)*?>/gm, ''));
+            $scope.newArticle.key = 'article-key-' + utc_timestamp;
 
-        var thumbnail = /<\s*img [^\>]*src\s*=\s*(["\'])(.*?)\1/.exec(article.content);
+            $scope.newArticle.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
+            //$log.info('Content with stripped tags' + article.content.replace(/<(?:.|\n)*?>/gm, ''));
 
-        if(thumbnail){
-            $scope.newArticle.thumbnail = thumbnail[2];
-        }else{
-            $scope.newArticle.thumbnail = 'images/row-of-columns.jpg'
-        }
+            var thumbnail = /<\s*img [^\>]*src\s*=\s*(["\'])(.*?)\1/.exec(article.content);
 
-        $scope.newArticle.roles = ['ROLE_ANONYMOUS'];
-
-        if(article.premium) {
-            $scope.newArticle.roles.push('ROLE_PREMIUM');
-        }
-
-        delete article.premium;
-
-        $scope.newArticle.$save(
-            function(response){
-                $location.path('/content/view/' + response.content._id);
-                $log.info('ARTICLE SUCCESSFULLY SAVED!!!', 'STATUS CODE: ' + response.status);
-            },
-            function(response){
-                $log.info('ARTICLE SAVE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+            if(thumbnail){
+                $scope.newArticle.thumbnail = thumbnail[2];
+            }else{
+                $scope.newArticle.thumbnail = 'images/row-of-columns.jpg'
             }
-        );
+
+            $scope.newArticle.roles = ['ROLE_ANONYMOUS'];
+
+            if(article.premium) {
+                $scope.newArticle.roles.push('ROLE_PREMIUM');
+            }
+
+            delete article.premium;
+
+            $scope.newArticle.$save(
+                function(response){
+                    $location.path('/content/view/' + response.content._id);
+                    $log.info('ARTICLE SUCCESSFULLY SAVED!!!', 'STATUS CODE: ' + response.status);
+                },
+                function(response){
+                    $log.info('ARTICLE SAVE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+                }
+            );
+        });
     };
 
     $scope.cancel = function(){

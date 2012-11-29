@@ -1175,43 +1175,11 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 //jQuery('.attachment-fields').last().children('.progress').children('.bar').css('width', file.percent + '%');
             });
 
-            /*uploader.bind('QueueChanged', function(uploader){
-                if(uploader.files.length > 0 && !scope.showUploadBtn){
-                    scope.showUploadBtn = true;
-                    scope.$digest();
-
-                    var startUploadBtn = angular.element('#upload-files');
-
-                    startUploadBtn.bind('click', function(event){
-                        scope.showUploadBtn = false;
-                        scope.$digest();
-
-                        // Remove all form fields related to attachments
-                        jQuery('.attachment-fields').remove();
-
-                        var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
-                                       <div id="block-2" class="little-block"></div> \
-                                       <div id="block-3" class="little-block"></div> \
-                                       <div id="block-4" class="little-block"></div> \
-                                       <div id="block-5" class="little-block"></div> \
-                                       <div id="block-6" class="little-block"></div> \
-                                       <div id="block-7" class="little-block"></div> \
-                                       <div id="block-8" class="little-block"></div> \
-                                       <div id="block-9" class="little-block"></div></div>';
-
-                        jQuery('#container').append(progress);
-
-                        uploader.start();
-                    });
-                }else if(uploader.files.length == 0){
-                    scope.showUploadBtn = false;
-                    scope.$digest();
-                }
-            });*/
-
             var content;
 
-            var attachmentDivPos = 0;
+            scope.$on('saveArticle', function(){
+                uploader.start();
+            });
 
             uploader.bind('FileUploaded', function(uploader, file, response){
                 content = scope.$eval("(" + response.response + ")");
@@ -1246,96 +1214,10 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                         .success(function(data, status){
                             scope.article.attachments.push(data.content._id);
                         });
-
-/*
-                    if(attachment.file_id === file.id){
-                        // make an xhr and create a resource for this attachment
-
-
-                        //var attachmentId;
-
-                        $http.post('api/attachments', attachment)
-                            .success(function(data, status){
-                                //var date = new Date();
-                                //date = date.getMonth()+1 +'/'+date.getDate()+'/'+date.getFullYear();
-
-                                // remove this attachment from the attachments array
-                                */
-/*attachmentId = data.content._id;
-                                scope.article.attachments.push(attachmentId);
-                                scope.attachments.splice(index, 1);
-
-                                scope.attachmentTitle = data.content.title
-
-                                var attachmentDiv = '<div class="discussion-stack-container attachment" style="top:'+ attachmentDivPos+'em;"> \
-                                                        <div class="discussion-item grey-gradient"> \
-                                                            <h4>'+ data.content.title +'</h4> \
-                                                            <h6>By '+ data.content.author +', '+ date +'</h6> \
-                                                            <p class="muted">'+ data.content.description +'</p> \
-                                                        </div> \
-                                                        \
-                                                        <div class="btn-group-border">\
-                                                            <div class="btn-group bgc">\
-                                                                <button id="edit-attachment-'+attachmentId+'" data-attachment="'+attachmentId+'" class="btn btn-success"><i class="icon-pencil icon-white"></i> Edit</button>\
-                                                            </div>\
-                                                        </div>\
-                                                        <div class="btn-group-border">\
-                                                            <div class="btn-group bgc">\
-                                                                <button id="remove-attachment-'+attachmentId+'" data-attachment="'+attachmentId+'" class="btn btn-success"><i class="icon-remove-circle icon-white"></i> Remove</button>\
-                                                            </div>\
-                                                        </div>\
-                                                        <div class="paper-clip"></div> \
-                                                        <div class="attached-doc"> \
-                                                            <div class="new-picture-frame small content-thumbnail attachment"> \
-                                                                <span class="doc-type '+ getMimeType(data.content.mimetype) +'"></span> \
-                                                                <img src="images/document-default.jpg" alt="">\
-                                                            </div>\
-                                                        </div>';
-
-                                attachmentDivPos -= 3;
-
-                                jQuery('#attachment-list').append(attachmentDiv);
-
-                                jQuery('.discussion-stack-container.attachment').last().click(function(){
-                                    $('.discussion-stack-container.attachment').css('z-index', '1');
-                                    $(this).css('z-index', '20');
-                                });*//*
-
-
-                                */
-/*jQuery('#remove-attachment-' + data.content._id).click(function(){
-                                    var _this = $(this);
-                                    $http.delete('api/attachments/' + $(this).data('attachment'))
-                                        .success(function(data, status){
-                                            scope.article.attachments.splice(scope.article.attachments.indexOf($(this).data('attachment')), 1);
-                                            _this.parents('.discussion-stack-container.attachment').fadeOut(function(){
-                                                _this.parents('.discussion-stack-container.attachment').remove();
-                                                attachmentDivPos += 3;
-                                            });
-                                        });
-
-                                    //$log.info('Attachment id: ' + $(this).data('attachment'));
-                                });
-
-                                jQuery('#edit-attachment-' + data.content._id).click(function(){
-                                    $log.info('What\'s in the scope?');
-                                });*//*
-
-
-                            })
-                            .error(function(data, status){
-
-                            });
-                    }
-*/
                 });
 
+                scope.$emit('attachmentUploadComplete');
             });
-
-            /*uploader.bind('UploadComplete', function(uploader, file){
-                jQuery('.upload-progress').remove();
-                scope.showUploadBtn = false;
-            });*/
 
             uploader.init();
         }
