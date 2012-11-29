@@ -136,7 +136,7 @@ app.get('/article/:id', function(req, id) {
 app.post('/admin/articles', function(req){
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
-    {     log.info("USER IS NOT ADMIN");
+    {     
         return {
             status:401,
             headers:{"Content-Type":'text/html'},
@@ -620,6 +620,16 @@ app.get('/profiles/:id', function(req, id){
 });
 
 app.get('/profiles/admin', function(req){
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {     
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
+    
     var user = getUserDetails();
 
     var opts = {
@@ -668,6 +678,16 @@ app.get('/profiles/admin', function(req){
 });
 
 app.post('/profiles/admin/filter', function(req){
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {     
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
+    
     var user = getUserDetails();
     var data = req.postParams;
 
@@ -1498,6 +1518,16 @@ app.post('/search/discussions/', function(req){
  *
  ************************/
 app.get('/admin/users', function(req) {
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {     
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
+    
     var url = getZociaUrl(req) + '/profiles/';
 
     var opts = {
@@ -1511,6 +1541,15 @@ app.get('/admin/users', function(req) {
 });
 
 app.put('/admin/users', function(req) {
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {     
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
 
     /*var data = {
         "username" : req.postParams.username,
