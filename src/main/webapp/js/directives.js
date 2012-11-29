@@ -1108,7 +1108,7 @@ angular.module('bgc.directives').directive('adminResetPassword', ['$http', funct
     }
 }]);
 
-angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log', '$compile', function($http, $log, $compile){
+angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log', '$compile', '$timeout', function($http, $log, $compile, $q, $timeout){
     return {
         restrict: 'A',
         link: function(scope, elm, attrs){
@@ -1144,8 +1144,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                     file_id: ''
                 };
 
-                for (var i in files) {
-                    attachment.file_id = files[i].id;
+                for(var i in files){
+                    attachment._id = files[i].id;
                     scope.attachments.push(attachment);
 
                     scope.$apply();
@@ -1166,56 +1166,52 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 upload.settings.multipart_params = {size: file.size}
             });
 
-            uploader.bind('FilesRemoved', function(uploader, files){
-
-            });
-
-            uploader.bind('UploadProgress', function (up, file) {
-                //$$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-                //jQuery('.attachment-fields').last().children('.progress').children('.bar').css('width', file.percent + '%');
-            });
-
-            var content;
-
             scope.$on('saveArticle', function(){
                 uploader.start();
             });
+
+            var content;
 
             uploader.bind('FileUploaded', function(uploader, file, response){
                 content = scope.$eval("(" + response.response + ")");
                 content = scope.$eval("(" + content.content + ")");
 
-                // get the element in the array of attachments and create a new request object
-                scope.attachments.forEach(function(attachment, index, array){
-                    var date = new Date();
+                var date = new Date();
 
-                    var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
-                        date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+                var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
+                    date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
 
-                    //$scope.newArticle.key = ;
-                    var title = attachment.title === '' ? 'This attachment doesn\'t have a title' : attachment.title;
-                    var description = attachment.description === '' ? 'This attachment doesn\'t have a description' : attachment.description;
-                    var attachment = {
-                        dataType: 'resources',
-                        title: title,
-                        description: description,
-                        key: 'attachment-key-' + utc_timestamp,
-                        author: scope.$parent.$root.auth.principal.username,
-                        format: 'attachment',
-                        mimetype: content.mimetype,
-                        uri: content.uri,
-                        views: 0,
-                        likes: 0,
-                        comments: 0,
-                        rating: 0
-                    };
+                scope.attachments.forEach(function(attachment){
+                    if(file.id === attachment._id){
+                        var title = attachment.title === '' ? 'This attachment doesn\'t have a title' : attachment.title;
+                        var description = attachment.description === '' ? 'This attachment doesn\'t have a description' : attachment.description;
+                        var resource = {
+                            dataType: 'resources',
+                            title: title,
+                            description: description,
+                            key: 'attachment-key-' + utc_timestamp,
+                            author: scope.$parent.$root.auth.principal.username,
+                            format: 'attachment',
+                            mimetype: content.mimetype,
+                            uri: content.uri,
+                            views: 0,
+                            likes: 0,
+                            comments: 0,
+                            rating: 0
+                        };
 
-                    $http.post('api/attachments', attachment)
-                        .success(function(data, status){
-                            scope.article.attachments.push(data.content._id);
-                        });
+                        $http.post('api/attachments', resource)
+                            .success(function(data, status){
+                                scope.article.attachments.push(data.content._id);
+                                $log.info(data.content._id);
+                            });
+
+                        return;
+                    }
                 });
+            });
 
+            uploader.bind('UploadComplete', function(){
                 scope.$emit('attachmentUploadComplete');
             });
 
