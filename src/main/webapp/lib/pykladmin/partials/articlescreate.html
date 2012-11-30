@@ -60,7 +60,7 @@
                                         </div>
                                     </div>
                                     <div ng-repeat="attachment in newAttachments">
-                                        <div class="attachment-fields">
+                                        <div class="new-attachment-fields">
                                             <div class="filename">
                                                 <div class="control-group">
                                                     <label class="control-label"></label>
@@ -104,6 +104,24 @@
                                 </div>
                             </div>
                         </form>
+
+                        <div ng-switch on=resetStatus>
+                            <div ng-switch-when="error">
+                                <div class="alert alert-error alert-block">
+                                    <h4>Error!</h4>
+                                    Terribly sorry, something seems to have gone wrong when updating the article.
+                                </div>
+
+                            </div>
+                            <div ng-switch-when="success">
+                                <h2>Success!</h2>
+                                <p>
+                                    <strong>
+                                        Article successfully updated. <a ng-href="#/content/view/{{article._id}}">View the updated article now</a>
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

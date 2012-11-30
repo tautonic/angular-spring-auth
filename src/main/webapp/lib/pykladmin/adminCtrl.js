@@ -330,7 +330,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
                 $scope.article.taggable = tags;
             }
 
-            $location.path('/content/view/' + article._id);
+            //$location.path('/content/view/' + article._id);
 
         }, function(response){
             $log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
