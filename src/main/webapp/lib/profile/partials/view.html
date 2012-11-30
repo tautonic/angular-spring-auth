@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <div ui-if=false>
+        <div ui-if="!auth.isUser(profile._id)">
             <div class="btn-group-border">
                 <div class="btn-group bgc">
                     <button class="btn btn-success" ng-click="followUser(profile._id)"><span ui-if="!profile.isUserFollowing">Follow</span><span ui-if="profile.isUserFollowing">Unfollow</span></button>
