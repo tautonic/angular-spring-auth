@@ -92,7 +92,7 @@
         });
 
         $routeProvider.when( '/admin/articles/update/:articleId', {
-            templateUrl: 'lib/pykladmin/partials/articlesupdate.html',
+            templateUrl: 'lib/pykladmin/partials/articlescreate.html',
             controller: 'adminArticlesUpdate'
         });
 

@@ -220,6 +220,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
     $scope.resetStatus = "none";
+    $scope.attachments = [];
 
     $scope.location = $location;
 
@@ -240,15 +241,6 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         file_browser_callback: bgcFileBrowser
     };
 
-    /*var article = Article.get({articleId:$routeParams.articleId},
-        function(){
-            if(article.status === 400){
-                $location.path('/error/404');
-            }else{
-                $scope.article = article.content;
-            }
-        }
-    );*/
     $http.get( 'api/article/' + $routeParams.articleId )
         .success( function (data) {
             $log.info("ARTICLE RETURNED: ",data);
@@ -265,7 +257,19 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
 
-    $scope.update = function(article){
+    $scope.save = function(article){
+        if($scope.attachments.length > 0){
+            $scope.$broadcast('saveArticle');
+
+            $scope.$on('attachmentUploadComplete', function(){
+                saveArticle(article);
+            });
+        }else{
+            saveArticle(article);
+        }
+    };
+
+    function saveArticle(article){
         article.roles = ['ROLE_ANONYMOUS'];
 
         delete article._index;
@@ -301,14 +305,19 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             $scope.resetStatus = (response.success) ? "success" : "error";
 
             var tags = [];
-            $scope.article.taggable.forEach(function(tag) {
-                tags.push({ "text": tag });
-            });
-            $scope.article.taggable = tags;
+            if($scope.article.taggable){
+                $scope.article.taggable.forEach(function(tag) {
+                    tags.push({ "text": tag });
+                });
+                $scope.article.taggable = tags;
+            }
+
+            $location.path('/content/view/' + article._id);
+
         }, function(response){
             $log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
         });
-    };
+    }
 
     $scope.addTag = function() {
         $scope.article.taggable.push({"text": ""});
