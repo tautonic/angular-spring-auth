@@ -67,14 +67,14 @@
                                     <div class="controls">
                                         <div class="btn-group-border">
                                             <div class="btn-group bgc">
-                                                <button ng-click="save(article)" class="btn btn-success">Save Article</button>
-                                                <button ng-click="cancel()" class="btn btn-success">Cancel</button>
+                                                <button ng-disabled=disabled ng-click="save(article)" class="btn btn-success">Save Article</button>
+                                                <button ng-disabled=disabled ng-click="cancel()" class="btn btn-success">Cancel</button>
                                             </div>
                                         </div>
 
                                         <div class="btn-group-border">
                                             <div class="btn-group bgc">
-                                                <button id="choose-files" class="btn btn-success"><i class="icon-file icon-white"></i> Add file to queue</button>
+                                                <button ng-disabled=disabled id="choose-files" class="btn btn-success"><i class="icon-file icon-white"></i> Add file to queue</button>
                                             </div>
                                         </div>
                                     </div>

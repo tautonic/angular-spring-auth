@@ -1141,25 +1141,27 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 var attachment = {
                     title: '',
                     description: '',
-                    file_id: ''
+                    _id: ''
                 };
 
-                for(var i in files){
-                    attachment._id = files[i].id;
-                    scope.attachments.push(attachment);
+                /*for(var i in files){
 
-                    scope.$apply();
+                }*/
 
-                    var attachmentFields = jQuery('.attachment-fields').last();
-                    attachmentFields.children('.filename').children('.control-group').children('.controls').html(files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <button id="file-'+files[i].id+'" data-fileid="'+files[i].id+'" class="close">&times; Remove from queue</button>');
+                attachment._id = files[0].id;
+                scope.attachments.push(attachment);
 
-                    $('#file-' + files[i].id).click(function(){
-                        up.removeFile(up.getFile($(this).data('fileid')));
-                        $(this).parents('.attachment-fields').fadeOut(function(){
-                            $(this).remove();
-                        });
+                scope.$apply();
+
+                var attachmentFields = jQuery('.attachment-fields').last();
+                attachmentFields.children('.filename').children('.control-group').children('.controls').html(files[0].name + ' (' + plupload.formatSize(files[0].size) + ') <button id="file-'+files[0].id+'" data-fileid="'+files[0].id+'" class="close">&times; Remove from queue</button>');
+
+                $('#file-' + files[0].id).click(function(){
+                    up.removeFile(up.getFile($(this).data('fileid')));
+                    $(this).parents('.attachment-fields').fadeOut(function(){
+                        $(this).remove();
                     });
-                }
+                });
             });
 
             uploader.bind('BeforeUpload', function(upload, file){
@@ -1168,6 +1170,20 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
             scope.$on('saveArticle', function(){
                 uploader.start();
+
+                var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
+                                       <div id="block-2" class="little-block"></div> \
+                                       <div id="block-3" class="little-block"></div> \
+                                       <div id="block-4" class="little-block"></div> \
+                                       <div id="block-5" class="little-block"></div> \
+                                       <div id="block-6" class="little-block"></div> \
+                                       <div id="block-7" class="little-block"></div> \
+                                       <div id="block-8" class="little-block"></div> \
+                                       <div id="block-9" class="little-block"></div></div>'
+
+                $('#attachment-upload').prepend(progress).append(progress);
+
+                scope.disabled = true;
             });
 
             var content;
@@ -1203,7 +1219,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                         $http.post('api/attachments', resource)
                             .success(function(data, status){
                                 scope.article.attachments.push(data.content._id);
-                                $log.info(data.content._id);
+                                $log.info('Successfully added to the attachment array: ' + data.content._id);
                             });
 
                         return;
@@ -1212,6 +1228,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
             });
 
             uploader.bind('UploadComplete', function(){
+                $('.upload-progress').remove();
                 scope.$emit('attachmentUploadComplete');
             });
 
