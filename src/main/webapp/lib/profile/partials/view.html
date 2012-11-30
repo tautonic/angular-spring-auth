@@ -119,7 +119,7 @@
                         <div class="controls">
                             <div class="btn-group-border">
                                 <div class="btn-group bgc">
-                                    <button admin-reset-password email={{profile.accountEmail.address}} class="btn btn-success">Reset Password</button>
+                                    <button are-you-sure="{ call: activateUser, user: profile }"admin-reset-password email={{profile.accountEmail.address}} class="btn btn-success">Reset Password</button>
                                 </div>
                             </div>
                         </div>

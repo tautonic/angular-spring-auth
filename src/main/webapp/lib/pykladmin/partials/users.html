@@ -15,9 +15,9 @@
                                     <div class="btn-group-border">
                                         <div class="btn-group bgc">
                                             <a class="btn btn-success" ng-href="#/profiles/view/{{profile._source._id}}"><i class="icon-pencil icon-white"></i> Update</a>
-                                            <button ui-if="profile._source.status != 'unverified'" class="btn btn-danger" admin-deactivate-user user={{profile._source}}><i class="icon-lock icon-white"></i> Deactivate</button>
-                                            <button ui-if="profile._source.status == 'unverified'" class="btn btn-warning" ng-click=activateUser(profile._source)><i class="icon-lock icon-white"></i> Activate</button>
-                                            <button class="btn btn-danger" admin-delete-user userId={{profile._source._id}}><i class="icon-trash icon-white"></i> Delete</button>
+                                            <button ui-if="profile._source.status != 'unverified'" class="btn btn-danger" are-you-sure="{ call: deactivateUser, user: profile._source }"><i class="icon-lock icon-white"></i> Deactivate</button>
+                                            <button ui-if="profile._source.status == 'unverified'" class="btn btn-warning" are-you-sure="{ call: activateUser, user: profile._source }"><i class="icon-lock icon-white"></i> Activate</button>
+                                            <button class="btn btn-danger" are-you-sure="{ call: deleteUser, user: profile._source }"><i class="icon-trash icon-white"></i> Delete</button>
                                         </div>
                                     </div>
                                     <br>

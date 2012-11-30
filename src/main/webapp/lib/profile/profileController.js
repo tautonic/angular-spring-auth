@@ -298,6 +298,23 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     $scope.canEditProfile = function() {
         return ( ($rootScope.auth.isUserInRole('ROLE_ADMIN')) || ($rootScope.auth.isUser($scope.profile._id)) );
     };
+
+    $scope.adminResetPassword = function(element, attr) {
+        var data = {
+            profileEmail: attr.user.accountEmail.address
+        };
+
+        $http.post('api/utility/resettoken/', data)
+            .success(function(data, status, headers, config){
+                if(data.success) {
+                    elm.parents('.btn-group-border').fadeOut('fast', function(){
+                        var controlsElement = elm.parents('.controls');
+                        $(this).remove();
+                        controlsElement.append("<h3>We've sent an email to this user with instructions on how to complete the password reset process</h3>");
+                    });
+                }
+            });
+    };
 }
 
 function createProfile($rootScope, $scope, $routeParams, $location, $http, Profile, $log){

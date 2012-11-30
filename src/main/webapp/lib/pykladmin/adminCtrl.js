@@ -95,12 +95,27 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
         }
     };
 
-    $scope.activateUser = function(user) {
-        //user = JSON.parse(user);
-        user.status = "verified";
+    $scope.activateUser = function(element, attr) {
+        attr.user.status = "verified";
 
-        //var userId = attrs.userid
-        user = Profile.update({profileId:user._id}, user, function(){
+        Profile.update({profileId:attr.user._id}, attr.user, function(){
+            element.parents('.btn-group-border').removeClass('btn-group-border').html("<p>"+attr.user.name.fullName+"'s account has been activated.</p>");
+        });
+    };
+
+    $scope.deactivateUser = function(element, attr) {
+        attr.user.status = "unverified";
+
+        Profile.update({profileId:attr.user._id}, attr.user, function(){
+            element.parents('.btn-group-border').removeClass('btn-group-border').html("<p>"+attr.user.name.fullName+"'s account has been deactivated.</p>");
+        });
+    };
+
+    $scope.deleteUser = function(element, attr) {
+        var profile = Profile['delete']({"profileId": attr.user._id}, function(){
+            element.parents('.profile-list-item.profile').fadeOut('slow', function(){
+                $(this).remove();
+            });
         });
     };
 }
