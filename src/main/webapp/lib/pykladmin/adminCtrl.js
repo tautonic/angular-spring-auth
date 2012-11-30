@@ -257,6 +257,10 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
 
+    // we need to get the resources attached to this article for updating/removal as well
+    $http.get('api')
+
+
     $scope.save = function(article){
         if($scope.attachments.length > 0){
             $scope.$broadcast('saveArticle');
