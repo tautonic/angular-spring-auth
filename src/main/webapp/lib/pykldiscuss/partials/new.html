@@ -1,6 +1,6 @@
-<div id="discussions" class="container" ng-show="!hide">
+<div id="discussions" class="container" ui-if="!hide">
     <div class="row">
-        <div class="reply grey-gradient" ng-show="auth.isAuthenticated">
+        <div class="reply grey-gradient" ui-if="auth.isAuthenticated">
             <div class="user">
                 <div class="new-picture-frame profile-thumbnail medium clockwise">
                     <img ng-src ="{{auth.principal.thumbnail}}" alt="">
@@ -24,7 +24,7 @@
                 </form>
             </div>
         </div>
-        <div ng-show="!auth.isAuthenticated">
+        <div ui-if="!auth.isAuthenticated">
             <a ng-click="auth.requestLogin()">Log In</a> or <a ng-href="#/profile">register</a> to start a discussion.
         </div>
     </div>

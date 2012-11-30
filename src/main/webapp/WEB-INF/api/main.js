@@ -21,7 +21,7 @@ var {getZociaUrl} = require('utility/getUrls');
 var {encode} = require('ringo/base64');
 
 var app = exports.app = Application();
-app.configure( 'error', 'notfound', 'params', 'mount', 'route' );
+app.configure( 'error', 'notfound', 'params', auth, 'mount', 'route' );
 
 app.mount('/cms', require('./cms'));
 app.mount('/seedcms', require('./seedcms'));
@@ -113,10 +113,8 @@ app.get('/article/:id', function(req, id) {
         var servletRequest = req.env.servletRequest;
         if( (article.content.premium) && !((servletRequest.isUserInRole('ROLE_PREMIUM')) || (servletRequest.isUserInRole('ROLE_ADMIN')) ))
         {
-            log.info("User does not have access to full article content.");
             delete article.content.content;
         } else {
-            log.info("Full article content should be returned");
             //todo: make this replacement actually replace things properly. this solution is not feasible for long term
             /*var newUrl = "http://localhost:8080" + ctx("/#/article/");
 
@@ -136,7 +134,7 @@ app.get('/article/:id', function(req, id) {
 app.post('/admin/articles', function(req){
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
-    {     log.info("USER IS NOT ADMIN");
+    {     
         return {
             status:401,
             headers:{"Content-Type":'text/html'},
@@ -267,7 +265,7 @@ app.get('/discussions/byParent/:id', function(req, id) {
 app.put('/discussions/:id/:post', function(req, id, post) {
     var editedPost = req.params;
 
-    return json(editDiscussionPost(req, id, post, editedPost, getUserDetails()));
+    return json(editDiscussionPost(req, id, post, editedPost));
 });
 
 /**
@@ -281,7 +279,7 @@ app.post('/discussions/new', function(req) {
         discussion = discussion["0"];
     }
 
-    var result = createDiscussion(req, discussion, getUserDetails());
+    var result = createDiscussion(req, discussion);
 
     if(result != false) {
         if(result.title !== "") {
@@ -308,7 +306,7 @@ app.post('/discussions/:id', function(req, id) {
         };
     }
 
-    return json(addReply(req, req.params, getUserDetails()));
+    return json(addReply(req, req.params));
 });
 
 app.del('/discussions/:id', function(req, id) {
@@ -326,21 +324,18 @@ app.del('/discussions/:id', function(req, id) {
         var thread = getDiscussion(req, id).content[0];
 
         thread.children.forEach(function(post) {
-            deletePost(req, post._id, getUserDetails());
+            deletePost(req, post._id);
         });
     }
 
-    return json(deletePost(req, id, getUserDetails()));
+    return json(deletePost(req, id));
 });
 /****** End discussion posts ********/
 
 app.get('/notifications', function(req) {
     var params = req.params;
 
-    // Get user profile obj
-    var profile = getUserDetails();
-    if(profile.principal.id === undefined) {
-        log.info("User not found or not logged in. Exiting");
+    if(req.auth.principal.id === undefined) {
         return json({
             itemCount: 0,
             currentPage: 0,
@@ -360,7 +355,7 @@ app.get('/notifications', function(req) {
         filteredActivities = filteredActivities.replace(activity, '');
     });
 
-    var url = getZociaUrl(req) + '/activities/streams/' + profile.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ',');
+    var url = getZociaUrl(req) + '/activities/streams/' + req.auth.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ',');
 
     // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
     var exchange = ajax(url);
@@ -373,7 +368,7 @@ app.get('/notifications', function(req) {
 
         var activities = [];
         stream.acts.forEach(function (activity) {
-            activity = convertActivity(activity, req, ctx('/'), profile.principal.id);
+            activity = convertActivity(activity, req, ctx('/'), req.auth.principal.id);
 
             if (activity !== null) {
                 // Assign values from the mixin to a temp object, since the mixin won't be passed via JSON
@@ -395,21 +390,17 @@ app.get('/notifications', function(req) {
 });
 
 app.get( '/ping', function ( req ) {
-	var servletRequest = req.env.servletRequest;
-
 	return json( {
 		url: '/ping',
-		user: servletRequest.isUserInRole( 'ROLE_USER' ),
-		admin: servletRequest.isUserInRole( 'ROLE_ADMIN' ),
-		anonymous: servletRequest.isUserInRole( 'ROLE_ANONYMOUS' )
+		user: req.auth.isUserInRole( 'ROLE_USER' ),
+		admin: req.auth.isUserInRole( 'ROLE_ADMIN' ),
+		anonymous: req.auth.isUserInRole( 'ROLE_ANONYMOUS' )
 	} );
 } );
 
 /************ Follow User functions *********/
 //generally, the user ID and the ID of the thing he's following
 app.post('/follow/:followedById/:entityId', function(req, followedById, entityId) {
-    var user = getUserDetails();
-
     var opts = {
         url: getZociaUrl(req) + '/follow/' + followedById + "/" + entityId,
         method: 'POST',
@@ -422,8 +413,6 @@ app.post('/follow/:followedById/:entityId', function(req, followedById, entityId
 });
 
 app.del('/follow/:followedById/:entityId', function(req, followedById, entityId) {
-    var user = getUserDetails();
-
     var opts = {
         url: getZociaUrl(req) + '/follow/' + followedById + "/" + entityId,
         method: 'DELETE',
@@ -494,7 +483,6 @@ app.get('/followers/:userId', function(req, userId, params) {
 });
 
 function getUser(req, id) {
-    var user = getUserDetails();
     var opts = {
         url: getZociaUrl(req) + '/profiles/' + id,
         method: 'GET',
@@ -511,18 +499,14 @@ function getUser(req, id) {
         return role == "ROLE_PREMIUM";
     });
 
-    profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);
+    profile.activity = getLatestActivity(req, profile, ctx('/'), req.auth.principal.id);
 
     return profile;
 }
 
 function isUserFollowing(req, id) {
-    var user = getUserDetails();
-
-    log.info('Current User Object: ' + JSON.stringify(user, null, 4));
-
     var opts = {
-        url: getZociaUrl(req) + '/follow/' + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + '/follow/' + req.auth.principal.id + "/" + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
@@ -538,10 +522,8 @@ function isUserFollowing(req, id) {
  * classes.
  */
 app.get( '/auth', function ( req ) {
-	var result = getUserDetails();
-
     log.info("logging in user");
-	return json( result );
+	return json( req.auth );
 } );
 
 /********** Profile pages *********/
@@ -620,7 +602,15 @@ app.get('/profiles/:id', function(req, id){
 });
 
 app.get('/profiles/admin', function(req){
-    var user = getUserDetails();
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {     
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
 
     var opts = {
         url: getZociaUrl(req) + '/profiles/gc/admin',
@@ -645,7 +635,7 @@ app.get('/profiles/admin', function(req){
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
     profiles.forEach(function(profile){
-        profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);
+        profile.activity = getLatestActivity(req, profile, ctx('/'), req.auth.principal.id);
 
         profile.isUserFollowing = isUserFollowing(req, profile._id);
 
@@ -668,7 +658,16 @@ app.get('/profiles/admin', function(req){
 });
 
 app.post('/profiles/admin/filter', function(req){
-    var user = getUserDetails();
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {     
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
+
     var data = req.postParams;
 
     var opts = {
@@ -692,7 +691,7 @@ app.post('/profiles/admin/filter', function(req){
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
     profiles.forEach(function(profile){
-        profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);;
+        profile.activity = getLatestActivity(req, profile, ctx('/'), req.auth.principal.id);
 
         profile.isUserFollowing = isUserFollowing(req, profile._id);
 
@@ -714,8 +713,6 @@ app.post('/profiles/admin/filter', function(req){
 });
 
 app.get('/profiles/', function(req){
-    var user = getUserDetails();
-
     var opts = {
         url: getZociaUrl(req) + '/profiles/',
         method: 'GET',
@@ -730,11 +727,11 @@ app.get('/profiles/', function(req){
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
     profiles.forEach(function(profile){
-        profile.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);
+        profile.activity = getLatestActivity(req, profile, ctx('/'), req.auth.principal.id);
 
         profile.isUserFollowing = isUserFollowing(req, profile._id);
 
-        if(profile._id === user.principal.id){
+        if(profile._id === req.auth.principal.id){
             profile.cannotFollow = true;
         }
 
@@ -756,8 +753,6 @@ app.get('/profiles/', function(req){
 });
 
 app.put('/profiles/:id', function(req, id){
-    var user = getUserDetails();
-
     var data = req.postParams;
 
     setUserDetails(req.postParams.thumbnail);
@@ -788,7 +783,7 @@ app.put('/profiles/:id', function(req, id){
         data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc',
             'Content-Type': 'application/json',
-            'Authorization': _generateBasicAuthorization(user.username, user.password)}),
+            'Authorization': _generateBasicAuthorization(req.auth.username, req.auth.password)}),
         async: false
     };
 
@@ -1018,8 +1013,6 @@ app.post('/attachments', function(req){
 });
 
 app.del('/attachments/:id', function(req, id){
-    var user = getUserDetails();
-
     var opts = {
         url: getZociaUrl(req) + '/resources/' + id,
         method: 'DELETE',
@@ -1060,10 +1053,8 @@ app.post('/utility/view/:id', function(req, id) {
 
 //likes a specific object. todo: can anonymous users like something?
 app.post('/utility/like/:id', function(req, id) {
-    var user = getUserDetails();
-
     var opts = {
-        url: getZociaUrl(req) + "/likes/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/likes/" + req.auth.principal.id + "/" + id,
         method: 'POST',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -1076,10 +1067,8 @@ app.post('/utility/like/:id', function(req, id) {
 
 //checks to see if a user has already liked this particular object, if so, returns true, otherwise, returns false
 app.get('/utility/like/:id', function(req, id) {
-    var user = getUserDetails();
-
     var opts = {
-        url: getZociaUrl(req) + "/likes/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/likes/" + req.auth.principal.id + "/" + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -1096,10 +1085,8 @@ app.get('/utility/like/:id', function(req, id) {
 
 //deletes a like relationship, effectively decreasing total likes by one
 app.post('/utility/unlike/:id', function(req, id) {
-    var user = getUserDetails();
-
     var opts = {
-        url: getZociaUrl(req) + "/likes/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/likes/" + req.auth.principal.id + "/" + id,
         method: 'DELETE',
         headers: Headers({ 'x-rt-index': 'gc', 'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
@@ -1112,10 +1099,8 @@ app.post('/utility/unlike/:id', function(req, id) {
 
 //marks a specific object (namely, discussion posts) as spam. todo: can anonymous users mark something as spam?
 app.post('/utility/spam/:id', function(req, id) {
-    var user = getUserDetails();
-
     var opts = {
-        url: getZociaUrl(req) + "/spams/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/spams/" + req.auth.principal.id + "/" + id,
         method: 'POST',
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
@@ -1128,10 +1113,8 @@ app.post('/utility/spam/:id', function(req, id) {
 
 //checks to see if a user has already marked this particular object as spam, if so, returns true, otherwise, returns false
 app.get('/utility/spam/:id', function(req, id) {
-    var user = getUserDetails();
-
     var opts = {
-        url: getZociaUrl(req) + "/spams/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/spams/" + req.auth.principal.id + "/" + id,
         method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
@@ -1148,10 +1131,8 @@ app.get('/utility/spam/:id', function(req, id) {
 
 //deletes a spam relationship, effectively decreasing total spam count by one
 app.post('/utility/unspam/:id', function(req, id) {
-    var user = getUserDetails();
-
     var opts = {
-        url: getZociaUrl(req) + "/spams/" + user.principal.id + "/" + id,
+        url: getZociaUrl(req) + "/spams/" + req.auth.principal.id + "/" + id,
         method: 'DELETE',
         headers: Headers({ 'x-rt-index': 'gc', 'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
@@ -1321,7 +1302,7 @@ app.post('/search/site/', function(req){
         //log.info('GCEE object returned from Zocia {}', JSON.stringify(object, null, 4));
         // We have to get last activity information for each profile
         if(object._source.dataType === 'profiles'){
-            object._source.activity = getLatestActivity(req, object._source, ctx('/'), getUserDetails().principal.id);
+            object._source.activity = getLatestActivity(req, object._source, ctx('/'), req.auth.principal.id);
 
             object._source.facultyFellow = object._source.roles.some(function(role) {
                 return role == "ROLE_PREMIUM";
@@ -1364,7 +1345,6 @@ app.post('/search/site/', function(req){
 });
 
 app.post('/search/faculty/', function(req){
-    var user = getUserDetails();
     var url = getZociaUrl(req) + '/search/';
 
     var queryParams = [
@@ -1392,7 +1372,7 @@ app.post('/search/faculty/', function(req){
     // grab the latest activity for each profile that was done by the user before sending on
     // to angular
     profiles.forEach(function(profile){
-        profile._source.activity = getLatestActivity(req, profile, ctx('/'), user.principal.id);
+        profile._source.activity = getLatestActivity(req, profile, ctx('/'), req.auth.principal.id);
 
         profile._source.facultyFellow = profile._source.roles.some(function(role) {
             return role == "ROLE_PREMIUM";
@@ -1498,6 +1478,16 @@ app.post('/search/discussions/', function(req){
  *
  ************************/
 app.get('/admin/users', function(req) {
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {     
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
+    
     var url = getZociaUrl(req) + '/profiles/';
 
     var opts = {
@@ -1511,6 +1501,15 @@ app.get('/admin/users', function(req) {
 });
 
 app.put('/admin/users', function(req) {
+    var servletRequest = req.env.servletRequest;
+    if(!servletRequest.isUserInRole('ROLE_ADMIN'))
+    {     
+        return {
+            status:401,
+            headers:{"Content-Type":'text/html'},
+            body:[]
+        };
+    }
 
     /*var data = {
         "username" : req.postParams.username,
@@ -1582,44 +1581,6 @@ function _simpleHTTPRequest(opts) {
     return result;
 }
 
-function getUserDetails() {
-    var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
-    var auth = SecurityContextHolder.context.authentication;
-
-    // principal can be a simple string or a spring security user object
-    //todo setup so that auth.principal doesn't fail if it ever happens to be a string (test to see if it's ever a string)
-    var principal = (typeof auth.principal === 'string') ? auth.principal : auth.principal;
-    log.info('GET USER DETAILS PRINCIPAL PASSWORD: ' + principal.password);
-    var result = {
-        principal: {
-            id: principal.id,
-            username: principal.username,
-            name: principal.name,
-            email: principal.email,
-            country: principal.country,
-            profileType: principal.profileType,
-            accountType: principal.accountType,
-            thumbnail: principal.thumbnail
-        },
-        username: principal.username,
-        password: principal.password,
-        roles: []
-    };
-
-    var authorities = auth.authorities.iterator();
-    while ( authorities.hasNext() ) {
-        var authority = authorities.next();
-        result.roles.push( authority.toString().toLowerCase() );
-    }
-
-    if(result.principal.thumbnail === 'profiles-0000-0000-0000-000000000001' ||
-        result.principal.thumbnail === ''){
-        result.principal.thumbnail = 'images/GCEE_image_profileMale_135x135.jpeg';
-    }
-
-    return result;
-}
-
 function setUserDetails(thumbnail){
     var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
     var auth = SecurityContextHolder.context.authentication;
@@ -1628,4 +1589,65 @@ function setUserDetails(thumbnail){
     var principal = (typeof auth.principal === 'string') ? auth.principal : auth.principal;
 
     principal.thumbnail = thumbnail;
+}
+
+/**
+ * Middleware component for Stick to inject Spring Security credentials and props into request object.
+ *
+ * @return {Function}
+ */
+function auth(next) {
+    return function (req) {
+        req.auth = {
+            isAuthenticated: false,
+            roles: [],
+            isUserInRole: function (r) {
+                r = r.toLocaleLowerCase();
+                return this.roles.some(function (role) {
+                    return r === role
+                })
+            }
+        };
+
+        var SecurityContextHolder = Packages.org.springframework.security.core.context.SecurityContextHolder;
+        var springAuth = SecurityContextHolder.context.authentication;
+
+        // An unauthenticated user will have a principal of type String ('anonymousUser')
+        if (springAuth && typeof springAuth.principal !== 'string') {
+            var p = springAuth.principal;
+
+            // While an authenticated user will have a BLTVUserDetails object as the principal
+            req.auth.isAuthenticated = springAuth.isAuthenticated();
+            req.auth.username = p.username;
+            req.auth.password = p.password;
+
+            var authorities = springAuth.principal.authorities.iterator();
+            while (authorities.hasNext()) {
+                var authority = authorities.next();
+                req.auth.roles.push(authority.toString().toLowerCase());
+            }
+
+            req.auth.principal = {
+                id: p.id,
+                username: p.username,
+                name: p.name,
+                email: p.email,
+                country: p.country,
+                profileType: p.profileType,
+                accountType: p.accountType,
+                thumbnail: p.thumbnail
+            };
+            // todo: Need to take gender into consideration or generate a unisex thumbnail
+            req.auth.principal.thumbnail =
+                (p.thumbnail === 'profiles-0000-0000-0000-000000000001' || p.thumbnail === '')
+                    ? 'images/GCEE_image_profileMale_135x135.jpeg'
+                    : p.thumbnail
+        } else {
+            req.auth.principal = {
+                id: '',
+                username: 'AnonymousUser'
+            };
+        }
+        return next(req);
+    }
 }

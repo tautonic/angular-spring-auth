@@ -143,7 +143,7 @@ var getDiscussionList = function(req, params) {
     };
 };
 
-var addReply = function(req, reply, user) {
+var addReply = function(req, reply) {
     var data = {
         "dataType": "posts",
         "dateCreated": "",
@@ -151,9 +151,9 @@ var addReply = function(req, reply, user) {
         "parentId": reply.parentId,
         "type": reply.dataType,
         "creator":{
-            "_id": user.principal.id,
-            "username": user.username,
-            "profilePicture": { 'filepath': user.principal.thumbnail }
+            "_id": req.auth.principal.id,
+            "username": req.auth.username,
+            "profilePicture": { 'filepath': req.auth.principal.thumbnail }
         },
         "title": reply.title,
         "message": reply.reply,
@@ -165,7 +165,7 @@ var addReply = function(req, reply, user) {
         "active": true
     };
 
-    var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
+    var headers = Headers({"Authorization": generateBasicAuthorization(req.auth), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
         url: getZociaUrl(req) + '/posts/'+reply.threadId,
@@ -182,7 +182,7 @@ var addReply = function(req, reply, user) {
 
 var log = require( 'ringo/logging' ).getLogger( module.id );
 
-var createDiscussion = function(req, firstPost, user) {
+var createDiscussion = function(req, firstPost) {
 
     var data = {
         "dataType": "posts",
@@ -190,9 +190,9 @@ var createDiscussion = function(req, firstPost, user) {
         "parentId": firstPost.parentId,
         "type": firstPost.dataType,
         "creator":{
-            "_id": user.principal.id,
-            "username": user.username,
-            "profilePicture": { 'filepath': user.principal.thumbnail }
+            "_id": req.auth.principal.id,
+            "username": req.auth.username,
+            "profilePicture": { 'filepath': req.auth.principal.thumbnail }
         },
         "title": (firstPost.title || ''),
         "message": firstPost.posts[0].message,
@@ -208,7 +208,7 @@ var createDiscussion = function(req, firstPost, user) {
     if(firstPost.parentId !== null) {
         url += firstPost.parentId.toString();
     }
-    var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
+    var headers = Headers({"Authorization": generateBasicAuthorization(req.auth), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
         url: url,
@@ -228,7 +228,7 @@ var createDiscussion = function(req, firstPost, user) {
     return false;
 };
 
-var editDiscussionPost = function(req, id, postId, postContent, user) {
+var editDiscussionPost = function(req, id, postId, postContent) {
 
     var data = {
         "dataType": "posts",
@@ -246,7 +246,7 @@ var editDiscussionPost = function(req, id, postId, postContent, user) {
         "active": postContent.active
     };
 
-    var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
+    var headers = Headers({"Authorization": generateBasicAuthorization(req.auth), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
         url: getZociaUrl(req) + '/posts/'+postId,
@@ -261,8 +261,8 @@ var editDiscussionPost = function(req, id, postId, postContent, user) {
     return (Math.floor(exchange.status/100) === 2);
 };
 
-var deletePost = function(req, id, user) {
-    var headers = Headers({"Authorization": generateBasicAuthorization(user), "x-rt-index" : 'gc', "Content-Type": "application/json"});
+var deletePost = function(req, id) {
+    var headers = Headers({"Authorization": generateBasicAuthorization(req.auth), "x-rt-index" : 'gc', "Content-Type": "application/json"});
 
     var opts = {
         url: getZociaUrl(req) + '/posts/'+id,

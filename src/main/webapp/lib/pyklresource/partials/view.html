@@ -43,13 +43,13 @@
             <h3>{{article.title}}</h3>
             <p class="article-meta">
                 <span class="doc-type {{article.doctype}}"></span>
-                <span class="premium" ng-show="article.premium"></span>
+                <span class="premium" ui-if="article.premium"></span>
                 <div class="article-tweet-button" reload-twitter-btns>
                     <a href="https://twitter.com/share" data-url="{{url}}" data-text="Babson GC: {{article.title}}" class="twitter-share-button" data-lang="en">Tweet</a>
                 </div>
                 <span class="muted"><like objectid="{{article._id}}"></like> ({{article.likes}})</span>
             </p>
-            <div class="formatted" ng-bind-html-unsafe="article.description" ng-show="abstractVisible()"></div>
+            <div class="formatted" ng-bind-html-unsafe="article.description" ui-if="abstractVisible()"></div>
             <div class="formatted" ng-bind-html-unsafe="article.content"></div>
         </div>
         <div class="span3">

@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        <div class="span4" ng-show="auth.isAuthenticated">
+        <div class="span4" ui-if="auth.isAuthenticated">
             <div class="activity-stream">
                 <div class="activity-stream-header">
                     <!--<div thumbnail thumb=auth size="medium" rotation="none" type="profile" />-->
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        <div class="span4 sign-up" ng-show="!auth.isAuthenticated">
+        <div class="span4 sign-up" ui-if="!auth.isAuthenticated">
             <div class="details">
                 <h3><a href="#/signup">Sign up today</a></h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec aliquet ultricies feugiat. Aenean varius turpis ut nibh imperdiet vehicula. Phasellus sit amet adipiscing enim. Sed sit amet nisl lacus.</p>

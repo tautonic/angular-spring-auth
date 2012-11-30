@@ -21,34 +21,24 @@
                                     <h5>{{profileModal.title}}</h5>
                                     <h5 class="muted">{{profileModal.institution.name}}</h5>
 
-                                    <div ui-if="auth.isAuthenticated">
-                                        <div ui-if="profileModal.cannotFollow">
-                                            <div class="btn-group-border">
-                                                <div class="btn-group bgc">
-                                                    <a class="btn btn-success" ng-href="#/profiles/view/{{profileModal.id}}">Profile</a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div ui-if="!profileModal.cannotFollow">
-                                            <div class="btn-group-border">
-                                                <div class="btn-group bgc">
-                                                    <button class="btn btn-success" ng-click="followUser(profileModal.id, profileModal.index)">
-                                                        <div ng-switch on=profileModal.isUserFollowing>
-                                                            <div ng-switch-when=true>Unfollow</div>
-                                                            <div ng-switch-default>Follow</div>
-                                                        </div>
-                                                    </button>
-                                                    <a class="btn btn-success" ng-href="#/profiles/view/{{profileModal.id}}">Profile</a>
-                                                </div>
+                                    <div ui-if="(profileModal.cannotFollow || !auth.isAuthenticated)">
+                                        <div class="btn-group-border">
+                                            <div class="btn-group bgc">
+                                                <a class="btn btn-success" ng-href="#/profiles/view/{{profileModal.id}}">Profile</a>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div ui-if="!auth.isAuthenticated">
+                                    <div ui-if="(!profileModal.cannotFollow && auth.isAuthenticated)">
                                         <div class="btn-group-border">
                                             <div class="btn-group bgc">
-                                                <a class="btn btn-success" ng-href="#/profiles/view/{{profileModal._id}}">Profile</a>
+                                                <button class="btn btn-success" ng-click="followUser(profileModal.id, profileModal.index)">
+                                                    <div ng-switch on=profileModal.isUserFollowing>
+                                                        <div ng-switch-when=true>Unfollow</div>
+                                                        <div ng-switch-default>Follow</div>
+                                                    </div>
+                                                </button>
+                                                <a class="btn btn-success" ng-href="#/profiles/view/{{profileModal.id}}">Profile</a>
                                             </div>
                                         </div>
                                     </div>
