@@ -311,7 +311,9 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $locatio
         });
     };
 
-    $scope.deletePost = function(post, index) {
+    $scope.deletePost = function(element, attr) {
+        var post = attr.post;
+        var index = attr.index;
         $http['delete']('api/discussions/'+post._id+"?threadId="+post.threadId).success(function(data) {
             if($scope.discussion.children[index]._id === post._id) {
                 $scope.discussion.children.splice(index, 1);

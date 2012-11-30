@@ -991,6 +991,14 @@ angular.module('bgc.directives').directive('spam', ['$http', '$rootScope', funct
     }
 }]);
 
+/**
+ * This changes the text of a button to "Are You Sure?" and requires the user to click a second time before performing the action. Requires parameters to be passed into the directive
+ *
+ * @param [areYouSure] {object} This requires a function passed in with the "call" argument, which will be called upon the second click.
+ *                          It also allows an arbitrary amount of arguments, which will be sent to the 'call' function, allowing it to be used there
+ *                          This is mostly useful for admin type buttons, with things like deleting or resetting stuff
+ * @example are-you-sure="{ call: deleteArticle, article: article }"
+ */
 angular.module('bgc.directives').directive('areYouSure', function() {
     return {
         restrict: 'A',
