@@ -40,11 +40,6 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
 
         var thumbnail = profile.thumbnail === 'profiles-0000-0000-0000-000000000001' ?  'images/GCEE_image_profileMale_135x135.jpeg' : profile.thumbnail;
 
-        var website = {
-            title: '',
-            url: ''
-        };
-
         if(!profile.websites){
             profile.websites = [{
                 title: '',
@@ -386,80 +381,6 @@ function createProfile($rootScope, $scope, $routeParams, $location, $http, Profi
     };
 
 }
-/*
-function updateProfile($scope, $routeParams, $location, Profile){
-    $scope.profile = {};
-    $scope.master = {};
-
-    var profile = Profile.get({profileId: $routeParams.profileId}, function(){
-        $scope.profile = profile.content;
-        $scope.master = angular.copy($scope.profile);
-
-        if($scope.profile.thumbnail === 'profiles-0000-0000-0000-000000000001' || $scope.profile.thumbnail === null){
-            $scope.profile.thumbnail = "http://dummyimage.com/500x300&text=Drag and drop files here"
-        }
-    });
-
-    $scope.profile.newPass = '';
-    $scope.profile.newPassRepeat = '';
-
-    $scope.update = function(profile){
-
-        if($scope.thumbnailURI !== ''){
-            profile.thumbnail = $scope.thumbnailURI;
-        }
-
-        Profile.update({profileId: profile._id}, profile, function(response){
-            $scope.responseContent = response.content;
-
-            $location.path('/profiles/view/' + profile._id);
-        }, function(response){
-            $scope.responseContent = 'UPDATE FAILED WITH AN ERROR OF: ' + response.status;
-        });
-    };
-
-    $scope.isUnchanged = function(profile){
-        return !angular.equals(profile, $scope.master);
-    };
-
-    $scope.addEdRow = function(){
-        $scope.profile.educationHistory.push({
-            "schoolName" : '',
-            "degree" : '',
-            "fieldOfStudy" : '',
-            "country" : "",
-            "yearFrom": {
-                "hijri": "",
-                "gregorian": "",
-                "preference": "gregorian"
-            },
-            "yearTo": {
-                "hijri": "",
-                "gregorian": "",
-                "preference": "gregorian"
-            },
-            "edNotes": ""
-        });
-    };
-
-    $scope.removeEdRow = function(index){
-        $scope.profile.educationHistory.splice(index, 1);
-    };
-
-    $scope.addContactRow = function(){
-        $scope.profile.websites.push(
-            {
-                "title" : '',
-                "url" : ''
-            }
-        );
-    };
-
-    $scope.removeContactRow = function(index){
-        $scope.profile.websites.splice(index, 1);
-    };
-
-}  */
 
 function searchProfiles($scope, $location){
     $scope.searchProfiles = function(){

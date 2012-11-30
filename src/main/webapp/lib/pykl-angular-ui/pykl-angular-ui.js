@@ -40,7 +40,7 @@ var pykl = window.pykl || {};
         ['pykl-ui.config', '$log', function (pyklConfig, $log) {
             var overlay;
 
-            var browseButton = angular.element('<button id="pickfiles">Browse</button>');
+            var browseButton = angular.element('<button class="btn btn-success" id="pickfiles">Browse</button>');
 
             function addOverlay(elm) {
                 // The overlay will be absolutely positioned above the image element. In order

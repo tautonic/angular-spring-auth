@@ -156,8 +156,13 @@ var pykl = window.pykl || {};
             ng.forEach(modifiedResources, persist);
         };
 
+        $scope.$on('hideModal', function(event){
+            $scope.showError = false;
+            $scope.modalShown = false;
+        });
+
         $scope.cancel = function() {
-//            $log.info('Cancel pressed');
+            //$log.info('Cancel pressed');
             $scope.showError = false;
             $scope.modalShown = false;
         };
@@ -183,7 +188,6 @@ var pykl = window.pykl || {};
         // for a specific key. So, we will have to break up the lookup value into key/locale by splitting on
         // the '@' symbol which joins them.
         $scope.$on(CMS_EDIT_EVENT, function(event, lookup) {
-
             var tokens = lookup.split('@');
             var key = tokens[0];
             var locale = tokens.length > 1 && tokens[1];

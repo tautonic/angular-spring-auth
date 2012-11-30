@@ -9,7 +9,7 @@
         </div>
         <form name="editCMS" class="form-horizontal" novalidate>
             <fieldset ng-repeat="resource in resources">
-                <label class="control-label" for="cms-{{resource.locale}}-title">Title</label>
+                <label class="control-label" for="cms-{{resource.locale}}-title">Title:</label>
                 <div class="controls">
                     <input type="text"
                            ng-model="resource.title"
@@ -21,11 +21,11 @@
 
                 <br />
 
-                <label class="control-label" for="cms-{{resource.locale}}-body">Body</label>
+                <label class="control-label" for="cms-{{resource.locale}}-body">Body:</label>
                 <div class="controls">
                     <textarea
                             rows="10"
-                            cols="100"
+                            cols="1500"
                             ng-model="resource.content"
                             class="input-xlarge"
                             id="cms-{{resource.locale}}-body"
@@ -38,10 +38,10 @@
 
                 <br />
 
-                <label class="control-label">Upload</label>
+                <label class="control-label">Image Upload:</label>
                 <div class="controls">
                     <div id="container" x-img-upload>
-                        <div id="target" style="width:300px; height:200px; border: 1px solid blue;"></div>
+                        <div id="target" style="width:100%; height:200px; border: 1px solid blue;"></div>
                         <img class="imgUpload" src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
                     </div>
                 </div>
@@ -57,14 +57,22 @@
 -->
             </fieldset>
         </form>
+
+        <div class="right clearfix">
+            <div class="close-modal" ng-click="cancel()"></div>
+        </div>
     </div>
     <div class="modal-footer">
-        <a ng-click="cancel()" class="btn btn-warning">
-            <i class="icon-ban-circle icon-white"></i> Cancel
-        </a>
+        <div class="btn-group-border">
+            <div class="btn-group bgc">
+                <button ng-click="cancel()" class="btn btn-success">
+                    <i class="icon-ban-circle icon-white"></i> Cancel
+                </button>
 
-        <button ng-click="submit()" ng-disabled="false" class="btn btn-success" >
-            <i class="icon-pencil icon-white"></i> Update
-        </button>
+                <button ng-click="submit()" ng-disabled="false" class="btn btn-success" >
+                    <i class="icon-pencil icon-white"></i> Update
+                </button>
+            </div>
+        </div>
     </div>
 </div>
