@@ -107,7 +107,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
     }
 }
 
-function ViewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location, $log) {
+function ViewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $location, $timeout, $log) {
     $scope.paging = {
         size: 5
     };
@@ -305,13 +305,16 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $locatio
         });
     };
 
-    $scope.deleteDiscussion = function() {
+    $scope.deleteDiscussion = function(element) {
         $http['delete']('api/discussions/'+$scope.discussion._id+"?threadId="+$scope.discussion.threadId).success(function(data) {
-            $location.path('network/discussion/list');
+            element.html('<i class="icon-white icon-time"></i> Deleting Discussion...')
+            $timeout(function() { $location.path('network/discussion/list'); }, 1000);
         });
     };
 
-    $scope.deletePost = function(post, index) {
+    $scope.deletePost = function(element, attr) {
+        var post = attr.post;
+        var index = attr.index;
         $http['delete']('api/discussions/'+post._id+"?threadId="+post.threadId).success(function(data) {
             if($scope.discussion.children[index]._id === post._id) {
                 $scope.discussion.children.splice(index, 1);
@@ -437,5 +440,5 @@ function NewDiscussion($rootScope, $scope, $routeParams, $http, $location) {
 }
 
 ListDiscussions.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$log'];
-ViewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$auth', '$location', '$log'];
+ViewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$auth', '$location', '$timeout', '$log'];
 NewDiscussion.$inject = ['$rootScope', '$scope', '$routeParams', '$http', '$location'];

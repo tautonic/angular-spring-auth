@@ -114,6 +114,7 @@ var getDiscussionList = function(req, params) {
 
     var threads = JSON.parse(exchange.content);
 
+
     //loop through each thread and add an attribute that contains the
     //number of replies/comments
     //and hides spam threads
@@ -133,7 +134,6 @@ var getDiscussionList = function(req, params) {
 
         thread.link = "#/network/discussion/view/" + thread._id;
     });
-
 
     return {
         'status': exchange.status,

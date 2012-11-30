@@ -991,34 +991,19 @@ angular.module('bgc.directives').directive('spam', ['$http', '$rootScope', funct
     }
 }]);
 
-angular.module('bgc.directives').directive('adminDeleteUser', ['Profile', function(Profile){
+/**
+ * This changes the text of a button to "Are You Sure?" and requires the user to click a second time before performing the action. Requires parameters to be passed into the directive
+ *
+ * @param [areYouSure] {object} This requires a function passed in with the "call" argument, which will be called upon the second click.
+ *                          It also allows an arbitrary amount of arguments, which will be sent to the 'call' function, allowing it to be used there
+ *                          This is mostly useful for admin type buttons, with things like deleting or resetting stuff
+ * @example are-you-sure="{ call: deleteArticle, article: article }"
+ */
+angular.module('bgc.directives').directive('areYouSure', function() {
     return {
         restrict: 'A',
         link: function(scope, elm, attrs){
-            var attrs = attrs;
-            var check = false;
-            elm.bind('click', function(){
-                if(!check) {
-                    elm.html('<i class="icon-question-sign icon-white"></i> Are You Sure?');
-                    check = true;
-                    return;
-                }
-                //var userId = attrs.userid
-                var profile = Profile['delete']({"profileId": attrs.userid}, function(){
-                    elm.parents('.profile-list-item.profile').fadeOut('slow', function(){
-                        $(this).remove();
-                    });
-                });
-            });
-        }
-    }
-}]);
-
-angular.module('bgc.directives').directive('adminDeactivateUser', ['Profile', function(Profile){
-    return {
-        restrict: 'A',
-        link: function(scope, elm, attrs){
-            var attrs = attrs;
+            var attr = scope.$eval(attrs.areYouSure);
             var check = false;
             elm.bind('click', function(){
                 if(!check) {
@@ -1027,74 +1012,11 @@ angular.module('bgc.directives').directive('adminDeactivateUser', ['Profile', fu
                     return;
                 }
 
-                var user = JSON.parse(attrs.user);
-                user.status = "unverified";
-
-                //var userId = attrs.userid
-                var profile = Profile.update({profileId:user._id}, user, function(){
-                    elm.parents('.btn-group-border').removeClass('btn-group-border').html("<p>This user is now deactivated</p>");
-                });
+                attr.call(elm, attr);
             });
         }
     }
-}]);
-
-angular.module('bgc.directives').directive('adminDeleteArticle', ['Article', function(Article){
-    return {
-        restrict: 'A',
-        link: function(scope, elm, attrs){
-            var attrs = attrs;
-            var check = false;
-            elm.bind('click', function(){
-                if(!check) {
-                    elm.html('<i class="icon-question-sign icon-white"></i> Are You Sure?');
-                    check = true;
-                    return;
-                }
-                //var articleId = attrs.articleid
-                var profile = Article['delete']({ "articleId": attrs.articleid}, function(){
-                    elm.parents('.article.admin.row').fadeOut('slow', function(){
-                        $(this).remove();
-                    });
-                });
-
-            });
-        }
-    }
-}]);
-
-angular.module('bgc.directives').directive('adminResetPassword', ['$http', function($http){
-    return {
-        restrict: 'A',
-        link: function(scope, elm, attrs){
-            var attrs = attrs;
-            var check = false;
-            elm.bind('click', function(){
-                if(!check) {
-                    elm.html('<i class="icon-question-sign icon-white"></i> Are You Sure?');
-                    check = true;
-                    return;
-                }
-                var data = {
-                    profileEmail: attrs.email
-                };
-
-                $http.post('api/utility/resettoken/', data)
-                    .success(function(data, status, headers, config){
-                        if(data.success) {
-                            elm.parents('.btn-group-border').fadeOut('fast', function(){
-                                var controlsElement = elm.parents('.controls');
-                                $(this).remove();
-                                controlsElement.append("<h3>We've sent an email to this user with instructions on how to complete the password reset process</h3>");
-                            });
-                        } else {
-                            //$scope.showError = true;
-                        }
-                    });
-            });
-        }
-    }
-}]);
+});
 
 angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log', '$compile', '$timeout', function($http, $log, $compile, $q, $timeout){
     return {

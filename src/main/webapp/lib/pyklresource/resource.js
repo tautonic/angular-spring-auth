@@ -178,6 +178,14 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $scope.paging.from = 0;
         $scope.paging.more = true;
     }
+
+    $scope.deleteArticle = function(element, attr) {
+        $http['delete']('api/admin/articles/' + attr.article._id).success( function() {
+            element.parents('.article.admin.row').fadeOut('slow', function(){
+                $(this).remove();
+            });
+        });
+    };
 }
 
 
