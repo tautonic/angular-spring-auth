@@ -1142,7 +1142,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 scope.$apply();
 
                 var attachmentFields = jQuery('.attachment-fields').last();
-                attachmentFields.children('.filename').children('.control-group').children('.controls').html(files[0].name + ' (' + plupload.formatSize(files[0].size) + ') <button id="file-'+files[0].id+'" data-fileid="'+files[0].id+'" class="close">&times; Remove from queue</button>');
+                attachmentFields.children('.filename').children('.control-group').children('.controls').html(files[0].name + ' (' + plupload.formatSize(files[0].size) + ') <button id="file-'+files[0].id+'" data-fileid="'+files[0].id+'" class="close">&times; Remove Attachment</button>');
 
                 $('#file-' + files[0].id).click(function(){
                     up.removeFile(up.getFile($(this).data('fileid')));
@@ -1442,6 +1442,30 @@ angular.module('bgc.directives').directive('roleToggleAdmin', ['Profile', functi
                 }, function(response){
                     log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
                 });
+            });
+        }
+    }
+}]);
+
+angular.module('bgc.directives').directive('removeAttachment', ['$http', function($http){
+    return {
+        restrict: 'A',
+        scope: {
+            attachment: '='
+        },
+        link: function(scope, elm, attrs){
+            elm.bind('click', function(){
+                // remove the attachment from the array of article attachments
+                scope.$parent.article.attachments.splice(scope.$parent.article.attachments.indexOf(scope.attachment._id), 1);
+                console.log(scope);
+                $http.delete('api/attachments/' + scope.attachment._id)
+                    .success(function(){
+                        // the article has to be updated as well
+                        //$http.put()
+                        elm.parents('.attachment-fields').fadeOut(function(){
+                            $(this).remove();
+                        });
+                    });
             });
         }
     }

@@ -1012,11 +1012,15 @@ app.post('/attachments', function(req){
     return _simpleHTTPRequest(opts);
 });
 
-app.get('/attachments/:id', function(req, id){
+app.get('/attachments', function(req){
+    log.info('Attachment request params {}', JSON.stringify(req.params, null, 4));
+
+    var resourceUrl = req.params.ids.join('&ids[]=');
+    resourceUrl = '?ids[]=' + resourceUrl;
+
     var opts = {
-        url: getZociaUrl(req) + '/resources/' + id,
+        url: getZociaUrl(req) + '/resources/' + resourceUrl,
         method: 'GET',
-        data: JSON.stringify(req.postParams),
         headers: Headers({ 'x-rt-index': 'gc',
             'Content-Type': 'application/json'}),
         async: false

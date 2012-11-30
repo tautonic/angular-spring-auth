@@ -221,6 +221,8 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
     $rootScope.about = 'none';
     $scope.resetStatus = "none";
     $scope.attachments = [];
+    $scope.article = {};
+    var resourceUrl = '';
 
     $scope.location = $location;
 
@@ -245,6 +247,21 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         .success( function (data) {
             $log.info("ARTICLE RETURNED: ",data);
             $scope.article = data;
+            //$scope.attachments = $scope.article.attachments.slice(0);
+            resourceUrl = $scope.article.attachments.join('&ids[]=');
+            resourceUrl = '?ids[]=' + resourceUrl;
+
+            // we need to get the resources attached to this article for updating/removal as well
+            // /?ids[]=213&ids[]=783
+            $http.get('api/attachments/' + resourceUrl)
+                .success(function(data, status){
+                    $log.info(data);
+                    $scope.attachments = data.content.slice(0);
+                })
+                .error(function(data, status){
+                    $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+                });
+
             var tags = [];
             if($scope.article.taggable){
                 $scope.article.taggable.forEach(function(tag) {
@@ -256,10 +273,6 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         .error(function(data, status) {
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
-
-    // we need to get the resources attached to this article for updating/removal as well
-    $http.get('api')
-
 
     $scope.save = function(article){
         if($scope.attachments.length > 0){
