@@ -1132,24 +1132,39 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                     _id: ''
                 };
 
-                /*for(var i in files){
+                var attachmentFields;
 
-                }*/
+                if(scope.newAttachments){
+                    attachment._id = files[0].id;
+                    scope.newAttachments.push(attachment);
 
-                attachment._id = files[0].id;
-                scope.attachments.push(attachment);
+                    scope.$apply();
 
-                scope.$apply();
+                    attachmentFields = jQuery('.new-attachment-fields').last();
+                    attachmentFields.children('.filename').children('.control-group').children('.controls').html(files[0].name + ' (' + plupload.formatSize(files[0].size) + ') <button id="file-'+files[0].id+'" data-fileid="'+files[0].id+'" class="close">&times; Remove Attachment</button>');
 
-                var attachmentFields = jQuery('.attachment-fields').last();
-                attachmentFields.children('.filename').children('.control-group').children('.controls').html(files[0].name + ' (' + plupload.formatSize(files[0].size) + ') <button id="file-'+files[0].id+'" data-fileid="'+files[0].id+'" class="close">&times; Remove Attachment</button>');
-
-                $('#file-' + files[0].id).click(function(){
-                    up.removeFile(up.getFile($(this).data('fileid')));
-                    $(this).parents('.attachment-fields').fadeOut(function(){
-                        $(this).remove();
+                    $('#file-' + files[0].id).click(function(){
+                        up.removeFile(up.getFile($(this).data('fileid')));
+                        $(this).parents('.attachment-fields').fadeOut(function(){
+                            $(this).remove();
+                        });
                     });
-                });
+                }else{
+                    attachment._id = files[0].id;
+                    scope.attachments.push(attachment);
+
+                    scope.$apply();
+
+                    attachmentFields = jQuery('.attachment-fields').last();
+                    attachmentFields.children('.filename').children('.control-group').children('.controls').html(files[0].name + ' (' + plupload.formatSize(files[0].size) + ') <button id="file-'+files[0].id+'" data-fileid="'+files[0].id+'" class="close">&times; Remove Attachment</button>');
+
+                    $('#file-' + files[0].id).click(function(){
+                        up.removeFile(up.getFile($(this).data('fileid')));
+                        $(this).parents('.attachment-fields').fadeOut(function(){
+                            $(this).remove();
+                        });
+                    });
+                }
             });
 
             uploader.bind('BeforeUpload', function(upload, file){
@@ -1184,8 +1199,15 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
                 var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
                     date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+                var attachments = [];
 
-                scope.attachments.forEach(function(attachment){
+                if(scope.newAttachments){
+                    attachments = scope.newAttachments.slice(0);
+                }else{
+                    attachments = scope.attachments.slice(0);
+                }
+
+                attachments.forEach(function(attachment){
                     if(file.id === attachment._id){
                         var title = attachment.title === '' ? 'This attachment doesn\'t have a title' : attachment.title;
                         var description = attachment.description === '' ? 'This attachment doesn\'t have a description' : attachment.description;
@@ -1457,14 +1479,17 @@ angular.module('bgc.directives').directive('removeAttachment', ['$http', functio
             elm.bind('click', function(){
                 // remove the attachment from the array of article attachments
                 scope.$parent.article.attachments.splice(scope.$parent.article.attachments.indexOf(scope.attachment._id), 1);
-                console.log(scope);
+                // remove the attachment from the array attached to the scope
+                scope.$parent.$parent.attachments.splice(scope.$parent.$parent.attachments.indexOf(scope.attachment._id), 1);
                 $http.delete('api/attachments/' + scope.attachment._id)
                     .success(function(){
                         // the article has to be updated as well
-                        //$http.put()
-                        elm.parents('.attachment-fields').fadeOut(function(){
-                            $(this).remove();
-                        });
+                        $http.put('api/admin/articles/' + scope.$parent.article._id, scope.$parent.article)
+                            .success(function(data, status){
+                                elm.parents('.attachment-fields').fadeOut(function(){
+                                    $(this).remove();
+                                });
+                            });
                     });
             });
         }

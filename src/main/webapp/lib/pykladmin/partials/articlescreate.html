@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="span9">
                     <div class="article-update grey-gradient">
-                        <ng-form name="editArticle" class="form-horizontal" novalidate>
+                        <form name="editArticle" class="form-horizontal" novalidate>
                             <div class="control-group">
                                 <label class="control-label" for="title">Title:</label>
                                 <div class="controls">
@@ -59,6 +59,29 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div ng-repeat="attachment in newAttachments">
+                                        <div class="attachment-fields">
+                                            <div class="filename">
+                                                <div class="control-group">
+                                                    <label class="control-label"></label>
+                                                    <div class="controls"><button remove-attachment attachment=attachment class="close">&times; Remove Attachment</button></div>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="attachment-title">Title:</label>
+                                                <div class="controls">
+                                                    <input type="text" ng-model="attachment.title" id="new-attachment-title" placeholder="Title" />
+                                                </div>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <label class="control-label" for="attachment-description">Description:</label>
+                                                <div class="controls">
+                                                    <textarea ng-model="attachment.description" id="new-attachment-description"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div id="attachment-list"></div>
@@ -80,7 +103,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </ng-form>
+                        </form>
                     </div>
                 </div>
 

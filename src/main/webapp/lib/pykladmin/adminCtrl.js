@@ -221,6 +221,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
     $rootScope.about = 'none';
     $scope.resetStatus = "none";
     $scope.attachments = [];
+    $scope.newAttachments = [];
     $scope.article = {};
     var resourceUrl = '';
 
@@ -275,7 +276,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         });
 
     $scope.save = function(article){
-        if($scope.attachments.length > 0){
+        if($scope.newAttachments.length > 0){
             $scope.$broadcast('saveArticle');
 
             $scope.$on('attachmentUploadComplete', function(){
