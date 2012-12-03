@@ -1018,7 +1018,7 @@ angular.module('bgc.directives').directive('areYouSure', function() {
     }
 });
 
-angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log', '$compile', '$timeout', function($http, $log, $compile, $q, $timeout){
+angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log', '$compile', '$window', function($http, $log, $compile, $q, $window){
     return {
         restrict: 'A',
         link: function(scope, elm, attrs){
@@ -1051,7 +1051,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 var attachment = {
                     title: '',
                     description: '',
-                    _id: ''
+                    _id: '',
+                    resourceId: ''
                 };
 
                 var attachmentFields;
@@ -1121,6 +1122,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
                 var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
                     date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
+
                 var attachments = [];
 
                 if(scope.newAttachments){
@@ -1150,11 +1152,12 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
                         $http.post('api/attachments', resource)
                             .success(function(data, status){
-                                scope.article.attachments.push(data.content._id);
+                                //scope.article.attachments.push(data.content._id);
+                                attachment.resourceId = data.content._id;
                                 $log.info('Successfully added to the attachment array: ' + data.content._id);
-                            });
 
-                        return;
+                                return;
+                            });
                     }
                 });
             });

@@ -457,36 +457,41 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     };
 
     function saveArticle(article){
-        $scope.newArticle = new Article(article);
+        var newArticle = new Article(article);
+
+        // loop through array of attachment objects and
+        $scope.attachments.forEach(function(attachment){
+            newArticle.attachments.push(attachment.resourceId);
+        });
 
         var date = new Date();
 
-        $scope.newArticle.lastModifiedDate = ISODateString(date);
-        $scope.newArticle.dateCreated = ISODateString(date);
+        newArticle.lastModifiedDate = ISODateString(date);
+        newArticle.dateCreated = ISODateString(date);
 
         var utc_timestamp = Date.UTC(date.getFullYear(),date.getMonth(), date.getDate() ,
             date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
 
-        $scope.newArticle.key = 'article-key-' + utc_timestamp;
+        newArticle.key = 'article-key-' + utc_timestamp;
 
-        $scope.newArticle.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
+        newArticle.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
 
         var thumbnail = /<\s*img [^\>]*src\s*=\s*(["\'])(.*?)\1/.exec(article.content);
 
         if(thumbnail){
-            $scope.newArticle.thumbnail = thumbnail[2];
+            newArticle.thumbnail = thumbnail[2];
         }else{
-            $scope.newArticle.thumbnail = 'images/row-of-columns.jpg'
+            newArticle.thumbnail = 'images/row-of-columns.jpg'
         }
 
-        $scope.newArticle.roles = ['ROLE_ANONYMOUS'];
+        newArticle.roles = ['ROLE_ANONYMOUS'];
 
         if(article.premium) {
-            $scope.newArticle.roles.push('ROLE_PREMIUM');
+            newArticle.roles.push('ROLE_PREMIUM');
             delete article.premium;
         }
 
-        $scope.newArticle.$save(
+        newArticle.$save(
             function(response){
                 $location.path('/content/view/' + response.content._id);
                 $log.info('ARTICLE SUCCESSFULLY SAVED!!!', 'STATUS CODE: ' + response.status);
