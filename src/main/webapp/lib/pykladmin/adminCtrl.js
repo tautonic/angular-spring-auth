@@ -86,7 +86,7 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
             if(terms === ''){
                 // we should check and see if any options for filtering by role
                 // have been selected
-                terms = 'verified candidate';
+                terms = 'verified candidate unverified';
             }
         }
     };
