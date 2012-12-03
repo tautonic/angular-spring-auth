@@ -1113,6 +1113,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
             });
 
             var content;
+            var fileAttachments = [];
 
             uploader.bind('FileUploaded', function(uploader, file, response){
                 content = scope.$eval("(" + response.response + ")");
@@ -1150,21 +1151,21 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                             rating: 0
                         };
 
-                        $http.post('api/attachments', resource)
-                            .success(function(data, status){
-                                //scope.article.attachments.push(data.content._id);
-                                attachment.resourceId = data.content._id;
-                                $log.info('Successfully added to the attachment array: ' + data.content._id);
-
-                                return;
-                            });
+                        fileAttachments.push(resource);
                     }
                 });
             });
 
-            uploader.bind('UploadComplete', function(){
-                $('.upload-progress').remove();
-                scope.$emit('attachmentUploadComplete');
+            uploader.bind('UploadComplete', function(uploader, files){
+                fileAttachments.forEach(function(attachment){
+                    $http.post('api/attachments', attachment)
+                        .success(function(data, status){
+                            scope.article.attachments.push(data.content._id);
+
+                            $('.upload-progress').remove();
+                            scope.$emit('attachmentUploadComplete');
+                        });
+                });
             });
 
             uploader.init();

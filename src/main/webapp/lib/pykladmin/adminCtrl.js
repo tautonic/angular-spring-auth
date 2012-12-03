@@ -455,11 +455,6 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     function saveArticle(article){
         var newArticle = new Article(article);
 
-        // loop through array of attachment objects and
-        $scope.attachments.forEach(function(attachment){
-            newArticle.attachments.push(attachment.resourceId);
-        });
-
         var date = new Date();
 
         newArticle.lastModifiedDate = ISODateString(date);
