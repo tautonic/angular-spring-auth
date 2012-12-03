@@ -2180,7 +2180,8 @@ li.search-result.members{
     cursor: pointer;
 }*/
 
-.attachment-fields .filename{
+.attachment-fields .filename,
+.new-attachment-fields .filename{
     font-weight: bold;
 }
 

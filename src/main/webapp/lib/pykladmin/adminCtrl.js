@@ -341,6 +341,14 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
                 $scope.article.taggable = tags;
             }
 
+            //update all old attachments related to this article
+            $scope.attachments.forEach(function(attachment){
+                $http.put('api/attachments/' + attachment._id, attachment)
+                    .success(function(data, status){
+                        $log.info('Attachment successfully updated!');
+                    });
+            });
+
             //$location.path('/content/view/' + article._id);
 
         }, function(response){

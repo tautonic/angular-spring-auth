@@ -1029,6 +1029,20 @@ app.get('/attachments', function(req){
     return _simpleHTTPRequest(opts);
 });
 
+app.put('/attachments/:id', function(req, id){
+    var opts = {
+        url: getZociaUrl(req) + '/resources/' + id,
+        method: 'PUT',
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc',
+            'Content-Type': 'application/json',
+            'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
+});
+
 app.del('/attachments/:id', function(req, id){
     var opts = {
         url: getZociaUrl(req) + '/resources/' + id,
