@@ -9,10 +9,6 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 
-    /*Profile.query(function(profiles){
-        $scope.profiles = profiles.content;
-    });*/
-
     $http.get('api/profiles/admin').
         success(function(data, status, headers, config){
             $log.info(data);
@@ -55,11 +51,11 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
 
         $http.post('api/profiles/admin/filter/', data)
             .success(function(response){
-                $log.info('Success! Search request was successful');
+                $log.info('Success! Profiles request was successful');
                 $scope.profiles = response.content;
             })
             .error(function(){
-                $log.info('Error! Search request was successful');
+                $log.info('Error! Profiles request was unsuccessful');
             });
 
         function filterByRole(){
@@ -72,7 +68,7 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
             terms = roles.join(' ');
 
             if(terms === ''){
-                // we should check and see of any options for filtering by status
+                // we should check and see if any options for filtering by status
                 // have been selected
                 terms = 'ROLE_USER ROLE_PREMIUM ROLE_EDITOR ROLE_ADMIN';
             }
@@ -88,9 +84,9 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
             terms = status.join(' ');
 
             if(terms === ''){
-                // we should check and see of any options for filtering by role
+                // we should check and see if any options for filtering by role
                 // have been selected
-                terms = 'verfied candidate';
+                terms = 'verified candidate';
             }
         }
     };
