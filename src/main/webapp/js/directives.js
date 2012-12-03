@@ -1068,7 +1068,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
                     $('#file-' + files[0].id).click(function(){
                         up.removeFile(up.getFile($(this).data('fileid')));
-                        $(this).parents('.attachment-fields').fadeOut(function(){
+                        $(this).closest('.new-attachment-fields').fadeOut(function(){
                             $(this).remove();
                         });
                     });
@@ -1083,7 +1083,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
 
                     $('#file-' + files[0].id).click(function(){
                         up.removeFile(up.getFile($(this).data('fileid')));
-                        $(this).parents('.attachment-fields').fadeOut(function(){
+                        $(this).closest('.attachment-fields').fadeOut(function(){
                             $(this).remove();
                         });
                     });
@@ -1407,13 +1407,16 @@ angular.module('bgc.directives').directive('removeAttachment', ['$http', functio
                 // remove the attachment from the array of article attachments
                 scope.$parent.article.attachments.splice(scope.$parent.article.attachments.indexOf(scope.attachment._id), 1);
                 // remove the attachment from the array attached to the scope
-                scope.$parent.$parent.attachments.splice(scope.$parent.$parent.attachments.indexOf(scope.attachment._id), 1);
+                //scope.$parent.$parent.attachments.splice(scope.$parent.$parent.attachments.indexOf(scope.attachment._id), 1);
                 $http.delete('api/attachments/' + scope.attachment._id)
                     .success(function(){
                         // the article has to be updated as well
                         $http.put('api/admin/articles/' + scope.$parent.article._id, scope.$parent.article)
                             .success(function(data, status){
-                                elm.parents('.attachment-fields').fadeOut(function(){
+                                elm.closest('.attachment-fields').fadeOut(function(){
+                                    $(this).remove();
+                                });
+                                elm.closest('.new-attachment-fields').fadeOut(function(){
                                     $(this).remove();
                                 });
                             });
