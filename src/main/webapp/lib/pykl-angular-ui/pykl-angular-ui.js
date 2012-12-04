@@ -38,9 +38,9 @@ var pykl = window.pykl || {};
      */
     angular.module('pykl-ui.directives').directive('imgUpload',
         ['pykl-ui.config', '$log', function (pyklConfig, $log) {
-            var overlay;
+            //var overlay;
 
-            var browseButton = angular.element('<button class="btn btn-success" id="pickfiles">Browse</button>');
+            /*var browseButton = angular.element('<button class="btn btn-success" id="pickfiles">Browse</button>');
 
             function addOverlay(elm) {
                 // The overlay will be absolutely positioned above the image element. In order
@@ -78,10 +78,10 @@ var pykl = window.pykl || {};
                     $log.info('On image load', opts);
                     overlay.css(opts);
                 });
-            }
+            }*/
 
             function updateOverlay(acceptDragAndDrop) {
-                if (acceptDragAndDrop) overlay.prepend('<h1>Drag and Drop or</h1>');
+                if (acceptDragAndDrop) $("#target").prepend('<h1>Drag and Drop or</h1>');
             }
 
             return {
@@ -103,7 +103,7 @@ var pykl = window.pykl || {};
 
                     }, pyklConfig.imgUpload, options);
 
-                    addOverlay(elm);
+                    //addOverlay(elm);
 
                     // Initialize the plupload upload library (http://www.plupload.com/documentation.php#configuration)
                     var uploader = new plupload.Uploader(options);

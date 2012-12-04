@@ -41,8 +41,8 @@
                 <label class="control-label">Image Upload:</label>
                 <div class="controls">
                     <div id="container" x-img-upload>
-                        <div id="target" style="width:100%; height:200px; border: 1px solid blue;"></div>
-                        <img class="imgUpload" src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
+                        <img ui-if="resource.thumbnail != undefined" class="imgUpload" src="{{resource.thumbnail}}"  alt="{{resource.title}}"/>
+                        <div id="target" class="overlay"><button class="btn btn-success" id="pickfiles">Browse</button></div>
                     </div>
                 </div>
 
