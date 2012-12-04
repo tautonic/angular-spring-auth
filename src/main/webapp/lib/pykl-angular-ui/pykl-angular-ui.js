@@ -169,6 +169,8 @@ var pykl = window.pykl || {};
 
                     uploader.bind('FileUploaded', function (up, file, response) {
                         $log.info('FileUploaded', arguments);
+                        // Update the model with the new URL
+                        ngModel.$setViewValue(file);
                     });
 
                     uploader.bind('UploadProgress', function (up, file) {
