@@ -2466,3 +2466,11 @@ li.search-result.members{
 .new-attachment-fields .close{
     font-size: 12px;
 }
+
+.contact-info {
+    margin-top: 5em;
+}
+
+.contact-info p {
+    margin-left: 20px;
+}
