@@ -11,6 +11,8 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
         $rootScope.about = 'network';
     });
 
+    $scope.loading = true;
+
     //$rootScope.showModal = false;
 
     $scope.showModal = false;
@@ -140,6 +142,7 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
 
     Profile.query(function(profiles){
         $scope.profiles = profiles.content;
+        $scope.loading = false;
     });
 }
 
