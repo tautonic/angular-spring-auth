@@ -2466,21 +2466,3 @@ li.search-result.members{
 .new-attachment-fields .close{
     font-size: 12px;
 }
-
-.modal.cms-edit {
-    width: 800px;
-    left: 40%;
-}
-
-.modal.cms-edit .form-horizontal .control-label {
-    width: 120px;
-}
-
-.modal.cms-edit .form-horizontal .controls {
-    margin-left: 160px;
-    margin-right: 20px;
-}
-
-.modal.cms-edit .form-horizontal .controls .mceLayout {
-    width: 100% !important;
-}
