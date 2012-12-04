@@ -85,11 +85,11 @@ var pykl = window.pykl || {};
             }
 
             function locateImage(elm) {
-                var img = $('img.imgUpload', elm).css('position', 'relative');
+                img = $('img.imgUpload', elm).css('position', 'relative');
 
                 // Once the image loads, we will know its positioning and size, so the overlay
                 // and panel can then be positioned.
-                img.load(function (e) {
+                if (img) img.load(function (e) {
                     var $this = $(this);
                     // todo: These calcs depend on top/bottom and left/right margins/padding/border being the same values
                     var imageTop = $this.position().top + (($this.outerHeight(true) - $this.height()) >> 1);
@@ -104,6 +104,8 @@ var pykl = window.pykl || {};
                         width: $this.width()
                     });
                 });
+
+                return img;
             }
 
             function initPlupload(features) {
@@ -116,6 +118,7 @@ var pykl = window.pykl || {};
 
             return {
                 restrict: 'A',
+                require: '?ngModel',
                 link: function (scope, elm, attrs, ngModel) {
                     var options = attrs.imgUpload ? scope.$eval(attrs.imgUpload) : {};
                     options = ng.extend({
@@ -136,10 +139,15 @@ var pykl = window.pykl || {};
                     // Locate the image tag within the directive scope that will be updated (hint: it
                     // contains the imgUpload class.
                     img = locateImage(elm);
+                    if (!img) {
+                        $log.warn('An <img> element with a class set to "imgUpload" must be included within the img-upload directive.');
+                        return;
+                    }
 
                     // The image's src is updated to the value stored in ngModel
+                    $log.info('Arguments to link:', arguments);
                     ngModel.$render = function() {
-                        img.src(ngModel.$viewValue || '');
+                        img.attr('src', ngModel.$viewValue || '');
                     };
 
                     // The overlay will be absolutely positioned above the image element. In order
@@ -170,7 +178,13 @@ var pykl = window.pykl || {};
                     uploader.bind('FileUploaded', function (up, file, response) {
                         $log.info('FileUploaded', arguments);
                         // Update the model with the new URL
-                        ngModel.$setViewValue(file);
+                        if (response.status == 200) {
+                            response = ng.fromJson(response.response);
+                            if (response.file && response.file.uri) {
+                                ngModel.$setViewValue(response.file.uri);
+                                $log.info('Updating model to new image src:', response.file.uri);
+                            }
+                        }
                     });
 
                     uploader.bind('UploadProgress', function (up, file) {
