@@ -142,6 +142,10 @@ angular.module( 'bgc.directives')
                     scope.$emit('togglePortrait');
                 };
 
+                scope.showAttachmentModal = function(){
+                    scope.$emit('showAttachmentModal', {});
+                }
+
                 if(attr.type === 'profile' || !attr.type){
                     scope.thumbnail.type = attr.type;
 
@@ -1425,3 +1429,14 @@ angular.module('bgc.directives').directive('removeAttachment', ['$http', functio
         }
     }
 }]);
+
+angular.module('bgc.directives').directive('attachmentModal', function(){
+    return {
+        restrict: 'A',
+        replace: true,
+        templateUrl: 'partials/article-attachment.html',
+        link: function(scope, elm, attrs){
+
+        }
+    }
+});

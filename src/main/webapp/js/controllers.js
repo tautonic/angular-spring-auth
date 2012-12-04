@@ -9,6 +9,29 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     $rootScope.content_query = '';
     $rootScope.discussion_query = '';
 
+    $scope.$on('showAttachmentModal', function(args){
+        $http.get('api/attachments/' + args.targetScope.thumb.attachments[0])
+            .success(function(data, status){
+                //$scope.modal = data.content;
+                $scope.modal = {
+                    document: {
+                        title: data.content.title,
+                        description: data.content.description,
+                        url: 'http://docs.google.com/viewer?url=http:' + data.content.uri + '&embedded=true',
+                        directLink: "http:" + data.content.uri,
+                        doctype: data.content.doctype,
+                        author: data.content.author,
+                        dateCreated: data.content.dateCreated
+                    }
+                }
+            });
+        $scope.showModal = true;
+    });
+
+    $scope.toggleModal = function(show){
+        $scope.showModal = show;
+    }
+
     $http.get("api/utility/getquote").success(function(data) {
         $scope.quote = data.quote;
     });
