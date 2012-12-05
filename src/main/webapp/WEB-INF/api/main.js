@@ -1125,6 +1125,10 @@ app.post('/utility/like/:id', function(req, id) {
 
 //checks to see if a user has already liked this particular object, if so, returns true, otherwise, returns false
 app.get('/utility/like/:id', function(req, id) {
+    if(!req.auth.isAuthenticated) {
+        return json(false);
+    }
+
     var opts = {
         url: getZociaUrl(req) + "/likes/" + req.auth.principal.id + "/" + id,
         method: 'GET',
@@ -1580,7 +1584,7 @@ app.put('/admin/users', function(req) {
         "workHistory" : req.postParams.workHistory
     };*/
 
-    var data = req.postParams
+    var data = req.postParams;
 
     var opts = {
         url: getZociaUrl(req) + '/profiles/' + req.postParams._id,
@@ -1624,19 +1628,6 @@ function _simpleHTTPRequest(opts) {
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    //result.status = exchange.status;
-
-    /*var result = json({
-        'status': profileExchange.status,
-        'content': profiles,
-        'headers': profileExchange.headers,
-        'success': Math.floor(profileExchange.status / 100) === 2
-    });
-
-    result.status = profileExchange.status;*/
-
-    //return result;
 }
 
 function setUserDetails(thumbnail){
