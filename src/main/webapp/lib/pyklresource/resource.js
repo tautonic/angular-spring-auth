@@ -4,6 +4,29 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     var category = $routeParams.service || '';
     var tagFilter = '';
 
+    $scope.$on('showAttachmentModal', function(args){
+        $http.get('api/attachments/' + args.targetScope.thumb.attachments[0])
+            .success(function(data, status){
+                //$scope.modal = data.content;
+                $scope.modal = {
+                    document: {
+                        title: data.content.title,
+                        description: data.content.description,
+                        url: 'http://docs.google.com/viewer?url=http:' + data.content.uri + '&embedded=true',
+                        directLink: "http:" + data.content.uri,
+                        doctype: data.content.doctype,
+                        author: data.content.author,
+                        dateCreated: data.content.dateCreated
+                    }
+                }
+            });
+        $scope.showModal = true;
+    });
+
+    $scope.toggleModal = function(show){
+        $scope.showModal = show;
+    }
+
     $scope.tabs = {
         featured: true,
         recent: false,

@@ -7,12 +7,28 @@
                 <!--<div class="premium" ng-show="thumb.premium"></div>-->
             </div>
 
-            <a ng-href="#/content/view/{{thumb._id}}">
+            <!--<a ng-href="#/content/view/{{thumb._id}}">
                 <div read-more-hover class="read-more gradient">
                     <p>{{thumbnail.text}}</p>
                     <div class="preview-lens"></div>
                 </div>
-            </a>
+            </a>-->
+            <div ui-if="thumb.attachments.length>0">
+                <a ng-click="showAttachmentModal()">
+                    <div read-more-hover class="read-more gradient">
+                        <p>Preview</p>
+                        <div class="preview-lens"></div>
+                    </div>
+                </a>
+            </div>
+            <div ui-if="thumb.attachments.length==0">
+                <a ng-href="#/content/view/{{thumb._id}}">
+                    <div read-more-hover class="read-more gradient">
+                        <p>Read More</p>
+                        <div class="read-more-arrow"></div>
+                    </div>
+                </a>
+            </div>
         </div>
 
         <div ng-switch-when="article">
@@ -22,12 +38,22 @@
                 <!--<div class="premium" ng-show="thumb.premium"></div>-->
             </div>
 
-            <a ng-href="#/content/view/{{thumb._id}}">
-                <div read-more-hover class="read-more gradient">
-                    <p>{{thumbnail.text}}</p>
-                    <div class="read-more-arrow"></div>
-                </div>
-            </a>
+            <div ui-if="thumb.attachments.length>0">
+                <a ng-click="showAttachmentModal()">
+                    <div read-more-hover class="read-more gradient">
+                        <p>Preview</p>
+                        <div class="preview-lens"></div>
+                    </div>
+                </a>
+            </div>
+            <div ui-if="thumb.attachments.length==0">
+                <a ng-href="#/content/view/{{thumb._id}}">
+                    <div read-more-hover class="read-more gradient">
+                        <p>Read More</p>
+                        <div class="read-more-arrow"></div>
+                    </div>
+                </a>
+            </div>
         </div>
 
         <div ng-switch-default>
