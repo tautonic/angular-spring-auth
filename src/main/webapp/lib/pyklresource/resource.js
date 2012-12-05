@@ -30,16 +30,19 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
 
     function loadAttachment() {
         var id = attachments[attachmentIndex];
-        $http.get( 'api/attachments/' + id ).success( function (data) {
+        $http.get( 'api/article/' + id ).success( function (data) {
+            var filesize = data.filesize === undefined ? 'Filesize unavailable' : data.filesize;
             $scope.modal = {
                 document: {
-                    title: data.content.title,
-                    description: data.content.description,
-                    url: 'http://docs.google.com/viewer?url=http:' + data.content.uri + '&embedded=true',
-                    directLink: "http:" + data.content.uri,
-                    doctype: data.content.doctype,
-                    author: data.content.author,
-                    dateCreated: data.content.dateCreated
+                    title: data.title,
+                    description: data.description,
+                    url: 'http://docs.google.com/viewer?url=http:' + data.uri + '&embedded=true',
+                    directLink: "http:" + data.uri,
+                    doctype: data.doctype,
+                    author: data.author,
+                    dateCreated: data.dateCreated,
+                    filename: data.name,
+                    filesize: filesize
                 }
             };
             $http.post("api/utility/view/" + id);
@@ -286,6 +289,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     function loadAttachment() {
         var id = $scope.article.attachments[attachmentIndex];
         $http.get( 'api/article/' + id ).success( function (data) {
+            var filesize = data.filesize === undefined ? 'Filesize unavailable' : data.filesize;
             $scope.modal = {
                 document: {
                     title: data.title,
@@ -294,7 +298,9 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
                     directLink: "http:" + data.uri,
                     doctype: data.doctype,
                     author: data.author,
-                    dateCreated: data.dateCreated
+                    dateCreated: data.dateCreated,
+                    filename: data.name,
+                    filesize: filesize
                 }
             };
             $http.post("api/utility/view/" + id);

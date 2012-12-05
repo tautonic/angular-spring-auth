@@ -1029,8 +1029,6 @@ app.post('/attachments', function(req){
 });
 
 app.get('/attachments', function(req){
-    log.info('Attachment request params {}', JSON.stringify(req.params, null, 4));
-
     var resourceUrl = req.params.ids.join('&ids[]=');
     resourceUrl = '?ids[]=' + resourceUrl;
 
