@@ -1429,14 +1429,3 @@ angular.module('bgc.directives').directive('removeAttachment', ['$http', functio
         }
     }
 }]);
-
-angular.module('bgc.directives').directive('attachmentModal', function(){
-    return {
-        restrict: 'A',
-        replace: true,
-        templateUrl: 'partials/article-attachment.html',
-        link: function(scope, elm, attrs){
-
-        }
-    }
-});
