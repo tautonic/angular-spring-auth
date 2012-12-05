@@ -6,6 +6,7 @@
                     <h3>{{modal.document.title}}</h3>
                     <p class="article-meta"><span class="doc-type {{modal.document.doctype}}"></span><strong>by {{modal.document.author}}, {{modal.document.dateCreated | asDate}}</strong></p>
                     <p class="description formatted">{{modal.document.description}}</p>
+                    <p><strong>{{modal.document.filename}}</strong> &nbsp; <i>{{modal.document.filesize}}</i></p>
                 </div>
                 <div class="span2">
                     <div class="btn-group-border">
@@ -53,7 +54,7 @@
 
                 <div class="article row" ng-repeat="article in articles">
                     <div class="span3">
-                        <div thumbnail thumb=article size="medium" text="Read More" type="article" />
+                        <div thumbnail thumb=article size="medium" text="Read More" type="article" auth=auth />
                     </div>
                     <div class="span5 content">
                         <h3><a ng-href="#/content/view/{{article._id}}">{{article.title}}</a></h3>

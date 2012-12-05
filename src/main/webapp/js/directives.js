@@ -1153,7 +1153,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                             likes: 0,
                             comments: 0,
                             rating: 0,
-                            name: file.name
+                            name: file.name,
+                            filesize: plupload.formatSize(file.size)
                         };
 
                         fileAttachments.push(resource);
