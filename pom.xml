@@ -206,6 +206,41 @@
                 </configuration>
             </plugin>
 
+            <!-- https://github.com/searls/jasmine-maven-plugin -->
+            <plugin>
+                <groupId>com.github.searls</groupId>
+                <artifactId>jasmine-maven-plugin</artifactId>
+                <version>1.2.0.0</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jsSrcDir>src/main/webapp</jsSrcDir>
+                    <sourceIncludes>
+                        <include>lib/angular/*.js</include>
+                        <include>lib/angularui/*.js</include>
+                        <include>lib/jquery-ui/*.js</include>
+                        <include>lib/*.js</include>
+                        <include>js/*.js</include>
+                    </sourceIncludes>
+                    <sourceExcludes>
+                        <exclude>src/main/webapp/WEB-INF</exclude>
+                    </sourceExcludes>
+                    <jsTestSrcDir>test</jsTestSrcDir>
+                    <specIncludes>
+                        <include>lib/*.js</include>
+                        <!-- not sure how to get this working just yet <include>e2e/*.js</include> -->
+                        <include>unit/*.js</include>
+                    </specIncludes>
+                    <!-- configuration properties will go here -->
+                </configuration>
+            </plugin>
+
         </plugins>
 
         <!-- Allow property substitution filtering on all files in src/main/resources -->
