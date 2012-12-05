@@ -4,28 +4,66 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     var category = $routeParams.service || '';
     var tagFilter = '';
 
+    var attachmentIndex = 0;
+    var attachments;
+
     $scope.$on('showAttachmentModal', function(args){
-        $http.get('api/attachments/' + args.targetScope.thumb.attachments[0])
-            .success(function(data, status){
-                //$scope.modal = data.content;
-                $scope.modal = {
-                    document: {
-                        title: data.content.title,
-                        description: data.content.description,
-                        url: 'http://docs.google.com/viewer?url=http:' + data.content.uri + '&embedded=true',
-                        directLink: "http:" + data.content.uri,
-                        doctype: data.content.doctype,
-                        author: data.content.author,
-                        dateCreated: data.content.dateCreated
-                    }
-                }
-            });
+        attachments = args.targetScope.thumb.attachments;
+        loadAttachment();
         $scope.showModal = true;
     });
 
-    $scope.toggleModal = function(show){
-        $scope.showModal = show;
+    $scope.toggleModal = function(value) {
+        $scope.showModal = value;
+        if(value) {
+            loadAttachment();
+        }
+    };
+
+    $scope.next = function() {
+        changeAttachmentIndex("inc");
+    };
+
+    $scope.previous = function() {
+        changeAttachmentIndex("dec");
+    };
+
+    function loadAttachment() {
+        var id = attachments[attachmentIndex];
+        $http.get( 'api/attachments/' + id ).success( function (data) {
+            $scope.modal = {
+                document: {
+                    title: data.content.title,
+                    description: data.content.description,
+                    url: 'http://docs.google.com/viewer?url=http:' + data.content.uri + '&embedded=true',
+                    directLink: "http:" + data.content.uri,
+                    doctype: data.content.doctype,
+                    author: data.content.author,
+                    dateCreated: data.content.dateCreated
+                }
+            };
+            $http.post("api/utility/view/" + id);
+        }).error(function(data, status) {
+                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+            });
     }
+
+    //we do this in a function so we can handle cases where it goes too far in one direction or another
+    function changeAttachmentIndex(direction) {
+        attachmentIndex += (direction === "inc") ? 1 : -1;
+
+        if(attachmentIndex >= attachments.length) {
+            attachmentIndex = 0;
+        } else if(attachmentIndex < 0) {
+            attachmentIndex = attachments.length - 1;
+        }
+
+        loadAttachment();
+    }
+
+    $scope.hasMoreThanAttachments = function(total) {
+        return (attachments && attachments.length > total);
+    };
 
     $scope.tabs = {
         featured: true,
