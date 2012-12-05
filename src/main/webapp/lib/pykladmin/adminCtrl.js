@@ -309,6 +309,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         delete article._score;
         delete article._type;
         delete article._version;
+        delete article.authorThumb;
 
         if(article.premium) {
             article.roles.push('ROLE_PREMIUM');
