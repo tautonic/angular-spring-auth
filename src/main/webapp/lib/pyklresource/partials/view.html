@@ -65,7 +65,7 @@
                 </div>
                 <div class="activity-stream-content">
                     <p class="author">by {{article.author}}, {{article.dateCreated | asDate}}</p>
-                    <div ui-if="hasMoreThanAttachments(0)">
+                    <div ui-if="( hasMoreThanAttachments(0) && auth.isAuthenticated )">
                         <p style="margin: 0 10px 10px;">This article has attachments. Preview them using the buttons below.</p>
                         <hr>
                         <!--<div class="tags">
@@ -77,6 +77,9 @@
                                 <button class="btn btn-success" ng-click="toggleModal(true)">Preview</button>
                             </div>
                         </div>
+                    </div>
+                    <div ui-if="!auth.isAuthenticated">
+                        <p style="margin: 0 10px 10px;">This article has attachments. <a ng-click="auth.requestLogin()">Log In</a> to view them.</p>
                     </div>
                 </div>
             </div>
