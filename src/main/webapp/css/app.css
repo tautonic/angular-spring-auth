@@ -2475,3 +2475,7 @@ li.search-result.members{
 .contact-info p {
     margin-left: 20px;
 }
+
+.profile.btn-group-border{
+    margin-top: 0;
+}
