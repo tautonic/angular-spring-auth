@@ -25,7 +25,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
 
     $scope.toggleModal = function(show){
         $scope.showModal = show;
-    }
+    };
 
     $scope.tabs = {
         featured: true,

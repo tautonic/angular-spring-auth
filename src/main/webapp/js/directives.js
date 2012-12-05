@@ -144,7 +144,7 @@ angular.module( 'bgc.directives')
 
                 scope.showAttachmentModal = function(){
                     scope.$emit('showAttachmentModal', {});
-                }
+                };
 
                 if(attr.type === 'profile' || !attr.type){
                     scope.thumbnail.type = attr.type;
