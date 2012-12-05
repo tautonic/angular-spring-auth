@@ -7,7 +7,7 @@
 <div when-scrolled="loadMore(searchTerm)" offset="92">
     <div class="article row" ng-repeat="article in articles">
         <div class="span2">
-            <div thumbnail thumb=article size="medium" text="Preview" type="content" />
+            <div thumbnail thumb=article size="medium" text="Preview" type="content" auth=auth />
         </div>
         <div class="span7 content">
             <h3><a ng-href="#/content/view/{{article._id}}">{{article.title}}</a></h3>

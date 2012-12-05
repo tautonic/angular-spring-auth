@@ -176,12 +176,14 @@ var pykl = window.pykl || {};
         function ($rootScope, $scope, $location, $log) {
             var referral;
 
+            //this performs the actual action of sending the user to the login page
+            //to send the user (safely) to the login page from somewhere outside of the login menu controller, use auth.requestLogin()
             function gotoLoginPage() {
                 referral = $location.path();
                 if((referral === '/login') || (referral === '/signup')) {
                     referral = '/home';
                 }
-                $location.path('login');
+                $location.path('/login');
             }
 
             $scope.callLoginPage = gotoLoginPage;
