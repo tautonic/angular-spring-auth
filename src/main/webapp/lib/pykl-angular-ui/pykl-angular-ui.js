@@ -5,8 +5,6 @@
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-var pykl = window.pykl || {};
-
 (function (window, ng, undefined) {
 
     'use strict';
@@ -145,8 +143,9 @@ var pykl = window.pykl || {};
                     }
 
                     // The image's src is updated to the value stored in ngModel
-                    $log.info('Arguments to link:', arguments);
+                    // todo: Why doesn't this get called when the model is changed in FileUploaded handler?
                     ngModel.$render = function() {
+                        $log.info('Received render call', arguments);
                         img.attr('src', ngModel.$viewValue || '');
                     };
 
@@ -181,7 +180,10 @@ var pykl = window.pykl || {};
                         if (response.status == 200) {
                             response = ng.fromJson(response.response);
                             if (response.file && response.file.uri) {
-                                ngModel.$setViewValue(response.file.uri);
+                                scope.$apply(function() {
+                                    ngModel.$setViewValue(response.file.uri);
+                                    img.attr('src', ngModel.$viewValue || '');
+                                });
                                 $log.info('Updating model to new image src:', response.file.uri);
                             }
                         }
