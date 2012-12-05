@@ -260,19 +260,23 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             $log.info("ARTICLE RETURNED: ",data);
             $scope.article = data;
             //$scope.attachments = $scope.article.attachments.slice(0);
-            resourceUrl = $scope.article.attachments.join('&ids[]=');
-            resourceUrl = '?ids[]=' + resourceUrl;
+            if($scope.article.attachments) {
+                resourceUrl = $scope.article.attachments.join('&ids[]=');
+                resourceUrl = '?ids[]=' + resourceUrl;
 
-            // we need to get the resources attached to this article for updating/removal as well
-            // /?ids[]=213&ids[]=783
-            $http.get('api/attachments/' + resourceUrl)
-                .success(function(data, status){
-                    $log.info(data);
-                    $scope.attachments = data.content.slice(0);
-                })
-                .error(function(data, status){
-                    $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
-                });
+                // we need to get the resources attached to this article for updating/removal as well
+                // /?ids[]=213&ids[]=783
+                $http.get('api/attachments/' + resourceUrl)
+                    .success(function(data, status){
+                        $log.info(data);
+                        $scope.attachments = data.content.slice(0);
+                    })
+                    .error(function(data, status){
+                        $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+                    });
+            } else {
+                $scope.article.attachments = [];
+            }
 
             var tags = [];
             if($scope.article.taggable){

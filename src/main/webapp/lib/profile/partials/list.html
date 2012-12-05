@@ -77,6 +77,9 @@
                         <div ng-repeat="profile in profiles">
                             <div ng-include="'lib/profile/partials/singleProfile.html'"></div>
                         </div>
+
+                        <div ng-show="(!loading) && (profiles.length == 0)" class="loader">No members found.</div>
+                        <div ng-show="loading" class="loader"><img src="images/ajax-loader.gif">Loading...</div>
                     </div>
                     <div class="span3">
                         <div class="search-box members">
