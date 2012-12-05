@@ -121,6 +121,22 @@ app.get('/article/:id', function(req, id) {
              article.content = article.content.replace(new RegExp("http://example.com/blog/article-title-"), newUrl.toString());*/
         }
 
+        // Before we pass the article on to angular, let's get the thumbnail of the author
+        var opts = {
+            url: getZociaUrl(req) + '/profiles/byusername/' + article.content.author,
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc',
+                'Content-Type': 'application/json'}),
+            async: false
+        };
+
+        var author = _simpleHTTPRequest(opts);
+        author = JSON.parse(author.body[0]);
+        if(author.content.thumbnail === 'profiles-0000-0000-0000-000000000001'){
+            author.content.thumbnail = 'images/GCEE_image_defaultMale.jpeg';
+        }
+        article.content.authorThumb = author.content.thumbnail;
+
         return json(article.content);
     } else {
         return {
@@ -1604,7 +1620,7 @@ function _simpleHTTPRequest(opts) {
 
     log.info('EXCHANGE STATUS!!! ', exchange.status);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
@@ -1622,7 +1638,7 @@ function _simpleHTTPRequest(opts) {
 
     result.status = profileExchange.status;*/
 
-    return result;
+    //return result;
 }
 
 function setUserDetails(thumbnail){

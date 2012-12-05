@@ -594,6 +594,7 @@ ul.dropdown-menu li:last-child a {
 .footer {
     background-color: #c4c4c4;
     padding: 10px 20px;
+    margin-top: 5em;
 }
 
 .footer h3, .footer p {
