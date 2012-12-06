@@ -220,29 +220,17 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jsSrcDir>src/main/webapp</jsSrcDir>
-                    <sourceIncludes>
-                        <include>lib/jquery-ui/js/*.js</include>
-                        <include>lib/angular/angular.min.js</include>
-                        <include>lib/angularui/*.js</include>
-                        <include>lib/bootstrap/js/bootstrap.min.js</include>
-                        <include>lib/*.js</include>
-                        <include>js/*.js</include>
-                    </sourceIncludes>
-                    <sourceExcludes>
-                        <exclude>src/main/webapp/WEB-INF</exclude>
-                    </sourceExcludes>
-                    <jsTestSrcDir>test</jsTestSrcDir>
+                    <preloadSources>
+                        <source>${project.basedir}/test/lib/jquery-1.8.3.js</source>
+                        <source>${project.basedir}/src/main/webapp/lib/angular/angular.js</source>
+                        <source>${project.basedir}/test/lib/angular/angular-mocks.js</source>
+                    </preloadSources>
                     <specIncludes>
-                        <!--<include>lib/jasmine/jasmine.js</include>-->
-                        <!--<include>lib/jasmine/jasmine-html.js</include>-->
-                        <!--<include>lib/jasmine/index.js</include>-->
-                        <include>lib/angular/angular-mocks.js</include>
-                        <include>lib/angular/angular-scenario.js</include>
-                        <!--<include>e2e/*.js</include>-->
-                        <include>unit/*.js</include>
+                        <include>${project.basedir}/test/lib/angular/angular-mocks.js</include>
+                        <include>**/*.js</include> <!-- This is catching your tests. -->
                     </specIncludes>
-                    <!-- configuration properties will go here -->
+                    <jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir>
+                    <jsTestSrcDir>${project.basedir}/test/unit</jsTestSrcDir>
                 </configuration>
             </plugin>
 
