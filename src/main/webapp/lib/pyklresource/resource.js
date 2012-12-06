@@ -278,6 +278,17 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
         $http.get( url ).success( function (data) {
             $log.info("ARTICLE RETURNED: ",data);
             $scope.article = data;
+            // add an attribute to the article that will
+            // contain the array of doctypes attached to the article
+            $scope.article.childDoctypes = [];
+            // loop through each article's attachments
+            $scope.article.attachments.forEach(function(attachment){
+                $http.get('api/article/' + attachment)
+                    .success(function(data, status){
+                        // add the attachment doctype to the array
+                        $scope.article.childDoctypes.push(data.doctype);
+                    });
+            });
             $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
             $http.post("api/utility/view/" + $scope.article._id);
         }).error(function(data, status) {
