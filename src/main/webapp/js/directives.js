@@ -1038,7 +1038,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
                 silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
                 filters:[
-                    {title : "Image files", extensions : "pdf,doc,ppt,txt,jpg,jpeg"},
+                    {title : "Image files", extensions : "pdf,doc,ppt,txt,jpg,jpeg,xls"},
                     {title:"Zip files", extensions:"zip"}
                 ]
             };
@@ -1169,9 +1169,10 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                             scope.article.attachments.push(data.content._id);
 
                             $('.upload-progress').remove();
-                            scope.$emit('attachmentUploadComplete');
                         });
                 });
+
+                scope.$emit('attachmentUploadComplete');
             });
 
             uploader.init();

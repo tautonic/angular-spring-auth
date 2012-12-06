@@ -448,7 +448,9 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         views: 0,
         rating: 0,
         attachments: [],
-        premium: false
+        premium: false,
+        mimetype: 'text/html',
+        category: ''
     };
 
     //dateCreated: "2011-01-17T23:07:32.000Z"
@@ -493,6 +495,10 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         if(article.premium) {
             newArticle.roles.push('ROLE_PREMIUM');
             delete article.premium;
+        }
+
+        if(newArticle.category === ''){
+            newArticle.category = 'curriculum';
         }
 
         newArticle.$save(

@@ -996,7 +996,7 @@ ul.dropdown-menu li:last-child a {
 span.doc-type {
     background-image: url('../images/GCEE_sprite.png');
     width: 32px;
-    height: 24px;
+    height: 25px;
     float: left;
 }
 
@@ -2478,4 +2478,10 @@ li.search-result.members{
 
 .profile.btn-group-border{
     margin-top: 0;
+}
+
+a.category{
+    text-decoration: none;
+    color: #999;
+    font-size: 14px;
 }

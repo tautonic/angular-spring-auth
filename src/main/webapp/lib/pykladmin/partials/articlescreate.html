@@ -20,9 +20,19 @@
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label" for="category">Category:</label>
+                                <label class="control-label">Category:</label>
                                 <div class="controls">
-                                    <input type="text" id="category" ng-model="article.category" placeholder="Category" />
+                                    <!--<input type="text" id="category" ng-model="article.category" placeholder="Category" />-->
+                                    <select ui-select2 data-placeholder="Choose a category" ng-model="article.category">
+                                        <option></option>
+                                        <option value="curriculum">Curriculum Advisory Services</option>
+                                        <option value="access">Access To Babson Curriculum</option>
+                                        <option value="facultydev">Faculty Development</option>
+                                        <option value="nextopp">Next Opportunity</option>
+                                        <option value="handbook">Handbook</option>
+                                        <option value="entrepreneurship">Entrepreneurship Center Development</option>
+                                        <option value="gceemsce">GCEE MSCE</option>
+                                    </select>
                                 </div>
                             </div>
 

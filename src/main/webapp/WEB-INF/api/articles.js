@@ -186,18 +186,21 @@ function getDocType(mimetype) {
             doctype = 'pdf';
             break;
         case 'application/msword':
+        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
             doctype = 'word';
             break;
         case 'application/mspowerpoint':
         case 'application/powerpoint':
         case 'application/vnd.ms-powerpoint':
         case 'application/x-mspowerpoint':
+        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
             doctype = 'ppt';
             break;
         case 'application/excel':
         case 'application/vnd.ms-excel':
         case 'application/x-excel':
         case 'application/x-msexcel':
+        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
             doctype = 'xls';
             break;
         case 'application/rtf':
@@ -227,13 +230,13 @@ function getPossibleMimetypes(doctype) {
             mimetypes = ['application/pdf'];
             break;
         case 'word':
-            mimetypes = ['application/msword'];
+            mimetypes = ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'];
             break;
         case 'ppt':
-            mimetypes = ['application/mspowerpoint', 'application/powerpoint', 'application/vnd.ms-powerpoint', 'application/x-mspowerpoint'];
+            mimetypes = ['application/vnd.openxmlformats-officedocument.presentationml.presentation','application/mspowerpoint', 'application/powerpoint', 'application/vnd.ms-powerpoint', 'application/x-mspowerpoint'];
             break;
         case 'xls':
-            mimetypes = ['application/excel', 'application/vnd.ms-excel', 'application/x-excel', 'application/x-msexcel'];
+            mimetypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/excel', 'application/vnd.ms-excel', 'application/x-excel', 'application/x-msexcel'];
             break;
         case 'rtf':
             mimetypes = ['application/rtf', 'application/x-rtf', 'text/richtext'];
