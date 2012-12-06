@@ -14,6 +14,13 @@
                             <a ng-href="{{modal.document.directLink}}" class="btn btn-success">Download</a>
                         </div>
                     </div>
+                    <br><br>
+                    <div ui-if="hasMoreThanAttachments(1)" class="btn-group-border">
+                        <div class="btn-group bgc paging">
+                            <button class="btn btn-success" ng-click="previous()"><div class="read-more-arrow read-less-arrow"></div></button>
+                            <button class="btn btn-success" ng-click="next()"><div class="read-more-arrow"></div></button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -59,13 +66,13 @@
                     <div class="span5 content">
                         <h3><a ng-href="#/content/view/{{article._id}}">{{article.title}}</a></h3>
                         <p class="article-meta"><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
-
                         <p class="article-brief">{{article.description}}</p>
                         <ul class="article-stats">
                             <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
                             <li class="muted"><i class="views"></i> {{article.views}} Views</li>
                             <li class="muted"><i class="comments"></i> {{article.comments}} Comments</li>
                         </ul>
+                        <a class="category" ng-href="#/content/service/{{article.category}}">Category: {{article.category | category}}</a>
                     </div>
                 </div>
                 <div class="article" ng-show="(articles.length == 0)">No news found.</div>

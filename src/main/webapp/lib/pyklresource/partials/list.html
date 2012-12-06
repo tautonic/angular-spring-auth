@@ -20,7 +20,9 @@
                 <li class="muted"><i class="likes"></i> {{article.likes | pluralize:'Like'}}</li>
                 <li class="muted"><i class="views"></i> {{article.views | pluralize:'View'}}</li>
                 <li class="muted"><i class="comments"></i> {{article.comments | pluralize:'Comment'}}</li>
+                <li class="muted"><a ng-href="#/content/service/{{article.category}}">Category: {{article.category | category}}</a></li>
             </ul>
+            <!--<p class="muted">Category: {{article.category | category}}</p>-->
         </div>
     </div>
     <div ng-show="(articles.length == 0)" class="loader">No articles found.</div>
