@@ -784,6 +784,7 @@ app.put('/profiles/:id', function(req, id){
     delete data._type;
     delete data._index;
     delete data._version;
+    delete data.followers;
 
     if(req.postParams.status === "unverified") {
         var servletRequest = req.env.servletRequest;
