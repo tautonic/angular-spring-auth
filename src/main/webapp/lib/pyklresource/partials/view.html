@@ -13,6 +13,13 @@
                             <a ng-href="{{modal.document.directLink}}" class="btn btn-success">Download</a>
                         </div>
                     </div>
+                    <br><br>
+                    <div ui-if="hasMoreThanAttachments(1)" class="btn-group-border">
+                        <div class="btn-group bgc paging">
+                            <button class="btn btn-success" ng-click="previous()"><div class="read-more-arrow read-less-arrow"></div></button>
+                            <button class="btn btn-success" ng-click="next()"><div class="read-more-arrow"></div></button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -42,12 +49,15 @@
         <div class="span9">
             <h3>{{article.title}}</h3>
             <p class="article-meta">
-                <span class="doc-type {{article.doctype}}"></span>
+                <!--<span class="doc-type {{article.doctype}}"></span>-->
+                <span ng-repeat="doctype in article.childDoctypes" class="doc-type {{doctype}}"></span>
                 <span class="premium" ui-if="article.premium"></span>
                 <div class="article-tweet-button" reload-twitter-btns>
                     <a href="https://twitter.com/share" data-url="{{url}}" data-text="Babson GC: {{article.title}}" class="twitter-share-button" data-lang="en">Tweet</a>
                 </div>
                 <span class="muted"><like objectid="{{article._id}}"></like> ({{article.likes}})</span>
+                <br>
+                <a class="category" ng-href="#/content/service/{{article.category}}">Category: {{article.category | category}}</a>
             </p>
             <div class="formatted" ng-bind-html-unsafe="article.description" ui-if="abstractVisible()"></div>
             <div class="formatted" ng-bind-html-unsafe="article.content"></div>
