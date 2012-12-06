@@ -78,6 +78,20 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     $http.get('api/article/all/news').success(function(data) {
         if(typeof(data) === "object") {
             $scope.articles = data;
+            // loop through the array of articles
+            $scope.articles.forEach(function(article){
+                // add an attribute to the article that will
+                // contain the array of doctypes attached to the article
+                article.childDoctypes = [];
+                // loop through each article's attachments
+                article.attachments.forEach(function(attachment){
+                    $http.get('api/article/' + attachment)
+                        .success(function(data, status){
+                            // add the attachment doctype to the array
+                            article.childDoctypes.push(data.doctype);
+                        });
+                });
+            });
         } else {
             $location.path('/maintenance');
         }
