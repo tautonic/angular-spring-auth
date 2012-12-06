@@ -65,7 +65,10 @@
                     </div>
                     <div class="span5 content">
                         <h3><a ng-href="#/content/view/{{article._id}}">{{article.title}}</a></h3>
-                        <p class="article-meta"><strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong></p>
+                        <p class="article-meta">
+                            <span ng-repeat="doctype in article.childDoctypes" class="doc-type {{doctype}}"></span>
+                            <strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong>
+                        </p>
                         <p class="article-brief">{{article.description}}</p>
                         <ul class="article-stats">
                             <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>

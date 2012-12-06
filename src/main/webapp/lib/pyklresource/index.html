@@ -13,6 +13,13 @@
                         <a ng-href="{{modal.document.directLink}}" class="btn btn-success">Download</a>
                     </div>
                 </div>
+                <br><br>
+                <div ui-if="hasMoreThanAttachments(1)" class="btn-group-border">
+                    <div class="btn-group bgc paging">
+                        <button class="btn btn-success" ng-click="previous()"><div class="read-more-arrow read-less-arrow"></div></button>
+                        <button class="btn btn-success" ng-click="next()"><div class="read-more-arrow"></div></button>
+                    </div>
+                </div>
             </div>
         </div>
 
