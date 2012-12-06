@@ -292,10 +292,16 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
 
     $scope.save = function(article){
         if($scope.newAttachments.length > 0){
+            var count = 1;
+
             $scope.$broadcast('saveArticle');
 
             $scope.$on('attachmentUploadComplete', function(){
-                saveArticle(article);
+                if($scope.newAttachments.length == count){
+                    saveArticle(article);
+                }else{
+                    count++;
+                }
             });
         }else{
             saveArticle(article);
@@ -372,8 +378,8 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
     function generateDescription(content){
         var result = content;
         var resultArray = result.split(" ");
-        if(resultArray.length > 40){
-            resultArray = resultArray.slice(0, 40);
+        if(resultArray.length > 30){
+            resultArray = resultArray.slice(0, 30);
             result = resultArray.join(" ") + " ...";
         }
         return result;
@@ -457,10 +463,16 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
 
     $scope.save = function(article){
         if($scope.attachments.length > 0){
+            var count = 1;
+
             $scope.$broadcast('saveArticle');
 
             $scope.$on('attachmentUploadComplete', function(){
-                saveArticle(article);
+                if($scope.attachments.length == count){
+                    saveArticle(article);
+                }else{
+                    count++;
+                }
             });
         }else{
             saveArticle(article);
@@ -529,8 +541,8 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     function generateDescription(content){
         var result = content;
         var resultArray = result.split(" ");
-        if(resultArray.length > 40){
-            resultArray = resultArray.slice(0, 40);
+        if(resultArray.length > 30){
+            resultArray = resultArray.slice(0, 30);
             result = resultArray.join(" ") + " ...";
         }
         return result;
