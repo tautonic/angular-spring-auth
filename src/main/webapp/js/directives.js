@@ -319,6 +319,8 @@ angular.module('bgc.directives')
 
             options = scope.$eval(attrs.pyklProfileImageUpload);
 
+            // from this point onward, access to the scope object is only available
+            // by adding it as a property to this config object
             var config = {
                 scope: scope,
                 runtimes: 'html5, flash, silverlight, browserplus',
@@ -334,6 +336,8 @@ angular.module('bgc.directives')
                     {title:"Zip files", extensions:"zip"}
                 ]
             };
+
+            var scope = config.scope;
 
             if (attrs.pyklProfileImageUpload) {
                 if (options.dropTarget) {
@@ -451,24 +455,23 @@ angular.module('bgc.directives')
 
                 $('#image-crop').Jcrop({
                     bgColor: '#fff',
-                    //onChange: showPreview,
+                    onChange: showPreview,
                     //onSelect: showPreview,
                     aspectRatio: 1
                 }, function(){
                     jcropApi = this;
                 });
 
-                /*function showPreview(coords){
-                    var rx = 135 / coords.w;
-                    var ry = 135 / coords.h;
-
-                    $('#crop-preview').css({
-                        width: Math.round(rx * width) + 'px',
-                        height: Math.round(ry * height) + 'px',
-                        marginLeft: '-' + Math.round(rx * coords.x) + 'px',
-                        marginTop: '-' + Math.round(ry * coords.y) + 'px'
-                    });
-                }*/
+                function showPreview(coords){
+                    console.log('Crop width: ' + coords.w);
+                    if(coords.w > 50){
+                        scope.cropDisabled = false;
+                        scope.$apply();
+                    }else{
+                        scope.cropDisabled = true;
+                        scope.$apply();
+                    }
+                }
             });
 
             uploader.init();

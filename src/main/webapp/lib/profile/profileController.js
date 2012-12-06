@@ -149,6 +149,7 @@ function listProfiles($rootScope, $scope, $location, $http, Profile, $window){
 function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $http, Profile, $auth, $log){
     $scope.profile = {};
     $scope.master = {};
+    $scope.cropDisabled = true;
 
     $scope.editing = {
         contact: false,
