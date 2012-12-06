@@ -1167,12 +1167,10 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                     $http.post('api/attachments', attachment)
                         .success(function(data, status){
                             scope.article.attachments.push(data.content._id);
-
+                            scope.$emit('attachmentUploadComplete');
                             $('.upload-progress').remove();
                         });
                 });
-
-                scope.$emit('attachmentUploadComplete');
             });
 
             uploader.init();
