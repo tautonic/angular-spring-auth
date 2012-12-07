@@ -800,36 +800,53 @@ angular.module('bgc.directives').directive('streamItem', ['$http',
 angular.module('bgc.directives').directive('discussionStack', ['$compile', function($compile){
     'use strict';
     return {
-        link: function(scope, element, attrs){
-            var top = 4;
-            var left = 5;
-            var zIndex = -1;
-            var height = element.height() - element.css('margin-bottom').replace('px', '');
-            //var height = element.height();
-            height -= 21;
+        scope: {
+            discussion: '=',
+            last: '='
+        },
+        compile: function compile(element, attrs){
+            var commentCount = [];
+            return function (scope, element, attrs){
+                var index;
+                var top = 5;
+                var left = 5;
+                var zIndex = -1;
+                var height;
 
-            attrs.$observe('comments', function(value){
-                var stacks = Math.floor(value/5);
+                commentCount.push(scope.discussion.commentCount);
 
-                for(var i=0; i < stacks; i++){
-                    var div = document.createElement('div');
-                    div = jQuery(div);
-                    div.addClass('discussion-item discussion-stack-div grey-gradient');
-                    div.css({
-                        'width': element.css('width'),
-                        'height': height,
-                        'top': top,
-                        'left': left,
-                        'z-index': zIndex
+                if(scope.last){
+                    $('.discussion-item').each(function(index, elm){
+                        var stacks = Math.floor(commentCount[index]/5);
+
+                        for(var i=0; i < stacks; i++){
+                            var div = document.createElement('div');
+                            div = jQuery(div);
+                            div.addClass('discussion-item discussion-stack-div grey-gradient');
+
+                            if(index === $('.discussion-stack-container').length - 1){
+                                height = $(this).innerHeight() - 28;
+                            }else{
+                                height = $(this).innerHeight() - 8;
+                            }
+
+                            div.css({
+                                'width': $(this).css('width'),
+                                'height': height,
+                                'top': top,
+                                'left': left,
+                                'z-index': zIndex
+                            });
+
+                            $(this).parent('.discussion-stack-container').append(div);
+
+                            top += 5;
+                            left += 5;
+                            zIndex -= 1;
+                        }
                     });
-
-                    element.parent('.discussion-stack-container').append($compile(div)(scope));
-
-                    top += 4;
-                    left += 4;
-                    zIndex -= 1;
                 }
-            });
+            }
         }
     }
 }]);
