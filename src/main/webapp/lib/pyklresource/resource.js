@@ -7,6 +7,16 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     var attachmentIndex = 0;
     var attachments;
 
+    $scope.categories = {
+        'curriculum': {count: 0},
+        'access': {count: 0},
+        'facultydev': {count: 0},
+        'nextopp': {count: 0},
+        'handbook': {count: 0},
+        'entrepreneurship': {count: 0},
+        'gceemsce': {count: 0}
+    };
+
     $scope.$on('showAttachmentModal', function(args){
         attachments = args.targetScope.thumb.attachments;
         loadAttachment();
@@ -135,6 +145,16 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         }).error(function(data, status) {
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
+
+        // get article category facets to display article counts in each category
+        $http.get('api/facets/article')
+            .success(function(data, status){
+                $scope.totalCount = data.content.facets.category.total;
+                //data.content.facets.category.terms.
+                data.content.facets.category.terms.forEach(function(term){
+                    $scope.categories[term.term].count = term.count;
+                });
+            });
     }
 
     $scope.filterByTag = function(tag) {

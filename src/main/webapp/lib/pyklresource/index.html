@@ -58,14 +58,14 @@
                     <h4>SERVICES & PROGRAMS</h4>
                 </div>
                 <ul class="secondary-nav-options">
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/'}" ng-href="#/content/">All Articles</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/curriculum'}" ng-href="#/content/service/curriculum">Curriculum Advisory Services</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/access'}" ng-href="#/content/service/access">Access to Babson Curriculum</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/facultydev'}" ng-href="#/content/service/facultydev">Faculty Development</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/nextopp'}" ng-href="#/content/service/nextopp">Next Opportunity</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/handbook'}" ng-href="#/content/service/handbook">Handbook</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/entrepreneurship'}" ng-href="#/content/service/entrepreneurship">Entrepreneurship Center Development</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/gceemsce'}" ng-href="#/content/service/gceemsce">GCEE MSCE</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/'}" ng-href="">All Articles ({{totalCount}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/curriculum'}" ng-href="#/content/service/curriculum">Curriculum Advisory Services ({{categories['curriculum'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/access'}" ng-href="#/content/service/access">Access to Babson Curriculum ({{categories['access'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/facultydev'}" ng-href="#/content/service/facultydev">Faculty Development ({{categories['facultydev'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/nextopp'}" ng-href="#/content/service/nextopp">Next Opportunity ({{categories['nextopp'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/handbook'}" ng-href="#/content/service/handbook">Handbook ({{categories['handbook'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/entrepreneurship'}" ng-href="#/content/service/entrepreneurship">Entrepreneurship Center<br>Development ({{categories['entrepreneurship'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/gceemsce'}" ng-href="#/content/service/gceemsce">GCEE MSCE ({{categories['gceemsce'].count}})</a></li>
                     <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/contact'}" ng-href="#/content/service/contact">Contact Information</a></li>
                 </ul>
 
