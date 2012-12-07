@@ -1,23 +1,23 @@
 <div id="discussions" class="container">
     <div class="row">
         <div class="span8" when-scrolled="loadMore()" offset="37">
-            <div ng-repeat="post in discussion">
-                <div class="discussion-stack-container" ui-if="!post.hidden">
-                    <div discussion-stack comments={{post.commentCount}} class="discussion-item grey-gradient">
+            <div ng-repeat="discussion in discussions">
+                <div class="discussion-stack-container" ui-if="!discussion.hidden">
+                    <div discussion-stack last=$last discussion=discussion class="discussion-item grey-gradient">
 
-                        <a ng-href="{{post.link}}" class="author"><h4>{{post.title}}</h4></a>
-                        <h6>By <a ng-href="#/profiles/view/{{post.creator._id}}" class="author">{{post.creator.username}}</a>, {{post.dateCreated | asDate: 'fullDate'}}</h6>
-                        <p class="muted" ui-if="post.linkedItem.exists"><strong>Document:</strong> <a href="#/content/view/{{post.linkedItem._id}}" class="author">{{post.linkedItem.title}}</a></p>
+                        <a ng-href="{{discussion.link}}" class="author"><h4>{{discussion.title}}</h4></a>
+                        <h6>By <a ng-href="#/profiles/view/{{discussion.creator._id}}" class="author">{{discussion.creator.username}}</a>, {{discussion.dateCreated | asDate: 'fullDate'}}</h6>
+                        <p class="muted" ui-if="discussion.linkedItem.exists"><strong>Document:</strong> <a href="#/content/view/{{discussion.linkedItem._id}}" class="author">{{discussion.linkedItem.title}}</a></p>
 
                         <ul class="article-stats">
-                            <li class="muted"><i class="likes"></i> {{post.likes | pluralize:'Like'}}</li>
-                            <li class="muted"><i class="views"></i> {{post.views | pluralize:'View'}}</li>
-                            <li class="muted"><i class="comments"></i> {{post.commentCount | pluralize:'Comment'}}</li>
-                            <li class="muted"><spam objectid="{{post._id}}"></spam></li>
+                            <li class="muted"><i class="likes"></i> {{discussion.likes | pluralize:'Like'}}</li>
+                            <li class="muted"><i class="views"></i> {{discussion.views | pluralize:'View'}}</li>
+                            <li class="muted"><i class="comments"></i> {{discussion.commentCount | pluralize:'Comment'}}</li>
+                            <li class="muted"><spam objectid="{{discussion._id}}"></spam></li>
                         </ul>
                     </div>
 
-                    <div ui-if="post.linkedItem.exists">
+                    <div ui-if="discussion.linkedItem.exists">
                         <div class="paper-clip"></div>
                         <div class="attached-doc">
                             <div class="new-picture-frame small content-thumbnail">
@@ -27,11 +27,11 @@
                     </div>
                 </div>
 
-                <div class="discussion-post discussion-item grey-gradient" ui-if="post.hidden">
+                <div class="discussion-post discussion-item grey-gradient" ui-if="discussion.hidden">
                     <p class="spammed">This discussion has been flagged as spam.</p>
                     <ul class="article-stats">
-                        <li class="muted"><spam objectid="{{post._id}}"></spam></li>
-                        <li class="muted"><i class="comments"></i><a ng-href="#/network/discussion/view/{{post._id}}">Show Discussion</a></li>
+                        <li class="muted"><spam objectid="{{discussion._id}}"></spam></li>
+                        <li class="muted"><i class="comments"></i><a ng-href="#/network/discussion/view/{{discussion._id}}">Show Discussion</a></li>
                     </ul>
                 </div>
 
