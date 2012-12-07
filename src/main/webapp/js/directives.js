@@ -442,6 +442,8 @@ angular.module('bgc.directives')
                 $('.profile-crop-preview').hide();
             });
 
+            var initialCrop = true;
+
             uploader.bind('UploadComplete', function(uploader, file){
                 //$('#image-crop').attr('src', url);
                 $('.upload-progress').remove();
@@ -456,14 +458,22 @@ angular.module('bgc.directives')
                 $('#image-crop').Jcrop({
                     bgColor: '#fff',
                     onChange: showPreview,
-                    //onSelect: showPreview,
                     aspectRatio: 1
                 }, function(){
                     jcropApi = this;
+                    var cropDimensions = Math.min(parseInt($('.jcrop-holder img').width()), parseInt($('.jcrop-holder img').height()));
+
+                    var distanceToCropCenter = Math.floor(cropDimensions/2);
+                    var distanceToImageCenter = Math.floor($('.jcrop-holder img').width()/2);
+
+                    var shiftCropToCenter = Math.abs(distanceToCropCenter - distanceToImageCenter);
+
+                    jcropApi.setSelect([shiftCropToCenter, 0, cropDimensions, cropDimensions]);
+                    scope.cropDisabled = false;
+                    scope.$apply();
                 });
 
                 function showPreview(coords){
-                    console.log('Crop width: ' + coords.w);
                     if(coords.w > 50){
                         scope.cropDisabled = false;
                         scope.$apply();
