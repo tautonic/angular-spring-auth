@@ -1017,6 +1017,17 @@ app.get('/profiles/images/', function(req, id){
     }
 });
 
+app.get('/facets/:format', function(req, format){
+    var opts = {
+        url: getZociaUrl(req) + '/resources/facets/' + format,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
+});
+
 app.post('/attachments', function(req){
     var opts = {
         url: getZociaUrl(req) + '/resources/',
