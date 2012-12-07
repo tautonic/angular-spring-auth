@@ -328,7 +328,8 @@ angular.module('bgc.directives')
                 container: 'update',
                 url: 'api/profiles/images/upload/',
                 max_file_size:'100mb',
-                resize:{"width":'100%', "quality":90},
+                multi_selection:false,
+                resize:{"width":650, "quality":90},
                 flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
                 silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
                 filters:[
