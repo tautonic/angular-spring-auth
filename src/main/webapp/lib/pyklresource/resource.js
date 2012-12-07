@@ -150,7 +150,6 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $http.get('api/facets/article')
             .success(function(data, status){
                 $scope.totalCount = data.content.facets.category.total;
-                //data.content.facets.category.terms.
                 data.content.facets.category.terms.forEach(function(term){
                     $scope.categories[term.term].count = term.count;
                 });
