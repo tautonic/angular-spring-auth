@@ -225,11 +225,16 @@
                         <source>${project.basedir}/src/main/webapp/lib/angular/angular.js</source>
                         <source>${project.basedir}/test/lib/angular/angular-mocks.js</source>
                     </preloadSources>
+                    <sourceIncludes>
+                        <include>js/*.js</include>
+                        <include>lib/pyklsecurity/*.js</include>
+                        <include>lib/pykldiscuss/*.js</include>
+                    </sourceIncludes>
                     <specIncludes>
                         <include>${project.basedir}/test/lib/angular/angular-mocks.js</include>
                         <include>**/*.js</include> <!-- This is catching your tests. -->
                     </specIncludes>
-                    <jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir>
+                    <jsSrcDir>${project.basedir}/src/main/webapp</jsSrcDir>
                     <jsTestSrcDir>${project.basedir}/test/unit</jsTestSrcDir>
                 </configuration>
             </plugin>

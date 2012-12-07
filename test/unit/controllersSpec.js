@@ -1,25 +1,56 @@
 'use strict';
-describe("A suite", function() {
-    it("contains spec with an expectation", function() {
-        expect(true).toBe(true);
-    });
-});
+
 /* jasmine specs for controllers go here */
-/***
+
 describe('Babson GC Controllers', function(){
     beforeEach(function(){
         this.addMatchers({
             toEqualData: function(expected){
-                return equals(this.actual, expected);
+                return (this.actual== expected);
             }
         })
     });
 
-    beforeEach(angular.module('bgc.services'));
+    var $httpBackend, $auth, $rootScope, user;
+
+    beforeEach(function() {
+        angular.module('bgc.services');
+        angular.module('pykl.security'); //this allows for injecting $auth service
+
+        inject(function ($injector) {
+            $httpBackend = $injector.get('$httpBackend');
+            $rootScope = $injector.get('$rootScope');
+
+            //response from the auth server
+            $httpBackend.whenGET('api/auth')
+                .respond(
+                {
+                    username:'example@user.com',
+                    isAuthenticated:true,
+                    roles:['role_user', 'role_premium'],
+                    verify:true
+                }
+            );
+
+            $auth = $injector.get('$auth');
+            user = $injector.get('user');
+
+        });
+    });
+
+    /*beforeEach(function () {
+        $auth.refresh();
+        $httpBackend.flush();
+    });*/
+
+    afterEach(function () {
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+    });
 
     /*************************
      * Discussion controller *
-     *************************//*
+     *************************/
     describe('DiscussionCtrlTest', function() {
         var scope, $httpBackend, $controller, defaultParams;
 
@@ -47,7 +78,7 @@ describe('Babson GC Controllers', function(){
             scope = $rootScope.$new();
             $httpBackend = _$httpBackend_;
 
-            $httpBackend.when('GET', 'api/discussions/all').respond(
+            $httpBackend.when('GET', 'api/discussions/all?from=0size=10').respond(
                 {
                     content: [
                         {
@@ -158,8 +189,8 @@ describe('Babson GC Controllers', function(){
             $httpBackend.verifyNoOutstandingRequest();
         });
 
-        it('should return a list of discussions ', function() {
-            $controller(DiscussionCtrl, defaultParams);
+        /*it('should return a list of discussions ', function() {
+            $controller(ListDiscussions, defaultParams);
             expect(scope.discussion).toBeUndefined();
             $httpBackend.flush();
 
@@ -207,12 +238,12 @@ describe('Babson GC Controllers', function(){
                     ]
                 });
 
-            expect(scope.pageType).toEqual("all");
-        });
+            expect(scope.isLoaded).toEqual(true);
+        });  */
 
-        it('should return a single threaded discussion ', function() {
+        /*it('should return a single threaded discussion ', function() {
             defaultParams.$routeParams = { "discussionId": "1" };
-            $controller(DiscussionCtrl, defaultParams);
+            $controller(ViewDiscussion, defaultParams);
 
             expect(scope.discussion).toBeUndefined();
             $httpBackend.flush();
@@ -245,7 +276,7 @@ describe('Babson GC Controllers', function(){
 
         it('should post a reply to a single threaded discussion ', function() {
             defaultParams.$routeParams = { "discussionId": "1" };
-            $controller(DiscussionCtrl, defaultParams);
+            $controller(ViewDiscussion, defaultParams);
 
             expect(scope.discussion).toBeUndefined();
             $httpBackend.flush();
@@ -300,13 +331,14 @@ describe('Babson GC Controllers', function(){
                     }]
                 }
             );
-        });
+        });    */
 
         it('should be on a new post page and then create the post ', function() {
             defaultParams.$routeParams = { "discussionId": "new" };
-            $controller(DiscussionCtrl, defaultParams);
+            $controller(NewDiscussion, defaultParams);
 
-            expect(scope.pageType).toEqual("new");
+            expect(scope.hide).toBeFalsy();
+
             expect(scope.reply).toEqualData({
                 show: false,
                 title: '',
@@ -326,8 +358,8 @@ describe('Babson GC Controllers', function(){
 
     /**********************
      * Profile controller *
-     **********************/ /*
-
+     **********************/
+    /*
     describe('ProfileCtrl', function(){
         var scope, $httpBackend, $controller;
 
@@ -535,6 +567,5 @@ describe('Babson GC Controllers', function(){
             expect(scope.isEditMode).toBeFalsy();
             expect(scope.isCreateMode).toBeFalsy();
         });
-    });
+    }); */
 });
-    */

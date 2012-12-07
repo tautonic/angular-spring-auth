@@ -94,6 +94,7 @@ var pykl = window.pykl || {};
         // Return the service onject for direct invocations
         var result = {
             isUserInRole: isUserInRole,
+            refresh: getAuth,
             event:{
                 signinRequired:EVENT_SIGNIN_REQUIRED,
                 signinRequest:EVENT_SIGNIN_REQUEST,

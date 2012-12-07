@@ -243,7 +243,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $locatio
             return false;
         }
 
-        return (post.creator._id == $auth.id);
+        return (post.creator._id == $rootScope.auth.id);
     };
 
     $scope.edit = function (post) {
