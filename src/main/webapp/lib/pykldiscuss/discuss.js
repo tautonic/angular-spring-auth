@@ -34,9 +34,9 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
         }
         $http.get(url).success(function (data) {
             if (data !== "false") {
-                $scope.discussion = data;
+                $scope.discussions = data;
                 $scope.isLoaded = true;
-                if($scope.discussion.length < $scope.paging.size) {
+                if($scope.discussions.length < $scope.paging.size) {
                     $scope.paging.more = false;
                 }
             } else {
@@ -52,7 +52,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
     };
 
     $scope.noDiscussions = function () {
-        return (($scope.discussion) && ($scope.discussion.length === 0));
+        return (($scope.discussions) && ($scope.discussions.length === 0));
     };
 
     //hides posts that have been marked as spam by the user
@@ -68,7 +68,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
                 break;
         }
 
-        $scope.discussion.forEach(function(post) {
+        $scope.discussions.forEach(function(post) {
             if(post._id === id) {
                 post.spam += change;
                 post.hidden = (change > -1);
@@ -91,7 +91,7 @@ function ListDiscussions($rootScope, $scope, $routeParams, $http, $log) {
                 if(data.length === 0) {
                     $scope.paging.more = false;
                 } else {
-                    $scope.discussion = $scope.discussion.concat(data);
+                    $scope.discussions = $scope.discussions.concat(data);
                 }
             } else {
                 $log.info("ERROR getting discussions.");
@@ -158,7 +158,7 @@ function ViewDiscussion($rootScope, $scope, $routeParams, $http, $auth, $locatio
                 $scope.isLoaded = true;
                 $scope.hide = false;
 
-                /*if($scope.discussion.children.length < $scope.paging.size) {
+                /*if($scope.discussions.children.length < $scope.paging.size) {
                     $scope.paging.more = false;
                 }*/
 

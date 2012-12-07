@@ -316,7 +316,7 @@
         <div class="info image">
             <h3 class="sans-serif">
                 PROFILE IMAGE
-                <div class="edit" ng-click="edit('image')" class="edit"><i class="icon-pencil"></i> Edit Profile Image</div>
+                <!--<div class="edit" ng-click="edit('image')" class="edit"><i class="icon-pencil"></i> Edit Profile Image</div>-->
             </h3>
 
             <div class="profile-crop-preview">
@@ -336,7 +336,7 @@
 
                 <div class="btn-group-border">
                     <div class="btn-group bgc">
-                        <button id="save-crop" class="btn btn-success"><i class="icon-ok-circle icon-white"></i> Crop Image</button>
+                        <button ng-disabled="cropDisabled" id="save-crop" class="btn btn-success"><i class="icon-ok-circle icon-white"></i> Crop Image</button>
                         <button id="cancel-crop" class="btn btn-success"><i class="icon-ban-circle icon-white"></i> Cancel Crop</button>
                     </div>
                 </div>

@@ -41,4 +41,25 @@ angular.module('bgc.filters').filter('pluralize', function(){
     }
 });
 
+angular.module('bgc.filters').filter('category', function(){
+    return function(category){
+        switch (category){
+            case 'curriculum':
+                return 'Curriculum Advisory Services'
+            case 'access':
+                return 'Access To Babson Curriculum'
+            case 'facultydev':
+                return 'Faculty Development'
+            case 'nextopp':
+                return 'Next Opportunity'
+            case 'handbook':
+                return 'Handbook'
+            case 'entrepreneurship':
+                return 'Entrepreneurship Center Development'
+            case 'gceemsce':
+                return 'GCEE MSCE'
+        }
+    }
+});
+
 

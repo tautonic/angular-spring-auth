@@ -142,6 +142,10 @@ angular.module( 'bgc.directives')
                     scope.$emit('togglePortrait');
                 };
 
+                scope.showAttachmentModal = function(){
+                    scope.$emit('showAttachmentModal', {});
+                };
+
                 if(attr.type === 'profile' || !attr.type){
                     scope.thumbnail.type = attr.type;
 
@@ -313,6 +317,8 @@ angular.module('bgc.directives')
 
             options = scope.$eval(attrs.pyklProfileImageUpload);
 
+            // from this point onward, access to the scope object is only available
+            // by adding it as a property to this config object
             var config = {
                 scope: scope,
                 runtimes: 'html5, flash, silverlight, browserplus',
@@ -320,7 +326,8 @@ angular.module('bgc.directives')
                 container: 'update',
                 url: 'api/profiles/images/upload/',
                 max_file_size:'100mb',
-                resize:{"width":'100%', "quality":90},
+                multi_selection:false,
+                resize:{"width":650, "quality":90},
                 flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
                 silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
                 filters:[
@@ -328,6 +335,8 @@ angular.module('bgc.directives')
                     {title:"Zip files", extensions:"zip"}
                 ]
             };
+
+            var scope = config.scope;
 
             if (attrs.pyklProfileImageUpload) {
                 if (options.dropTarget) {
@@ -432,6 +441,8 @@ angular.module('bgc.directives')
                 $('.profile-crop-preview').hide();
             });
 
+            var initialCrop = true;
+
             uploader.bind('UploadComplete', function(uploader, file){
                 //$('#image-crop').attr('src', url);
                 $('.upload-progress').remove();
@@ -445,24 +456,31 @@ angular.module('bgc.directives')
 
                 $('#image-crop').Jcrop({
                     bgColor: '#fff',
-                    //onChange: showPreview,
-                    //onSelect: showPreview,
+                    onChange: showPreview,
                     aspectRatio: 1
                 }, function(){
                     jcropApi = this;
+                    var cropDimensions = Math.min(parseInt($('.jcrop-holder img').width()), parseInt($('.jcrop-holder img').height()));
+
+                    var distanceToCropCenter = Math.floor(cropDimensions/2);
+                    var distanceToImageCenter = Math.floor($('.jcrop-holder img').width()/2);
+
+                    var shiftCropToCenter = Math.abs(distanceToCropCenter - distanceToImageCenter);
+
+                    jcropApi.setSelect([shiftCropToCenter, 0, cropDimensions, cropDimensions]);
+                    scope.cropDisabled = false;
+                    scope.$apply();
                 });
 
-                /*function showPreview(coords){
-                    var rx = 135 / coords.w;
-                    var ry = 135 / coords.h;
-
-                    $('#crop-preview').css({
-                        width: Math.round(rx * width) + 'px',
-                        height: Math.round(ry * height) + 'px',
-                        marginLeft: '-' + Math.round(rx * coords.x) + 'px',
-                        marginTop: '-' + Math.round(ry * coords.y) + 'px'
-                    });
-                }*/
+                function showPreview(coords){
+                    if(coords.w > 50){
+                        scope.cropDisabled = false;
+                        scope.$apply();
+                    }else{
+                        scope.cropDisabled = true;
+                        scope.$apply();
+                    }
+                }
             });
 
             uploader.init();
@@ -793,36 +811,57 @@ angular.module('bgc.directives').directive('streamItem', ['$http',
 angular.module('bgc.directives').directive('discussionStack', ['$compile', function($compile){
     'use strict';
     return {
-        link: function(scope, element, attrs){
-            var top = 4;
-            var left = 5;
-            var zIndex = -1;
-            var height = element.height() - element.css('margin-bottom').replace('px', '');
-            //var height = element.height();
-            height -= 21;
+        scope: {
+            discussion: '=',
+            last: '='
+        },
+        compile: function compile(element, attrs){
+            var commentCount = [];
+            var index;
 
-            attrs.$observe('comments', function(value){
-                var stacks = Math.floor(value/5);
+            var height;
 
-                for(var i=0; i < stacks; i++){
-                    var div = document.createElement('div');
-                    div = jQuery(div);
-                    div.addClass('discussion-item discussion-stack-div grey-gradient');
-                    div.css({
-                        'width': element.css('width'),
-                        'height': height,
-                        'top': top,
-                        'left': left,
-                        'z-index': zIndex
+            return function (scope, element, attrs){
+                commentCount.push(scope.discussion.commentCount);
+
+                if(scope.last){
+                    $('.discussion-item').each(function(index, elm){
+                        var top = 5;
+                        var left = 5;
+                        var zIndex = -1;
+
+                        console.log('Discussion stack #: ' + index + ' value of left: ' + left);
+
+                        var stacks = Math.floor(commentCount[index]/5);
+
+                        for(var i=0; i < stacks; i++){
+                            var div = document.createElement('div');
+                            div = jQuery(div);
+                            div.addClass('discussion-item discussion-stack-div grey-gradient');
+
+                            if(index === $('.discussion-stack-container').length - 1){
+                                height = $(this).innerHeight() - 28;
+                            }else{
+                                height = $(this).innerHeight() - 8;
+                            }
+
+                            div.css({
+                                'width': $(this).css('width'),
+                                'height': height,
+                                'top': top,
+                                'left': left,
+                                'z-index': zIndex
+                            });
+
+                            $(this).parent('.discussion-stack-container').append(div);
+
+                            top += 5;
+                            left += 5;
+                            zIndex -= 1;
+                        }
                     });
-
-                    element.parent('.discussion-stack-container').append($compile(div)(scope));
-
-                    top += 4;
-                    left += 4;
-                    zIndex -= 1;
                 }
-            });
+            }
         }
     }
 }]);
@@ -900,7 +939,7 @@ angular.module('bgc.directives').directive('like', ['$http', '$rootScope', funct
             attrs.$observe('objectid', function(object_id) {
                 if(object_id !== '') {
                     $http.get("api/utility/like/" + object_id).success(function(data) {
-                        var result = JSON.parse(data);
+                        var result = JSON.parse(data); console.log("like button result: ",result);
                         if(result) {
                             scope.likeText = "Unlike";
                         }
@@ -1034,7 +1073,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
                 silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
                 filters:[
-                    {title : "Image files", extensions : "pdf,doc,ppt,txt,jpg,jpeg"},
+                    {title : "Image files", extensions : "pdf,doc,ppt,txt,jpg,jpeg,xls"},
                     {title:"Zip files", extensions:"zip"}
                 ]
             };
@@ -1149,7 +1188,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                             likes: 0,
                             comments: 0,
                             rating: 0,
-                            name: file.name
+                            name: file.name,
+                            filesize: plupload.formatSize(file.size)
                         };
 
                         fileAttachments.push(resource);
@@ -1162,9 +1202,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                     $http.post('api/attachments', attachment)
                         .success(function(data, status){
                             scope.article.attachments.push(data.content._id);
-
-                            $('.upload-progress').remove();
                             scope.$emit('attachmentUploadComplete');
+                            $('.upload-progress').remove();
                         });
                 });
             });

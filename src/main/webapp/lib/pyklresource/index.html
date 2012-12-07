@@ -1,3 +1,49 @@
+<div ui-modal class="fade profile-summary" ng-model="showModal">
+    <div class="article">
+        <div class="row top-row">
+            <div class="span8">
+                <h3>{{modal.document.title}}</h3>
+                <p class="article-meta"><span class="doc-type {{modal.document.doctype}}"></span><strong>by {{modal.document.author}}, {{modal.document.dateCreated | asDate}}</strong></p>
+                <p class="description formatted">{{modal.document.description}}</p>
+                <p><strong>{{modal.document.filename}}</strong> &nbsp; <i>{{modal.document.filesize}}</i></p>
+            </div>
+            <div class="span2">
+                <div class="btn-group-border">
+                    <div class="btn-group bgc">
+                        <a ng-href="{{modal.document.directLink}}" class="btn btn-success">Download</a>
+                    </div>
+                </div>
+                <br><br>
+                <div ui-if="hasMoreThanAttachments(1)" class="btn-group-border">
+                    <div class="btn-group bgc paging">
+                        <button class="btn btn-success" ng-click="previous()"><div class="read-more-arrow read-less-arrow"></div></button>
+                        <button class="btn btn-success" ng-click="next()"><div class="read-more-arrow"></div></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span9">
+                <iframe src="{{modal.document.url}}" style="margin: 2em 0 0 2em; width:100%; height:700px;" frameborder="3px"></iframe>
+                <!--<doc-viewer url=modal.document.url></doc-viewer>-->
+            </div>
+        </div>
+
+        <div class="row bottom-row">
+            <div class="offset8 span2" ui-if="hasMoreThanAttachments(1)">
+                <div class="btn-group-border">
+                    <div class="btn-group bgc paging">
+                        <button class="btn btn-success" ng-click="previous()"><div class="read-more-arrow read-less-arrow"></div></button>
+                        <button class="btn btn-success" ng-click="next()"><div class="read-more-arrow"></div></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="close-modal" ng-click="toggleModal(false)"></div>
+    </div>
+</div>
 <div class="content container">
     <div class="row">
         <div class="articles span9" >
@@ -12,14 +58,14 @@
                     <h4>SERVICES & PROGRAMS</h4>
                 </div>
                 <ul class="secondary-nav-options">
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/'}" ng-href="#/content/">All Articles</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/curriculum'}" ng-href="#/content/service/curriculum">Curriculum Advisory Services</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/access'}" ng-href="#/content/service/access">Access to Babson Curriculum</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/facultydev'}" ng-href="#/content/service/facultydev">Faculty Development</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/nextopp'}" ng-href="#/content/service/nextopp">Next Opportunity</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/handbook'}" ng-href="#/content/service/handbook">Handbook</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/entrepreneurship'}" ng-href="#/content/service/entrepreneurship">Entrepreneurship Center Development</a></li>
-                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/gceemsce'}" ng-href="#/content/service/gceemsce">GCEE MSCE</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/'}" ng-href="#/content">All Articles ({{totalCount}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/curriculum'}" ng-href="#/content/service/curriculum">Curriculum Advisory Services ({{categories['curriculum'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/access'}" ng-href="#/content/service/access">Access to Babson Curriculum ({{categories['access'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/facultydev'}" ng-href="#/content/service/facultydev">Faculty Development ({{categories['facultydev'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/nextopp'}" ng-href="#/content/service/nextopp">Next Opportunity ({{categories['nextopp'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/handbook'}" ng-href="#/content/service/handbook">Handbook ({{categories['handbook'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/entrepreneurship'}" ng-href="#/content/service/entrepreneurship">Entrepreneurship Center<br>Development ({{categories['entrepreneurship'].count}})</a></li>
+                    <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/gceemsce'}" ng-href="#/content/service/gceemsce">GCEE MSCE ({{categories['gceemsce'].count}})</a></li>
                     <li class="nav-option"><a ng-class="{activeSecondary: location.path() == '/content/service/contact'}" ng-href="#/content/service/contact">Contact Information</a></li>
                 </ul>
 

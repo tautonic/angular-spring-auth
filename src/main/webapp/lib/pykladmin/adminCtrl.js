@@ -292,10 +292,16 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
 
     $scope.save = function(article){
         if($scope.newAttachments.length > 0){
+            var count = 1;
+
             $scope.$broadcast('saveArticle');
 
             $scope.$on('attachmentUploadComplete', function(){
-                saveArticle(article);
+                if($scope.newAttachments.length == count){
+                    saveArticle(article);
+                }else{
+                    count++;
+                }
             });
         }else{
             saveArticle(article);
@@ -309,6 +315,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
         delete article._score;
         delete article._type;
         delete article._version;
+        delete article.authorThumb;
 
         if(article.premium) {
             article.roles.push('ROLE_PREMIUM');
@@ -371,8 +378,8 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
     function generateDescription(content){
         var result = content;
         var resultArray = result.split(" ");
-        if(resultArray.length > 40){
-            resultArray = resultArray.slice(0, 40);
+        if(resultArray.length > 30){
+            resultArray = resultArray.slice(0, 30);
             result = resultArray.join(" ") + " ...";
         }
         return result;
@@ -447,17 +454,25 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         views: 0,
         rating: 0,
         attachments: [],
-        premium: false
+        premium: false,
+        mimetype: 'text/html',
+        category: ''
     };
 
     //dateCreated: "2011-01-17T23:07:32.000Z"
 
     $scope.save = function(article){
         if($scope.attachments.length > 0){
+            var count = 1;
+
             $scope.$broadcast('saveArticle');
 
             $scope.$on('attachmentUploadComplete', function(){
-                saveArticle(article);
+                if($scope.attachments.length == count){
+                    saveArticle(article);
+                }else{
+                    count++;
+                }
             });
         }else{
             saveArticle(article);
@@ -494,6 +509,10 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
             delete article.premium;
         }
 
+        if(newArticle.category === ''){
+            newArticle.category = 'curriculum';
+        }
+
         newArticle.$save(
             function(response){
                 $location.path('/content/view/' + response.content._id);
@@ -522,8 +541,8 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     function generateDescription(content){
         var result = content;
         var resultArray = result.split(" ");
-        if(resultArray.length > 40){
-            resultArray = resultArray.slice(0, 40);
+        if(resultArray.length > 30){
+            resultArray = resultArray.slice(0, 30);
             result = resultArray.join(" ") + " ...";
         }
         return result;
