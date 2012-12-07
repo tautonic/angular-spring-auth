@@ -819,17 +819,21 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
         },
         compile: function compile(element, attrs){
             var commentCount = [];
-            return function (scope, element, attrs){
-                var index;
-                var top = 5;
-                var left = 5;
-                var zIndex = -1;
-                var height;
+            var index;
 
+            var height;
+
+            return function (scope, element, attrs){
                 commentCount.push(scope.discussion.commentCount);
 
                 if(scope.last){
                     $('.discussion-item').each(function(index, elm){
+                        var top = 5;
+                        var left = 5;
+                        var zIndex = -1;
+
+                        console.log('Discussion stack #: ' + index + ' value of left: ' + left);
+
                         var stacks = Math.floor(commentCount[index]/5);
 
                         for(var i=0; i < stacks; i++){
