@@ -238,6 +238,7 @@
                     <jsSrcDir>${project.basedir}/src/main/webapp</jsSrcDir>
                     <jsTestSrcDir>${project.basedir}/test/unit</jsTestSrcDir>
                     <junitXmlReportFileName>TEST-RESULTS.xml</junitXmlReportFileName>
+                    <!--<customRunnerTemplate>${project.basedir}/test/resources/customRunner.template</customRunnerTemplate>-->
                 </configuration>
             </plugin>
 
