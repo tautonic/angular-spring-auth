@@ -820,7 +820,6 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
             var index;
 
             var height;
-
             return function (scope, element, attrs){
                 commentCount.push(scope.discussion.commentCount);
 
@@ -830,8 +829,6 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
                         var left = 5;
                         var zIndex = -1;
 
-                        console.log('Discussion stack #: ' + index + ' value of left: ' + left);
-
                         var stacks = Math.floor(commentCount[index]/5);
 
                         for(var i=0; i < stacks; i++){
@@ -839,11 +836,7 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
                             div = jQuery(div);
                             div.addClass('discussion-item discussion-stack-div grey-gradient');
 
-                            if(index === $('.discussion-stack-container').length - 1){
-                                height = $(this).innerHeight() - 28;
-                            }else{
-                                height = $(this).innerHeight() - 8;
-                            }
+                            height = $(this).innerHeight() - 8;
 
                             div.css({
                                 'width': $(this).css('width'),
@@ -854,6 +847,7 @@ angular.module('bgc.directives').directive('discussionStack', ['$compile', funct
                             });
 
                             $(this).parent('.discussion-stack-container').append(div);
+                            scope.$apply();
 
                             top += 5;
                             left += 5;
