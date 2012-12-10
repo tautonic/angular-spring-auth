@@ -895,7 +895,7 @@ angular.module('bgc.directives').directive('reloadTwitterBtns', function(){
  * Runs a function when the user reaches the bottom of the page. The individual function that is run is passed in as an argument.
  *
  * @param [options] {function} This should be a function that is passed into the directive. The function would then load more objects and add them to the list
- * @example <div when-scrolled="loadMore()">
+ * @example <div when-scrolled="loadMore()" offset="90">
  */
 angular.module('bgc.directives').directive('whenScrolled', function() {
     return function(scope, elm, attr) {
@@ -903,8 +903,8 @@ angular.module('bgc.directives').directive('whenScrolled', function() {
         var offset = attr.offset || 0;
         angular.element(window).bind('scroll', function() {
             var rectObject = raw.getBoundingClientRect();
-            //229 is the value of the footer height and some other things. it's possible this might need to be an option passed in though
-            if (Math.floor(rectObject.bottom) === $(window).height() - 150 - offset) {
+            //200 is the value of the footer height and some other things. offset is passed in as an option and is used for
+            if (Math.floor(rectObject.bottom) === $(window).height() - 200 - offset) {
                 scope.$apply(attr.whenScrolled);
             }
 

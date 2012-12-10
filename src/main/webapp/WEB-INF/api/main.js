@@ -728,7 +728,7 @@ app.post('/profiles/admin/filter', function(req){
     return result;
 });
 
-app.get('/profiles', function(req){         log.info("GET ALL PROFILES");
+app.get('/profiles', function(req){
     var opts = {
         url: getZociaUrl(req) + '/profiles/',
         method: 'GET',
