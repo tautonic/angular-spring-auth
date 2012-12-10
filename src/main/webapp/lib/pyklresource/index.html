@@ -99,8 +99,15 @@
                         <hr>
                         <input type="checkbox" id="image" ng-model="filters.image" ng-change="search(searchTerm)"><label for="image"><span class="doc-type image"></span>Pictures ({{count('image')}})</label>
                     </form>
-                    <a ng-href="#/admin/articles/create" ui-if="auth.isUserInRole('ROLE_ADMIN')" class="btn btn-info">Add Article</a>
 
+                </div>
+            </div>
+
+            <div ui-if="auth.isUserInRole('ROLE_ADMIN')" style="padding-top: 30px; text-align: center">
+                <div class="btn-group-border">
+                    <div class="btn-group bgc">
+                        <a ng-href="#/admin/articles/create" class="btn btn-success">Add Article</a>
+                    </div>
                 </div>
             </div>
         </div>
