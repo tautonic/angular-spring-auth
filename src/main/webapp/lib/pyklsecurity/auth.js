@@ -155,15 +155,15 @@ var pykl = window.pykl || {};
             restrict:'ACME',
             template:'<li>\
         <span ng-show="!auth.isAuthenticated"><a ng-click="callLoginPage()"><span x-cms="menu_signin">{{cms.content}}</span></a></span> \
-        <div ng-show="auth.isAuthenticated" class="dropdown" ng-dropdown> \
-            <a data-toggle="dropdown" class="thumb"> \
+        <div ng-show="auth.isAuthenticated" class="dropdown" > \
+            <a data-toggle="dropdown" class="thumb dropdown-toggle" dropdown> \
                 <div class="new-picture-frame profile-thumbnail medium clockwise">\
                     <img ng-src ="{{auth.principal.thumbnail}}" alt="">\
                 </div>\
             </a> \
         <ul class="dropdown-menu"> \
             <li><span class="gradient"><a ng-href="#/profiles/view/{{auth.principal.id}}">My profile</a></span></li> \
-        <li ui-if="auth.isUserInRole(\'ROLE_ADMIN\')"><span class="gradient"><a ng-href="#/admin/users">Admin Panel</a></span></li> \
+            <li ui-if="auth.isUserInRole(\'ROLE_ADMIN\')"><span class="gradient"><a ng-href="#/admin/users">Admin Panel</a></span></li> \
             <li><span class="gradient"><a ng-click="signout()">Log Out</a></span></li> \
         </ul> \
         </div> \
