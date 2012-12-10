@@ -6,7 +6,7 @@ describe('Babson GC Controllers', function(){
     beforeEach(function(){
         this.addMatchers({
             toEqualData: function(expected){
-                return (this.actual== expected);
+                return jasmine.getEnv().equals_(this.actual, expected);
             }
         })
     });
@@ -14,8 +14,8 @@ describe('Babson GC Controllers', function(){
     var $httpBackend, $auth, $rootScope, user;
 
     beforeEach(function() {
-        angular.module('bgc.services');
-        angular.module('pykl.security'); //this allows for injecting $auth service
+        module('pykl.security'); //this allows for injecting $auth service
+        module('bgc.services');
 
         inject(function ($injector) {
             $httpBackend = $injector.get('$httpBackend');
@@ -28,12 +28,16 @@ describe('Babson GC Controllers', function(){
                     username:'example@user.com',
                     isAuthenticated:true,
                     roles:['role_user', 'role_premium'],
-                    verify:true
+                    verify:true,
+                    principal: {
+                        id: 0,
+                        username: 'Bob'
+                    }
                 }
             );
 
             $auth = $injector.get('$auth');
-            user = $injector.get('user');
+            user = $injector.get('Profile');
 
         });
     });
