@@ -9,14 +9,24 @@
  *
  * Background
  *
+ * Each piece of CMS content is a record called a "resource object" which contains properties like title,
+ * description, thumbnail url, author, date created and modified, etc. We look up CMS content in Zocia
+ * using two properties which identify a unique record, "key" and "locale". It is important to recognize
+ * that the CMS is multilingual and the "key" designates a particular segment of content, but until the
+ * "locale" is specified we won't know which specific content record is being requested.
+ *
+ * It is also worth noting that the "locale" property is a best match situation. For example, you may be
+ * requesting content with a local of 'fr-CA" (French Canadian), but you may get the record for "fr" (French)
+ * because the more specific locale could not be found.
+ *
  * While the Zocia platform is used for all CMS persistence (using its 'resources' collection),
  * all GC clients will use this module's services for basic CRUD functionality relating to CMS
  * content.
  *
  * There are two unique keys used for each CMS fragment. First, the primary key is _id which holds
- * a UID value which allows any specific piece of content to be referenced. While this is handy
- * for some functionality, we will not make use of it. Instead, we will use the composite key formed
- * through a combination of the 'key' property and the 'locale' property.
+ * a UID value which allows any specific piece of content to be referenced. While this is handy, for
+ * some update functionality, we rarely use it because of our need to beforem a best match search on
+ * the 'locale' property.
  *
  * key - A unique value used to identify the general content block (i.e. intro). The key does not
  *       uniquely identify a single record in the database since a block will have separate records
@@ -41,7 +51,7 @@
  *     Note: The locale is extracted in this precedence.
  *       1. The use of a suffix on the key delimited with an @ symbol. (ie /<key>@fr-CA)
  *       2. The use of a 'format' parameter. (ie /<key>?format=fr-CA)
- *       3. If the header 'x-cms-no-locale' is present, no locale is used. (middleware makes sure of this.
+ *       3. If the header 'x-cms-no-locale' is present, no locale is used. (middleware makes sure of this.)
  *       4. The use of the 'Accept-Language' header in the request.
  *
  * POST /api/cms/
@@ -113,7 +123,8 @@ app.configure('route', locale);
 var INDEX = 'gc';
 
 // It is important to realize that this map has nothing to do with the map of resources stored
-// in the Zocia system; save for its name.
+// in the Zocia system; save for its name. This is a clustered shared hazelcast map used within
+// this server.
 var map = store.getMap(INDEX, 'resources');
 
 /**
@@ -141,8 +152,16 @@ app.get('/:key', function (req, key) {
         lookup += '@' + locale;
     }
 
-    log.info('Fetching key {} and locale {}: lookup: {}', key, locale, lookup);
-    return json(map.get(lookup));
+    var resource = map.get(lookup);
+
+    // In order for the map to work, we need to use the locale of the resource and not the lookup
+    // when we store the resource in the map.
+    map.evict(lookup);
+    var newLookup = key + '@' + resource.locale;
+    map.put(newLookup, resource);
+
+    log.info('Fetching key {} and locale {}: lookup: {}, value: {}', key, locale, newLookup, JSON.stringify(resource));
+    return json(resource);
 });
 
 
@@ -193,7 +212,7 @@ app.post('/', function (req) {
  *
  */
 app.put('/:id', function (req, id) {
-    log.debug('POST /api/cms, locale: {}', req.locale);
+    log.debug('PUT /api/cms, locale: {}', req.locale);
 
     // Get the JSON object holding the payload
     var resource = req.postParams;
@@ -211,6 +230,8 @@ app.put('/:id', function (req, id) {
     var lookup = resource.key + '@' + resource.locale;
     var mapResources = store.getMap(INDEX, "resources");
     mapResources.put(lookup, resource);
+
+    log.info('Updated the HZ map, key: {}, resource: {}', lookup, JSON.stringify(resource));
 
     return json(resource, 204, {});
 });
