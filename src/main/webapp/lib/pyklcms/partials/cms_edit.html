@@ -1,4 +1,4 @@
-<div ui-modal class="modal fade cms-edit" ng-controller="pykl.cmsCtrl" ng-model="modalShown">
+<div ui-modal class="modal fade cms-edit" ng-controller="pykl.$cms.ctrl" ng-model="modalShown">
     <div class="modal-header">
         <h2>CMS Editor</h2>
     </div>
@@ -40,8 +40,8 @@
 
                 <label class="control-label">Image Upload:</label>
                 <div class="controls">
-                    <div id="container" x-img-upload ng-model="resource.thumbnail">
-                        <img class="imgUpload" alt="{{resource.title}}"/>
+                    <div x-img-upload ng-model="resource.thumbnail">
+                        <img alt="{{resource.title}}"/>
                     </div>
                 </div>
 

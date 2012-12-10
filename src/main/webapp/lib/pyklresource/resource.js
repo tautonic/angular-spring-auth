@@ -4,6 +4,80 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     var category = $routeParams.service || '';
     var tagFilter = '';
 
+    var attachmentIndex = 0;
+    var attachments;
+
+    $scope.categories = {
+        'curriculum': {count: 0},
+        'access': {count: 0},
+        'facultydev': {count: 0},
+        'nextopp': {count: 0},
+        'handbook': {count: 0},
+        'entrepreneurship': {count: 0},
+        'gceemsce': {count: 0}
+    };
+
+    $scope.$on('showAttachmentModal', function(args){
+        attachments = args.targetScope.thumb.attachments;
+        loadAttachment();
+        $scope.showModal = true;
+    });
+
+    $scope.toggleModal = function(value) {
+        $scope.showModal = value;
+        if(value) {
+            loadAttachment();
+        }
+    };
+
+    $scope.next = function() {
+        changeAttachmentIndex("inc");
+    };
+
+    $scope.previous = function() {
+        changeAttachmentIndex("dec");
+    };
+
+    function loadAttachment() {
+        var id = attachments[attachmentIndex];
+        $http.get( 'api/article/' + id ).success( function (data) {
+            var filesize = data.filesize === undefined ? 'Filesize unavailable' : data.filesize;
+            $scope.modal = {
+                document: {
+                    title: data.title,
+                    description: data.description,
+                    url: 'http://docs.google.com/viewer?url=http:' + data.uri + '&embedded=true',
+                    directLink: "http:" + data.uri,
+                    doctype: data.doctype,
+                    author: data.author,
+                    dateCreated: data.dateCreated,
+                    filename: data.name,
+                    filesize: filesize
+                }
+            };
+            $http.post("api/utility/view/" + id);
+        }).error(function(data, status) {
+                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+            });
+    }
+
+    //we do this in a function so we can handle cases where it goes too far in one direction or another
+    function changeAttachmentIndex(direction) {
+        attachmentIndex += (direction === "inc") ? 1 : -1;
+
+        if(attachmentIndex >= attachments.length) {
+            attachmentIndex = 0;
+        } else if(attachmentIndex < 0) {
+            attachmentIndex = attachments.length - 1;
+        }
+
+        loadAttachment();
+    }
+
+    $scope.hasMoreThanAttachments = function(total) {
+        return (attachments && attachments.length > total);
+    };
+
     $scope.tabs = {
         featured: true,
         recent: false,
@@ -48,6 +122,20 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $http.get( url ).success( function (data) {
             if(data !== "false") {
                 $scope.articles = data;
+                // loop through the array of articles
+                $scope.articles.forEach(function(article){
+                    // add an attribute to the article that will
+                    // contain the array of doctypes attached to the article
+                    article.childDoctypes = [];
+                    // loop through each article's attachments
+                    article.attachments.forEach(function(attachment){
+                        $http.get('api/article/' + attachment)
+                            .success(function(data, status){
+                                // add the attachment doctype to the array
+                                article.childDoctypes.push(data.doctype);
+                            });
+                    });
+                });
                 if($scope.articles.length < $scope.paging.size) {
                     $scope.paging.more = false;
                 }
@@ -57,6 +145,15 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         }).error(function(data, status) {
             $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
         });
+
+        // get article category facets to display article counts in each category
+        $http.get('api/facets/article')
+            .success(function(data, status){
+                $scope.totalCount = data.content.facets.category.total;
+                data.content.facets.category.terms.forEach(function(term){
+                    $scope.categories[term.term].count = term.count;
+                });
+            });
     }
 
     $scope.filterByTag = function(tag) {
@@ -200,6 +297,17 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
         $http.get( url ).success( function (data) {
             $log.info("ARTICLE RETURNED: ",data);
             $scope.article = data;
+            // add an attribute to the article that will
+            // contain the array of doctypes attached to the article
+            $scope.article.childDoctypes = [];
+            // loop through each article's attachments
+            $scope.article.attachments.forEach(function(attachment){
+                $http.get('api/article/' + attachment)
+                    .success(function(data, status){
+                        // add the attachment doctype to the array
+                        $scope.article.childDoctypes.push(data.doctype);
+                    });
+            });
             $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
             $http.post("api/utility/view/" + $scope.article._id);
         }).error(function(data, status) {
@@ -225,6 +333,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     function loadAttachment() {
         var id = $scope.article.attachments[attachmentIndex];
         $http.get( 'api/article/' + id ).success( function (data) {
+            var filesize = data.filesize === undefined ? 'Filesize unavailable' : data.filesize;
             $scope.modal = {
                 document: {
                     title: data.title,
@@ -233,7 +342,9 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
                     directLink: "http:" + data.uri,
                     doctype: data.doctype,
                     author: data.author,
-                    dateCreated: data.dateCreated
+                    dateCreated: data.dateCreated,
+                    filename: data.name,
+                    filesize: filesize
                 }
             };
             $http.post("api/utility/view/" + id);

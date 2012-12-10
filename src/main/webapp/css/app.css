@@ -594,6 +594,7 @@ ul.dropdown-menu li:last-child a {
 .footer {
     background-color: #c4c4c4;
     padding: 10px 20px;
+    margin-top: 5em;
 }
 
 .footer h3, .footer p {
@@ -754,7 +755,7 @@ ul.dropdown-menu li:last-child a {
 }
 
 .paging .btn {
-    padding: 5px 4px;
+    padding: 7px 4px;
 }
 
 .paging .read-more-arrow {
@@ -939,7 +940,7 @@ ul.dropdown-menu li:last-child a {
     background: url(../images/GCEE_sprite.png) -9px -8px no-repeat;
     position: absolute;
     right: 9px;
-    top: 8px;
+    top: 10px;
     width: 20px;
     height: 20px;
 
@@ -995,7 +996,7 @@ ul.dropdown-menu li:last-child a {
 span.doc-type {
     background-image: url('../images/GCEE_sprite.png');
     width: 32px;
-    height: 24px;
+    height: 25px;
     float: left;
 }
 
@@ -1909,7 +1910,7 @@ li.search-result.members{
     display: block;
     text-decoration: none;
     color: #5b5b5b;
-    font-size: 12px;
+    font-size: 11px;
     background-color: #F1F1F1;
     padding: 0.75em 0 0.75em 1em;
 }
@@ -2467,20 +2468,20 @@ li.search-result.members{
     font-size: 12px;
 }
 
-.modal.cms-edit {
-    width: 800px;
-    left: 40%;
+.contact-info {
+    margin-top: 5em;
 }
 
-.modal.cms-edit .form-horizontal .control-label {
-    width: 120px;
+.contact-info p {
+    margin-left: 20px;
 }
 
-.modal.cms-edit .form-horizontal .controls {
-    margin-left: 160px;
-    margin-right: 20px;
+.profile.btn-group-border{
+    margin-top: 0;
 }
 
-.modal.cms-edit .form-horizontal .controls .mceLayout {
-    width: 100% !important;
+a.category{
+    text-decoration: none;
+    color: #999;
+    font-size: 14px;
 }

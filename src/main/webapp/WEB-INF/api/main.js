@@ -121,6 +121,22 @@ app.get('/article/:id', function(req, id) {
              article.content = article.content.replace(new RegExp("http://example.com/blog/article-title-"), newUrl.toString());*/
         }
 
+        // Before we pass the article on to angular, let's get the thumbnail of the author
+        var opts = {
+            url: getZociaUrl(req) + '/profiles/byusername/' + article.content.author,
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc',
+                'Content-Type': 'application/json'}),
+            async: false
+        };
+
+        var author = _simpleHTTPRequest(opts);
+        author = JSON.parse(author.body[0]);
+        if(author.content.thumbnail === 'profiles-0000-0000-0000-000000000001'){
+            author.content.thumbnail = 'images/GCEE_image_defaultMale.jpeg';
+        }
+        article.content.authorThumb = author.content.thumbnail;
+
         return json(article.content);
     } else {
         return {
@@ -768,6 +784,7 @@ app.put('/profiles/:id', function(req, id){
     delete data._type;
     delete data._index;
     delete data._version;
+    delete data.followers;
 
     if(req.postParams.status === "unverified") {
         var servletRequest = req.env.servletRequest;
@@ -1000,6 +1017,17 @@ app.get('/profiles/images/', function(req, id){
     }
 });
 
+app.get('/facets/:format', function(req, format){
+    var opts = {
+        url: getZociaUrl(req) + '/resources/facets/' + format,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
+});
+
 app.post('/attachments', function(req){
     var opts = {
         url: getZociaUrl(req) + '/resources/',
@@ -1013,14 +1041,25 @@ app.post('/attachments', function(req){
 });
 
 app.get('/attachments', function(req){
-    log.info('Attachment request params {}', JSON.stringify(req.params, null, 4));
-
     var resourceUrl = req.params.ids.join('&ids[]=');
     resourceUrl = '?ids[]=' + resourceUrl;
 
     var opts = {
         url: getZociaUrl(req) + '/resources/' + resourceUrl,
         method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc',
+            'Content-Type': 'application/json'}),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
+});
+
+app.get('/attachments/:id', function(req, id){
+    var opts = {
+        url: getZociaUrl(req) + '/resources/' + id,
+        method: 'GET',
+        data: JSON.stringify(req.postParams),
         headers: Headers({ 'x-rt-index': 'gc',
             'Content-Type': 'application/json'}),
         async: false
@@ -1098,6 +1137,10 @@ app.post('/utility/like/:id', function(req, id) {
 
 //checks to see if a user has already liked this particular object, if so, returns true, otherwise, returns false
 app.get('/utility/like/:id', function(req, id) {
+    if(!req.auth.isAuthenticated) {
+        return json(false);
+    }
+
     var opts = {
         url: getZociaUrl(req) + "/likes/" + req.auth.principal.id + "/" + id,
         method: 'GET',
@@ -1553,7 +1596,7 @@ app.put('/admin/users', function(req) {
         "workHistory" : req.postParams.workHistory
     };*/
 
-    var data = req.postParams
+    var data = req.postParams;
 
     var opts = {
         url: getZociaUrl(req) + '/profiles/' + req.postParams._id,
@@ -1591,25 +1634,12 @@ function _simpleHTTPRequest(opts) {
 
     log.info('EXCHANGE STATUS!!! ', exchange.status);
 
-    var result = json({
+    return json({
         'status': exchange.status,
         'content': JSON.parse(exchange.content),
         'headers': exchange.headers,
         'success': Math.floor(exchange.status / 100) === 2
     });
-
-    //result.status = exchange.status;
-
-    /*var result = json({
-        'status': profileExchange.status,
-        'content': profiles,
-        'headers': profileExchange.headers,
-        'success': Math.floor(profileExchange.status / 100) === 2
-    });
-
-    result.status = profileExchange.status;*/
-
-    return result;
 }
 
 function setUserDetails(thumbnail){

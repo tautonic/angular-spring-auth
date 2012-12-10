@@ -5,8 +5,6 @@
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-var pykl = window.pykl || {};
-
 (function (window, ng, undefined) {
 
     'use strict';
@@ -27,6 +25,10 @@ var pykl = window.pykl || {};
      * page. There is some config that must be set up, but sensible defaults and the
      * uploading of a single file reduces the options significantly.
      *
+     * There is a fair amount of boilerplate that is added to the user's original image tag.
+     *
+     * UI experimentation was done here:
+     *
      * @element ANY
      * @param {expression} Contains a config object that controls the capabilities of the plupload plugin.
      *
@@ -38,92 +40,71 @@ var pykl = window.pykl || {};
      */
     ng.module('pykl-ui.directives').directive('imgUpload',
         ['pykl-ui.config', '$log', function (pyklConfig, $log) {
-            var overlay, panel, img, browseButton;
+            var container;
 
             var uid = Math.round(13 * Math.random() * Math.random() * 100000) + '';
+            var idBrowseButton = 'browse_' + uid;
+            var idDropTarget = 'drop_' + uid;
 
-            var id_browseButton = 'browse_' + uid;
-            var id_dropTarget = 'drop_' + uid;
-
-            function showOverlay() {
-                overlay.removeClass('hide');
-                overlay.addClass('show')
-            }
-
-            function hideOverlay() {
-                overlay.removeClass('show');
-                overlay.addClass('hide')
-            }
-
-            function showPanel() {
-                $log.info('Show panel');
-                panel.removeClass('hide');
-                panel.addClass('show')
-            }
-
-            function hidePanel() {
-                $log.info('Hide panel');
-                panel.removeClass('show');
-                panel.addClass('hide')
-            }
-
-            // The overlay is a drag and drop target containing
-            function addOverlay(elm) {
-                overlay = ng.element('<div class="overlay hide"></div>')
-                    .prependTo(elm)
-                    .attr('id', id_dropTarget);
-            }
-
-            function addPanel(elm) {
-                browseButton = ng.element('<button class="browse btn">Browse</button>')
-                    .attr('id', id_browseButton);
-
-                panel = ng.element('<div class="panel hide"></div>')
-                    .prependTo(elm)
-                    .append(browseButton);
-                elm.hover(showPanel, hidePanel);
-            }
-
-            function locateImage(elm) {
-                var img = $('img.imgUpload', elm).css('position', 'relative');
-
-                // Once the image loads, we will know its positioning and size, so the overlay
-                // and panel can then be positioned.
+            function applyImageHandlers(img) {
+                // Once the image loads, we will know its positioning and size, and then we will
+                // adjust the size of the parent container.
                 img.load(function (e) {
                     var $this = $(this);
-                    // todo: These calcs depend on top/bottom and left/right margins/padding/border being the same values
-                    var imageTop = $this.position().top + (($this.outerHeight(true) - $this.height()) >> 1);
-                    var imageLeft = $this.position().left + (($this.outerWidth(true) - $this.width()) >> 1);
-                    overlay.css({
-                        top: imageTop,
-                        left: imageLeft,
+                    container.css({
                         width: $this.width(),
                         height: $this.height()
-                    });
-                    panel.css({
-                        width: $this.width()
                     });
                 });
             }
 
             function initPlupload(features) {
                 if (features.dragdrop) {
-                    overlay.prepend('<h1>Drag and Drop</h1>');
-                    overlay.bind('dragover', showOverlay);
-                    overlay.bind('dragleave', hideOverlay);
+                    ng.element('div.browse p').prepend('Drag and Drop or ');
+                    container.bind('dragover', function() {
+                        $(this).addClass('dragover');
+                    });
+                    container.bind('dragleave', function() {
+                        $(this).removeClass('dragover');
+                    });
+                    container.bind('drop', function() {
+                        $(this).removeClass('dragover');
+                    });
+                } else {
+                    ng.element('div.drop').remove();
                 }
             }
 
             return {
-                restrict: 'A',
+                template: '\
+                    <div class="img-upload"> \
+                        <div class="fade"> \
+                            <div class="drop"><p>Drop files here</p></div> \
+                        </div> \
+                        <div class="browse"> \
+                            <p><button class="btn btn-success">Browse</button></p> \
+                        </div> \
+                        <div class="working"> \
+                            <div>[x]</div> \
+                            <div class="progress progress-striped active"> \
+                                <div class="bar"></div> \
+                            </div> \
+                            <div class="name"></div> \
+                        </div> \
+                        <div ng-transclude /> \
+                    </div>',
+                replace: true,
+                transclude: true,
+                restrict: 'EA',
+                require: '?ngModel',
                 link: function (scope, elm, attrs, ngModel) {
+                    // Initialize options
                     var options = attrs.imgUpload ? scope.$eval(attrs.imgUpload) : {};
                     options = ng.extend({
                         url: './api/cms/upload/image',
                         runtimes: 'html5',
-                        browse_button: id_browseButton,
-                        drop_element: id_dropTarget,
-//                        container: 'container',
+                        browse_button: idBrowseButton,
+                        drop_element: idDropTarget,
                         max_file_size: '10mb',
                         filters: [
                             {title: "Image files", extensions: "jpg,gif,png"},
@@ -133,21 +114,31 @@ var pykl = window.pykl || {};
 
                     }, pyklConfig.imgUpload, options);
 
-                    // Locate the image tag within the directive scope that will be updated (hint: it
-                    // contains the imgUpload class.
-                    img = locateImage(elm);
+                    // Locate the primary container
+                    container = elm;
+
+                    // Identify the transclude div
+                    var elTransclude = container.find('div[ng-transclude]');
+
+                    // Locate the image. If not found create one and place in transclude holder.
+                    var img = elTransclude.find('img');
+                    if (img.length === 0) img = ng.element('<img />').appendTo(elTransclude);
+                    applyImageHandlers(img);
 
                     // The image's src is updated to the value stored in ngModel
                     ngModel.$render = function() {
-                        img.src(ngModel.$viewValue || '');
+                        $log.info('Received render call', arguments);
+                        img.attr('src', ngModel.$viewValue || '');
                     };
 
-                    // The overlay will be absolutely positioned above the image element. In order
-                    // to accomplish this, we must set the elm to relative positioning.
-                    elm.css('position', 'relative');
+                    // The plupload libraries requires a few of our elements to have set
+                    // id values (that we generated earlier)
+                    container.find('div.browse button').attr('id', idBrowseButton);
+                    container.find('div.drop').attr('id', idDropTarget);
 
-                    addOverlay(elm);
-                    addPanel(elm);
+                    // Content areas
+                    var elName = container.find('div.name');
+                    var elProgressBar = container.find('div.bar');
 
                     // Initialize the plupload upload library (http://www.plupload.com/documentation.php#configuration)
                     var uploader = new plupload.Uploader(options);
@@ -162,6 +153,9 @@ var pykl = window.pykl || {};
                     // Start the upload process when a file is added to the queue.
                     uploader.bind('FilesAdded', function (up, files) {
                         $log.info('FilesAdded', arguments);
+                        container.addClass('inprogress');
+                        elName.html(files[0].name);
+                        elProgressBar.width(0);
                         setTimeout(function () {
                             up.start();
                         }, 0);
@@ -170,11 +164,22 @@ var pykl = window.pykl || {};
                     uploader.bind('FileUploaded', function (up, file, response) {
                         $log.info('FileUploaded', arguments);
                         // Update the model with the new URL
-                        ngModel.$setViewValue(file);
+                        if (response.status == 200) {
+                            response = ng.fromJson(response.response);
+                            if (response.file && response.file.uri) {
+                                container.removeClass('inprogress');
+                                scope.$apply(function() {
+                                    ngModel.$setViewValue(response.file.uri);
+                                    img.attr('src', ngModel.$viewValue || '');
+                                });
+                                $log.info('Updating model to new image src:', response.file.uri);
+                            }
+                        }
                     });
 
                     uploader.bind('UploadProgress', function (up, file) {
                         $log.info('UploadProgress', arguments);
+                        elProgressBar.width(file.percent + '%');
                     });
 
                     uploader.init();

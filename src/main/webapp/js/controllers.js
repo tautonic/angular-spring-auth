@@ -9,6 +9,68 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     $rootScope.content_query = '';
     $rootScope.discussion_query = '';
 
+    var attachmentIndex = 0;
+    var attachments;
+
+    $scope.$on('showAttachmentModal', function(args){
+        attachments = args.targetScope.thumb.attachments;
+
+        loadAttachment();
+        $scope.showModal = true;
+    });
+
+    $scope.next = function() {
+        changeAttachmentIndex("inc");
+    };
+
+    $scope.previous = function() {
+        changeAttachmentIndex("dec");
+    };
+
+    function loadAttachment() {
+        var id = attachments[attachmentIndex];
+        $http.get( 'api/article/' + id ).success( function (data) {
+            var filesize = data.filesize === undefined ? 'Filesize unavailable' : data.filesize;
+            $scope.modal = {
+                document: {
+                    title: data.title,
+                    filename: data.name,
+                    description: data.description,
+                    url: 'http://docs.google.com/viewer?url=http:' + data.uri + '&embedded=true',
+                    directLink: "http:" + data.uri,
+                    doctype: data.doctype,
+                    author: data.author,
+                    dateCreated: data.dateCreated,
+                    filesize: filesize
+                }
+            };
+            $http.post("api/utility/view/" + id);
+        }).error(function(data, status) {
+
+            });
+    }
+
+    //we do this in a function so we can handle cases where it goes too far in one direction or another
+    function changeAttachmentIndex(direction) {
+        attachmentIndex += (direction === "inc") ? 1 : -1;
+
+        if(attachmentIndex >= attachments.length) {
+            attachmentIndex = 0;
+        } else if(attachmentIndex < 0) {
+            attachmentIndex = attachments.length - 1;
+        }
+
+        loadAttachment();
+    }
+
+    $scope.hasMoreThanAttachments = function(total) {
+        return (attachments && attachments.length > total);
+    };
+
+    $scope.toggleModal = function(show){
+        $scope.showModal = show;
+    }
+
     $http.get("api/utility/getquote").success(function(data) {
         $scope.quote = data.quote;
     });
@@ -16,6 +78,20 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
     $http.get('api/article/all/news').success(function(data) {
         if(typeof(data) === "object") {
             $scope.articles = data;
+            // loop through the array of articles
+            $scope.articles.forEach(function(article){
+                // add an attribute to the article that will
+                // contain the array of doctypes attached to the article
+                article.childDoctypes = [];
+                // loop through each article's attachments
+                article.attachments.forEach(function(attachment){
+                    $http.get('api/article/' + attachment)
+                        .success(function(data, status){
+                            // add the attachment doctype to the array
+                            article.childDoctypes.push(data.doctype);
+                        });
+                });
+            });
         } else {
             $location.path('/maintenance');
         }

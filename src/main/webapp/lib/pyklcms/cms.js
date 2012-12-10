@@ -1,13 +1,11 @@
-var pykl = window.pykl || {};
-
 /**
  * todo: Determine some naming conventions. The service, directive, events and controller are all
  * over the board.
  * Proposed:
- *      Module: pykl.<module>    i.e. pykl.cms
+ *      Module: pykl.<module>    i.e. pykl.$cms
  *     Service: name it according to the service it provides
  *   Directive:
- *  Controller: use the window.pykl namespace for the controller.
+ *  Controller: pykl.$cms.ctrl
  *      Filter:
  */
 (function(window, ng, undefined) {
@@ -107,7 +105,8 @@ var pykl = window.pykl || {};
      * @param $scope
      * @param $http
      */
-    pykl.cmsCtrl = function($rootScope, $scope, $cms, $log) {
+    pyklCms.controller( 'pykl.$cms.ctrl', ['$rootScope', '$scope', 'pykl.$cms', '$log',
+        function($rootScope, $scope, $cms, $log) {
         // Stores the original array of incoming data. This object is used to diff
         // against the updated set of resources to determine whether a persist needs
         // to take place.
@@ -127,15 +126,15 @@ var pykl = window.pykl || {};
          * The user has submitted the
          */
         $scope.submit = function() {
-//            $log.info('Updated values: ', $scope.resources);
+            $log.info('pykl.$cms.ctrl, Updated values: ', $scope.resources);
             var modifiedResources = $scope.resources.filter(modified);
 
             var updateSuccess = function(resource) {
-//                $log.info('Successful update', arguments);
+                $log.info('pykl.$cms.ctrl, Successful update', arguments);
 
                 // broadcast the successful update of a resource
                 var eventName = CMS_UPDATE_EVENT + '-' + resource.key + '@' + resource.locale;
-//                $log.warn('RootScope:', $rootScope);
+                $log.warn('pykl.$cms.ctrl, Broadcasting: ', eventName);
                 $rootScope.$broadcast(eventName, resource);
 
                 $scope.showError = false;
@@ -143,7 +142,7 @@ var pykl = window.pykl || {};
             };
 
             var updateFailure = function() {
-//                $log.info('Error update', arguments);
+                $log.info('pykl.$cms.ctrl, Error update', arguments);
                 $scope.showError = true;
             };
 
@@ -208,11 +207,10 @@ var pykl = window.pykl || {};
                 $scope.modalShown = true;
             };
 
-//            $log.info('CMS Edit event captured, fetching all resources for key:', key);
+            $log.info('pykl.$cms.ctrl, CMS Edit event captured, fetching all resources for key:', key);
             $cms.getResources(key, initDialog);
         });
-    };
-    pykl.cmsCtrl.$inject = ['$rootScope', '$scope', 'pykl.$cms', '$log'];
+    }]);
 
     /**
      * @ngdoc directive

@@ -524,6 +524,8 @@ a.btn{
     color: #ffffff;
 }
 
+a.btn,
+.profile a.btn,
 a.btn:hover,
 a.btn:visited{
     color: #ffffff;
