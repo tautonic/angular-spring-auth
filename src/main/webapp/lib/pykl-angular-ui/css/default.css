@@ -1,4 +1,3 @@
-
 .modal.cms-edit {
     width: 800px;
     left: 40%;
@@ -17,70 +16,229 @@
     width: 100% !important;
 }
 
-.overlay {
-    background-color: #333333;
-    border: 10px dashed #888888;
+
+/* --------------------------------------------------------- */
+/* Directive:  pykl-ui.directives:imgUpload                  */
+/* --------------------------------------------------------- */
+/* Primary Container is relatively positioned as it
+   is the parent of several div overlays. It has a
+   minimum height for when the image is too small 
+   to support the overlay panels. It also acts as 
+   clipping bounds for the other panel's animations.
+   There is javascript to ensure the parent 
+   container is at least as large as the target 
+   image. 
+*/
+div.img-upload {
+    background: url('http://subtlepatterns.com/patterns/subtle_stripes.png') #dddddd;
+    min-width: 200px;
+    min-height: 200px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+}
+
+div.img-upload p, div.img-upload button {
+    font-size: 16px;
+    color: #ddd;
+}
+
+div.img-upload p {
+    margin: 1em 0;
+}
+
+/* All boxes use border-box for sizing and occupy
+   the full area of the container. We also want
+   a transition on changes to position and opacity.
+*/
+div.img-upload div {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    transition: all .25s ease-in-out;
+    -o-transition: all .25s ease-in-out;
+    -moz-transition: all .25s ease-in-out;
+    -webkit-transition: all .25s ease-in-out;
+}
+
+/* The target image should be vertically and
+   horizontally centered in the parent 
+   container. 
+*/
+div.img-upload > img {
+    vertical-align: middle;
+    z-index: 0;
+}
+
+/* Whenever the drag/drop panel or one of
+   the other overlays appear, the image is
+   faded out using this overlay. Opacity is
+   elevated to 0.8 when :hover is detected 
+   on the parent container.
+
+   This is also the container for the drop
+   zone div, and it includes some padding 
+   so the grop zone can have a slightly 
+   inset border.
+*/
+div.img-upload .fade {
+    background: #cccccc;
+    opacity: 0;
+    position: absolute;
+    padding: 8px;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* The drop zone has a dashed border and 
+   stylized text to let the user know 
+   that this element accepts a drag/drop 
+   operation.
+*/
+div.img-upload .drop {
+    border: 3px dashed #666;
+    border-radius: 6px;
+    color: #333;
+    opacity: 0;
+    text-align: center;
+    z-index: 2;
+}
+
+/* Drop zone text. */
+div.img-upload .drop p {
+    display: inline-block;
+    margin: 0;
+    font-size: 25px;
+    vertical-align: middle;
+}
+
+/* The browse panel animates up from the bottom
+   to ask the user to upload a file. Because the 
+   height is determined by its contents, the 
+   bottom is set using a percentage, and ensures
+   the non-visible state isn't within the parent
+   container.
+*/
+div.img-upload .browse {
+    background-color: rgba(0, 0, 0, 0.6);
+    border-top: 2px solid #000;
+    bottom: -100%;
+    height: auto;
+    left: 0;
     opacity: 0;
     position: absolute;
     text-align: center;
     z-index: 2;
 }
 
-.overlay h1, .overlay h3 {
-    color: #bbbbbb;
-    text-transform: none;
-}
+/* The progress overlay shows the file
+   currently being uploaded, a progress
+   indicator and a button to cancel the
+   upload process.
 
-.overlay h1 {
-    margin-top: 3em;
-    font-size: 30px;
-}
-
-.overlay h3 {
-    font-size: 14px;
-}
-
-.overlay.show {
-    opacity: .5;
-}
-
-.overlay.hide {
+   Like the browse overlay, the bottom 
+   property is exagerated because the 
+   content height cannot be known at
+   runtime.
+*/
+div.img-upload .working {
+    background-color: rgba(0, 0, 0, 0.6);
+    border-top: 2px solid #000;
+    bottom: -100%;
+    color: #ddd;
+    font-size: 70%;
+    height: auto;
+    left: 0;
     opacity: 0;
-}
-
-.panel {
-    background-color: #666666;
-    border-top: 3px solid #333333;
-    height: 100px;
     position: absolute;
-    text-align: center;
+    text-align: left;
     z-index: 3;
-    -webkit-transition: all 1s ease-in-out;
-    -moz-transition: all 1s ease-in-out;
-    -o-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
 }
 
-.panel.show {
-    opacity: .8;
+/* The progress indicator and the cancel button
+   are floated right. */
+div.img-upload .working div {
+    float: right;
+    margin: 1em 0.25em;
+    width: 50px;
+}
+
+/* The filename is the only sib,ing element not
+   floated, so it gives the parent block its
+   content height. Half of the width is devoted
+   to the filename, and it can wrap if need be.
+*/
+div.img-upload .working div.name {
+    width: 50%;
+    float: none;
+    margin: 1em .5em;
+}
+
+
+/* ======    Animations    ======= */
+
+/* Slide the progress overlay up from the bottom. 
+*/
+div.img-upload.inprogress .working {
     bottom: 0;
-}
-
-.panel.hide {
-    opacity: 0;
-    bottom: -100px;
-}
-
-.panel .browse {
     opacity: 1;
 }
 
+/* Don't want the browse panel to appear when
+   upload is in progress.
+*/
+.img-upload.inprogress:hover .browse {
+    opacity: 0;
+}
 
-/*
-#container img {
-    margin: 10px;
-    border: 15px solid blue;
-    padding: 20px;
-    top: 30px;
-    left:-20px;
-}*/
+/* Slide the browse overlay up from the bottom. 
+*/
+div.img-upload:hover .browse {
+    bottom: 0;
+    opacity: 1;
+}
+
+/* The drop zone appears when the dragover class
+   is added to the parent container.
+*/
+div.img-upload.dragover .drop {
+    opacity: .5;
+}
+
+/* The fade layer shows up whenever a hover event
+   is detected on the parent container, or when 
+   the classes for dragover and inprogress are 
+   detected.
+*/
+div.img-upload:hover .fade,
+div.img-upload.dragover .fade,
+div.img-upload.inprogress .fade {
+    opacity: 0.8;
+}
+
+/* ======       Hacks       ======= */
+
+/* A hack for the vertical centering of the
+   <p> content inside of the drop block.
+*/
+div.img-upload .drop:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -0.25em;
+}
+
+/* A hack for the vertical centering of the
+   <img> element inside of the parent container..
+div.img-upload:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em; 
+}
+*/
+  
+  
