@@ -42,13 +42,15 @@ if (!Array.prototype.filter)
 var animation = false,
     domPrefixes = 'Webkit Moz O ms Khtml'.split(' ');
 
-if( document.body.style.animationName ) { animation = true; }
+if(document.body != null) {
+    if(document.body.style.animationName)  { animation = true; }
 
-if( animation === false ) {
-    for( var i = 0; i < domPrefixes.length; i++ ) {
-        if( document.body.style[ domPrefixes[i] + 'AnimationName' ] !== undefined ) {
-            animation = true;
-            break;
+    if( (animation === false) ) {
+        for( var i = 0; i < domPrefixes.length; i++ ) {
+            if( document.body.style[ domPrefixes[i] + 'AnimationName' ] !== undefined ) {
+                animation = true;
+                break;
+            }
         }
     }
 }
@@ -764,7 +766,7 @@ angular.module('bgc.directives')
     .directive('dropdown', function(){
         return {
             restrict: 'A',
-            require: 'ngModel',
+            //require: 'ngModel',
             link: function(scope, elm){
                 elm.dropdown();
             }
@@ -890,7 +892,7 @@ angular.module('bgc.directives').directive('reloadTwitterBtns', function(){
  * Runs a function when the user reaches the bottom of the page. The individual function that is run is passed in as an argument.
  *
  * @param [options] {function} This should be a function that is passed into the directive. The function would then load more objects and add them to the list
- * @example <div when-scrolled="loadMore()">
+ * @example <div when-scrolled="loadMore()" offset="90">
  */
 angular.module('bgc.directives').directive('whenScrolled', function() {
     return function(scope, elm, attr) {
@@ -898,8 +900,8 @@ angular.module('bgc.directives').directive('whenScrolled', function() {
         var offset = attr.offset || 0;
         angular.element(window).bind('scroll', function() {
             var rectObject = raw.getBoundingClientRect();
-            //229 is the value of the footer height and some other things. it's possible this might need to be an option passed in though
-            if (Math.floor(rectObject.bottom) === $(window).height() - 150 - offset) {
+            //200 is the value of the footer height and some other things. offset is passed in as an option and is used for
+            if (Math.floor(rectObject.bottom) === $(window).height() - 200 - offset) {
                 scope.$apply(attr.whenScrolled);
             }
 
@@ -1133,15 +1135,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
             scope.$on('saveArticle', function(){
                 uploader.start();
 
-                var progress = '<div class="upload-progress clearfix"><div id="block-1" class="little-block"></div> \
-                                       <div id="block-2" class="little-block"></div> \
-                                       <div id="block-3" class="little-block"></div> \
-                                       <div id="block-4" class="little-block"></div> \
-                                       <div id="block-5" class="little-block"></div> \
-                                       <div id="block-6" class="little-block"></div> \
-                                       <div id="block-7" class="little-block"></div> \
-                                       <div id="block-8" class="little-block"></div> \
-                                       <div id="block-9" class="little-block"></div></div>'
+                var progress = ajaxLoader;
 
                 $('#attachment-upload').prepend(progress).append(progress);
 

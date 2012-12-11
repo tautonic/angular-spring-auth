@@ -24,9 +24,7 @@
                 <li class="muted"><i class="likes"></i> {{article.likes | pluralize:'Like'}}</li>
                 <li class="muted"><i class="views"></i> {{article.views | pluralize:'View'}}</li>
                 <li class="muted"><i class="comments"></i> {{article.comments | pluralize:'Comment'}}</li>
-                <!--<li class="muted"></li>-->
             </ul>
-            <!--<p class="muted">Category: {{article.category | category}}</p>-->
             <a class="category" ng-href="#/content/service/{{article.category}}">Category: {{article.category | category}}</a>
         </div>
     </div>

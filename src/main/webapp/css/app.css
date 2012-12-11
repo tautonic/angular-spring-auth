@@ -591,10 +591,11 @@ ul.dropdown-menu li:last-child a {
 }
 
 /****** Footer ******/
+/** warning: changes to footer margin can break the loadMore directive. If you change this, then change the number in the directive **/
 .footer {
     background-color: #c4c4c4;
     padding: 10px 20px;
-    margin-top: 5em;
+    margin-top: 50px;
 }
 
 .footer h3, .footer p {

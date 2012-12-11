@@ -13,7 +13,7 @@ function ajax(url) {
         headers: Headers({ 'x-rt-index': 'gc' }),
         async: false
     };
-    } catch(e) { log.info("THERE WAS A TERRIBLE ERROR");
+    } catch(e) {
         return {
             'status': 404,
             'content': '',

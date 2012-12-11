@@ -62,20 +62,20 @@
                             <div class="preview-lens"></div>
                         </div>
                     </form>
-                    <br>
-                    <div ui-if="auth.isAuthenticated">
-                        <div class="btn-group bgc">
-                            <a class="btn btn-success" ng-href="#/network/discussion/new">Start a new discussion</a>
-                        </div>
-                        <!--<a ng-href="#/network/discussion/new" class="btn btn-primary">Start new discussion</a>-->
-                    </div>
-                    <div ui-if="!auth.isAuthenticated">
-                        <div class="discussion-btn btn-group bgc">
-                            <a class="btn btn-success" ng-href="#/login">Log In to start a discussion</a>
-                        </div>
-                        <!--<a ng-href="#/network/discussion/new" class="btn btn-primary">Start new discussion</a>-->
-                    </div>
                 </div>
+            </div>
+            <br>
+            <div ui-if="auth.isAuthenticated">
+                <div class="btn-group bgc">
+                    <a class="btn btn-success" ng-href="#/network/discussion/new">Start a new discussion</a>
+                </div>
+                <!--<a ng-href="#/network/discussion/new" class="btn btn-primary">Start new discussion</a>-->
+            </div>
+            <div ui-if="!auth.isAuthenticated">
+                <div class="discussion-btn btn-group bgc">
+                    <a class="btn btn-success" ng-href="#/login">Log In to start a discussion</a>
+                </div>
+                <!--<a ng-href="#/network/discussion/new" class="btn btn-primary">Start new discussion</a>-->
             </div>
         </div>
     </div>
