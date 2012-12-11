@@ -303,8 +303,6 @@ angular.module('bgc.directives')
 angular.module('bgc.directives')
     .directive('pyklProfileImageUpload', ['$http', '$log', function($http, $log){
 
-    //alert('Upload Directive!');
-
     //pyklConfig.upload = pyklConfig.upload || {};
 
     return{
@@ -326,7 +324,6 @@ angular.module('bgc.directives')
                 runtimes: 'html5, flash, silverlight, browserplus',
                 browse_button: 'choose-files',
                 container: 'update',
-                //url: 'api/profiles/images/upload/',
                 url: 'api/cms/upload/image',
                 max_file_size:'100mb',
                 multi_selection:false,
@@ -410,11 +407,6 @@ angular.module('bgc.directives')
 
             saveCropBtn.bind('click', function(){
                 jQuery('.info.image h3').after(ajaxLoader);
-
-                var rxp = /^.*cms\//;
-                //var assetKey = url;
-
-                //assetKey = assetKey.replace(rxp, "");
 
                 var coords = jcropApi.tellSelect();
 
@@ -1065,8 +1057,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 runtimes: 'html5, flash, silverlight, browserplus',
                 browse_button: 'choose-files',
                 container:'attachment-upload',
-                url: 'api/profiles/images/upload/',
-                max_file_size:'100mb',
+                url: 'api/cms/upload/image',
+                max_file_size:'10mb',
                 multi_selection:false,
                 resize:{"width":320, "height":240, "quality":90},
                 flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
@@ -1146,8 +1138,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
             var fileAttachments = [];
 
             uploader.bind('FileUploaded', function(uploader, file, response){
-                content = scope.$eval("(" + response.response + ")");
-                content = scope.$eval("(" + content.content + ")");
+                var content = angular.fromJson(response.response);
 
                 var date = new Date();
 
@@ -1173,8 +1164,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                             key: 'attachment-key-' + utc_timestamp,
                             author: scope.$parent.$root.auth.principal.username,
                             format: 'attachment',
-                            mimetype: content.mimetype,
-                            uri: content.uri,
+                            mimetype: content.file.contentType,
+                            uri: content.file.uri,
                             views: 0,
                             likes: 0,
                             comments: 0,

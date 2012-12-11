@@ -41,13 +41,14 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     function loadAttachment() {
         var id = attachments[attachmentIndex];
         $http.get( 'api/article/' + id ).success( function (data) {
+            var uri = data.uri.replace('http://', '');
             var filesize = data.filesize === undefined ? 'Filesize unavailable' : data.filesize;
             $scope.modal = {
                 document: {
                     title: data.title,
                     description: data.description,
-                    url: 'http://docs.google.com/viewer?url=http:' + data.uri + '&embedded=true',
-                    directLink: "http:" + data.uri,
+                    url: 'http://docs.google.com/viewer?url=http://' + uri + '&embedded=true',
+                    directLink: "http://" + uri,
                     doctype: data.doctype,
                     author: data.author,
                     dateCreated: data.dateCreated,
@@ -333,13 +334,14 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
     function loadAttachment() {
         var id = $scope.article.attachments[attachmentIndex];
         $http.get( 'api/article/' + id ).success( function (data) {
+            var uri = data.uri.replace('http://', '');
             var filesize = data.filesize === undefined ? 'Filesize unavailable' : data.filesize;
             $scope.modal = {
                 document: {
                     title: data.title,
                     description: data.description,
-                    url: 'http://docs.google.com/viewer?url=http:' + data.uri + '&embedded=true',
-                    directLink: "http:" + data.uri,
+                    url: 'http://docs.google.com/viewer?url=http://' + uri + '&embedded=true',
+                    directLink: "http://" + uri,
                     doctype: data.doctype,
                     author: data.author,
                     dateCreated: data.dateCreated,
