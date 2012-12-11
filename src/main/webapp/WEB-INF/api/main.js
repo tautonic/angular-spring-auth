@@ -544,24 +544,6 @@ app.get( '/auth', function ( req ) {
 
 /********** Profile pages *********/
 app.post('/profiles', function(req){
-    /*var data = {
-        "username" : req.postParams.username,
-        "name" : {
-            "given": req.postParams.name.given,
-            "pre": req.postParams.name.pre,
-            "surname": req.postParams.name.surname
-        },
-        "password" : digest(req.postParams.password).toLowerCase(),
-        *//*"accountEmail" : {
-            "address"  : req.postParams.accountEmail.address
-        },*//*
-        "accountEmail" : req.postParams.accountEmail,
-        "workHistory" : req.postParams.workHistory,
-        "educationHistory" : req.postParams.educationHistory,
-        "thumbnail": req.postParams.thumbnail,
-        "status": "unverified"
-    };*/
-
     delete req.postParams.newPassRepeat;
     var data = req.postParams;
 
