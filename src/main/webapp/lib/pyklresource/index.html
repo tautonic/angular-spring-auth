@@ -98,6 +98,10 @@
                         <input type="checkbox" id="videos" ng-model="filters.video" ng-change="search(searchTerm)"><label for="videos"><span class="doc-type video"></span>Videos ({{count('videos')}})</label>
                         <hr>
                         <input type="checkbox" id="image" ng-model="filters.image" ng-change="search(searchTerm)"><label for="image"><span class="doc-type image"></span>Pictures ({{count('image')}})</label>
+
+                        <div class="btn-group bgc">
+                            <input type="submit" value="Search" class="btn btn-success">
+                        </div>
                     </form>
 
                 </div>

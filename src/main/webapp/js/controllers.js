@@ -69,7 +69,7 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
 
     $scope.toggleModal = function(show){
         $scope.showModal = show;
-    }
+    };
 
     $http.get("api/utility/getquote").success(function(data) {
         $scope.quote = data.quote;
@@ -116,8 +116,8 @@ function HomepageController($rootScope, $scope, $http, $location, $route) {
         return (($scope.stream) && ($scope.stream.itemCount === 0));
     };
 
-    $scope.signup = function() {
-        $location.path("/signup/"+$scope.signupEmail);
+    $scope.signup = function(email) {
+        $location.path("/signup/"+email);
     }
 }
 
