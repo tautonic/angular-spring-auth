@@ -224,7 +224,8 @@
     app.value('ui.config', {
         tinymce: {
             theme: 'simple',
-            width: '50%',
+            width: '90%',
+            height: '200px',
             preformatted: true
         },
         jq: {
