@@ -993,6 +993,20 @@ app.del('/attachments/:id', function(req, id){
     return _simpleHTTPRequest(opts);
 });
 
+app.post('/attachments/delete/:id', function(req, id){
+    var opts = {
+        url: getZociaUrl(req) + '/resources/' + id,
+        method: 'DELETE',
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc',
+            'Content-Type': 'application/json',
+            'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
+});
+
 /***********************
  *
  * Utility Functions

@@ -1429,7 +1429,7 @@ angular.module('bgc.directives').directive('removeAttachment', ['$http', functio
                 scope.$parent.article.attachments.splice(scope.$parent.article.attachments.indexOf(scope.attachment._id), 1);
                 // remove the attachment from the array attached to the scope
                 //scope.$parent.$parent.attachments.splice(scope.$parent.$parent.attachments.indexOf(scope.attachment._id), 1);
-                $http.delete('api/attachments/' + scope.attachment._id)
+                $http.post('api/attachments/delete/' + scope.attachment._id)
                     .success(function(){
                         // the article has to be updated as well
                         $http.put('api/admin/articles/' + scope.$parent.article._id, scope.$parent.article)
