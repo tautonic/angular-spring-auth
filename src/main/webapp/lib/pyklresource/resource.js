@@ -99,8 +99,15 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $rootScope.about = 'summit';
         category = 'summit';
     } else {
-        $rootScope.banner = 'curriculum';
-        $rootScope.about = 'curriculum';
+        if(category === '') {
+            $rootScope.banner = 'curriculum';
+            $rootScope.about = 'curriculum';
+            $rootScope.service = 'curriculum';
+        } else {
+            $rootScope.banner = category;
+            $rootScope.about = category;
+            $rootScope.service = category;
+        }
     }
 
     var url = "api/article/search?sort=" + sortBy + "&category=" + category;
@@ -112,7 +119,6 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     resetPaging();
     loadContent();
 
-    $rootScope.service = 'curriculum';
 
     function loadContent() {
         $scope.adminUsers = false;
@@ -267,8 +273,15 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
             $rootScope.about = 'summit';
             category = 'summit';
         } else {
-            $rootScope.banner = 'curriculum';
-            $rootScope.about = 'curriculum';
+            if(category === '') {
+                $rootScope.banner = 'curriculum';
+                $rootScope.about = 'curriculum';
+                $rootScope.service = 'curriculum';
+            } else {
+                $rootScope.banner = category;
+                $rootScope.about = category;
+                $rootScope.service = category;
+            }
         }
     });
 
