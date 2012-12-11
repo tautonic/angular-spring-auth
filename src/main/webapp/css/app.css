@@ -2486,3 +2486,7 @@ a.category{
     color: #999;
     font-size: 14px;
 }
+
+.btn-group.search-btn {
+    margin-top: 10px;
+}

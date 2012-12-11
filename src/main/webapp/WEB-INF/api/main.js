@@ -1238,7 +1238,7 @@ app.post('/utility/sendusername/:email', function(req, email){
 });
 
 // GCEE global search
-app.post('/search/site/', function(req){
+app.post('/search/site', function(req){
     var url = getZociaUrl(req) + '/search/';
 
     log.info('Request params {}', JSON.stringify(req.postParams, null, 4));
@@ -1333,7 +1333,7 @@ app.post('/search/site/', function(req){
     return result;
 });
 
-app.post('/search/faculty/', function(req){
+app.post('/search/faculty', function(req){
     var url = getZociaUrl(req) + '/search/';
 
     var queryParams = [
@@ -1380,7 +1380,7 @@ app.post('/search/faculty/', function(req){
     return result;
 });
 
-app.post('/search/content/', function(req){
+app.post('/search/content', function(req){
     var url = getZociaUrl(req) + '/search/';
 
     var queryParams = [
@@ -1404,7 +1404,7 @@ app.post('/search/content/', function(req){
     return _simpleHTTPRequest(opts);
 });
 
-app.post('/search/discussions/', function(req){
+app.post('/search/discussions', function(req){
     var url = getZociaUrl(req) + '/search/';
 
     var queryParams = [
@@ -1429,16 +1429,14 @@ app.post('/search/discussions/', function(req){
 
     var exchange = httpclient.request(opts);
 
-    //filters out threads with empty titles and threads that are tied to an article
-    var threads = JSON.parse(exchange.content).filter(function(element) {
-        return !(element.title === "");
-    });
+    var threads = JSON.parse(exchange.content).hits.hits;
 
     //loop through each thread and add an attribute that contains the
     //number of replies/comments
+    //and hides spam threads
     threads.forEach(function(thread){
         opts = {
-            url: getZociaUrl(req) + '/posts/byentities/count?ids[]=' + thread._id + '&types=discussion',
+            url: getZociaUrl(req) + '/posts/byentities/count?ids[]=' + thread._id + '&types=' + thread.type,
             method: 'GET',
             headers: Headers({ 'x-rt-index': 'gc' }),
             async: false
@@ -1446,9 +1444,11 @@ app.post('/search/discussions/', function(req){
 
         exchange = httpclient.request(opts);
 
-        var comment = JSON.parse(exchange.content);
+        thread.commentCount = JSON.parse(exchange.content).count;
 
-        thread.commentCount = comment.count;
+        thread.hidden = (thread.spam >= 3);
+
+        thread.link = "#/network/discussion/view/" + thread._id;
     });
 
     log.info('EXCHANGE STATUS!!! ', exchange.status);

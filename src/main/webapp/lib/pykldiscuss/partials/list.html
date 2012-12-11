@@ -61,7 +61,13 @@
                         <div class="search-lens read-more gradient">
                             <div class="preview-lens"></div>
                         </div>
+
+                        <div class="btn-group bgc search-btn">
+                            <input type="submit" value="Search" class="btn btn-success">
+                        </div>
                     </form>
+
+
                 </div>
             </div>
             <br>
@@ -69,13 +75,11 @@
                 <div class="btn-group bgc">
                     <a class="btn btn-success" ng-href="#/network/discussion/new">Start a new discussion</a>
                 </div>
-                <!--<a ng-href="#/network/discussion/new" class="btn btn-primary">Start new discussion</a>-->
             </div>
             <div ui-if="!auth.isAuthenticated">
                 <div class="discussion-btn btn-group bgc">
                     <a class="btn btn-success" ng-href="#/login">Log In to start a discussion</a>
                 </div>
-                <!--<a ng-href="#/network/discussion/new" class="btn btn-primary">Start new discussion</a>-->
             </div>
         </div>
     </div>
