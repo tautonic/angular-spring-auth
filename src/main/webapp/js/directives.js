@@ -324,7 +324,8 @@ angular.module('bgc.directives')
                 runtimes: 'html5, flash, silverlight, browserplus',
                 browse_button: 'choose-files',
                 container: 'update',
-                url: 'api/profiles/images/upload/',
+                //url: 'api/profiles/images/upload/',
+                url: 'api/cms/upload/image',
                 max_file_size:'100mb',
                 multi_selection:false,
                 resize:{"width":650, "quality":90},
@@ -367,39 +368,51 @@ angular.module('bgc.directives')
                 upload.settings.multipart_params = {size: file.size}
             });
 
-
-            /*uploader.bind('UploadProgress', function (up, file) {
-                $$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-            });*/
-
             var url;
+            var assetKey;
 
             uploader.bind('FileUploaded', function(uploader, file, response){
-                var content = scope.$eval("(" + response.response + ")");
-                content = scope.$eval("(" + content.content + ")");
+                var content = angular.fromJson(response.response);
 
-                url = content.uri;
+                url = content.file.uri;
+
+                // file has been uploaded, let's create a resource and send that to zocia
+                var resource = {
+                    "name": content.file.name,
+                    "locale": "en" ,
+                    "author": "",
+                    "dataType": "resources",
+                    "category": "",
+                    "taggable": [] ,
+                    "title": "",
+                    "description": "",
+                    "likes": 0,
+                    "comments": 0,
+                    "uri": url,
+                    "mimetype": content.file.contentType
+                };
+
+                $http.post('api/profiles/image/resource', resource)
+                    .success(function(data, status){
+                        assetKey = data.content.key;
+                    });
             });
 
             var jcropApi;
-            //var height;
-            //var width;
 
             cancelCropBtn.bind('click', function(){
                 $('.upload-progress').remove();
                 $('.jcrop-holder').empty();
                 $('.profile-crop-preview').hide();
-                //jcropApi.destroy();
-                $log.info('Files in queue: ' + uploader.files.length)
             });
 
             saveCropBtn.bind('click', function(){
                 jQuery('.info.image h3').after(ajaxLoader);
 
                 var rxp = /^.*cms\//;
-                var assetKey = url;
+                //var assetKey = url;
 
-                assetKey = assetKey.replace(rxp, "");
+                //assetKey = assetKey.replace(rxp, "");
 
                 var coords = jcropApi.tellSelect();
 
@@ -420,39 +433,29 @@ angular.module('bgc.directives')
                     function(data, status, headers, config){
                         $('.upload-progress').remove();
                         var uri = data.content.uri;
-                        uri = uri.replace(/http:/, '');
+                        //uri = uri.replace(/http:/, '');
 
                         delete profile.isUserFollowing;
                         delete profile.facultyFellow;
 
                         profile.thumbnail = uri;
                         scope.$parent.updateThumbnailUri(profile);
-                        //scope.$digest();
-                        //$('.new-picture-frame.profile-thumbnail img').attr('src', uri);
                     }).error(
                     function(){
                         $log.info('Image crop error!');
                     }
                 );
 
-                //height = $('#image-crop').height();
-                //width = $('#image-crop').width();
-
                 $('.profile-crop-preview').hide();
             });
 
-            var initialCrop = true;
-
             uploader.bind('UploadComplete', function(uploader, file){
-                //$('#image-crop').attr('src', url);
                 $('.upload-progress').remove();
                 $('.profile-crop-preview').show();
 
                 $('.jcrop-holder img').attr('src', url);
 
                 $('#image-crop').attr('src', url);
-
-                //$('#crop-preview').attr('src', url);
 
                 $('#image-crop').Jcrop({
                     bgColor: '#fff',

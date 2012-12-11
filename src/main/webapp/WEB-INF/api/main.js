@@ -848,109 +848,24 @@ app.get('/profiles/byusername/:username', function(req, username){
  * @param {JsgiRequest} request
  * @returns {JsgiResponse} An HTML <div> containing a JSON string with upload results
  */
-app.post('/profiles/images/upload/', function (req) {
-    var contentType = req.env.servletRequest.getContentType();
+app.post('/profiles/image/resource', function (req) {
+    var uuid = Packages.java.util.UUID;
 
-    if ((req.method === "POST" || req.method === "PUT") && fileUpload.isFileUpload(contentType)) {
-        var headers = {};
+    var result = uuid.randomUUID().toString();
+    result = result.replace(/-/g, '');
 
-        log.info('File pre-upload: ' + JSON.stringify(req.params, null, 4));
+    req.postParams.key = result;
+    req.postParams.ref = result;
 
-        var encoding = req.env.servletRequest.getCharacterEncoding();
-
-        var params = {};
-
-        fileUpload.parseFileUpload(req, params, encoding, fileUpload.BufferFactory);
-
-        log.info('File uploaded: ' + JSON.stringify(params, null, 4));
-
-        var exchange;
-
-        if(params.file){
-            // as a workaround we're only adding a upload-size to the
-            // header if the file is over a certain size
-            if(params.size >= 131072){
-                headers = {
-                    'x-rt-index': 'gc',
-                    'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r'),
-                    'x-rt-upload-name': params.file.filename,
-                    'x-rt-upload-content-type': params.file.contentType,
-                    'x-rt-upload-size': params.size
-                }
-            }else{
-                headers = {
-                    'x-rt-index': 'gc',
-                    'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r'),
-                    'x-rt-upload-name': params.file.filename,
-                    'x-rt-upload-content-type': params.file.contentType
-                }
-            }
-
-            var opts = {
-                "url": getZociaUrl(req) + '/files/upload/',
-                "headers": headers,
-                "data": params.file.value,
-                "method": 'PUT'
-            };
-
-            java.lang.Thread.sleep(1000);
-
-            exchange = httpclient.request(opts);
-
-            //log.info('UPLOAD EXCHANGE CONTENT', JSON.stringify(content, null, 4));
-
-            /*var result = {
-                'status': exchange.status,
-                'content': JSON.parse(exchange.content),
-                'headers': exchange.headers,
-                'success': Math.floor(exchange.status / 100) === 2
-            };
-
-            result.status = exchange.status;
-
-            return json(result);*/
-
-            if(exchange.status === 200 ){
-                var result = {
-                    'status': exchange.status,
-                    'content': exchange.content,
-                    'headers': exchange.headers,
-                    'success': Math.floor(exchange.status / 100) === 2
-                 };
-
-                 result.status = exchange.status;
-
-                 return json(result);
-                /*return {
-                    status: 200,
-                    headers: {
-                        "Content-Type": "'application/json"
-                    },
-                    body: [content]
-                }*/
-            }else if(exchange.status === 401){
-                return {
-                    status: 401,
-                    headers: {"Content-Type": 'text/html'},
-                    body: []
-                };
-            }
-        } else {
-            log.info("Error uploading image to S3: " + exchange.content);
-
-            return {
-                status: 500,
-                headers: {"Content-Type": 'text/html'},
-                body: []
-            };
-        }
-    }
-
-    return {
-        status:400,
-        headers:{"Content-Type":'text/html'},
-        body:[]
+    var opts = {
+        url: getZociaUrl(req) + '/resources/',
+        method: 'POST',
+        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+        async: false
     };
+
+    return _simpleHTTPRequest(opts);
 });
 
 app.post('/profiles/images/crop/', function (req) {
