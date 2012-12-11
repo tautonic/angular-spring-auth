@@ -201,6 +201,7 @@ input, button, select, textarea {
 
 .transparent-pill-shapes h2{
     font-size: 30px;
+    line-height: 30px;
     font-weight: bold;
 }
 

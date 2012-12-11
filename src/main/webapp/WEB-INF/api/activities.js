@@ -362,7 +362,8 @@ var getLatestActivity = function(request, profile, context, userId) {
         filteredActivities = filteredActivities.replace(activity, '');
     });
 
-    var url = getZociaUrl(request) + '/activities/byactor/' + profile._id;
+    //this gets the lastest/newest activity from a user, returning only one result
+    var url = getZociaUrl(request) + '/activities/byactor/' + profile._id + '/newest';
 
     var opts = {
         url: url,
@@ -371,16 +372,15 @@ var getLatestActivity = function(request, profile, context, userId) {
         async: false
     };
 
-    // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
     var activityExchange = httpclient.request(opts);
 
-    var stream = JSON.parse(activityExchange.content);
+    var stream = JSON.parse(activityExchange.content)[0];
 
     //log.info('Activity stream for {}: {}', profile.username, JSON.stringify(stream, null, 4));
 
     // find the latest activity directly taken by the owner of the profile
     // the latest activity is the last activity in the array
-    var activity = new ActivityMixin(stream.pop(), request, context, userId);
+    var activity = new ActivityMixin(stream, request, context, userId);
 
     return {
         'fullName': activity.fullName,
