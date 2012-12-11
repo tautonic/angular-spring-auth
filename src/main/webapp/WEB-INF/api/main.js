@@ -543,7 +543,7 @@ app.get( '/auth', function ( req ) {
 } );
 
 /********** Profile pages *********/
-app.post('/profiles/', function(req){
+app.post('/profiles', function(req){
     /*var data = {
         "username" : req.postParams.username,
         "name" : {
@@ -868,7 +868,7 @@ app.post('/profiles/image/resource', function (req) {
     return _simpleHTTPRequest(opts);
 });
 
-app.post('/profiles/images/crop/', function (req) {
+app.post('/profiles/images/crop', function (req) {
     var params = req.params;
 
     var opts = {
@@ -884,7 +884,7 @@ app.post('/profiles/images/crop/', function (req) {
     return _simpleHTTPRequest(opts);
 });
 
-app.get('/profiles/images/', function(req, id){
+app.get('/profiles/images', function(req, id){
     var opts = {
         url: getZociaUrl(req) + '/profiles/' + id,
         method: 'GET',
@@ -1135,7 +1135,7 @@ app.post('/utility/unspam/:id', function(req, id) {
 /**
  * Requires an email address, and passes that to zocia. If the email address is valid/in use, it will send the user an email giving them a link to reset their password using the token that's generated
  */
-app.post('/utility/resettoken/', function(req){
+app.post('/utility/resettoken', function(req){
     var data = req.postParams;
     data.callback = getZociaUrl(req) + '/';
 
@@ -1155,7 +1155,7 @@ app.post('/utility/resettoken/', function(req){
 /**
  * This actually performs the action of resetting the password, given the token from the previous function. Generates a new password, sending it via email, that the user can then use to login
  */
-app.post('/utility/resetpassword/', function(req){
+app.post('/utility/resetpassword', function(req){
     var data = req.postParams;
 
     var opts = {

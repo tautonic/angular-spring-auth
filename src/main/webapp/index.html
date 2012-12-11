@@ -114,16 +114,16 @@
             <div ng-switch on="banner">
                 <div ng-switch-when="none"></div>
                 <div ng-switch-when="summit">
-                    <div ng-include src="'partials/annual-summit-banner.html'"></div>
+                    <div ng-include src="'partials/banners/annual-summit-banner.html'"></div>
                 </div>
                 <div ng-switch-when="curriculum">
-                    <div ng-include src="'partials/curriculum-content-banner.html'"></div>
+                    <div ng-include src="'partials/banners/curriculum-content-banner.html'"></div>
                 </div>
                 <div ng-switch-when="network">
-                    <div ng-include src="'partials/network-banner.html'"></div>
+                    <div ng-include src="'partials/banners/network-banner.html'"></div>
                 </div>
                 <div ng-switch-default>
-                    <div ng-include src="'partials/home-banner.html'"></div>
+                    <div ng-include src="'partials/banners/home-banner.html'"></div>
                 </div>
             </div>
 
@@ -136,37 +136,37 @@
 <div ng-switch on="about">
     <div ng-switch-when="none"></div>
     <div ng-switch-when="summit">
-        <div ng-include src="'partials/annual-summit-about.html'"></div>
+        <div ng-include src="'partials/banners/annual-summit-about.html'"></div>
     </div>
     <div ng-switch-when="network">
-        <div ng-include src="'partials/network-about.html'"></div>
+        <div ng-include src="'partials/banners/network-about.html'"></div>
     </div>
     <div ng-switch-when="curriculum">
-        <div ng-include src="'partials/curriculum-about.html'"></div>
+        <div ng-include src="'partials/banners/curriculum-about.html'"></div>
     </div>
     <div ng-switch-when="home">
-        <div ng-include src="'partials/homepage-about.html'"></div>
+        <div ng-include src="'partials/banners/homepage-about.html'"></div>
     </div>
     <div ng-switch-when="404">
-        <div ng-include src="'partials/404_error_page.html'"></div>
+        <div ng-include src="'partials/banners/404_error_page.html'"></div>
     </div>
     <div ng-switch-when="500">
-        <div ng-include src="'partials/500_error_page.html'"></div>
+        <div ng-include src="'partials/banners/500_error_page.html'"></div>
     </div>
     <div ng-switch-when="maintenance">
-        <div ng-include src="'partials/maintenance_error_page.html'"></div>
+        <div ng-include src="'partials/banners/maintenance_error_page.html'"></div>
     </div>
     <div ng-switch-when="signin">
-        <div ng-include src="'partials/signin.html'"></div>
+        <div ng-include src="'partials/banners/signin.html'"></div>
     </div>
     <div ng-switch-when="signup">
-        <div ng-include src="'partials/signup.html'"></div>
+        <div ng-include src="'partials/banners/signup.html'"></div>
     </div>
     <div ng-switch-when="service">
-        <div ng-include src="'partials/services-about.html'"></div>
+        <div ng-include src="'partials/banners/services-about.html'"></div>
     </div>
     <div ng-switch-default>
-        <div ng-include src="'partials/homepage-about.html'"></div>
+        <div ng-include src="'partials/banners/homepage-about.html'"></div>
     </div>
 </div>
 
