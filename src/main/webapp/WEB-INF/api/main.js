@@ -543,7 +543,7 @@ app.get( '/auth', function ( req ) {
 } );
 
 /********** Profile pages *********/
-app.post('/profiles/', function(req){
+app.post('/profiles', function(req){
     /*var data = {
         "username" : req.postParams.username,
         "name" : {
