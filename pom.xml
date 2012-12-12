@@ -207,7 +207,7 @@
             </plugin>
 
             <!-- https://github.com/searls/jasmine-maven-plugin -->
-            <plugin>
+            <!--<plugin>
                 <groupId>com.github.searls</groupId>
                 <artifactId>jasmine-maven-plugin</artifactId>
                 <version>1.2.0.0</version>
@@ -227,12 +227,12 @@
                     </preloadSources>
                     <specIncludes>
                         <include>${project.basedir}/test/lib/angular/angular-mocks.js</include>
-                        <include>**/*.js</include> <!-- This is catching your tests. -->
+                        <include>**/*.js</include>
                     </specIncludes>
                     <jsSrcDir>${project.basedir}/src/main/webapp/js</jsSrcDir>
                     <jsTestSrcDir>${project.basedir}/test/unit</jsTestSrcDir>
                 </configuration>
-            </plugin>
+            </plugin>  -->
 
         </plugins>
 
