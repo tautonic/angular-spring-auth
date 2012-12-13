@@ -1172,7 +1172,9 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                             rating: 0,
                             name: file.name,
                             filesize: plupload.formatSize(file.size),
-                            roles: (scope.article.premium) ? ['ROLE_USER', 'ROLE_PREMIUM'] : ['ROLE_USER']
+                            roles: (scope.article.premium) ? ['ROLE_USER', 'ROLE_PREMIUM'] : ['ROLE_USER'],
+                            thumbnail: 'images/row-of-columns.jpg',
+                            category: ((scope.article.category === '') ? 'curriculum' : scope.article.category)
                         };
 
                         fileAttachments.push(resource);

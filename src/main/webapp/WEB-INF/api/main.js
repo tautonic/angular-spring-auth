@@ -176,14 +176,14 @@ app.post('/admin/articles', function(req){
 
     result.attachments.forEach(function(attachment) {
         opts = {
-            url: getZociaUrl(req) + '/resources/link/' + result._id + '/' + attachment._id,
+            url: getZociaUrl(req) + '/resources/link/' + result._id + '/' + attachment,
             method: 'POST',
             headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
             async: false
         };
 
-        if(httpclient.request(opts).content) {
-            log.info("success");
+        if(!httpclient.request(opts).content) {
+            exchange.status = 500;
         }
     });
 

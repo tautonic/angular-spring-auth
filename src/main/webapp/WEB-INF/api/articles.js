@@ -128,7 +128,7 @@ var searchAllArticles = function(req, params) {
     var exchange = httpclient.request(opts);
 
     var result = JSON.parse(exchange.content);
-    log.info("ARTICLE RESULTS: "+exchange.content);
+
     if(typeof(result) == "object" ) {
         result.forEach(configureArticles);
     } else {
