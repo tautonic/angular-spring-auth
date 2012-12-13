@@ -170,7 +170,29 @@ app.post('/admin/articles', function(req){
         async: false
     };
 
-    return _simpleHTTPRequest(opts);
+    var exchange = httpclient.request(opts);
+
+    var result = JSON.parse(exchange.content);
+
+    result.attachments.forEach(function(attachment) {
+        opts = {
+            url: getZociaUrl(req) + '/resources/link/' + result._id + '/' + attachment._id,
+            method: 'POST',
+            headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
+            async: false
+        };
+
+        if(httpclient.request(opts).content) {
+            log.info("success");
+        }
+    });
+
+    return json({
+        'status': exchange.status,
+        'content': result,
+        'headers': exchange.headers,
+        'success': Math.floor(exchange.status / 100) === 2
+    });
 });
 
 app.put('/admin/articles/:id', function(req, id){

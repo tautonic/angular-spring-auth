@@ -131,10 +131,6 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
                 $scope.articles = data;
                 // loop through the array of articles
                 $scope.articles.forEach(function(article){
-                    // add an attribute to the article that will
-                    // contain the array of doctypes attached to the article
-                    article.childDoctypes = [];
-                    // loop through each article's attachments
                     article.attachments.forEach(function(attachment){
                         $http.get('api/article/' + attachment)
                             .success(function(data, status){
@@ -315,6 +311,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             // contain the array of doctypes attached to the article
             $scope.article.childDoctypes = [];
             // loop through each article's attachments
+            article.childDoctypes.push(article.doctype);
             $scope.article.attachments.forEach(function(attachment){
                 $http.get('api/article/' + attachment)
                     .success(function(data, status){

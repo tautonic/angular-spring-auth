@@ -1171,7 +1171,8 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                             comments: 0,
                             rating: 0,
                             name: file.name,
-                            filesize: plupload.formatSize(file.size)
+                            filesize: plupload.formatSize(file.size),
+                            roles: (scope.article.premium) ? ['ROLE_USER', 'ROLE_PREMIUM'] : ['ROLE_USER']
                         };
 
                         fileAttachments.push(resource);

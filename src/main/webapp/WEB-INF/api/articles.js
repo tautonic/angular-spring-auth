@@ -31,7 +31,7 @@ function ajax(url) {
         'success': Math.floor(exchange.status / 100) === 2
     };
 }
-
+//take all articles and attachments as one single result list, don't try to combine them. might at some point need some way to connect the attachments to the original article in case of providing links or something
 var searchAllArticles = function(req, params) {
     var query;
     var from = params.from || 0;
@@ -79,12 +79,11 @@ var searchAllArticles = function(req, params) {
                                 "locale": [
                                     "en",
                                     "en_US"
+                                ],
+                                "format": [
+                                    "article",
+                                    "attachment"
                                 ]
-                            }
-                        },
-                        {
-                            "term": {
-                                "format": "article"
                             }
                         }
                     ]
@@ -129,7 +128,7 @@ var searchAllArticles = function(req, params) {
     var exchange = httpclient.request(opts);
 
     var result = JSON.parse(exchange.content);
-
+    log.info("ARTICLE RESULTS: "+exchange.content);
     if(typeof(result) == "object" ) {
         result.forEach(configureArticles);
     } else {
@@ -324,8 +323,16 @@ function generateBasicAuthorization(user) {
 }
 
 function configureArticles(article) {
-    article.doctype = getDocType(article.mimetype);
-    article.premium = article.roles.some(function(element) { return element == "ROLE_PREMIUM"; });
+    article.childDoctypes = [getDocType(article.mimetype)];
+    if(article.roles != undefined) {
+        article.premium = article.roles.some(function(element) { return element == "ROLE_PREMIUM"; });
+    } else {
+        article.premium = true;
+    }
+    if(article.attachments === undefined) {
+        article.attachments = [];
+        article._id = article.ref;
+    }
 }
 
 export('ajax', 'searchAllArticles', 'getAllArticles', 'getArticlesByCategory', 'getArticle', 'linkDiscussionToArticle', 'returnRandomQuote');
