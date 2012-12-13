@@ -323,7 +323,7 @@ function generateBasicAuthorization(user) {
 }
 
 function configureArticles(article) {
-    article.childDoctypes = [getDocType(article.mimetype)];
+    article.doctype = getDocType(article.mimetype);
     if(article.roles != undefined) {
         article.premium = article.roles.some(function(element) { return element == "ROLE_PREMIUM"; });
     } else {

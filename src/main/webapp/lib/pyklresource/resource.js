@@ -130,7 +130,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
             if(data !== "false") {
                 $scope.articles = data;
                 // loop through the array of articles
-                $scope.articles.forEach(function(article){
+                /*$scope.articles.forEach(function(article){
                     article.attachments.forEach(function(attachment){
                         $http.get('api/article/' + attachment)
                             .success(function(data, status){
@@ -138,7 +138,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
                                 article.childDoctypes.push(data.doctype);
                             });
                     });
-                });
+                });*/
                 if($scope.articles.length < $scope.paging.size) {
                     $scope.paging.more = false;
                 }
@@ -311,7 +311,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             // contain the array of doctypes attached to the article
             $scope.article.childDoctypes = [];
             // loop through each article's attachments
-            article.childDoctypes.push(article.doctype);
+            $scope.article.childDoctypes.push($scope.article.doctype);
             $scope.article.attachments.forEach(function(attachment){
                 $http.get('api/article/' + attachment)
                     .success(function(data, status){
