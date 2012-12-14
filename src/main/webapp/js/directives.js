@@ -930,7 +930,7 @@ angular.module('bgc.directives').directive('like', ['$http', '$rootScope', funct
             attrs.$observe('objectid', function(object_id) {
                 if(object_id !== '') {
                     $http.get("api/utility/like/" + object_id).success(function(data) {
-                        var result = JSON.parse(data); console.log("like button result: ",result);
+                        var result = JSON.parse(data);
                         if(result) {
                             scope.likeText = "Unlike";
                         }

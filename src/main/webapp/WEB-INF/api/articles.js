@@ -135,7 +135,6 @@ var searchAllArticles = function(req, params) {
     var exchange = httpclient.request(opts);
 
     var result = JSON.parse(exchange.content);
-    log.info("ARTICLES RESUTNRED: "+exchange.content);
 
     var articles = [];
 
