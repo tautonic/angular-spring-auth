@@ -321,11 +321,11 @@ angular.module('bgc.directives')
             // by adding it as a property to this config object
             var config = {
                 scope: scope,
-                runtimes: 'html5, flash, silverlight, browserplus',
+                runtimes: 'html5, flash, silverlight, html4, browserplus',
                 browse_button: 'choose-files',
                 container: 'update',
                 url: 'api/cms/upload/image',
-                max_file_size:'100mb',
+                max_file_size:'3mb',
                 multi_selection:false,
                 resize:{"width":650, "quality":90},
                 flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
