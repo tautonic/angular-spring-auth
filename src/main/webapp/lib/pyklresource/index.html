@@ -86,18 +86,18 @@
                         </div>
 
                         <hr>
-                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments()"><label for="documents">Documents ({{countDocuments()}})</label>
+                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments(searchTerm)"><label for="documents">Documents ({{facets.documents.count}})</label>
                         <div class="sub documents">
-                            <input type="checkbox" id="pdf" ng-model="filters.pdf" ng-change="search(searchTerm)"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{count('pdf')}})</label>
-                            <input type="checkbox" id="word" ng-model="filters.word" ng-change="search(searchTerm)"><label for="word"><span class="doc-type word"></span>Microsoft Word ({{count('word')}})</label>
-                            <input type="checkbox" id="powerpoint" ng-model="filters.ppt" ng-change="search(searchTerm)"><label for="powerpoint"><span class="doc-type ppt"></span>PowerPoint ({{count('powerpoint')}})</label>
-                            <input type="checkbox" id="excel" ng-model="filters.xls" ng-change="search(searchTerm)"><label for="excel"><span class="doc-type xls"></span>Excel Spreadsheet ({{count('excel')}})</label>
-                            <input type="checkbox" id="text" ng-model="filters.text" ng-change="search(searchTerm)"><label for="text"><span class="doc-type text"></span>Text File ({{count('text')}})</label>
-                            <input type="checkbox" id="rtf" ng-model="filters.rtf" ng-change="search(searchTerm)"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{count('rtf')}})</label>
+                            <input type="checkbox" id="pdf" ng-model="filters.pdf" ng-change="search(searchTerm)"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{facets.pdf.count}})</label>
+                            <input type="checkbox" id="word" ng-model="filters.word" ng-change="search(searchTerm)"><label for="word"><span class="doc-type word"></span>Microsoft Word ({{facets.word.count}})</label>
+                            <input type="checkbox" id="powerpoint" ng-model="filters.ppt" ng-change="search(searchTerm)"><label for="powerpoint"><span class="doc-type ppt"></span>PowerPoint ({{facets.ppt.count}})</label>
+                            <input type="checkbox" id="excel" ng-model="filters.xls" ng-change="search(searchTerm)"><label for="excel"><span class="doc-type xls"></span>Excel Spreadsheet ({{facets.xls.count}})</label>
+                            <input type="checkbox" id="text" ng-model="filters.text" ng-change="search(searchTerm)"><label for="text"><span class="doc-type text"></span>Text File ({{facets.text.count}})</label>
+                            <input type="checkbox" id="rtf" ng-model="filters.rtf" ng-change="search(searchTerm)"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{facets.rtf.count}})</label>
                         </div>
-                        <input type="checkbox" id="videos" ng-model="filters.video" ng-change="search(searchTerm)"><label for="videos"><span class="doc-type video"></span>Videos ({{count('videos')}})</label>
+                        <input type="checkbox" id="videos" ng-model="filters.video" ng-change="search(searchTerm)"><label for="videos"><span class="doc-type video"></span>Videos ({{facets.video.count}})</label>
                         <hr>
-                        <input type="checkbox" id="image" ng-model="filters.image" ng-change="search(searchTerm)"><label for="image"><span class="doc-type image"></span>Pictures ({{count('image')}})</label>
+                        <input type="checkbox" id="image" ng-model="filters.image" ng-change="search(searchTerm)"><label for="image"><span class="doc-type image"></span>Pictures ({{facets.image.count}})</label>
 
                         <div class="btn-group bgc">
                             <input type="submit" value="Search" class="btn btn-success">

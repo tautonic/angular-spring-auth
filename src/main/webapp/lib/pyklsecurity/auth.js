@@ -50,7 +50,8 @@ var pykl = window.pykl || {};
 
         initAuth();
         function getAuth() {
-            return $http.get('api/auth')
+            var random = 17 * Math.random() * Math.random();
+            return $http.get('api/auth?random=' + random)
                 .success(function (data, status, headers, config) {
                     $rootScope.auth.principal = data.principal;
                     $rootScope.auth.isAuthenticated =

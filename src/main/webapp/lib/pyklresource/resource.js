@@ -128,21 +128,9 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
 
         $http.get( url ).success( function (data) {
             if(data !== "false") {
-                $scope.articles = data;
-                // loop through the array of articles
-                $scope.articles.forEach(function(article){
-                    // add an attribute to the article that will
-                    // contain the array of doctypes attached to the article
-                    article.childDoctypes = [];
-                    // loop through each article's attachments
-                    article.attachments.forEach(function(attachment){
-                        $http.get('api/article/' + attachment)
-                            .success(function(data, status){
-                                // add the attachment doctype to the array
-                                article.childDoctypes.push(data.doctype);
-                            });
-                    });
-                });
+                $scope.articles = data.articles;
+                $scope.facets = data.facets;
+
                 if($scope.articles.length < $scope.paging.size) {
                     $scope.paging.more = false;
                 }
@@ -196,13 +184,15 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         return result;
     }
 
-    $scope.toggleDocuments = function() {
+    $scope.toggleDocuments = function(term) {
         $scope.filters.pdf = $scope.filters.documents;
         $scope.filters.word = $scope.filters.documents;
         $scope.filters.ppt = $scope.filters.documents;
         $scope.filters.xls = $scope.filters.documents;
         $scope.filters.text = $scope.filters.documents;
         $scope.filters.rtf = $scope.filters.documents;
+
+        $scope.search(term);
     };
 
     $scope.search = function(term) {
@@ -253,10 +243,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     }
 
     $scope.countDocuments = function() {
-        var total = 0;
-        total = count('pdf') + count('word') + count('ppt') + count('xls') + count('text') + count('rtf');
-
-        return total;
+        return count('pdf') + count('word') + count('ppt') + count('xls') + count('text') + count('rtf');
     };
 
     $scope.count = count;
@@ -315,6 +302,7 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             // contain the array of doctypes attached to the article
             $scope.article.childDoctypes = [];
             // loop through each article's attachments
+            $scope.article.childDoctypes.push($scope.article.doctype);
             $scope.article.attachments.forEach(function(attachment){
                 $http.get('api/article/' + attachment)
                     .success(function(data, status){
