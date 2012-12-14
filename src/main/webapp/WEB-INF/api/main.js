@@ -97,15 +97,6 @@ app.get('/article/search', function(req) {
     return json(articles);
 });
 
-app.get('/article/all/bycategory/:category', function(req, category) {
-    var articles = getArticlesByCategory(req, category);
-
-    if(articles.success) {
-        return json(articles.content);
-    }
-    return json(false);
-});
-
 app.get('/article/:id', function(req, id) {
     var article = getArticle(req, id);
 
@@ -936,10 +927,27 @@ app.get('/profiles/images', function(req, id){
     }
 });
 
+//todo: it's possible to use zocia/search/facets to do this, without the need for an additional endpoint, plus it returns the facets only
 app.get('/facets/:format', function(req, format){
+    var query = {
+        "query": {
+            "field": {
+                "format": format
+            }
+        },
+        "facets": {
+            "category": {
+                "terms": {
+                    "field": "category"
+                }
+            }
+        }
+    };
+
     var opts = {
-        url: getZociaUrl(req) + '/resources/facets/' + format,
-        method: 'GET',
+        url: getZociaUrl(req) + '/resources/searchRaw/',
+        method: 'POST',
+        data: JSON.stringify(query),
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
     };

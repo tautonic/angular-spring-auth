@@ -92,7 +92,14 @@ var searchAllArticles = function(req, params) {
         },
         "from": from,
         "size": size,
-        "sort": sorting
+        "sort": sorting,
+        "facets": {
+            "mimetypes": {
+                "terms": {
+                    "field": "mimetype"
+                }
+            }
+        }
     };
 
     if((params.category) && (params.category !== '')) {
@@ -118,7 +125,7 @@ var searchAllArticles = function(req, params) {
     }
 
     var opts = {
-        url: getZociaUrl(req) + '/resources/search',
+        url: getZociaUrl(req) + '/resources/searchRaw',
         method: 'POST',
         data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', "Content-Type": "application/json" }),
@@ -128,14 +135,44 @@ var searchAllArticles = function(req, params) {
     var exchange = httpclient.request(opts);
 
     var result = JSON.parse(exchange.content);
+    log.info("ARTICLES RESUTNRED: "+exchange.content);
 
-    if(typeof(result) == "object" ) {
-        result.forEach(configureArticles);
-    } else {
-        result = [];
+    var articles = [];
+
+    for(i = 0; i < result.hits.hits.length; i++)
+    {
+         articles.push(result.hits.hits[i]._source);
     }
 
-    return result;
+    articles.forEach(configureArticles);
+
+    for(i = 0; i < result.hits.hits.length; i++)
+    {
+        articles.push(result.hits.hits[i]._source);
+    }
+
+    var facets = {
+        "documents": { "count": 0 },
+        "pdf": { "count": 0 },
+        "word": { "count": 0 },
+        "ppt": { "count": 0 },
+        "xls": { "count": 0 },
+        "rtf": { "count": 0 },
+        "video": { "count": 0 },
+        "image": { "count": 0 },
+        "text": { "count": 0 }
+    };
+
+    for(i = 0; i < result.facets.mimetypes.terms.length; i++)
+    {
+        var term = getDocType(result.facets.mimetypes.terms[i].term);
+        facets[term].count += result.facets.mimetypes.terms[i].count;
+        if( (term != "video") && (term != "image") ) {
+            facets.documents.count += result.facets.mimetypes.terms[i].count;
+        }
+    }
+
+    return { "articles": articles, "facets": facets };
 };
 
 var getAllArticles = function(req, type, max) {
@@ -146,14 +183,6 @@ var getAllArticles = function(req, type, max) {
     } else {
         return false;
     }
-
-    return result;
-};
-
-var getArticlesByCategory = function(req, category) {
-    var result = ajax(getZociaUrl(req) + '/resources/bycategory/' + category);
-
-    result.content.forEach(configureArticles);
 
     return result;
 };
@@ -331,6 +360,8 @@ function configureArticles(article) {
     }
     if(article.attachments === undefined) {
         article.attachments = [];
+    }
+    if(article.format === "attachment") {
         article._id = article.ref;
     }
 }
