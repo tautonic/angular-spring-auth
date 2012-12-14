@@ -1,6 +1,9 @@
 'use strict';
 
 function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location, Profile){
+    if( ($rootScope.auth.isAuthenticated) && (!$rootScope.auth.isUserInRole('ROLE_ADMIN'))) {
+        $location.path('/home');
+    }
     $scope.adminUsers = true;
     $scope.adminArticles = false;
 
