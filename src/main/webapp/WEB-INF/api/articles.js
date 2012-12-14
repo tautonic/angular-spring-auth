@@ -146,11 +146,6 @@ var searchAllArticles = function(req, params) {
 
     articles.forEach(configureArticles);
 
-    for(i = 0; i < result.hits.hits.length; i++)
-    {
-        articles.push(result.hits.hits[i]._source);
-    }
-
     var facets = {
         "documents": { "count": 0 },
         "pdf": { "count": 0 },
