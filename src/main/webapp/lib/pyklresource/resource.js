@@ -17,6 +17,17 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         'gceemsce': {count: 0}
     };
 
+    $scope.doctypes = {
+        'pdf': {count: 0},
+        'word': {count: 0},
+        'ppt': {count: 0},
+        'xls': {count: 0},
+        'txt': {count: 0},
+        'rtf': {count: 0},
+        'images': {count: 0},
+        'videos': {count: 0}
+    }
+
     $scope.$on('showAttachmentModal', function(args){
         attachments = args.targetScope.thumb.attachments;
         loadAttachment();
@@ -161,6 +172,20 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
                     $scope.categories[term.term].count = term.count;
                 });
             });
+
+        // get article attachment facets
+        $http.get('api/facets/attachment')
+            .success(function(data, status){
+                $scope.attachmentCount = data.content.facets.category.total;
+                var doctype;
+                data.content.facets.category.terms.forEach(function(term){
+                    doctype = getPossibleMimetypes(term.term);
+                    $scope.doctypes[doctype].count = term.count;
+                });
+            })
+            .error(function(data, status){
+
+            });
     }
 
     $scope.filterByTag = function(tag) {
@@ -194,6 +219,50 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         }
 
         return result;
+    }
+
+    function getPossibleMimetypes(mimetype){
+        var doctype;
+        switch(mimetype)
+        {
+            case 'application/pdf':
+                doctype = 'pdf';
+                break;
+            case 'application/msword':
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                doctype = 'word';
+                break;
+            case 'application/mspowerpoint':
+            case 'application/powerpoint':
+            case 'application/vnd.ms-powerpoint':
+            case 'application/x-mspowerpoint':
+            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                doctype = 'ppt';
+                break;
+            case 'application/excel':
+            case 'application/vnd.ms-excel':
+            case 'application/x-excel':
+            case 'application/x-msexcel':
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                doctype = 'xls';
+                break;
+            case 'application/rtf':
+            case 'application/x-rtf':
+            case 'text/richtext':
+                doctype = 'rtf';
+                break;
+            default:
+                //this handles video and image cases, and defaults to text if it doesn't know what it is
+                if(mimetype != undefined)
+                {
+                    doctype = mimetype.split('/')[0];
+                } else {
+                    doctype = "text";
+                }
+                break;
+        }
+
+        return doctype;
     }
 
     $scope.toggleDocuments = function() {
