@@ -1159,6 +1159,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                         var description = attachment.description === '' ? 'This attachment doesn\'t have a description' : attachment.description;
                         var resource = {
                             dataType: 'resources',
+                            ref: '',
                             title: title,
                             description: description,
                             key: 'attachment-key-' + utc_timestamp,

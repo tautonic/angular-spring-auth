@@ -515,6 +515,22 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
 
         newArticle.$save(
             function(response){
+                // now that we've saved the article, we need to add a reference id to each of it's attachments
+                response.content.attachments.forEach(function(attachment){
+                    var attachment;
+                    $http.get('api/attachments/' + attachment)
+                        .success(function(data, status){
+                            attachment = data.content;
+
+                            attachment.ref = response.content._id;
+
+                            $http.put('api/attachments/' + attachment._id, attachment)
+                                .error(function(data, status){
+                                    alert('There was an error updating the attachment');
+                                });
+                        });
+                });
+
                 $location.path('/content/view/' + response.content._id);
                 $log.info('ARTICLE SUCCESSFULLY SAVED!!!', 'STATUS CODE: ' + response.status);
             },
