@@ -232,7 +232,60 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         term = term || "";
         resetPaging();
 
-        // grab all attachment resources that match the incoming term parameter
+        // grab all attachment resources that match the filter terms
+        var mimetypes = buildFilters();
+
+        // remove the commas and trailing space from the filter string
+        mimetypes = mimetypes.replace(/,/g, ' ');
+        mimetypes = mimetypes.replace(/\s+$/, '');
+
+        var attachments;
+
+        $http.get('api/attachments/mimetypes/?mimetypes=' + mimetypes)
+            .success(function(data, status){
+                var refIds = [];
+                attachments = data.content;
+
+                attachments.forEach(function(attachment){
+                    refIds.push(attachment.ref);
+
+                    //remove duplicates
+                    refIds = jQuery.unique(refIds);
+                });
+
+                // we have an array of refids, lets get the resources
+                var resourceUrl = refIds.join('&ids[]=');
+                resourceUrl = '?ids[]=' + resourceUrl;
+                $http.get('api/attachments/' + resourceUrl)
+                    .success(function(data, status){
+                        $scope.articles = data.content;
+
+                        // loop through the array of articles
+                        $scope.articles.forEach(function(article){
+                            // add an attribute to the article that will
+                            // contain the array of doctypes attached to the article
+                            article.childDoctypes = [];
+                            // loop through each article's attachments
+                            article.attachments.forEach(function(attachment){
+                                $http.get('api/article/' + attachment)
+                                    .success(function(data, status){
+                                        // add the attachment doctype to the array
+                                        article.childDoctypes.push(data.doctype);
+                                    });
+                            });
+                        });
+                    })
+                    .error(function(data, status){
+                        alert('There was an error retreiving the articles');
+                    });
+
+                // we want the ref id of each attachment, it refers to an article
+            })
+            .error(function(data, status){
+                alert('There was an error retreiving the resources');
+            });
+
+        // loop through the resources and find their parent articles
 
         url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category + tagFilter;
 

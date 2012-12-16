@@ -86,7 +86,7 @@
                         </div>
 
                         <hr>
-                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments()"><label for="documents">All Attachments ({{attachmentCount}})</label>
+                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments()"><label for="documents">Any Attachments ({{attachmentCount}})</label>
                         <div class="sub documents">
                             <input type="checkbox" id="pdf" ng-model="filters.pdf" ng-change="search(searchTerm)"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{doctypes['pdf'].count}})</label>
                             <input type="checkbox" id="word" ng-model="filters.word" ng-change="search(searchTerm)"><label for="word"><span class="doc-type word"></span>Microsoft Word ({{doctypes['word'].count}})</label>

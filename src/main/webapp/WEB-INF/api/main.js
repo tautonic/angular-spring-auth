@@ -956,7 +956,18 @@ app.get('/attachments/:id', function(req, id){
     var opts = {
         url: getZociaUrl(req) + '/resources/' + id,
         method: 'GET',
-        data: JSON.stringify(req.postParams),
+        headers: Headers({ 'x-rt-index': 'gc',
+            'Content-Type': 'application/json'}),
+        async: false
+    };
+
+    return _simpleHTTPRequest(opts);
+});
+
+app.get('/attachments/mimetypes/', function(req){
+    var opts = {
+        url: getZociaUrl(req) + '/resources/mimetypes/?mimetypes=' + encodeURI(req.params.mimetypes),
+        method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc',
             'Content-Type': 'application/json'}),
         async: false
