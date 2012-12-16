@@ -22,7 +22,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         'word': {count: 0},
         'ppt': {count: 0},
         'xls': {count: 0},
-        'txt': {count: 0},
+        'text': {count: 0},
         'rtf': {count: 0},
         'images': {count: 0},
         'videos': {count: 0}
@@ -176,8 +176,8 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         // get article attachment facets
         $http.get('api/facets/attachment')
             .success(function(data, status){
-                $scope.attachmentCount = data.content.facets.category.total;
-                data.content.facets.category.terms.forEach(function(term){
+                $scope.attachmentCount = data.content.facets.mimetype.total;
+                data.content.facets.mimetype.terms.forEach(function(term){
                     $scope.doctypes[term.term].count = term.count;
                 });
             })
@@ -239,6 +239,11 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     function loadFilteredContent(){
         // grab all attachment resources that match the filter terms
         var mimetypes = buildFilters();
+
+        if(mimetypes == ''){
+            loadContent();
+            return;
+        }
 
         // remove the commas and trailing space from the filter string
         mimetypes = mimetypes.replace(/,/g, ' ');
