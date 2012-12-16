@@ -226,12 +226,17 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $scope.filters.xls = $scope.filters.documents;
         $scope.filters.text = $scope.filters.documents;
         $scope.filters.rtf = $scope.filters.documents;
+
+        if(!$scope.filters.documents){
+            url = "api/article/search?sort=" + sortBy + "&category=" + category;
+            loadContent();
+        }else{
+            //url = "api/article/search/?filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category + tagFilter;
+            loadFilteredContent();
+        }
     };
 
-    $scope.search = function(term) {
-        term = term || "";
-        resetPaging();
-
+    function loadFilteredContent(){
         // grab all attachment resources that match the filter terms
         var mimetypes = buildFilters();
 
@@ -278,18 +283,17 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
                     .error(function(data, status){
                         alert('There was an error retreiving the articles');
                     });
-
-                // we want the ref id of each attachment, it refers to an article
             })
             .error(function(data, status){
                 alert('There was an error retreiving the resources');
             });
+    }
 
-        // loop through the resources and find their parent articles
+    $scope.search = function(term) {
+        term = term || "";
+        resetPaging();
 
-        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category + tagFilter;
-
-        //loadContent();
+        loadFilteredContent();
     };
 
     $scope.loadMore = function(term) {

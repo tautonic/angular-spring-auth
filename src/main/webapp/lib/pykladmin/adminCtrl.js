@@ -360,7 +360,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             });
 
             // new attachments need to refer to their parent article
-            $scope.newAttachments.forEach(function(id){
+            $scope.article.attachments.forEach(function(id){
                 var attachment;
                 $http.get('api/attachments/' + id)
                     .success(function(data, status){
@@ -375,8 +375,6 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
                             });
                     });
             });
-
-            //$location.path('/content/view/' + article._id);
 
         }, function(response){
             $log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
