@@ -177,10 +177,8 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $http.get('api/facets/attachment')
             .success(function(data, status){
                 $scope.attachmentCount = data.content.facets.category.total;
-                var doctype;
                 data.content.facets.category.terms.forEach(function(term){
-                    doctype = getPossibleMimetypes(term.term);
-                    $scope.doctypes[doctype].count = term.count;
+                    $scope.doctypes[term.term].count = term.count;
                 });
             })
             .error(function(data, status){
@@ -221,50 +219,6 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         return result;
     }
 
-    function getPossibleMimetypes(mimetype){
-        var doctype;
-        switch(mimetype)
-        {
-            case 'application/pdf':
-                doctype = 'pdf';
-                break;
-            case 'application/msword':
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                doctype = 'word';
-                break;
-            case 'application/mspowerpoint':
-            case 'application/powerpoint':
-            case 'application/vnd.ms-powerpoint':
-            case 'application/x-mspowerpoint':
-            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-                doctype = 'ppt';
-                break;
-            case 'application/excel':
-            case 'application/vnd.ms-excel':
-            case 'application/x-excel':
-            case 'application/x-msexcel':
-            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                doctype = 'xls';
-                break;
-            case 'application/rtf':
-            case 'application/x-rtf':
-            case 'text/richtext':
-                doctype = 'rtf';
-                break;
-            default:
-                //this handles video and image cases, and defaults to text if it doesn't know what it is
-                if(mimetype != undefined)
-                {
-                    doctype = mimetype.split('/')[0];
-                } else {
-                    doctype = "text";
-                }
-                break;
-        }
-
-        return doctype;
-    }
-
     $scope.toggleDocuments = function() {
         $scope.filters.pdf = $scope.filters.documents;
         $scope.filters.word = $scope.filters.documents;
@@ -278,9 +232,11 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         term = term || "";
         resetPaging();
 
+        // grab all attachment resources that match the incoming term parameter
+
         url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category + tagFilter;
 
-        loadContent();
+        //loadContent();
     };
 
     $scope.loadMore = function(term) {
