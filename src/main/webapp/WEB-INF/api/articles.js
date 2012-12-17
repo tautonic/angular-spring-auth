@@ -6,13 +6,14 @@ var {getZociaUrl, getLocalUrl} = require('utility/getUrls');
 var log = require( 'ringo/logging' ).getLogger( module.id );
 
 function ajax(url) {
+    var opts;
     try {
-    var opts = {
-        url: url,
-        method: 'GET',
-        headers: Headers({ 'x-rt-index': 'gc' }),
-        async: false
-    };
+        opts = {
+            url: url,
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc' }),
+            async: false
+        };
     } catch(e) {
         return {
             'status': 404,
