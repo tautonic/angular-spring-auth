@@ -225,6 +225,11 @@ var pykl = window.pykl || {};
                         $log.error( 'Error, status: ' + status + ', response: ' + JSON.stringify( response ) );
 
                         if (status === 401) {
+                            if($rootScope.auth.isAuthenticated)
+                            {
+                                $location.path('/home');
+                                return response;
+                            }
                             //there seems to be a bug relating to the defer() function in IE8. This does not appear to affect anything major, though, so will not be fixed at this time
                             var deferred = $q.defer();
                             var req = {
