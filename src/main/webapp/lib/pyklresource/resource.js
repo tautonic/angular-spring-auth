@@ -298,7 +298,10 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         term = term || "";
         resetPaging();
 
-        loadFilteredContent();
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size + "&sort=" + sortBy + "&category=" + category + tagFilter;
+
+        //loadFilteredContent();
+        loadContent();
     };
 
     $scope.loadMore = function(term) {
