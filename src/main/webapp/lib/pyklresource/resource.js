@@ -24,8 +24,8 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         'xls': {count: 0},
         'text': {count: 0},
         'rtf': {count: 0},
-        'images': {count: 0},
-        'videos': {count: 0}
+        'image': {count: 0},
+        'video': {count: 0}
     }
 
     $scope.$on('showAttachmentModal', function(args){
@@ -130,7 +130,6 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     resetPaging();
     loadContent();
 
-
     function loadContent() {
         $scope.adminUsers = false;
         $scope.adminArticles = true;
@@ -161,8 +160,8 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
                 $log.info("ERROR getting article, or resource.");
             }
         }).error(function(data, status) {
-            $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
-        });
+                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+            });
 
         // get article category facets to display article counts in each category
         $http.get('api/facets/article')
@@ -176,7 +175,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         // get article attachment facets
         $http.get('api/facets/attachment')
             .success(function(data, status){
-                $scope.attachmentCount = data.content.facets.mimetype.total;
+                $scope.documentCount = data.content.facets.mimetype.total;
                 data.content.facets.mimetype.terms.forEach(function(term){
                     $scope.doctypes[term.term].count = term.count;
                 });
@@ -331,8 +330,8 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
                 $log.info("ERROR getting article, or resource.");
             }
         }).error(function(data, status) {
-            $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
-        });
+                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+            });
     };
 
     function count(what) {
@@ -349,7 +348,10 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     }
 
     $scope.countDocuments = function() {
-        return count('pdf') + count('word') + count('ppt') + count('xls') + count('text') + count('rtf');
+        var total = 0;
+        total = count('pdf') + count('word') + count('ppt') + count('xls') + count('text') + count('rtf');
+
+        return total;
     };
 
     $scope.count = count;
@@ -408,7 +410,6 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             // contain the array of doctypes attached to the article
             $scope.article.childDoctypes = [];
             // loop through each article's attachments
-            $scope.article.childDoctypes.push($scope.article.doctype);
             $scope.article.attachments.forEach(function(attachment){
                 $http.get('api/article/' + attachment)
                     .success(function(data, status){
@@ -419,8 +420,8 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
             $http.post("api/utility/view/" + $scope.article._id);
         }).error(function(data, status) {
-            $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
-        });
+                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+            });
     }
 
     $scope.toggleModal = function(value) {
@@ -458,8 +459,8 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             };
             $http.post("api/utility/view/" + id);
         }).error(function(data, status) {
-            $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
-        });
+                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
+            });
     }
 
     //we do this in a function so we can handle cases where it goes too far in one direction or another

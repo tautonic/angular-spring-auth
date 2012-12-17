@@ -28,33 +28,33 @@ app.mount('/seedcms', require('./seedcms'));
 
 
 registerHelper( {
-	include: function ( path, context ) {
-		return trimpath( path );
-	},
-	ctx: function ( url ) {
-		return ctx( url );
-	}
+    include: function ( path, context ) {
+        return trimpath( path );
+    },
+    ctx: function ( url ) {
+        return ctx( url );
+    }
 } );
 
 function ctx( url ) {
-	// Only prepend the context path if the URL is a relative
-	if ( /^\//.test( url ) ) {
-		var req = getRequest();
-		if ( !req ) {
-			throw 'Function ctx requires a request object to be known to the application.';
-		}
+    // Only prepend the context path if the URL is a relative
+    if ( /^\//.test( url ) ) {
+        var req = getRequest();
+        if ( !req ) {
+            throw 'Function ctx requires a request object to be known to the application.';
+        }
 
-		// Get the servlet's context path
-		var contextPath = req.env.servletRequest.contextPath;
-		url = contextPath + url;
-	}
-	return url;
+        // Get the servlet's context path
+        var contextPath = req.env.servletRequest.contextPath;
+        url = contextPath + url;
+    }
+    return url;
 }
 
 function getRequest() {
-	var app = require( module.resolve( 'main' ) ).app;
-	if ( app ) return app.request;
-	return null;
+    var app = require( module.resolve( 'main' ) ).app;
+    if ( app ) return app.request;
+    return null;
 }
 
 
@@ -65,11 +65,11 @@ function getRequest() {
  ************************/
 
 app.get( '/', function ( req ) {
-	return homepage( req );
+    return homepage( req );
 } );
 
 app.get( '/index.html', function ( req ) {
-	return homepage( req );
+    return homepage( req );
 } );
 
 /********** Articles and resources *********/
@@ -85,6 +85,7 @@ app.get('/article/all', function(req) {
 function articles(req, type, max) {
     var articles = getAllArticles(req, type, max);
 
+
     if(articles.success) {
         return json(articles.content);
     }
@@ -95,6 +96,15 @@ app.get('/article/search', function(req) {
     var articles = searchAllArticles(req, req.params);
 
     return json(articles);
+});
+
+app.get('/article/all/bycategory/:category', function(req, category) {
+    var articles = getArticlesByCategory(req, category);
+
+    if(articles.success) {
+        return json(articles.content);
+    }
+    return json(false);
 });
 
 app.get('/article/:id', function(req, id) {
@@ -141,7 +151,7 @@ app.get('/article/:id', function(req, id) {
 app.post('/admin/articles', function(req){
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
-    {     
+    {
         return {
             status:401,
             headers:{"Content-Type":'text/html'},
@@ -161,29 +171,7 @@ app.post('/admin/articles', function(req){
         async: false
     };
 
-    var exchange = httpclient.request(opts);
-
-    var result = JSON.parse(exchange.content);
-
-    result.attachments.forEach(function(attachment) {
-        opts = {
-            url: getZociaUrl(req) + '/resources/link/' + result._id + '/' + attachment,
-            method: 'POST',
-            headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
-            async: false
-        };
-
-        if(!httpclient.request(opts).content) {
-            exchange.status = 500;
-        }
-    });
-
-    return json({
-        'status': exchange.status,
-        'content': result,
-        'headers': exchange.headers,
-        'success': Math.floor(exchange.status / 100) === 2
-    });
+    return _simpleHTTPRequest(opts);
 });
 
 app.put('/admin/articles/:id', function(req, id){
@@ -419,12 +407,12 @@ app.get('/notifications', function(req) {
 });
 
 app.get( '/ping', function ( req ) {
-	return json( {
-		url: '/ping',
-		user: req.auth.isUserInRole( 'ROLE_USER' ),
-		admin: req.auth.isUserInRole( 'ROLE_ADMIN' ),
-		anonymous: req.auth.isUserInRole( 'ROLE_ANONYMOUS' )
-	} );
+    return json( {
+        url: '/ping',
+        user: req.auth.isUserInRole( 'ROLE_USER' ),
+        admin: req.auth.isUserInRole( 'ROLE_ADMIN' ),
+        anonymous: req.auth.isUserInRole( 'ROLE_ANONYMOUS' )
+    } );
 } );
 
 /************ Follow User functions *********/
@@ -552,7 +540,7 @@ function isUserFollowing(req, id) {
  */
 app.get( '/auth', function ( req ) {
     log.info("logging in user");
-	return json( req.auth );
+    return json( req.auth );
 } );
 
 /********** Profile pages *********/
@@ -615,7 +603,7 @@ app.get('/profiles/:id', function(req, id){
 app.get('/profiles/admin', function(req){
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
-    {     
+    {
         return {
             status:401,
             headers:{"Content-Type":'text/html'},
@@ -671,7 +659,7 @@ app.get('/profiles/admin', function(req){
 app.post('/profiles/admin/filter', function(req){
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
-    {     
+    {
         return {
             status:401,
             headers:{"Content-Type":'text/html'},
@@ -927,27 +915,10 @@ app.get('/profiles/images', function(req, id){
     }
 });
 
-//todo: it's possible to use zocia/search/facets to do this, without the need for an additional endpoint, plus it returns the facets only
 app.get('/facets/:format', function(req, format){
-    var query = {
-        "query": {
-            "field": {
-                "format": format
-            }
-        },
-        "facets": {
-            "category": {
-                "terms": {
-                    "field": "category"
-                }
-            }
-        }
-    };
-
     var opts = {
-        url: getZociaUrl(req) + '/resources/searchRaw/',
-        method: 'POST',
-        data: JSON.stringify(query),
+        url: getZociaUrl(req) + '/resources/facets/' + format,
+        method: 'GET',
         headers: Headers({ 'x-rt-index': 'gc', 'Content-Type': 'application/json' }),
         async: false
     };
@@ -1026,8 +997,8 @@ app.del('/attachments/:id', function(req, id){
         method: 'DELETE',
         data: JSON.stringify(req.postParams),
         headers: Headers({ 'x-rt-index': 'gc',
-                            'Content-Type': 'application/json',
-                            'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
+            'Content-Type': 'application/json',
+            'Authorization': _generateBasicAuthorization('backdoor', 'Backd00r') }),
         async: false
     };
 
@@ -1506,14 +1477,14 @@ app.post('/search/discussions', function(req){
 app.get('/admin/users', function(req) {
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
-    {     
+    {
         return {
             status:401,
             headers:{"Content-Type":'text/html'},
             body:[]
         };
     }
-    
+
     var url = getZociaUrl(req) + '/profiles/';
 
     var opts = {
@@ -1529,7 +1500,7 @@ app.get('/admin/users', function(req) {
 app.put('/admin/users', function(req) {
     var servletRequest = req.env.servletRequest;
     if(!servletRequest.isUserInRole('ROLE_ADMIN'))
-    {     
+    {
         return {
             status:401,
             headers:{"Content-Type":'text/html'},
@@ -1538,15 +1509,15 @@ app.put('/admin/users', function(req) {
     }
 
     /*var data = {
-        "username" : req.postParams.username,
-        "name" : {
-            "fullName": req.postParams.name.fullName
-        },
-        "accountEmail" : {
-            "address"  : req.postParams.accountEmail.address
-        },
-        "workHistory" : req.postParams.workHistory
-    };*/
+     "username" : req.postParams.username,
+     "name" : {
+     "fullName": req.postParams.name.fullName
+     },
+     "accountEmail" : {
+     "address"  : req.postParams.accountEmail.address
+     },
+     "workHistory" : req.postParams.workHistory
+     };*/
 
     var data = req.postParams;
 
@@ -1568,17 +1539,17 @@ app.put('/admin/users', function(req) {
  ************************/
 
 function homepage( req ) {
-	return json( {homepage: true} );
+    return json( {homepage: true} );
 }
 
 /*
-Utility functions
-*/
+ Utility functions
+ */
 
 function _generateBasicAuthorization(username, password) {
-	var header = username + ":" + password;
-	var base64 = encode(header);
-	return 'Basic ' + base64;
+    var header = username + ":" + password;
+    var base64 = encode(header);
+    return 'Basic ' + base64;
 }
 
 function _simpleHTTPRequest(opts) {

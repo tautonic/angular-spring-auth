@@ -86,7 +86,7 @@
                         </div>
 
                         <hr>
-                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments()"><label for="documents">Any Attachment ({{attachmentCount}})</label>
+                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments()"><label for="documents">Any Document Attachment ({{documentCount}})</label>
                         <div class="sub documents">
                             <input type="checkbox" id="pdf" ng-model="filters.pdf" ng-click="search('', $event.target.checked)"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{doctypes['pdf'].count}})</label>
                             <input type="checkbox" id="word" ng-model="filters.word" ng-click="search('', $event.target.checked)"><label for="word"><span class="doc-type word"></span>Microsoft Word ({{doctypes['word'].count}})</label>
@@ -95,9 +95,9 @@
                             <input type="checkbox" id="text" ng-model="filters.text" ng-click="search('', $event.target.checked)"><label for="text"><span class="doc-type text"></span>Text File ({{doctypes['text'].count}})</label>
                             <input type="checkbox" id="rtf" ng-model="filters.rtf" ng-click="search('', $event.target.checked)"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{doctypes['rtf'].count}})</label>
                         </div>
-                        <input type="checkbox" id="videos" ng-model="filters.video" ng-click="search('', $event.target.checked)"><label for="videos"><span class="doc-type video"></span>Videos ({{doctypes['videos'].count}})</label>
+                        <input type="checkbox" id="videos" ng-model="filters.video" ng-click="search('', $event.target.checked)"><label for="videos"><span class="doc-type video"></span>Videos ({{doctypes['video'].count}})</label>
                         <hr>
-                        <input type="checkbox" id="image" ng-model="filters.image" ng-click="search('', $event.target.checked)"><label for="image"><span class="doc-type image"></span>Pictures ({{doctypes['images'].count}})</label>
+                        <input type="checkbox" id="image" ng-model="filters.image" ng-click="search('', $event.target.checked)"><label for="image"><span class="doc-type image"></span>Pictures ({{doctypes['image'].count}})</label>
 
                         <div class="btn-group bgc">
                             <input type="submit" value="Search" class="btn btn-success">

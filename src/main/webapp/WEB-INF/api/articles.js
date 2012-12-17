@@ -7,12 +7,12 @@ var log = require( 'ringo/logging' ).getLogger( module.id );
 
 function ajax(url) {
     try {
-    var opts = {
-        url: url,
-        method: 'GET',
-        headers: Headers({ 'x-rt-index': 'gc' }),
-        async: false
-    };
+        var opts = {
+            url: url,
+            method: 'GET',
+            headers: Headers({ 'x-rt-index': 'gc' }),
+            async: false
+        };
     } catch(e) {
         return {
             'status': 404,
@@ -31,7 +31,7 @@ function ajax(url) {
         'success': Math.floor(exchange.status / 100) === 2
     };
 }
-//take all articles and attachments as one single result list, don't try to combine them. might at some point need some way to connect the attachments to the original article in case of providing links or something
+
 var searchAllArticles = function(req, params) {
     var query;
     var from = params.from || 0;
@@ -79,11 +79,12 @@ var searchAllArticles = function(req, params) {
                                 "locale": [
                                     "en",
                                     "en_US"
-                                ],
-                                "format": [
-                                    "article",
-                                    "attachment"
                                 ]
+                            }
+                        },
+                        {
+                            "term": {
+                                "format": "article"
                             }
                         }
                     ]
@@ -92,14 +93,7 @@ var searchAllArticles = function(req, params) {
         },
         "from": from,
         "size": size,
-        "sort": sorting,
-        "facets": {
-            "mimetypes": {
-                "terms": {
-                    "field": "mimetype"
-                }
-            }
-        }
+        "sort": sorting
     };
 
     if((params.category) && (params.category !== '')) {
@@ -125,7 +119,7 @@ var searchAllArticles = function(req, params) {
     }
 
     var opts = {
-        url: getZociaUrl(req) + '/resources/searchRaw',
+        url: getZociaUrl(req) + '/resources/search',
         method: 'POST',
         data: JSON.stringify(data),
         headers: Headers({ 'x-rt-index': 'gc', "Content-Type": "application/json" }),
@@ -136,37 +130,13 @@ var searchAllArticles = function(req, params) {
 
     var result = JSON.parse(exchange.content);
 
-    var articles = [];
-
-    for(i = 0; i < result.hits.hits.length; i++)
-    {
-         articles.push(result.hits.hits[i]._source);
+    if(typeof(result) == "object" ) {
+        result.forEach(configureArticles);
+    } else {
+        result = [];
     }
 
-    articles.forEach(configureArticles);
-
-    var facets = {
-        "documents": { "count": 0 },
-        "pdf": { "count": 0 },
-        "word": { "count": 0 },
-        "ppt": { "count": 0 },
-        "xls": { "count": 0 },
-        "rtf": { "count": 0 },
-        "video": { "count": 0 },
-        "image": { "count": 0 },
-        "text": { "count": 0 }
-    };
-
-    for(i = 0; i < result.facets.mimetypes.terms.length; i++)
-    {
-        var term = getDocType(result.facets.mimetypes.terms[i].term);
-        facets[term].count += result.facets.mimetypes.terms[i].count;
-        if( (term != "video") && (term != "image") ) {
-            facets.documents.count += result.facets.mimetypes.terms[i].count;
-        }
-    }
-
-    return { "articles": articles, "facets": facets };
+    return result;
 };
 
 var getAllArticles = function(req, type, max) {
@@ -177,6 +147,14 @@ var getAllArticles = function(req, type, max) {
     } else {
         return false;
     }
+
+    return result;
+};
+
+var getArticlesByCategory = function(req, category) {
+    var result = ajax(getZociaUrl(req) + '/resources/bycategory/' + category);
+
+    result.content.forEach(configureArticles);
 
     return result;
 };
@@ -195,6 +173,7 @@ var getArticle = function(req, id) {
     } else {
         result.content.premium = false;
     }
+
 
 
     return result;
@@ -347,17 +326,7 @@ function generateBasicAuthorization(user) {
 
 function configureArticles(article) {
     article.doctype = getDocType(article.mimetype);
-    if(article.roles != undefined) {
-        article.premium = article.roles.some(function(element) { return element == "ROLE_PREMIUM"; });
-    } else {
-        article.premium = true;
-    }
-    if(article.attachments === undefined) {
-        article.attachments = [];
-    }
-    if(article.format === "attachment") {
-        article._id = article.ref;
-    }
+    article.premium = article.roles.some(function(element) { return element == "ROLE_PREMIUM"; });
 }
 
 export('ajax', 'searchAllArticles', 'getAllArticles', 'getArticlesByCategory', 'getArticle', 'linkDiscussionToArticle', 'returnRandomQuote');
