@@ -323,7 +323,7 @@ angular.module('bgc.directives')
                 scope: scope,
                 runtimes: 'html5, flash, silverlight, browserplus',
                 browse_button: 'choose-files',
-                container: 'update',
+                container: 'profile-image-upload',
                 url: 'api/cms/upload/image',
                 max_file_size:'3mb',
                 multi_selection:false,
