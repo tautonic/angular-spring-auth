@@ -2,16 +2,9 @@
     <div class="about-section-mesh">
         <div class="container">
             <div class="row">
-                <div class="span6">
-                    <h2>DESCRIPTION</h2>
-                    <p> GCEEMSCE
-                        Donec quam enim, fermentum at tristique sit amet, vestibulum ut nulla.
-                        Class aptent taciti sociosqu ad litora torquent per conubia nostra,
-                        per inceptos himenaeos. Sed semper, elit sit amet vestibulum consectetur,
-                        risus tellus pellentesque tellus, ut posuere mauris orci a ante. Aenean
-                        eu semper augue. Pellentesque habitant morbi tristique senectus et netus
-                        et.
-                    </p>
+                <div class="span6" x-cms="gcee_msce_about">
+                    <h2>{{cms.title}}</h2>
+                    <p ng-bind-html-unsafe="cms.content"></p>
                 </div>
                 <div class="span6">
                     <div class="curriculum-about">

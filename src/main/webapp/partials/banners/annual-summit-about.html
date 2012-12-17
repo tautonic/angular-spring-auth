@@ -4,16 +4,9 @@
             <div class="row">
                 <div class="span12">
                     <div class="row">
-                        <div class="span7">
-                            <h2>ABOUT THE SUMMIT</h2>
-                            <p>
-                                The integrative cornerstone of GCEE membership is the Annual Summit.
-                                The Annual Summit serves as a forum for exchanging ideas, practices, and experiences with global peers, for hearing from and debating with thought leaders in the field and for creating a host of opportunities for ongoing collaboration with Babson College and other GCEE Members.
-                            </p>
-                            <p>
-                                GCEE Members are entitled and expected to send representatives to each year’s Annual Summit, to actively and generously contribute to and participate in Summit deliberations and to help shape Annual Summit designs through engaged participation on the Summit Organizing Committee as well as the GCEE Advisory Board.
-                                GCEE Members also will have opportunities to host Annual Summits at their home institutions.
-                            </p>
+                        <div class="span7" x-cms="annual_summit_about">
+                            <h2>{{cms.title}}</h2>
+                            <p ng-bind-html-unsafe="cms.content"></p>
                         </div>
                         <div class="span5">
                             <div slide-show="{images: [{'image': '5420811288_9fddbe57b7_o.jpg'}, {'image': '6834576277_0d6c8853b9_o.jpg'}, {'image': '6834577409_604e3acbd0_o.jpg'}]}"></div>
