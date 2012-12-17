@@ -323,7 +323,7 @@ angular.module('bgc.directives')
                 scope: scope,
                 runtimes: 'html5, flash, silverlight, html4, browserplus',
                 browse_button: 'choose-files',
-                container: 'update',
+                container: 'profile-image-upload',
                 url: 'api/cms/upload/image',
                 max_file_size:'3mb',
                 multi_selection:false,
@@ -888,7 +888,7 @@ angular.module('bgc.directives').directive('reloadTwitterBtns', function(){
  */
 angular.module('bgc.directives').directive('whenScrolled', function() {
     return function(scope, elm, attr) {
-        var raw = elm[0];
+        /*var raw = elm[0];
         var offset = attr.offset || 0;
         angular.element(window).bind('scroll', function() {
             var rectObject = raw.getBoundingClientRect();
@@ -897,7 +897,7 @@ angular.module('bgc.directives').directive('whenScrolled', function() {
                 scope.$apply(attr.whenScrolled);
             }
 
-        });
+        });*/
     };
 });
 
@@ -1159,6 +1159,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                         var description = attachment.description === '' ? 'This attachment doesn\'t have a description' : attachment.description;
                         var resource = {
                             dataType: 'resources',
+                            ref: '',
                             title: title,
                             description: description,
                             key: 'attachment-key-' + utc_timestamp,

@@ -17,6 +17,17 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         'gceemsce': {count: 0}
     };
 
+    $scope.doctypes = {
+        'pdf': {count: 0},
+        'word': {count: 0},
+        'ppt': {count: 0},
+        'xls': {count: 0},
+        'text': {count: 0},
+        'rtf': {count: 0},
+        'images': {count: 0},
+        'videos': {count: 0}
+    }
+
     $scope.$on('showAttachmentModal', function(args){
         attachments = args.targetScope.thumb.attachments;
         loadAttachment();
@@ -128,9 +139,21 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
 
         $http.get( url ).success( function (data) {
             if(data !== "false") {
-                $scope.articles = data.articles;
-                $scope.facets = data.facets;
-
+                $scope.articles = data;
+                // loop through the array of articles
+                $scope.articles.forEach(function(article){
+                    // add an attribute to the article that will
+                    // contain the array of doctypes attached to the article
+                    article.childDoctypes = [];
+                    // loop through each article's attachments
+                    article.attachments.forEach(function(attachment){
+                        $http.get('api/article/' + attachment)
+                            .success(function(data, status){
+                                // add the attachment doctype to the array
+                                article.childDoctypes.push(data.doctype);
+                            });
+                    });
+                });
                 if($scope.articles.length < $scope.paging.size) {
                     $scope.paging.more = false;
                 }
@@ -148,6 +171,18 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
                 data.content.facets.category.terms.forEach(function(term){
                     $scope.categories[term.term].count = term.count;
                 });
+            });
+
+        // get article attachment facets
+        $http.get('api/facets/attachment')
+            .success(function(data, status){
+                $scope.attachmentCount = data.content.facets.mimetype.total;
+                data.content.facets.mimetype.terms.forEach(function(term){
+                    $scope.doctypes[term.term].count = term.count;
+                });
+            })
+            .error(function(data, status){
+
             });
     }
 
@@ -184,7 +219,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         return result;
     }
 
-    $scope.toggleDocuments = function(term) {
+    $scope.toggleDocuments = function() {
         $scope.filters.pdf = $scope.filters.documents;
         $scope.filters.word = $scope.filters.documents;
         $scope.filters.ppt = $scope.filters.documents;
@@ -192,16 +227,87 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $scope.filters.text = $scope.filters.documents;
         $scope.filters.rtf = $scope.filters.documents;
 
-        $scope.search(term);
+        if(!$scope.filters.documents){
+            url = "api/article/search?sort=" + sortBy + "&category=" + category;
+            loadContent();
+        }else{
+            loadFilteredContent();
+        }
     };
 
-    $scope.search = function(term) {
-        term = term || "";
+    function loadFilteredContent(){
+        var mimetypes = buildFilters();
+
+        if(mimetypes == ''){
+            loadContent();
+            return;
+        }
+
+        // remove the commas and trailing space from the filter string
+        mimetypes = mimetypes.replace(/,/g, ' ');
+        mimetypes = mimetypes.replace(/\s+$/, '');
+
+        var attachments;
+
+        // get all attachment resources that match the filter terms/mimetypes
+        $http.get('api/attachments/mimetypes/?mimetypes=' + mimetypes)
+            .success(function(data, status){
+                var refIds = [];
+                attachments = data.content;
+
+                attachments.forEach(function(attachment){
+                    refIds.push(attachment.ref);
+
+                    //remove duplicates
+                    refIds = jQuery.unique(refIds);
+                });
+
+                // we have an array of refids, lets get the resources
+                var resourceUrl = refIds.join('&ids[]=');
+                resourceUrl = '?ids[]=' + resourceUrl;
+                $http.get('api/attachments/' + resourceUrl)
+                    .success(function(data, status){
+                        $scope.articles = data.content;
+
+                        // loop through the array of articles
+                        $scope.articles.forEach(function(article){
+                            // add an attribute to the article that will
+                            // contain the array of doctypes attached to the article
+                            article.childDoctypes = [];
+                            // loop through each article's attachments
+                            article.attachments.forEach(function(attachment){
+                                $http.get('api/article/' + attachment)
+                                    .success(function(data, status){
+                                        // add the attachment doctype to the array
+                                        article.childDoctypes.push(data.doctype);
+                                    });
+                            });
+                        });
+                    })
+                    .error(function(data, status){
+                        alert('There was an error retreiving the articles');
+                    });
+            })
+            .error(function(data, status){
+                alert('There was an error retreiving the resources');
+            });
+    }
+
+    $scope.search = function(term, checked) {
+        if(checked){
+            term = "";
+        }
+        term = term;
+
         resetPaging();
 
-        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category + tagFilter;
+        url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size + "&sort=" + sortBy + "&category=" + category + tagFilter;
 
-        loadContent();
+        if(term == ""){
+            loadFilteredContent();
+        }else{
+            loadContent();
+        }
     };
 
     $scope.loadMore = function(term) {

@@ -264,7 +264,7 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
                 resourceUrl = $scope.article.attachments.join('&ids[]=');
                 resourceUrl = '?ids[]=' + resourceUrl;
 
-                // we need to get the resources attached to this article for updating/removal as well
+                // we need to get the resource attachments related to this article for updating/removal as well
                 // /?ids[]=213&ids[]=783
                 $http.get('api/attachments/' + resourceUrl)
                     .success(function(data, status){
@@ -321,7 +321,6 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
             article.roles.push('ROLE_PREMIUM');
         }
 
-        //article.lastModifiedDate = ISODateString(new Date());
         article.description = generateDescription(article.content.replace(/<(?:.|\n)*?>/gm, ''));
 
         var thumbnail = /<\s*img [^\>]*src\s*=\s*(["\'])(.*?)\1/.exec(article.content);
@@ -360,7 +359,22 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
                     });
             });
 
-            //$location.path('/content/view/' + article._id);
+            // new attachments need to refer to their parent article
+            $scope.article.attachments.forEach(function(id){
+                var attachment;
+                $http.get('api/attachments/' + id)
+                    .success(function(data, status){
+                        attachment = data.content;
+
+                        attachment.mimetype = getPossibleMimetypes(attachment.mimetype);
+                        attachment.ref = article._id;
+
+                        $http.put('api/attachments/' + attachment._id, attachment)
+                            .error(function(data, status){
+                                alert('There was an error updating the attachment');
+                            });
+                    });
+            });
 
         }, function(response){
             $log.info('UPDATE ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
@@ -374,6 +388,50 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
     $scope.cancel = function(){
         $location.path('/admin/articles');
     };
+
+    function getPossibleMimetypes(mimetype){
+        var doctype;
+        switch(mimetype)
+        {
+            case 'application/pdf':
+                doctype = 'pdf';
+                break;
+            case 'application/msword':
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                doctype = 'word';
+                break;
+            case 'application/mspowerpoint':
+            case 'application/powerpoint':
+            case 'application/vnd.ms-powerpoint':
+            case 'application/x-mspowerpoint':
+            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                doctype = 'ppt';
+                break;
+            case 'application/excel':
+            case 'application/vnd.ms-excel':
+            case 'application/x-excel':
+            case 'application/x-msexcel':
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                doctype = 'xls';
+                break;
+            case 'application/rtf':
+            case 'application/x-rtf':
+            case 'text/richtext':
+                doctype = 'rtf';
+                break;
+            default:
+                //this handles video and image cases, and defaults to text if it doesn't know what it is
+                if(mimetype != undefined)
+                {
+                    doctype = mimetype.split('/')[0];
+                } else {
+                    doctype = "text";
+                }
+                break;
+        }
+
+        return doctype;
+    }
 
     function generateDescription(content){
         var result = content;
@@ -515,6 +573,24 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
 
         newArticle.$save(
             function(response){
+                // now that we've saved the article, we need to add a reference id to each of it's attachments
+                response.content.attachments.forEach(function(attachment){
+                    var attachment;
+                    //var doctype;
+                    $http.get('api/attachments/' + attachment)
+                        .success(function(data, status){
+                            attachment = data.content;
+
+                            attachment.mimetype = getPossibleMimetypes(attachment.mimetype);
+                            attachment.ref = response.content._id;
+
+                            $http.put('api/attachments/' + attachment._id, attachment)
+                                .error(function(data, status){
+                                    alert('There was an error updating the attachment');
+                                });
+                        });
+                });
+
                 $location.path('/content/view/' + response.content._id);
                 $log.info('ARTICLE SUCCESSFULLY SAVED!!!', 'STATUS CODE: ' + response.status);
             },
@@ -527,6 +603,51 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
     $scope.cancel = function(){
         $location.path('/admin/articles');
     };
+
+    function getPossibleMimetypes(mimetype){
+        var doctype;
+        switch(mimetype)
+        {
+            case 'application/pdf':
+                doctype = 'pdf';
+                break;
+            case 'application/msword':
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                doctype = 'word';
+                break;
+            case 'application/mspowerpoint':
+            case 'application/powerpoint':
+            case 'application/vnd.ms-powerpoint':
+            case 'application/x-mspowerpoint':
+            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+                doctype = 'ppt';
+                break;
+            case 'application/excel':
+            case 'application/vnd.ms-excel':
+            case 'application/x-excel':
+            case 'application/x-msexcel':
+            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+                doctype = 'xls';
+                break;
+            case 'application/rtf':
+            case 'application/x-rtf':
+            case 'text/richtext':
+                doctype = 'rtf';
+                break;
+            default:
+                //this handles video and image cases, and defaults to text if it doesn't know what it is
+                if(mimetype != undefined)
+                {
+                    doctype = mimetype.split('/')[0];
+                } else {
+                    doctype = "text";
+                }
+                break;
+        }
+
+        return doctype;
+    }
+
 
     function ISODateString(d){
         function pad(n){return n<10 ? '0'+n : n}

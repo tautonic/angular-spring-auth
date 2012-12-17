@@ -73,10 +73,10 @@
 
             <div class="services search-box content">
                 <div class="header">
-                    <h4>SEARCH THIS SECTION</h4>
+                    <h4>FILTER ARTICLES</h4>
                 </div>
                 <div class="form-container">
-                    <form ng-submit="search(searchTerm)">
+                    <form ng-submit="search(searchTerm, false)">
                         <div class="search-input">
                             <input type="text" ng-model="searchTerm" placeholder="Search Articles...">
                             <div class="btn-group-border"></div>
@@ -86,18 +86,18 @@
                         </div>
 
                         <hr>
-                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments(searchTerm)"><label for="documents">Documents ({{facets.documents.count}})</label>
+                        <input type="checkbox" id="documents" ng-model="filters.documents" ng-change="toggleDocuments()"><label for="documents">Any Attachment ({{attachmentCount}})</label>
                         <div class="sub documents">
-                            <input type="checkbox" id="pdf" ng-model="filters.pdf" ng-change="search(searchTerm)"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{facets.pdf.count}})</label>
-                            <input type="checkbox" id="word" ng-model="filters.word" ng-change="search(searchTerm)"><label for="word"><span class="doc-type word"></span>Microsoft Word ({{facets.word.count}})</label>
-                            <input type="checkbox" id="powerpoint" ng-model="filters.ppt" ng-change="search(searchTerm)"><label for="powerpoint"><span class="doc-type ppt"></span>PowerPoint ({{facets.ppt.count}})</label>
-                            <input type="checkbox" id="excel" ng-model="filters.xls" ng-change="search(searchTerm)"><label for="excel"><span class="doc-type xls"></span>Excel Spreadsheet ({{facets.xls.count}})</label>
-                            <input type="checkbox" id="text" ng-model="filters.text" ng-change="search(searchTerm)"><label for="text"><span class="doc-type text"></span>Text File ({{facets.text.count}})</label>
-                            <input type="checkbox" id="rtf" ng-model="filters.rtf" ng-change="search(searchTerm)"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{facets.rtf.count}})</label>
+                            <input type="checkbox" id="pdf" ng-model="filters.pdf" ng-click="search('', $event.target.checked)"><label for="pdf"><span class="doc-type pdf"></span>Adobe Acrobat ({{doctypes['pdf'].count}})</label>
+                            <input type="checkbox" id="word" ng-model="filters.word" ng-click="search('', $event.target.checked)"><label for="word"><span class="doc-type word"></span>Microsoft Word ({{doctypes['word'].count}})</label>
+                            <input type="checkbox" id="powerpoint" ng-model="filters.ppt" ng-click="search('', $event.target.checked)"><label for="powerpoint"><span class="doc-type ppt"></span>PowerPoint ({{doctypes['ppt'].count}})</label>
+                            <input type="checkbox" id="excel" ng-model="filters.xls" ng-click="search('', $event.target.checked)"><label for="excel"><span class="doc-type xls"></span>Excel Spreadsheet ({{doctypes['xls'].count}})</label>
+                            <input type="checkbox" id="text" ng-model="filters.text" ng-click="search('', $event.target.checked)"><label for="text"><span class="doc-type text"></span>Text File ({{doctypes['text'].count}})</label>
+                            <input type="checkbox" id="rtf" ng-model="filters.rtf" ng-click="search('', $event.target.checked)"><label for="rtf"><span class="doc-type rtf"></span>Rich Text Document ({{doctypes['rtf'].count}})</label>
                         </div>
-                        <input type="checkbox" id="videos" ng-model="filters.video" ng-change="search(searchTerm)"><label for="videos"><span class="doc-type video"></span>Videos ({{facets.video.count}})</label>
+                        <input type="checkbox" id="videos" ng-model="filters.video" ng-click="search('', $event.target.checked)"><label for="videos"><span class="doc-type video"></span>Videos ({{doctypes['videos'].count}})</label>
                         <hr>
-                        <input type="checkbox" id="image" ng-model="filters.image" ng-change="search(searchTerm)"><label for="image"><span class="doc-type image"></span>Pictures ({{facets.image.count}})</label>
+                        <input type="checkbox" id="image" ng-model="filters.image" ng-click="search('', $event.target.checked)"><label for="image"><span class="doc-type image"></span>Pictures ({{doctypes['images'].count}})</label>
 
                         <div class="btn-group bgc">
                             <input type="submit" value="Search" class="btn btn-success">

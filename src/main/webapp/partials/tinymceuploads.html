@@ -45,33 +45,30 @@
             </div>
         </div>
         <br>
-        <div class="btn-group-border">
-            <div class="btn-group bgc">
-                <button id="choose-files" class="btn btn-success"><i class="icon-folder-open icon-white"></i> Browse</button>
+        <div id="browse-file-dialog">
+            <div class="btn-group-border">
+                <div class="btn-group bgc">
+                    <button id="choose-files" class="btn btn-success"><i class="icon-folder-open icon-white"></i> Browse</button>
+                </div>
             </div>
-        </div>
-
-        <div id="container">
-            <br>
-            <div id="filelist"></div>
-            <br />
         </div>
     </div>
 
     <script type="text/javascript">
         var config = {
-            runtimes: 'html5',
+            runtimes: 'html5, silverlight, browserplus',
             browse_button: 'choose-files',
-            container:'container',
+            container:'browse-file-dialog',
             drop_element: 'profile-thumb-drop-target',
-            url: baseUrl + '/api/profiles/images/upload/',
-            max_file_size:'100mb',
-            resize:{width:320, height:240, quality:90},
-            flash_swf_url:'../js/plupload.flash.swf',
-            silverlight_xap_url:'../js/plupload.silverlight.xap',
+            url: baseUrl + '/api/cms/upload/image',
+            //url: 'http://10.0.1.29:8080/gc/api/cms/upload/image',
+            max_file_size:'5mb',
+            multi_selection:false,
+            resize:{"width":320, quality:90},
+            //flash_swf_url:'../lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
+            silverlight_xap_url:'../lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
             filters:[
-                {title:"Image files", extensions:"jpg,gif,png,jpeg"},
-                {title:"Zip files", extensions:"zip"}
+                {title:"Image files", extensions:"jpg,gif,png,jpeg"}
             ]
         };
 
@@ -82,29 +79,23 @@
         var uploader = new plupload.Uploader(config);
 
         uploader.bind('FilesAdded', function (up, files) {
-            for (var i in files) {
-                $$('filelist').innerHTML += '<div id="' + files[i].id + '">' + files[i].name + ' (' + plupload.formatSize(files[i].size) + ') <b></b></div>';
-            }
-
             setTimeout(function () {
                 uploader.start();
             }, 500);
         });
 
-        uploader.bind('BeforeUpload', function(upload, file){
-            upload.settings.multipart_params = {size: file.size}
-        });
-
         uploader.bind('UploadProgress', function (up, file) {
-            $$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+            //$$(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
         });
 
         var url;
 
         uploader.bind('FileUploaded', function(uploader, file, response){
-            url = eval("(" + response.response  + ")");
-            url = eval("(" + url.content + ")");
-            url = url.uri;
+            //remove the leading and trailing double quotes from the response string
+            var responseObject;
+            response.response.replace(/^["]|["]$/, '\'');
+            responseObject = jQuery.parseJSON(response.response);
+            url = responseObject.file.uri;
         });
 
         uploader.bind('UploadComplete', function(uploader, files){
