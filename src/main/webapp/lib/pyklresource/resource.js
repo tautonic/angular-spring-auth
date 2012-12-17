@@ -231,13 +231,11 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
             url = "api/article/search?sort=" + sortBy + "&category=" + category;
             loadContent();
         }else{
-            //url = "api/article/search/?filters=" + buildFilters() + "&from=" + $scope.paging.from + "&sort=" + sortBy + "&category=" + category + tagFilter;
             loadFilteredContent();
         }
     };
 
     function loadFilteredContent(){
-        // grab all attachment resources that match the filter terms
         var mimetypes = buildFilters();
 
         if(mimetypes == ''){
@@ -251,6 +249,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
 
         var attachments;
 
+        // get all attachment resources that match the filter terms/mimetypes
         $http.get('api/attachments/mimetypes/?mimetypes=' + mimetypes)
             .success(function(data, status){
                 var refIds = [];
@@ -294,14 +293,21 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
             });
     }
 
-    $scope.search = function(term) {
-        term = term || "";
+    $scope.search = function(term, checked) {
+        if(checked){
+            term = "";
+        }
+        term = term;
+
         resetPaging();
 
         url = "api/article/search/?term=" + term + "&filters=" + buildFilters() + "&from=" + $scope.paging.from + "&size=" + $scope.paging.size + "&sort=" + sortBy + "&category=" + category + tagFilter;
 
-        //loadFilteredContent();
-        loadContent();
+        if(term == ""){
+            loadFilteredContent();
+        }else{
+            loadContent();
+        }
     };
 
     $scope.loadMore = function(term) {
