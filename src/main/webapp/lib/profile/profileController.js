@@ -453,6 +453,15 @@ function viewFollowing($rootScope, $scope, $http, $routeParams, $log) {
     };
     $scope.id = $routeParams.profileId;
 
+    if($routeParams.profileId == $rootScope.auth.principal.id){
+        $scope.followedUsers = "You aren't following anyone at the moment.";
+    }else{
+        $http.get('api/profiles/' + $routeParams.profileId)
+            .success(function(data, status){
+                $scope.followedUsers = data.content.name.fullName + " isn't following anyone at the moment.";
+            });
+    }
+
     $scope.$on('$routeChangeSuccess', function(){
         $rootScope.banner = 'none';
         $rootScope.about = 'none';

@@ -22,7 +22,7 @@
                     </li>
                 </ul>
 
-                <div ng-show="(following.length == 0)" class="loader">You are not following anyone at the moment.</div>
+                <div ng-show="(following.length == 0)" class="loader">{{followedUsers}}</div>
                 <div ng-show="(paging.more)" class="loader"><img src="images/ajax-loader.gif">Loading...</div>
                 <div ng-show="((!paging.more) && (following.length != 0))" class="loader">That's everyone you're following.</div>
             </div>
