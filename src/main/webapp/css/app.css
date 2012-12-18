@@ -808,7 +808,7 @@ ul.dropdown-menu li:last-child a {
 .curriculum-about img{
     position: absolute;
     z-index: 2;
-    right: -5em;
+    right: 1em;
 }
 
 .article-thumbnail{
@@ -1561,6 +1561,7 @@ li.search-result.members{
 #gcee-network{
     position: relative;
     top: -37px;
+    z-index: 4;
 }
 
 #curriculum-content.babson-contact-info{
@@ -2501,4 +2502,14 @@ a.category{
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
     hyphens: auto;
+}
+
+.curriculum-about img{
+    top: -1.5em;
+}
+
+@media only screen and (max-device-width: 768px) {
+    #outside-logo{
+        display: none;
+    }
 }
