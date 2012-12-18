@@ -69,7 +69,7 @@
                             <span ng-repeat="doctype in article.childDoctypes" class="doc-type {{doctype}}"></span>
                             <strong>by {{article.author}}, {{article.dateCreated | asDate}}</strong>
                         </p>
-                        <p class="article-brief">{{article.description}}</p>
+                        <p class="article-brief" ng-bind-html-unsafe="article.description"></p>
                         <ul class="article-stats">
                             <li class="muted"><i class="likes"></i> {{article.likes}} Likes</li>
                             <li class="muted"><i class="views"></i> {{article.views}} Views</li>

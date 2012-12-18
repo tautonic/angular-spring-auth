@@ -19,7 +19,7 @@
             <!--<div class="tags">
                 <span ng-repeat="tag in article.taggable"><a ng-click="filterByTag(tag)">{{tag}}</a><span ng-show="!$last">, </span></span>
             </div>-->
-            <p class="article-brief">{{article.description}}</p>
+            <p class="article-brief" ng-bind-html-unsafe="article.description"></p>
             <ul class="article-stats">
                 <li class="muted"><i class="likes"></i> {{article.likes | pluralize:'Like'}}</li>
                 <li class="muted"><i class="views"></i> {{article.views | pluralize:'View'}}</li>
