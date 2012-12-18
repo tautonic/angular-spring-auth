@@ -203,7 +203,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         $scope.tabs[param] = true;
         sortBy = param;
 
-        $scope.search($scope.searchTerm);
+        $scope.search($scope.searchTerm, false);
     };
 
     function buildFilters() {
@@ -295,8 +295,9 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     $scope.search = function(term, checked) {
         if(checked){
             term = "";
+        }else{
+            term = term || "";
         }
-        term = term;
 
         resetPaging();
 
