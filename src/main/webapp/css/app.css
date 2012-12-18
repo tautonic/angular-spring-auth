@@ -2508,7 +2508,7 @@ a.category{
     top: -1.5em;
 }
 
-@media only screen and (max-device-width: 768px) {
+@media only screen and (max-width: 1279px) {
     #outside-logo{
         display: none;
     }
