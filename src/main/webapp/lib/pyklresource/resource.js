@@ -111,9 +111,9 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
         category = 'summit';
     } else {
         if(category === '') {
-            $rootScope.banner = 'curriculum';
-            $rootScope.about = 'curriculum';
-            $rootScope.service = 'curriculum';
+            $rootScope.banner = 'allarticles';
+            $rootScope.about = 'allarticles';
+            $rootScope.service = 'allarticles';
         } else {
             $rootScope.banner = category;
             $rootScope.about = category;
@@ -369,9 +369,9 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
             category = 'summit';
         } else {
             if(category === '') {
-                $rootScope.banner = 'curriculum';
-                $rootScope.about = 'curriculum';
-                $rootScope.service = 'curriculum';
+                $rootScope.banner = 'allarticles';
+                $rootScope.about = 'allarticles';
+                $rootScope.service = 'allarticles';
             } else {
                 $rootScope.banner = category;
                 $rootScope.about = category;

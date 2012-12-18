@@ -116,6 +116,9 @@
                 <div ng-switch-when="summit">
                     <div ng-include src="'partials/banners/annual-summit-banner.html'"></div>
                 </div>
+                <div ng-switch-when="allarticles">
+                    <div ng-include src="'partials/banners/all-articles-banner.html'"></div>
+                </div>
                 <div ng-switch-when="curriculum">
                     <div ng-include src="'partials/banners/curriculum-banner.html'"></div>
                 </div>
@@ -162,6 +165,9 @@
         <div ng-include src="'partials/banners/network-about.html'"></div>
     </div>
     
+    <div ng-switch-when="allarticles">
+        <div ng-include src="'partials/banners/all-articles-about.html'"></div>
+    </div>
     <div ng-switch-when="curriculum">
         <div ng-include src="'partials/banners/curriculum-about.html'"></div>
     </div>
