@@ -551,6 +551,7 @@ app.post('/profiles', function(req){
     data.password = digest(req.postParams.password).toLowerCase();
     data.source = 'GC';
     data.accountEmail.status = 'unverified';
+    data.status = 'unverified';
 
     var opts = {
         url: getZociaUrl(req) + '/profiles/',
@@ -769,6 +770,7 @@ app.put('/profiles/:id', function(req, id){
     delete data._version;
     delete data.followers;
 
+    //this is JUST for changing the status in the admin panel, and is not used to change status from the user
     if(req.postParams.status === "unverified") {
         var servletRequest = req.env.servletRequest;
         if(servletRequest.isUserInRole('ROLE_ADMIN')) {

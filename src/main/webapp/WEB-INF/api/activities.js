@@ -79,7 +79,7 @@ function getDiscussion(req, id) {
     return JSON.parse(exchange.content);
 }
 
-var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
+function activityObject(activity, request, baseUrl, authenticatedId) {
     var result = {};
 
     var defAttrs = {
@@ -87,270 +87,228 @@ var ActivityMixin = function(activity, request, baseUrl, authenticatedId) {
         configurable: true
     };
 
-    /**
-     *
-     * @return {object} The properties file passed to the mixin
-     */
-    Object.defineProperty(result, "props", {
-        get: function() {
-            return activity;
+    result.props = activity;
+    result.isOwner = (authenticatedId === activity.actor._id);
+    result.profileId = activity.actor._id;
+
+    var opts = {
+        url: getZociaUrl(request) + "/profiles/" + result.profileId,
+        method: 'GET',
+        headers: Headers({ 'x-rt-index': 'gc' }),
+        async: false
+    };
+
+    var exchange = httpclient.request(opts);
+
+    if(Math.floor(exchange.status / 100) !== 2) {
+        return {
+            'status': 404,
+            'content': JSON.parse(exchange.status),
+            'headers': exchange.headers,
+            'success': Math.floor(exchange.status / 100) === 2
         }
-    }, defAttrs);
+    }
 
-    /**
-     *
-     * @return {object} The properties file passed to the mixin
-     */
-    Object.defineProperty(result, "isOwner", {
-        get: function() {
-            return authenticatedId === activity.actor._id;
+    var profile = JSON.parse(exchange.content);
+
+    result.thumbnailUrl = profile.thumbnail;
+
+    result.fullName = profile.name.fullName;
+
+    result.username = profile.username;
+
+    var actor = activity.actor,
+        verb = activity.verb,
+        about = activity.about,
+        direct = activity.direct,
+        type;
+
+
+    // Try to determine the "type" of the activity
+    if (direct && direct.dataType) {
+        type = direct.dataType;
+    } else if (about && about.dataType) {
+        type = about.dataType;
+    }
+
+    // Differentiate between data objects w/ the same type. e.g. "posts" can refer to comments or discussions
+    if (type === 'posts') {
+
+        type = direct.type;
+
+        // Fix pluralization of "discussion"
+        if (type === "discussion") {
+            type = "discussions";
         }
-    }, defAttrs);
 
-    /**
-     *
-     * @return {object} The properties file passed to the mixin
-     */
-    Object.defineProperty(result, "thumbnailUrl", {
-        get: function() {
-            //return baseUrl + "images/190x140.gif";//getThumbnailUrl(activity.actor, 'sml')
-            return activity.actor.thumbnail;
+        // Determine if a post is a "reply" or not - if activity parentId prop resolves, it's a reply
+        //var thread = getDiscussion(request, direct.parentId);
+        //if (thread) {
+            //verb = 'r';	// for "reply"
+        //}
+
+        if (direct.parentId !== direct._id) {
+            verb = 'r';	// for "reply"
         }
-    }, defAttrs);
+    }
 
-    Object.defineProperty(result, "fullName", {
-        get: function() {
-            return activity.actor.fullName;
-        }
-    }, defAttrs);
-
-    Object.defineProperty(result, "profileId", {
-        get: function() {
-            return activity.actor._id;
-        }
-    }, defAttrs);
-
-    /**
-     *
-     * @return {string} Text describing activity
-     */
-
-    Object.defineProperty(result, "description", {
-
-        get: function() {
-
-            var actor = activity.actor,
-                verb = activity.verb,
-                about = activity.about,
-                direct = activity.direct,
-                type;
-
-
-            // Try to determine the "type" of the activity
-            if (direct && direct.dataType) {
-                type = direct.dataType;
-            } else if (about && about.dataType) {
-                type = about.dataType;
-            }
-
-            // Differentiate between data objects w/ the same type. e.g. "posts" can refer to comments or discussions
-            if (type === 'posts') {
-
-                type = direct.type;
-
-                // Fix pluralization of "discussion"
-                if (type === "discussion") {
-                    type = "discussions";
+    // If the activity is a "like", the object that was "liked" needs to be determined
+    if (type === "likes") {
+        switch (direct.entityDataType) {
+            case 'posts':
+                // Determine if this is a comment, public or private discussion
+                if (about.type === "discussion") {
+                    type = 'discussions';
+                } else {
+                    type = 'comments';
                 }
+                break;
+            case 'resources':
+                type = 'resources';
+                break;
+        }
+    }
 
-                // Determine if a post is a "reply" or not - if activity parentId prop resolves, it's a reply
-                //var thread = getDiscussion(request, direct.parentId);
-                //if (thread) {
-                    //verb = 'r';	// for "reply"
-                //}
+    // Try to determine if the user is taking action against their own profile
+    if (activity.actor._id === activity.direct._id && authenticatedId === activity.direct._id) {
+        verb += '.self';
+    } else if (activity.actor._id === activity.direct._id) {
+        verb += '.themself';
+    }
 
-                if (direct.parentId !== direct._id) {
-                    verb = 'r';	// for "reply"
-                }
-            }
+    // Look up translation
+    var key = String('notifications-activity.' + verb + '.' + type).toLowerCase();
 
-            // If the activity is a "like", the object that was "liked" needs to be determined
-            if (type === "likes") {
-                switch (direct.entityDataType) {
-                    case 'posts':
-                        // Determine if this is a comment, public or private discussion
-                        if (about.type === "discussion") {
-                            type = 'discussions';
-                        } else {
-                            type = 'comments';
-                        }
-                        break;
-                    case 'resources':
-                        type = 'resources';
-                        break;
-                }
-            }
+    var skinStr = text[key];
+    if(skinStr == undefined) {
+        log.info("Error: Notification key not found. Expecting: "+key);
+    }
 
-            // Try to determine if the user is taking action against their own profile
-            if (activity.actor._id === activity.direct._id && authenticatedId === activity.direct._id) {
-                verb += '.self';
-            } else if (activity.actor._id === activity.direct._id) {
-                verb += '.themself';
-            }
+    // Substitute links
 
-            // Look up translation
-            var key = String('notifications-activity.' + verb + '.' + type).toLowerCase();
+    // Subject link
 
-            var skinStr = text[key];
-            if(skinStr == undefined) {
-                log.info("Error: Notification key not found. Expecting: "+key);
-            }
-            // DEBUG
-            // if (key) {
-            // 	log.info(key);
-            // }
-            // if (skinStr) {
-            // 	log.info(skinStr);
-            // }
+    if(authenticatedId !== undefined){
+        activity.actorLink = authenticatedId == activity.actor._id
+            ? "You"
+            : format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
+            activity.actor._id, activity.actor.fullName || activity.actor.username);
+    }else{
+        activity.actorLink = format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
+            activity.actor._id, activity.actor.fullName || activity.actor.username);
+    }
 
-            // Substitute links
+    var linkId, linkText,
+        linkType = type;
 
-            // Subject link
+    // Indirect object link
+    if (about) {
+        // Determine data on the indirect object
 
-            if(authenticatedId !== undefined){
-                activity.actorLink = authenticatedId == activity.actor._id
-                    ? "You"
-                    : format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
-                    activity.actor._id, activity.actor.fullName || activity.actor.username);
-            }else{
-                activity.actorLink = format('<a href="%s%s/%s">%s</a>', baseUrl, '#/profiles/view',
-                    activity.actor._id, activity.actor.fullName || activity.actor.username);
-            }
+        // Defaults
+        linkId = about._id;
+        linkText = about.title;
 
-            var linkId, linkText,
-                linkType = type;
-
-            // Indirect object link
-            if (about) {
-                // Determine data on the indirect object
-
-                // Defaults
+        switch (about.dataType) {
+            case 'ventures':
+                linkId = about.username;
+                linkText = about.fullName || about.username;
+                break;
+            case 'resources':
                 linkId = about._id;
+                // Need to get the title here
+                var resource = getArticle(request, about._id, request.locale);
+                linkText = resource.content.title;
+                linkType = '#/content/view';
+                break;
+            case 'posts':
                 linkText = about.title;
+                linkId = about._id;
+                linkType = '#/network/discussion/view';
 
-                switch (about.dataType) {
-                    case 'ventures':
-                        linkId = about.username;
-                        linkText = about.fullName || about.username;
-                        break;
-                    case 'resources':
-                        linkId = about._id;
-                        // Need to get the title here
-                        var resource = getArticle(request, about._id, request.locale);
-                        linkText = resource.content.title;
-                        linkType = '#/content/view';
-                        break;
-                    case 'posts':
-                        linkText = about.title;
-                        linkId = about._id;
-                        linkType = '#/network/discussion/view';
-
-                        if(about._id != about.parentId) {
-                            // Get the discussion root
-                            var discussion = getDiscussion(request, about.parentId);
-                            linkText = "a reply to " + discussion.title;
-                            linkId = discussion._id
-                        }
-                        break;
-                    default: break;
+                if(about._id != about.parentId) {
+                    // Get the discussion root
+                    var discussion = getDiscussion(request, about.parentId);
+                    linkText = "a reply to " + discussion.title;
+                    linkId = discussion._id
                 }
+                break;
+            default: break;
+        }
 
-                activity.aboutLink = format('<a href="%s%s/%s">%s</a>',
-                    baseUrl, linkType, linkId, linkText);
-            }
+        activity.aboutLink = format('<a href="%s%s/%s">%s</a>',
+            baseUrl, linkType, linkId, linkText);
+    }
 
-            // Direct object link
-            if (direct) {
-                // Determine data on the direct object
+    // Direct object link
+    if (direct) {
+        // Determine data on the direct object
 
+        linkId = direct._id;
+        linkText = direct.title;
+
+        switch (direct.dataType) {
+            case 'posts':
                 linkId = direct._id;
                 linkText = direct.title;
-
-                switch (direct.dataType) {
-                    case 'posts':
-                        linkId = direct._id;
-                        linkText = direct.title;
-                        linkType = '#/network/discussion/view';
-                        var discussion;
-                        if(linkText === ''){
-                            discussion = getDiscussion(request, direct._id);
-                            linkText = discussion.title;
-                        }
-
-                        //if the user commented on an article
-                        if (type === "comment") {
-                            discussion = getDiscussion(request, direct._id);
-                            var article;
-                            if(discussion._id !== discussion.threadId) {
-                                discussion = getDiscussion(request, discussion.threadId);
-                            }
-                            article = getArticle(request, discussion.parentId);
-
-                            linkId = article.content._id;
-                            linkText = article.content.title;
-                            linkType = '#/content/view';
-
-                            // Otherwise we have to look up the post info
-                        } else if (about && about.dataType === "posts") {
-                            // Get the discussion root
-                            discussion = getDiscussion(request, about._id);
-
-                            if(discussion._id !== discussion.threadId) {
-                                discussion = getDiscussion(request, discussion.threadId);
-                            }
-                            linkText = discussion.title;
-                            linkId = discussion.threadId;
-                        }
-                        break;
-                    case 'ventures':
-                        linkId = direct.username;
-                        linkText = direct.fullName || direct.username;
-                        break;
-                    case 'profiles':
-                        linkId = direct._id;
-                        linkText = direct.fullName || direct.username;
-                        // If showing this message to the same user, use the "you" word
-                        if (authenticatedId === direct._id) {
-                            //linkText = nativeYou.toLowerCase();
-
-                            linkText = 'you';
-                        }else{
-                            linkText = direct.username;
-                        }
-                        linkType = '#/profiles/view';
-                        break;
+                linkType = '#/network/discussion/view';
+                var discussion;
+                if(linkText === ''){
+                    discussion = getDiscussion(request, direct._id);
+                    linkText = discussion.title;
                 }
-                activity.directLink = format('<a href="%s%s/%s">%s</a>',
-                    baseUrl, linkType, linkId, linkText);
-            }
 
-            // Special case: service provider messages
-            /*if (type === "spMessages") {
-                if (!activity.direct.message) {
-                    // If we can't get the message string, don't display anything to the user
-                    activity.message = "There was an error loading the service provider thing";
-                } else {
-                    activity.message = activity.direct.message;
+                //if the user commented on an article
+                if (type === "comment") {
+                    discussion = getDiscussion(request, direct._id);
+                    var article;
+                    if(discussion._id !== discussion.threadId) {
+                        discussion = getDiscussion(request, discussion.threadId);
+                    }
+                    article = getArticle(request, discussion.parentId);
+
+                    linkId = article.content._id;
+                    linkText = article.content.title;
+                    linkType = '#/content/view';
+
+                    // Otherwise we have to look up the post info
+                } else if (about && about.dataType === "posts") {
+                    // Get the discussion root
+                    discussion = getDiscussion(request, about._id);
+
+                    if(discussion._id !== discussion.threadId) {
+                        discussion = getDiscussion(request, discussion.threadId);
+                    }
+                    linkText = discussion.title;
+                    linkId = discussion.threadId;
                 }
-            } */
+                break;
+            case 'ventures':
+                linkId = direct.username;
+                linkText = direct.fullName || direct.username;
+                break;
+            case 'profiles':
+                linkId = direct._id;
+                linkText = direct.fullName || direct.username;
+                // If showing this message to the same user, use the "you" word
+                if (authenticatedId === direct._id) {
+                    //linkText = nativeYou.toLowerCase();
 
-            // log.info("\n*************************\n");
-            return trimpathString(skinStr, activity);
+                    linkText = 'you';
+                }else{
+                    linkText = direct.username;
+                }
+                linkType = '#/profiles/view';
+                break;
         }
-    }, defAttrs);
+        activity.directLink = format('<a href="%s%s/%s">%s</a>',
+            baseUrl, linkType, linkId, linkText);
+    }
+
+    result.description = trimpathString(skinStr, activity);
 
     return result;
-};
+}
 
 var getLatestActivity = function(request, profile, context, userId) {
     var filters = "likes comments discussions collaborators ideas companies profiles spMessages";
@@ -380,7 +338,7 @@ var getLatestActivity = function(request, profile, context, userId) {
 
     // find the latest activity directly taken by the owner of the profile
     // the latest activity is the last activity in the array
-    var activity = new ActivityMixin(stream, request, context, userId);
+    var activity = activityObject(stream, request, context, userId);
 
     return {
         'fullName': activity.fullName,
@@ -390,14 +348,14 @@ var getLatestActivity = function(request, profile, context, userId) {
 };
 
 var convertActivity = function(activity, request, context, userId) {
-    activity = new ActivityMixin(activity, request, context, userId);
+    activity = activityObject(activity, request, context, userId);
 
     if (activity.description !== null) {
 
         return {
             'thumbnailUrl': activity.thumbnailUrl,
             'fullName': activity.fullName,
-            'username': activity.props.actor.username,
+            'username': activity.username,
             'message': activity.description,
             'dateCreated': activity.props.dateCreated,
             'isOwner': activity.isOwner,

@@ -27,7 +27,7 @@
             </div>
 
             <div ui-if="!auth.isAuthenticated">
-                <a ng-href="#/login">Log In</a> or <a ng-href="#/signup">register</a> to start a discussion.
+                <a ng-click="auth.requestLogin()">Log In</a> or <a ng-href="#/signup">register</a> to start a discussion.
             </div>
         </div>
     </div>

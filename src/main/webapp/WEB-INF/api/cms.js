@@ -154,6 +154,10 @@ app.get('/:key', function (req, key) {
 
     var resource = map.get(lookup);
 
+    if(resource === null) {
+        log.error("Error retrieving resource with key: "+lookup);
+        return json({'error': true});
+    }
     // In order for the map to work, we need to use the locale of the resource and not the lookup
     // when we store the resource in the map.
     map.evict(lookup);
