@@ -162,7 +162,7 @@ function verifyEmailController($rootScope, $scope, $routeParams, $http, $log){
 
     $http.get('api/utility/verifyemail/' + $routeParams.token)
         .success(function(data, status, headers, config){
-
+            $scope.success = data.content.verified;
         })
         .error(function(data, status, headers, config){
             $log.info('TOKEN VERIFICATION ERROR!!!');
@@ -251,7 +251,7 @@ function activateAccountController($rootScope, $scope, $location, $http){
 
     $scope.activate = function() {
         $location.path('verifyemail/'+$scope.code);
-    }
+    };
 
     $scope.resend = function() {
         $http.get('api/utility/resendvalidationcode/' + $scope.email)

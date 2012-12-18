@@ -1,7 +1,7 @@
 <div class="content container signup">
     <div class="row">
         <div class="span9">
-            <div class="signup-success grey-gradient">
+            <div ui-if="success" class="signup-success grey-gradient">
                 <h2>Your account has been verified</h2>
                 <p>
                     <strong>
@@ -13,6 +13,17 @@
 
                 <a class="btn btn-success" ng-href="#/login">Log In To Your Account</a>
                 <a class="btn btn-success" ng-href="#/network/members">Find Members</a>
+            </div>
+
+            <div ui-if="!success" class="signup-success grey-gradient">
+                <h2>There was an error verifying your email</h2>
+                <p>
+                    <strong>
+                        It's possible that the code you used is no longer valid.
+                    </strong>
+                </p>
+
+                <a class="btn btn-success" ng-href="#/activateAccount">Try another code or request a new one</a>
             </div>
 
         </div>
