@@ -4,7 +4,7 @@
             <img src="{{cms.thumbnail}}" alt="{{cms.title}}">
             <a ng-href="#/summit">
                 <div read-more-hover class="read-more gradient">
-                    <p x-cms="read_more"><span ng-bind-html-unsafe="cms.content" /></p>
+                    <p x-cms="read_more">{{cms.content | notags}}</p>
                     <div class="read-more-arrow"></div>
                 </div>
             </a>
@@ -17,7 +17,7 @@
             <img src="{{cms.thumbnail}}" alt="{{cms.title}}">
             <a ng-href="#/content">
                 <div read-more-hover class="read-more gradient">
-                    <p x-cms="read_more"><span ng-bind-html-unsafe="cms.content" /></p>
+                    <p x-cms="read_more">{{cms.content | notags}}</p>
                     <div class="read-more-arrow"></div>
                 </div>
             </a>
@@ -30,7 +30,7 @@
             <img src="{{cms.thumbnail}}" alt="{{cms.title}}">
             <a ng-href="#/network/discussion/list">
                 <div read-more-hover class="read-more gradient">
-                    <p x-cms="read_more"><span ng-bind-html-unsafe="cms.content" /></p>
+                    <p x-cms="read_more">{{cms.content | notags}}</p>
                     <div class="read-more-arrow"></div>
                 </div>
             </a>

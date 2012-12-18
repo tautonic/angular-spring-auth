@@ -64,4 +64,13 @@ angular.module('bgc.filters').filter('category', function(){
     }
 });
 
-
+//strips the <p> tags from cms content
+angular.module('bgc.filters').filter('notags', function(){
+    return function(text) {
+        if(text) {
+            text = text.replace("<p>", "");
+            text = text.replace("</p>", "");
+        }
+        return text;
+    }
+});

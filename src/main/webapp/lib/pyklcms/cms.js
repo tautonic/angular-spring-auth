@@ -107,6 +107,7 @@
      */
     pyklCms.controller( 'pykl.$cms.ctrl', ['$rootScope', '$scope', 'pykl.$cms', '$log',
         function($rootScope, $scope, $cms, $log) {
+
         // Stores the original array of incoming data. This object is used to diff
         // against the updated set of resources to determine whether a persist needs
         // to take place.
@@ -250,6 +251,7 @@
                 scope: {},
                 compile: function (tElement, tAttrs, transclude) {
                     var editBtn;
+
 
                     // Adds an edit button to the upper right corner of the cms element
                     function attachEdit(element) {
