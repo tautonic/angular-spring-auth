@@ -90,10 +90,10 @@
             <div class="span12 home">
                 <a class="logo" ng-href="#/home"><img src="images/GCEE_image_GCEE.png"></a>
                 <ul class="gradient menu">
-                    <li><a ng-href="#/home/" x-cms="menu_1">{{cms.content}}</a></li>
-                    <li><a ng-href="#/summit/" x-cms="menu_2">{{cms.content}}</a></li>
-                    <li><a ng-href="#/content/" x-cms="menu_3">{{cms.content}}</a></li>
-                    <li><a ng-href="#/network/discussion/list" x-cms="menu_4">{{cms.content}}</a></li>
+                    <li><a ng-href="#/home/" x-cms="menu_1">{{cms.content | notags}}</a></li>
+                    <li><a ng-href="#/summit/" x-cms="menu_2">{{cms.content | notags}}</a></li>
+                    <li><a ng-href="#/content/" x-cms="menu_3">{{cms.content | notags}}</a></li>
+                    <li><a ng-href="#/network/discussion/list" x-cms="menu_4">{{cms.content | notags}}</a></li>
                     <pykl-login ng-controller="LoginWatch"></pykl-login>
                     <!--<li id="search-menu-item"><a onclick="openSearch()"><img src="images/GCEE_images_header_searchIcon.png"></a></li>-->
                 </ul>
@@ -234,9 +234,9 @@
                     <a class="lifeat"></a>
                 </div>-->
             </div>
-            <div class="span8">
-                <h3>Taking enterpreneurship global.</h3>
-                <p>Babson Global was created to manage Babson's global projects and activities that fall outside of our traditional offerings in undergraduate, graduate and executive education. Based on the reputation, skills, knowledge, and experience of the College, Babson Global delivers programs that extend Entrepreneurial Thought and Action&reg; to new populations.</p>
+            <div class="span8" x-cms="footer">
+                <h3>{{cms.title}}</h3>
+                <p ng-bind-html-unsafe="cms.content"></p>
             </div>
         </div>
     </div>
