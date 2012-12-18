@@ -387,7 +387,7 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
     }
 
     $scope.deleteArticle = function(element, attr) {
-        //delete all of this articles attachments as well
+        //delete all of this article's attachments as well
         $http.get('api/article/' + attr.article._id)
             .success(function(data, status){
                 var article = data;
@@ -397,15 +397,15 @@ function ListResources( $rootScope, $scope, $routeParams, $auth, $http, $log, $l
                             $location.path('/error/500');
                         });
                 });
+                $http['delete']('api/admin/articles/' + attr.article._id).success( function() {
+                    element.parents('.article.admin.row').fadeOut('slow', function(){
+                        $(this).remove();
+                    });
+                });
             })
             .error(function(data, status){
 
             });
-        $http['delete']('api/admin/articles/' + attr.article._id).success( function() {
-            element.parents('.article.admin.row').fadeOut('slow', function(){
-                $(this).remove();
-            });
-        });
     };
 }
 
