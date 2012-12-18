@@ -809,6 +809,7 @@ ul.dropdown-menu li:last-child a {
     position: absolute;
     z-index: 2;
     right: 1em;
+    top: -1.5em;
 }
 
 .article-thumbnail{
@@ -2502,10 +2503,6 @@ a.category{
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
     hyphens: auto;
-}
-
-.curriculum-about img{
-    top: -1.5em;
 }
 
 @media only screen and (max-width: 1279px) {
