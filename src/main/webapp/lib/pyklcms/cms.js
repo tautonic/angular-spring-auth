@@ -264,7 +264,9 @@
                     }
 
                     function showEdit() {
-                        editBtn.show();
+                        if(editBtn) {
+                            editBtn.show();
+                        }
                     }
 
                     function hideEdit() {
@@ -329,8 +331,8 @@
                             } else {
                                 scope.cms = {
                                     title: 'CMS CONTENT NOT FOUND!',
-                                    description: 'CMS CONTENT NOT FOUND!',
-                                    thumbnail: 'CMS CONTENT NOT FOUND!'
+                                    content: 'CMS CONTENT NOT FOUND!',
+                                    thumbnail: 'images/190x140.gif'
                                 };
                             }
                         };
