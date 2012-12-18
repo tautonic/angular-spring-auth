@@ -78,7 +78,7 @@
             </div>
             <div ui-if="!auth.isAuthenticated">
                 <div class="discussion-btn btn-group bgc">
-                    <a class="btn btn-success" ng-href="#/login">Log In to start a discussion</a>
+                    <a class="btn btn-success" ng-click="auth.requestLogin()">Log In to start a discussion</a>
                 </div>
             </div>
         </div>

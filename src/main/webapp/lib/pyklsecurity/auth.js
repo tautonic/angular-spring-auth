@@ -184,6 +184,9 @@ var pykl = window.pykl || {};
                 if((referral === '/login') || (referral === '/signup')) {
                     referral = '/home';
                 }
+                if(referral === '/network/discussion/list') {
+                    referral = '/network/discussion/new';
+                }
                 $location.path('/login');
             }
 
@@ -191,6 +194,10 @@ var pykl = window.pykl || {};
 
             $rootScope.$on(EVENT_SIGNIN_CONFIRMED, function () {
                 $log.info(EVENT_SIGNIN_CONFIRMED + ' detected.');
+
+                if(referral === undefined) {
+                    referral = '/home';
+                }
                 $location.path(referral);
             });
 
