@@ -343,6 +343,10 @@ var pykl = window.pykl || {};
                     $rootScope.signInErrorReason = "Your account could not be logged in";
                 }
 
+                $rootScope.$on('$routeChangeStart', function(){
+                    $rootScope.showSignInError = false;
+                })
+
             })
         } ]
     );
