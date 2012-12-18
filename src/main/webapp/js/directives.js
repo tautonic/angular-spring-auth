@@ -888,7 +888,7 @@ angular.module('bgc.directives').directive('reloadTwitterBtns', function(){
  */
 angular.module('bgc.directives').directive('whenScrolled', function() {
     return function(scope, elm, attr) {
-        /*var raw = elm[0];
+        var raw = elm[0];
         var offset = attr.offset || 0;
         angular.element(window).bind('scroll', function() {
             var rectObject = raw.getBoundingClientRect();
@@ -896,8 +896,7 @@ angular.module('bgc.directives').directive('whenScrolled', function() {
             if (Math.floor(rectObject.bottom) === $(window).height() - 200 - offset) {
                 scope.$apply(attr.whenScrolled);
             }
-
-        });*/
+        });
     };
 });
 
@@ -1054,7 +1053,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
         link: function(scope, elm, attrs){
             var config = {
                 scope: scope,
-                runtimes: 'html5, flash, silverlight, browserplus',
+                runtimes: 'html5, html4, flash, silverlight, browserplus',
                 browse_button: 'choose-files',
                 container:'attachment-upload',
                 url: 'api/cms/upload/image',
@@ -1064,8 +1063,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
                 silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
                 filters:[
-                    {title : "Image files", extensions : "pdf,doc,ppt,txt,jpg,jpeg,xls"},
-                    {title:"Zip files", extensions:"zip"}
+                    {title : "Attachment files", extensions : "pdf,doc,ppt,txt,jpg,jpeg,xls,docx,pptx,xlsx"}
                 ]
             };
 

@@ -515,6 +515,7 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         views: 0,
         rating: 0,
         attachments: [],
+        format: 'article',
         premium: false,
         mimetype: 'text/html',
         category: ''
