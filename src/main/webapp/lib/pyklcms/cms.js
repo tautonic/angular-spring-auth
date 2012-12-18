@@ -268,12 +268,14 @@
                     }
 
                     function hideEdit() {
-                        editBtn.hide();
+                        if(editBtn) {
+                            editBtn.hide();
+                        }
                     }
 
                     function displayOnAuth() {
 //                        $log.info('Auth', $auth, 'Editor? ', $auth.isUserInRole('ROLE_EDITOR'));
-                        if ($auth.isUserInRole('ROLE_EDITOR')) showEdit(); else hideEdit();
+                        if ($auth.isUserInRole('ROLE_EDITOR')) showEdit();// else hideEdit();
                     }
 
                     $rootScope.$on( $auth.event.signinConfirmed, displayOnAuth);
