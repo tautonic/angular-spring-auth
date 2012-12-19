@@ -91,10 +91,9 @@
                             </div> \
                             <div class="name"></div> \
                         </div> \
-                        <div ng-transclude /> \
+                        <div id="base_image" /> \
                     </div>',
                 replace: true,
-                transclude: true,
                 restrict: 'EA',
                 require: '?ngModel',
                 link: function (scope, elm, attrs, ngModel) {
@@ -118,7 +117,9 @@
                     container = elm;
 
                     // Identify the transclude div
-                    var elTransclude = container.find('div[ng-transclude]');
+                    //note: ng-transclude creates a new scope, which can have a null parent value, which causes all sorts of unexpected behaviour (the scope doesn't get properly deleted, which results in copies being left around)
+                    // see: https://github.com/angular/angular.js/issues/1627 for details
+                    var elTransclude = container.find('#base_image');
 
                     // Locate the image. If not found create one and place in transclude holder.
                     var img = elTransclude.find('img');
