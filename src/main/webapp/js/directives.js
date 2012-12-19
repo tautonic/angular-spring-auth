@@ -888,7 +888,7 @@ angular.module('bgc.directives').directive('reloadTwitterBtns', function(){
  */
 angular.module('bgc.directives').directive('whenScrolled', function() {
     return function(scope, elm, attr) {
-        var raw = elm[0];
+        /*var raw = elm[0];
         var offset = attr.offset || 0;
         angular.element(window).bind('scroll', function() {
             var rectObject = raw.getBoundingClientRect();
@@ -896,7 +896,7 @@ angular.module('bgc.directives').directive('whenScrolled', function() {
             if (Math.floor(rectObject.bottom) === $(window).height() - 200 - offset) {
                 scope.$apply(attr.whenScrolled);
             }
-        });
+        });*/
     };
 });
 
@@ -1053,7 +1053,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
         link: function(scope, elm, attrs){
             var config = {
                 scope: scope,
-                runtimes: 'html5, flash, silverlight, browserplus',
+                runtimes: 'html5, silverlight, flash, html4, browserplus',
                 browse_button: 'choose-files',
                 container:'attachment-upload',
                 url: 'api/cms/upload/image',
