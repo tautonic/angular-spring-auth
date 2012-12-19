@@ -305,9 +305,9 @@
                         if (locale) lookup += '@' + locale;
 
                         var initScope = function(data) {
-                            // If the HTTP response is an array and the first element contains a content
+                            // If the HTTP response is an array and the first element contains a content or title
                             // property, then we found what we were looking for.
-                            var contentFound = data && data.length && data[0] && data[0].content;
+                            var contentFound = data && data.length && data[0] && (data[0].content || data[0].title);
 
                             if (contentFound) {
                                 // It is important to create the lookup values for editing and updating in this
