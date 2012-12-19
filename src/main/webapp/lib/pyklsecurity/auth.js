@@ -165,7 +165,7 @@ var pykl = window.pykl || {};
         <ul class="dropdown-menu"> \
             <li><span class="gradient"><a ng-href="#/profiles/view/{{auth.principal.id}}">My profile</a></span></li> \
             <li ui-if="auth.isUserInRole(\'ROLE_ADMIN\')"><span class="gradient"><a ng-href="#/admin/users">Admin Panel</a></span></li> \
-            <li><span class="gradient" x-cms="menu_signout"><a ng-click="signout()">{{cms.title}}</a></span></li> \
+            <li><span class="gradient"><a ng-click="signout()">Sign Out</a></span></li> \
         </ul> \
         </div> \
         </li>',
