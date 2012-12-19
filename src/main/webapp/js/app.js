@@ -42,9 +42,10 @@
             templateUrl: 'lib/pyklresource/partials/view.html'
         } );
 
-        //this is for the contact info page. will eventually need designed+a controller
+        //this is for the contact info page.
         $routeProvider.when( '/content/service/contact', {
-            templateUrl: 'lib/pyklresource/partials/contactinfo.html'
+            templateUrl: 'lib/pyklresource/partials/contactinfo.html',
+            controller: 'ContactInfo'
         } );
 
         $routeProvider.when( '/content/service/:service', {

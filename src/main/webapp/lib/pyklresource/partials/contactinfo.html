@@ -1,11 +1,9 @@
 <div class="content container">
     <div class="row">
         <div class="articles span9" >
-            <div class="contact-info">
-                <h3>Contact Info</h3>
-                <p>admin@babsonglobalgcee.com</p>
-                <p>123 Fake Street Baltimore, MA 02481</p>
-                <p>(781) 555-1234</p>
+            <div class="contact-info" x-cms="contact_info">
+                <h3>{{cms.title}}</h3>
+                <p ng-bind-html-unsafe="cms.content"></p>
             </div>
         </div>
 

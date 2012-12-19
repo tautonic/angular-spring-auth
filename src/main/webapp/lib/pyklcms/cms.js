@@ -154,6 +154,11 @@
             };
 
             ng.forEach(modifiedResources, persist);
+
+            if(modifiedResources.length === 0) {
+                $scope.showError = false;
+                $scope.modalShown = false;
+            }
         };
 
         $scope.$on('hideModal', function(event){
@@ -180,7 +185,7 @@
             var old = origData[index];
             return !(resource.title === old.title
                 && resource.content === old.content
-                && resource.thumbnailUrl === old.thumbnailUrl);
+                && resource.thumbnail === old.thumbnail);
         }
 
         // The edit event is invoked with the lookup key consisting of a concatenation of resource key and
