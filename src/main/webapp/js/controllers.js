@@ -156,6 +156,13 @@ function maintenanceController($rootScope, $scope){
     });
 }
 
+function ContactInfo($rootScope, $scope){
+    $scope.$on('$routeChangeSuccess', function(){
+        $rootScope.banner = 'none';
+        $rootScope.about = 'contact';
+    });
+}
+
 function verifyEmailController($rootScope, $scope, $routeParams, $http, $log){
     $rootScope.banner = 'none';
     $rootScope.about = 'signup';
