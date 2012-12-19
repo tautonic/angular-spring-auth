@@ -98,7 +98,8 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
         attr.user.status = "verified";
 
         Profile.update({profileId:attr.user._id}, attr.user, function(){
-            element.parents('.btn-group-border').removeClass('btn-group-border').html("<p>"+attr.user.name.fullName+"'s account has been activated.</p>");
+            var name = attr.user.name.fullName || attr.user.username;
+            element.parents('.btn-group-border').removeClass('btn-group-border').html("<p>"+name+"'s account has been activated.</p>");
         });
     };
 
@@ -106,7 +107,8 @@ function adminUsersList($rootScope, $scope, $routeParams, $http, $log, $location
         attr.user.status = "unverified";
 
         Profile.update({profileId:attr.user._id}, attr.user, function(){
-            element.parents('.btn-group-border').removeClass('btn-group-border').html("<p>"+attr.user.name.fullName+"'s account has been deactivated.</p>");
+            var name = attr.user.name.fullName || attr.user.username;
+            element.parents('.btn-group-border').removeClass('btn-group-border').html("<p>"+name+"'s account has been deactivated.</p>");
         });
     };
 
