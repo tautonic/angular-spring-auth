@@ -51,7 +51,7 @@
                Otherwise it is write-behind so updates will be stored after write-delay-seconds
                value by calling Hazelcast.storeAll(map). Default value is 0.
             -->
-            <write-delay-seconds>5</write-delay-seconds>
+            <write-delay-seconds>0</write-delay-seconds>
 
             <properties>
                 <!-- mapstore property contains the Spring names of map store implementations -->
