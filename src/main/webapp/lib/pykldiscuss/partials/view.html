@@ -22,8 +22,8 @@
                 <form name="editForm" ng-submit="editPost(discussion)">
                     <fieldset class="control-group">
                         <textarea style="width: 100%; height: 50px;" ng-model="discussion.edited" ui-tinymce required></textarea>
-                        <input type="submit" value="Save" class="btn" ng-disabled="editFormInvalid(this)">
                         <input type="button" ng-click="cancelEdit(discussion)" value="Cancel" class="btn">
+                        <input type="submit" value="Save" class="btn" ng-disabled="editFormInvalid(this)">
                     </fieldset>
                 </form>
             </div>
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="grey-gradient discussion-post-stats">
-                        <div class="btn-group-border">
+                        <div class="btn-group-border" style="float:right">
                             <div class="btn-group bgc">
                                 <input type="submit" value="Post" class="btn btn-success" ng-disabled="mainReplyForm.$invalid" ng-click="submitReply()">
                             </div>

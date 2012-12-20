@@ -13,8 +13,8 @@
                 <textarea style="width: 100%; height: 50px;" ng-model="post.edited" ui-tinymce required></textarea>
                 <span class="btn-group-border">
                     <div class="btn-group bgc">
-                        <input type="submit" value="Save" class="btn btn-success" ng-disabled="editFormInvalid(this)">
                         <input type="button" ng-click="cancelEdit(post)" value="Cancel" class="btn btn-success">
+                        <input type="submit" value="Save" class="btn btn-success" ng-disabled="editFormInvalid(this)">
                     </div>
                 </span>
             </fieldset>
@@ -25,16 +25,16 @@
     <p class="spammed">This post has been flagged as spam.</p>
 </div>
 <div class="discussion-post-stats grey-gradient" ui-if="!post.reply.show">
-        <div ui-if="auth.isUserInRole('ROLE_ADMIN')" class="btn-group bgc" style="float: right">
-            <button are-you-sure="{ call: deletePost, post: post, index: $index }" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete Post</button>
+
+
+    <span class="btn-group-border" ui-if="!post.hidden" style="float: right">
+        <div class="btn-group bgc">
+            <button ui-if="auth.isUserInRole('ROLE_ADMIN')" are-you-sure="{ call: deletePost, post: post, index: $index }" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete Post</button>
+            <button class="btn btn-success" ng-click="edit(post)" ui-if="canEdit(post)"><i class="icon-edit icon-white"></i> Edit</button>
+            <button class="btn btn-success" ng-click="replyTo(post, true)"><i class="icon-share icon-white"></i> Quote</button>
+            <button class="btn btn-success" ng-click="replyTo(post)"><i class="icon-share-alt icon-white"></i> Reply</button>
         </div>
-        <span class="btn-group-border" ui-if="!post.hidden">
-            <div class="btn-group bgc">
-                <button class="btn btn-success" ng-click="replyTo(post)"><i class="icon-share-alt icon-white"></i> Reply</button>
-                <button class="btn btn-success" ng-click="edit(post)" ui-if="canEdit(post)"><i class="icon-edit icon-white"></i> Edit</button>
-                <button class="btn btn-success" ng-click="replyTo(post, true)"><i class="icon-share icon-white"></i> Quote</button>
-            </div>
-        </span>
+    </span>
     <span class="muted" ui-if="!post.hidden"><like objectid="{{post._id}}"></like></span>
     <span class="muted"><spam objectid="{{post._id}}"></spam></span>
 </div>
@@ -52,8 +52,8 @@
             <br>
             <div class="btn-group-border">
                 <div class="btn-group bgc">
-                    <input type="submit" value="Post" class="btn btn-success" ng-disabled="replyForm.$invalid" ng-click="submitReply(post)">
                     <button class="btn btn-success" ng-click="cancelReply(post)">Cancel</button>
+                    <input type="submit" value="Post" class="btn btn-success" ng-disabled="replyForm.$invalid" ng-click="submitReply(post)">
                 </div>
             </div>
             <!--<span class="muted"><i class="add"></i> Add Image</span>-->

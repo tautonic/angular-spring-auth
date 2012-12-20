@@ -1973,7 +1973,8 @@ i.paper-clip{
     position: relative;
     border: 1px solid #E8E8E8;
     margin: 3em 0;
-    padding-bottom: 1em;
+    padding-bottom: 4em;
+    padding-right: 15px;
 }
 
 .profile-full .name-title{
@@ -2150,7 +2151,7 @@ i.paper-clip{
 }
 
 .article-update{
-    padding: 2em 1em;
+    padding: 2em 1em 3em;
     margin-top: 2em;
     border: #C5C5C5 solid 1px;
 }

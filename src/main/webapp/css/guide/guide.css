@@ -646,6 +646,7 @@ a.btn:visited{
     position: relative;
     border-radius: 0 0 3px 3px;
     margin-bottom: 20px;
+    height: 32px;
 }
 
 .discussion-post-stats .reply-form {

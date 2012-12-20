@@ -73,10 +73,10 @@
                                     <li class="muted"><a ng-href="#/content/service/{{article.category}}">Category: {{article.category | category}}</a></li>
                                 </ul>
 
-                                <div class="btn-group-border">
+                                <div class="btn-group-border" style="float:right">
                                     <div class="btn-group bgc">
-                                        <a class="btn btn-success" ng-href="#/admin/articles/update/{{article._id}}"><i class="icon-pencil icon-white"></i> Update</a>
                                         <button class="btn btn-danger" are-you-sure="{ call: deleteArticle, article: article }"><i class="icon-trash icon-white"></i> Delete</button>
+                                        <a class="btn btn-success" ng-href="#/admin/articles/update/{{article._id}}"><i class="icon-pencil icon-white"></i> Update</a>
                                     </div>
                                 </div>
                             </div>

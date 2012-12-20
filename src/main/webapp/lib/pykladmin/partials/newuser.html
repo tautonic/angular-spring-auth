@@ -310,10 +310,10 @@
                     <div ng-switch on=userCanEdit>
                         <div ng-switch-when=true>
                             <div class="admin new-user">
-                                <div class="admin new-user btn-group-border">
+                                <div class="admin new-user btn-group-border" style="float:right">
                                     <div class="btn-group bgc">
-                                        <button ng-disabled="newProfile.$invalid" ng-click="save(profile)" class="btn btn-success">Save New Profile</button>
                                         <button ng-click="cancel()" class="btn btn-success">Cancel</button>
+                                        <button ng-disabled="newProfile.$invalid" ng-click="save(profile)" class="btn btn-success">Save New Profile</button>
                                     </div>
                                 </div>
                             </div>

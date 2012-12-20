@@ -95,19 +95,19 @@
                                 </div>
 
                                 <div id="attachment-list"></div>
-                                <div class="control-group">
+                                <div class="control-group" style="float:right">
                                     <label class="control-label"></label>
                                     <div class="controls">
                                         <div class="btn-group-border">
                                             <div class="btn-group bgc">
-                                                <button ng-disabled=disabled ng-click="save(article)" class="btn btn-success">Save Article</button>
-                                                <button ng-disabled=disabled ng-click="cancel()" class="btn btn-success">Cancel</button>
+                                                <button ng-disabled=disabled id="choose-files" class="btn btn-success"><i class="icon-file icon-white"></i> Add file to queue</button>
                                             </div>
                                         </div>
 
                                         <div class="btn-group-border">
                                             <div class="btn-group bgc">
-                                                <button ng-disabled=disabled id="choose-files" class="btn btn-success"><i class="icon-file icon-white"></i> Add file to queue</button>
+                                                <button ng-disabled=disabled ng-click="cancel()" class="btn btn-success">Cancel</button>
+                                                <button ng-disabled=disabled ng-click="save(article)" class="btn btn-success">Save Article</button>
                                             </div>
                                         </div>
                                     </div>
@@ -116,14 +116,14 @@
                         </form>
 
                         <div ng-switch on=resetStatus>
-                            <div ng-switch-when="error">
+                            <div ng-switch-when="error" style="clear: both">
                                 <div class="alert alert-error alert-block">
                                     <h4>Error!</h4>
                                     Terribly sorry, something seems to have gone wrong when updating the article.
                                 </div>
 
                             </div>
-                            <div ng-switch-when="success">
+                            <div ng-switch-when="success" style="clear: both">
                                 <h2>Success!</h2>
                                 <p>
                                     <strong>

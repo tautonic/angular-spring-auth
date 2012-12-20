@@ -301,7 +301,7 @@
             <div class="control-group">
                 <label class="control-label"></label>
                 <div class="controls">
-                    <div class="btn-group-border">
+                    <div class="btn-group-border" style="float:right">
                         <div class="btn-group bgc">
                             <button ng-click="updateProfile(profile, 'notes')" class="btn btn-success">Save</button>
                             <button ng-click="cancelEditing('notes')" class="btn btn-success">Cancel</button>
@@ -330,8 +330,8 @@
 
                 <div class="btn-group-border">
                     <div class="btn-group bgc">
-                        <button ng-disabled="cropDisabled" id="save-crop" class="btn btn-success"><i class="icon-ok-circle icon-white"></i> Crop &amp; Save</button>
                         <button id="cancel-crop" class="btn btn-success"><i class="icon-ban-circle icon-white"></i> Cancel</button>
+                        <button ng-disabled="cropDisabled" id="save-crop" class="btn btn-success"><i class="icon-ok-circle icon-white"></i> Crop &amp; Save</button>
                     </div>
                 </div>
             </div>
@@ -349,8 +349,8 @@
                         <div id="profile-image-upload">
                             <div class="btn-group-border">
                                 <div class="btn-group bgc">
-                                    <button id="choose-files" class="btn btn-success"><i class="icon-folder-open icon-white"></i> Browse</button>
                                     <button ng-click="cancelEditing('image')" class="btn btn-success">Cancel</button>
+                                    <button id="choose-files" class="btn btn-success"><i class="icon-folder-open icon-white"></i> Browse</button>
                                 </div>
                             </div>
                         </div>
