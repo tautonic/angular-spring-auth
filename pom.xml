@@ -280,7 +280,7 @@
                 <environment>qa</environment>
                 <!-- The URL to access web services from the gcplatform. -->
                 <zociaUrl>http://qa-zocia.elasticbeanstalk.com/api</zociaUrl>
-                <localUrl>http://localhost/api</localUrl>
+                <localUrl>http://qa-babson-gcee.elasticbeanstalk.com/api</localUrl>
 
                 <!-- Hazelcast configuration
                      hz.name - Specifies a unique name for the hazelcast cluster.
