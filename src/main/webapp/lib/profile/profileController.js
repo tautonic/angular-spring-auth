@@ -456,7 +456,8 @@ function viewFollowing($rootScope, $scope, $http, $routeParams, $log) {
     }else{
         $http.get('api/profiles/' + $routeParams.profileId)
             .success(function(data, status){
-                $scope.followedUsers = data.content.name.fullName + " isn't following anyone at the moment.";
+                var name = data.content.name.fullName || data.content.username;
+                $scope.followedUsers = name + " isn't following anyone at the moment.";
             });
     }
 
