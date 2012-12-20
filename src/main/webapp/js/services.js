@@ -87,6 +87,7 @@ angular.module('bgc.services')
     .factory('getPossibleMimetypes', function(){
         return function(m){
             var mimetype;
+            mimetype = m;
             switch(m)
             {
                 case 'application/pdf':
