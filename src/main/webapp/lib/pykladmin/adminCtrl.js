@@ -230,7 +230,10 @@ function adminUsersNew($rootScope, $scope, $routeParams, $http, $log, $location,
     }
 }
 
-function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $location, Article){
+function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log,
+                             $location, Article, getPossibleMimetypes, ISODateString,
+                             generateDescription, bgcFileBrowser)
+{
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
     $scope.resetStatus = "none";
@@ -391,89 +394,6 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
     $scope.cancel = function(){
         $location.path('/admin/articles');
     };
-
-    function getPossibleMimetypes(mimetype){
-        var doctype;
-        switch(mimetype)
-        {
-            case 'application/pdf':
-                doctype = 'pdf';
-                break;
-            case 'application/msword':
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                doctype = 'word';
-                break;
-            case 'application/mspowerpoint':
-            case 'application/powerpoint':
-            case 'application/vnd.ms-powerpoint':
-            case 'application/x-mspowerpoint':
-            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-                doctype = 'ppt';
-                break;
-            case 'application/excel':
-            case 'application/vnd.ms-excel':
-            case 'application/x-excel':
-            case 'application/x-msexcel':
-            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                doctype = 'xls';
-                break;
-            case 'application/rtf':
-            case 'application/x-rtf':
-            case 'text/richtext':
-                doctype = 'rtf';
-                break;
-            default:
-                //this handles video and image cases, and defaults to text if it doesn't know what it is
-                if(mimetype != undefined)
-                {
-                    doctype = mimetype.split('/')[0];
-                } else {
-                    doctype = "text";
-                }
-                break;
-        }
-
-        return doctype;
-    }
-
-    function generateDescription(content){
-        var result = content;
-        var resultArray = result.split(" ");
-        if(resultArray.length > 30){
-            resultArray = resultArray.slice(0, 30);
-            result = resultArray.join(" ") + " ...";
-        }
-        return result;
-    }
-
-    function ISODateString(d){
-        function pad(n){return n<10 ? '0'+n : n}
-        return d.getUTCFullYear()+'-'
-            + pad(d.getUTCMonth()+1)+'-'
-            + pad(d.getUTCDate())+'T'
-            + pad(d.getUTCHours())+':'
-            + pad(d.getUTCMinutes())+':'
-            + pad(d.getUTCSeconds())+'Z'
-    }
-
-    function bgcFileBrowser(field_name, url, type, win){
-
-        //alert("Field_Name: " + field_name + " nURL: " + url + " nType: " + type + " nWin: " + win); // debug/testing
-
-        tinyMCE.activeEditor.windowManager.open({
-            file : baseUrl + 'partials/tinymceuploads.html',
-            title : 'Babson GCEE Insert/Upload',
-            width : 600,  // Your dimensions may differ - toy around with them!
-            height : 220,
-            resizable : "yes",
-            inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
-            close_previous : "no"
-        }, {
-            window : win,
-            input : field_name
-        });
-        return false;
-    }
 }
 
 function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log,
@@ -610,88 +530,5 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log,
     $scope.cancel = function(){
         $location.path('/admin/articles');
     };
-
-/*
-    function getPossibleMimetypes(mimetype){
-        var doctype;
-        switch(mimetype)
-        {
-            case 'application/pdf':
-                doctype = 'pdf';
-                break;
-            case 'application/msword':
-            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                doctype = 'word';
-                break;
-            case 'application/mspowerpoint':
-            case 'application/powerpoint':
-            case 'application/vnd.ms-powerpoint':
-            case 'application/x-mspowerpoint':
-            case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-                doctype = 'ppt';
-                break;
-            case 'application/excel':
-            case 'application/vnd.ms-excel':
-            case 'application/x-excel':
-            case 'application/x-msexcel':
-            case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-                doctype = 'xls';
-                break;
-            case 'application/rtf':
-            case 'application/x-rtf':
-            case 'text/richtext':
-                doctype = 'rtf';
-                break;
-            default:
-                //this handles video and image cases, and defaults to text if it doesn't know what it is
-                if(mimetype != undefined)
-                {
-                    doctype = mimetype.split('/')[0];
-                } else {
-                    doctype = "text";
-                }
-                break;
-        }
-
-        return doctype;
-    }
-*/
-
-
-    /*function ISODateString(d){
-        function pad(n){return n<10 ? '0'+n : n}
-        return d.getUTCFullYear()+'-'
-            + pad(d.getUTCMonth()+1)+'-'
-            + pad(d.getUTCDate())+'T'
-            + pad(d.getUTCHours())+':'
-            + pad(d.getUTCMinutes())+':'
-            + pad(d.getUTCSeconds())+'Z'
-    }*/
-
-    /*function generateDescription(content){
-        var result = content;
-        var resultArray = result.split(" ");
-        if(resultArray.length > 30){
-            resultArray = resultArray.slice(0, 30);
-            result = resultArray.join(" ") + " ...";
-        }
-        return result;
-    }*/
-
-    /*function bgcFileBrowser(field_name, url, type, win){
-        tinyMCE.activeEditor.windowManager.open({
-            file : baseUrl + 'partials/tinymceuploads.html',
-            title : 'Babson GCEE Insert/Upload',
-            width : 600,  // Your dimensions may differ - toy around with them!
-            height : 220,
-            resizable : "yes",
-            inline : "yes",  // This parameter only has an effect if you use the inlinepopups plugin!
-            close_previous : "no"
-        }, {
-            window : win,
-            input : field_name
-        });
-        return false;
-    }*/
 }
 
