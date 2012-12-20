@@ -50,7 +50,7 @@
             <h3>{{article.title}}</h3>
             <p class="article-meta">
                 <!--<span class="doc-type {{article.doctype}}"></span>-->
-                <span ng-repeat="doctype in article.childDoctypes" class="doc-type {{doctype}}"></span>
+                <span ng-repeat="attachment in article.attachmentList" class="doc-type {{attachment.doctype}}"></span>
                 <span class="premium" ui-if="article.premium"></span>
                 <div class="article-tweet-button" reload-twitter-btns>
                     <a href="https://twitter.com/share" data-url="{{url}}" data-text="Babson GC: {{article.title}}" class="twitter-share-button" data-lang="en">Tweet</a>
@@ -76,6 +76,9 @@
                 <div class="activity-stream-content">
                     <p class="author">by {{article.author}}, {{article.dateCreated | asDate}}</p>
                     <div ui-if="( hasMoreThanAttachments(0) && auth.isAuthenticated )">
+                        <div ng-repeat="attachment in article.attachmentList">
+                            <p style="margin: 0 10px 10px;"><a ng-click="showAttachment($index)">{{attachment.name}}</a><em> is an attachment on this article.</em> <a href="{{attachment.uri}}">Download it now.</a></p>
+                        </div>
                         <p style="margin: 0 10px 10px;">This article has attachments. Preview them using the buttons below.</p>
                         <hr>
                         <!--<div class="tags">
