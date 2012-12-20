@@ -375,10 +375,8 @@ function createProfile($rootScope, $scope, $routeParams, $location, $http, Profi
                     $scope.signupSuccess = true;
                 })
                 .error(function(data, status, headers, config){
-                    $log.info('POST VERIFY PROFILE ERROR!!!');
+                    $location.path("error/500");
                 });
-            //$location.path('/network');
-            $scope.responseContent = response.content;
         }, function(response){
             $location.path("error/500");
         });

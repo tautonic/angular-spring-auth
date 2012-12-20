@@ -1562,7 +1562,7 @@ li.search-result.members{
 #gcee-network{
     position: relative;
     top: -37px;
-    z-index: 4;
+    z-index: 1;
 }
 
 #curriculum-content.babson-contact-info{

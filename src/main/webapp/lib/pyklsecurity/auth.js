@@ -248,10 +248,7 @@ var pykl = window.pykl || {};
 
                             return deferred.promise;
                         }
-                        if (status === 404
-                            && $location.path().indexOf('/profiles/view') === -1
-                            && $location.path() !== '/signup'
-                            && $location.path() !== '/admin/users/new')
+                        if (status === 404)
                         {
                             $location.path("error/404");
                         }
