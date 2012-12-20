@@ -476,7 +476,10 @@ function adminArticlesUpdate($rootScope, $scope, $routeParams, $http, $log, $loc
     }
 }
 
-function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $location, Article, $auth){
+function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log,
+                             $location, Article, $auth, getPossibleMimetypes, ISODateString,
+                             generateDescription, bgcFileBrowser)
+{
     $rootScope.banner = 'none';
     $rootScope.about = 'none';
 
@@ -608,6 +611,7 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
         $location.path('/admin/articles');
     };
 
+/*
     function getPossibleMimetypes(mimetype){
         var doctype;
         switch(mimetype)
@@ -651,9 +655,10 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
 
         return doctype;
     }
+*/
 
 
-    function ISODateString(d){
+    /*function ISODateString(d){
         function pad(n){return n<10 ? '0'+n : n}
         return d.getUTCFullYear()+'-'
             + pad(d.getUTCMonth()+1)+'-'
@@ -661,9 +666,9 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
             + pad(d.getUTCHours())+':'
             + pad(d.getUTCMinutes())+':'
             + pad(d.getUTCSeconds())+'Z'
-    }
+    }*/
 
-    function generateDescription(content){
+    /*function generateDescription(content){
         var result = content;
         var resultArray = result.split(" ");
         if(resultArray.length > 30){
@@ -671,12 +676,9 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
             result = resultArray.join(" ") + " ...";
         }
         return result;
-    }
+    }*/
 
-    function bgcFileBrowser(field_name, url, type, win){
-
-        //alert("Field_Name: " + field_name + " nURL: " + url + " nType: " + type + " nWin: " + win); // debug/testing
-
+    /*function bgcFileBrowser(field_name, url, type, win){
         tinyMCE.activeEditor.windowManager.open({
             file : baseUrl + 'partials/tinymceuploads.html',
             title : 'Babson GCEE Insert/Upload',
@@ -690,6 +692,6 @@ function adminArticlesCreate($rootScope, $scope, $routeParams, $http, $log, $loc
             input : field_name
         });
         return false;
-    }
+    }*/
 }
 
