@@ -1447,6 +1447,16 @@ li.search-result.members{
     z-index: 2;
 }
 
+i.paper-clip{
+    position: absolute;
+    width: 17px;
+    height: 43px;
+    top: -4px;
+    left: 5px;
+    background: url('../images/GCEE_sprite.png') -116px -81px no-repeat;
+    z-index: 2;
+}
+
 .attachment .paper-clip{
     right: 16.25em;
 }
