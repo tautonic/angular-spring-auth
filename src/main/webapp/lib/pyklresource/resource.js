@@ -422,14 +422,14 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
             $log.info("ARTICLE RETURNED: ",data);
             $scope.article = data;
             // add an attribute to the article that will
-            // contain the array of doctypes attached to the article
-            $scope.article.childDoctypes = [];
+            // contain the array of attachments attached to the article
+            $scope.article.attachmentList = [];
             // loop through each article's attachments
             $scope.article.attachments.forEach(function(attachment){
                 $http.get('api/article/' + attachment)
                     .success(function(data, status){
-                        // add the attachment doctype to the array
-                        $scope.article.childDoctypes.push(data.doctype);
+                        // add the attachment to the array
+                        $scope.article.attachmentList.push(data);
                     });
             });
             $rootScope.$broadcast('event:loadDiscussion', { 'discussionId': $scope.article._id });
@@ -454,28 +454,30 @@ function ViewResource( $rootScope, $scope, $routeParams, $auth, $http, $log ) {
         changeAttachmentIndex("dec");
     };
 
+    $scope.showAttachment = function(index) {
+        attachmentIndex = index;
+        loadAttachment();
+        $scope.showModal = true;
+    };
+
     function loadAttachment() {
-        var id = $scope.article.attachments[attachmentIndex];
-        $http.get( 'api/article/' + id ).success( function (data) {
-            var uri = data.uri.replace('http://', '');
-            var filesize = data.filesize === undefined ? 'Filesize unavailable' : data.filesize;
-            $scope.modal = {
-                document: {
-                    title: data.title,
-                    description: data.description,
-                    url: 'http://docs.google.com/viewer?url=http://' + uri + '&embedded=true',
-                    directLink: "http://" + uri,
-                    doctype: data.doctype,
-                    author: data.author,
-                    dateCreated: data.dateCreated,
-                    filename: data.name,
-                    filesize: filesize
-                }
-            };
-            $http.post("api/utility/view/" + id);
-        }).error(function(data, status) {
-                $log.info("ERROR retrieving protected resource: "+data+" status: "+status);
-            });
+        var data = $scope.article.attachmentList[attachmentIndex];
+        var uri = data.uri.replace('http://', '');
+        var filesize = data.filesize === undefined ? 'Filesize unavailable' : data.filesize;
+        $scope.modal = {
+            document: {
+                title: data.title,
+                description: data.description,
+                url: 'http://docs.google.com/viewer?url=http://' + uri + '&embedded=true',
+                directLink: "http://" + uri,
+                doctype: data.doctype,
+                author: data.author,
+                dateCreated: data.dateCreated,
+                filename: data.name,
+                filesize: filesize
+            }
+        };
+        $http.post("api/utility/view/" + data._id);
     }
 
     //we do this in a function so we can handle cases where it goes too far in one direction or another
