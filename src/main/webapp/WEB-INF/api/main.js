@@ -19,6 +19,7 @@ var {convertActivity, getLatestActivity} = require('activities');
 var {getZociaUrl} = require('utility/getUrls');
 
 var {encode} = require('ringo/base64');
+var fs = require('fs');
 
 var app = exports.app = Application();
 app.configure( 'error', 'notfound', 'params', auth, 'mount', 'route' );
@@ -1471,6 +1472,13 @@ app.post('/search/discussions', function(req){
     });
 });
 
+app.get('/slideshow/thumbs', function(req){
+    //log.info('RINGOJS fs object {}', JSON.stringify(fs.list(fs.relative('main/webapp', 'images/annual_summit_images'), null, 4)));
+    //log.info('RINGOJS fs object {}', JSON.stringify(fs.list(fs.workingDirectory() + 'src/main/webapp/images/annual_summit_images/thumbs'), null, 4));
+    var images = fs.list(fs.workingDirectory() + 'src/main/webapp/images/annual_summit_images/thumbs');
+    return json({'images': images});
+});
+
 /************************
  *
  * Admin functions
@@ -1509,17 +1517,6 @@ app.put('/admin/users', function(req) {
             body:[]
         };
     }
-
-    /*var data = {
-     "username" : req.postParams.username,
-     "name" : {
-     "fullName": req.postParams.name.fullName
-     },
-     "accountEmail" : {
-     "address"  : req.postParams.accountEmail.address
-     },
-     "workHistory" : req.postParams.workHistory
-     };*/
 
     var data = req.postParams;
 
