@@ -1197,7 +1197,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
     }
 }]);
 
-angular.module('bgc.directives').directive('slideShow', ['$log', function($log){
+angular.module('bgc.directives').directive('slideShow', ['$http', function($http){
     return{
         restrict: 'A',
         scope: {
@@ -1205,13 +1205,12 @@ angular.module('bgc.directives').directive('slideShow', ['$log', function($log){
         },
         templateUrl: 'partials/slideshow-template.html',
         link: function(scope, elm, attrs){
-            var options = scope.$eval(attrs.slideShow);
-            if(attrs.slideShow){
-                if(options.images){
-                    scope.images = options.images;
-                }
-            }
-            //scope.images =
+            $http.get('api/slideshow/thumbs')
+                .success(function(data, status){
+                    data.images.splice(0, 1);
+                    scope.images = data.images;
+                });
+
             $('.summit-slide-show').slides({
                 container: 'slides',
                 next: 'forward',
@@ -1223,7 +1222,6 @@ angular.module('bgc.directives').directive('slideShow', ['$log', function($log){
             scope.showSlideshowModal = false;
 
             scope.slideshowModal = function(image, elm, page){
-                $log.info('Showing modal with image: ' + image);
                 scope.modalImage = image;
 
                 //$('.thumb').removeClass('active-thumb');
@@ -1280,7 +1278,7 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
             });
 
             scope.incrementPage = function(){
-                if(scope.page === 5){
+                if(scope.page === 9){
                     scope.page = 0;
                 }
                 scope.page++;
@@ -1288,7 +1286,7 @@ angular.module('bgc.directives').directive('slideShowModal', function(){
 
             scope.decrementPage = function(){
                 if(scope.page === 1){
-                    scope.page = 6;
+                    scope.page = 10;
                 }
                 scope.page--;
             }
