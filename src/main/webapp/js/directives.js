@@ -1205,12 +1205,6 @@ angular.module('bgc.directives').directive('slideShow', ['$http', function($http
         },
         templateUrl: 'partials/slideshow-template.html',
         link: function(scope, elm, attrs){
-            $http.get('api/slideshow/thumbs')
-                .success(function(data, status){
-                    data.images.splice(0, 1);
-                    scope.images = data.images;
-                });
-
             $('.summit-slide-show').slides({
                 container: 'slides',
                 next: 'forward',
