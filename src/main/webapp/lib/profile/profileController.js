@@ -364,7 +364,7 @@ function createProfile($rootScope, $scope, $routeParams, $location, $http, Profi
         $scope.newProfile.thumbnail = 'images/GCEE_image_defaultMale.jpeg';
 
         $scope.newProfile.$save(function(response){
-            if(response.status === 400){
+            if(response.status >= 400){
                 $location.path("error/500");
             }else{
                 var data = {
