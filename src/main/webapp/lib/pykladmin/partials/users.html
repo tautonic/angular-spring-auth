@@ -50,7 +50,7 @@
                             <form ng-controller="searchProfiles" ng-submit="searchProfiles()">
                                 <input type="text" ng-model="profileSearchQuery" placeholder="Search Members...">
                                 <div class="btn-group-border"></div>
-                                <div class="search-lens read-more gradient">
+                                <div ng-click="searchProfiles()" class="search-lens read-more gradient">
                                     <div class="preview-lens"></div>
                                 </div>
                             </form>
