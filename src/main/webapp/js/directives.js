@@ -1214,6 +1214,7 @@ angular.module('bgc.directives').directive('slideShow', ['$http', function($http
             });
 
             scope.showSlideshowModal = false;
+            scope.modalImage = '110626-0014.jpg';
 
             scope.slideshowModal = function(image, elm, page){
                 scope.modalImage = image;

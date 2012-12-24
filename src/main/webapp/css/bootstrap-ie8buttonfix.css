@@ -44,14 +44,16 @@
 }
 /* Success button */
 .btn-success {
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);
+  /*filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);*/
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#569a61', endColorstr='#005037',GradientType=0 ); /* IE6-8 */
+
 }
 .btn-success:hover,
 .btn-success:active,
 .btn-success.active,
 .btn-success.disabled,
 .btn-success[disabled] {
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff51a351', endColorstr='#ff51a351', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#005037', endColorstr='#005037', GradientType=0);
 }
 /* Info button */
 .btn-info {
