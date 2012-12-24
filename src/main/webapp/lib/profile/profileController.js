@@ -364,21 +364,23 @@ function createProfile($rootScope, $scope, $routeParams, $location, $http, Profi
         $scope.newProfile.thumbnail = 'images/GCEE_image_defaultMale.jpeg';
 
         $scope.newProfile.$save(function(response){
-            var data = {
-                profileId: response.content._id
-            };
+            if(response.status === 400){
+                $location.path("error/500");
+            }else{
+                var data = {
+                    profileId: response.content._id
+                };
 
-            $http.post('api/utility/verifyprofile/', data)
-                .success(function(data, status, headers, config){
-                    //$scope.showResetForm = false;
-                    //$scope.showSuccess = true;
-                    $scope.signupSuccess = true;
-                })
-                .error(function(data, status, headers, config){
-                    $location.path("error/500");
-                });
-        }, function(response){
-            $location.path("error/500");
+                $http.post('api/utility/verifyprofile/', data)
+                    .success(function(data, status, headers, config){
+                        //$scope.showResetForm = false;
+                        //$scope.showSuccess = true;
+                        $scope.signupSuccess = true;
+                    })
+                    .error(function(data, status, headers, config){
+                        $location.path("error/500");
+                    });
+            }
         });
     };
 
