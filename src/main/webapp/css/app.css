@@ -2539,6 +2539,7 @@ a.category{
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     left: 185px;
+    cursor: pointer;
 }
 
 .preview-lens.search{
