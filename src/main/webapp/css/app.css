@@ -1724,7 +1724,7 @@ i.paper-clip{
 }
 
 .services.search-box.content {
-    margin-top: 5em;
+    margin-top: 1em;
 }
 
 .search-box.content .form-container {
@@ -2563,6 +2563,10 @@ a.category{
 
 .btn-group-border.search.articles{
     height:43px;
+}
+
+.btn-group-border.first-add-article{
+    margin-top: 3em;
 }
 
 @media only screen and (max-width: 1279px) {
