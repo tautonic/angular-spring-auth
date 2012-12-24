@@ -1657,7 +1657,7 @@ i.paper-clip{
 .btn-success.active,
 .btn-success.disabled,
 .btn-success[disabled]{
-    background-color: #005037;
+    background: #005037;
 }
 
 #discussions .discussion-item{
