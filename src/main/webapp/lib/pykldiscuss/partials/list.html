@@ -58,7 +58,7 @@
                     <form ng-controller="searchDiscussionsController" ng-submit="searchDiscussions()">
                         <input type="text" ng-model="query" placeholder="Search Discussions...">
                         <div class="btn-group-border search"></div>
-                        <div class="search-lens search read-more gradient">
+                        <div ng-click="searchDiscussions()" class="search-lens search read-more gradient">
                             <div class="preview-lens search"></div>
                         </div>
 

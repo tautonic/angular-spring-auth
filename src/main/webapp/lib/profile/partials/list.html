@@ -90,7 +90,7 @@
                                 <form ng-controller="searchProfiles" ng-submit="searchProfiles()">
                                     <input type="text" ng-model="profileSearchQuery" placeholder="Search Members...">
                                     <div class="btn-group-border search"></div>
-                                    <div class="search-lens search read-more gradient">
+                                    <div ng-click="searchProfiles()" class="search-lens search read-more gradient">
                                         <div class="preview-lens search"></div>
                                     </div>
 

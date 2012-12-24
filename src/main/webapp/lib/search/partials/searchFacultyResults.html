@@ -74,19 +74,20 @@
                 <div class="form-container">
                     <form ng-controller="searchProfiles" ng-submit="searchProfiles()">
                         <input type="text" ng-model="profileSearchQuery" placeholder="Search Members...">
-                        <div class="btn-group-border"></div>
-                        <div class="search-lens read-more gradient">
-                            <div class="preview-lens"></div>
+                        <div class="btn-group-border search"></div>
+                        <div ng-click="searchProfiles()" class="search-lens search read-more gradient">
+                            <div class="preview-lens search"></div>
                         </div>
 
-                        <div class="btn-group bgc">
+                       <!-- <div class="btn-group bgc">
                             <input type="submit" value="Search" class="btn btn-success">
-                        </div>
+                        </div>-->
                     </form>
                 </div>
             </div>
 
             <div ui-if="auth.isUserInRole('ROLE_ADMIN')">
+                <br>
                 <div class="profile search-box btn-group-border">
                     <div class="btn-group bgc">
                         <a class="btn btn-success" ng-href="#/admin/users">Back To Admin Page</a>

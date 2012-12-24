@@ -80,7 +80,7 @@
                         <div class="search-input">
                             <input type="text" ng-model="searchTerm" placeholder="Search Articles...">
                             <div class="btn-group-border articles search"></div>
-                            <div class="search-lens search read-more gradient">
+                            <div ng-click="search(searchTerm, false)" class="search-lens search read-more gradient">
                                 <div class="preview-lens search"></div>
                             </div>
                         </div>

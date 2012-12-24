@@ -13,15 +13,26 @@
 
                     <div ng-repeat="result in results">
                         <div class="discussion-stack-container">
-                            <div discussion-stack comments={{result.commentCount}} class="discussion-item grey-gradient">
-                                <a ng-href="#/network/{{result._id}}"><h4>{{result.title}}</h4></a>
-                                <h6>By <a ng-href="#/profiles/view/{{result.creator._id}}">{{result.creator.username}}</a>, {{result.dateCreated | asDate: 'fullDate'}}</h6>
+                            <!--<div discussion-stack last=$last discussion=result class="discussion-item grey-gradient">
+                                <a ng-href="#/network/{{result._source._id}}"><h4>{{result._source.title}}</h4></a>
+                                <h6>By <a ng-href="#/profiles/view/{{result._source.creator._id}}">{{result._source.creator.username}}</a>, {{result._source.dateCreated | asDate: 'fullDate'}}</h6>
+                                &lt;!&ndash;<p class="muted"><strong>Document:</strong> <a href="#/content">Document Title</a></p>&ndash;&gt;
+                                <ul class="article-stats">
+                                    <li class="muted"><i class="likes"></i> {{result._source.likes}} Likes</li>
+                                    <li class="muted"><i class="views"></i> {{result._source.views}} Views</li>
+                                    <li class="muted"><i class="comments"></i> {{result.commentCount}} Comments</li>
+                                    <li ng-click="flag({{result._source._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
+                                </ul>
+                            </div>-->
+                            <div class="discussion-item grey-gradient">
+                                <a ng-href="#/network/discussion/view/{{result._source._id}}"><h4>{{result._source.title}}</h4></a>
+                                <h6>By <a ng-href="#/profiles/view/{{result._source.creator._id}}">{{result._source.creator.username}}</a>, {{result._source.dateCreated | asDate: 'fullDate'}}</h6>
                                 <!--<p class="muted"><strong>Document:</strong> <a href="#/content">Document Title</a></p>-->
                                 <ul class="article-stats">
-                                    <li class="muted"><i class="likes"></i> {{result.likes}} Likes</li>
-                                    <li class="muted"><i class="views"></i> {{result.views}} Views</li>
+                                    <li class="muted"><i class="likes"></i> {{result._source.likes}} Likes</li>
+                                    <li class="muted"><i class="views"></i> {{result._source.views}} Views</li>
                                     <li class="muted"><i class="comments"></i> {{result.commentCount}} Comments</li>
-                                    <li ng-click="flag({{result._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
+                                    <li ng-click="flag({{result._source._id}})" class="muted"><i class="flag"></i> Flag for Spam</li>
                                 </ul>
                             </div>
                         </div>
@@ -37,14 +48,14 @@
                 <div class="form-container">
                     <form ng-controller="searchDiscussionsController" ng-submit="searchDiscussions()">
                         <input type="text" ng-model="query" placeholder="Search Discussions...">
-                        <div class="btn-group-border"></div>
-                        <div class="search-lens read-more gradient">
-                            <div class="preview-lens"></div>
+                        <div class="btn-group-border search"></div>
+                        <div ng-click="searchDiscussions()" class="search-lens read-more search gradient">
+                            <div class="preview-lens search"></div>
                         </div>
 
-                        <div class="btn-group bgc">
+                        <!--<div class="btn-group bgc">
                             <input type="submit" value="Search" class="btn btn-success">
-                        </div>
+                        </div>-->
                     </form>
                 </div>
             </div>

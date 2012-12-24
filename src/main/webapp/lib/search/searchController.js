@@ -129,11 +129,13 @@ function SearchDiscussions($rootScope, $scope, $routeParams, $location, Search, 
     };
 
     var results = Search.discussions({type: 'discussions'}, data, function(response){
-        $scope.results = response.content;
-        $scope.resultLength = response.content.length;
-        $scope.query = $routeParams.query;
-    }, function(response){
-        $log.info('Profile search ERROR HANDLER!!!', 'STATUS CODE: ' + response.status);
+        if(response.status >= 400){
+            $location.path('error/500');
+        }else{
+            $scope.results = response.content;
+            $scope.resultLength = response.content.length;
+            $scope.query = $routeParams.query;
+        }
     });
 }
 
