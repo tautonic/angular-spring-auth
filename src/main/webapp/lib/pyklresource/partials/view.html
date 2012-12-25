@@ -77,7 +77,7 @@
                     <p class="author">by {{article.author}}, {{article.dateCreated | asDate}}</p>
                     <div ui-if="( hasMoreThanAttachments(0) && auth.isAuthenticated )">
                         <div ng-repeat="attachment in article.attachmentList" style="position: relative;">
-                            <i class="paper-clip"></i><p style="margin: 0 25px 17px;">{{attachment.name}}<br><a href="{{attachment.uri}}" target="_blank">Download</a></p>
+                            <i class="paper-clip"></i><p style="margin: 0 25px 17px;">{{attachment.name | shorten}}<br><a href="{{attachment.uri}}" target="_blank">Download</a></p>
                         </div>
                         <p style="margin: 0 10px 10px;">This article has attachments. Preview them using the buttons below.</p>
                         <hr>
