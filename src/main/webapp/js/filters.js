@@ -97,7 +97,7 @@ angular.module('bgc.filters').filter('shorten', function(){
         }
 
         if(string.length > 22){
-            return string.substr(0, 11) + '...' + string.substr(-11);
+            return string.substr(0, length) + '...' + string.substr(-length);
         }
 
         return string;
