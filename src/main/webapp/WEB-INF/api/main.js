@@ -373,7 +373,8 @@ app.get('/notifications', function(req) {
         filteredActivities = filteredActivities.replace(activity, '');
     });
 
-    var url = getZociaUrl(req) + '/activities/streams/' + req.auth.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ',');
+    //var url = getZociaUrl(req) + '/activities/streams/' + req.auth.principal.id + '?size=' + size + '&from=' + from + '&filters=' + filteredActivities.trim().replace(/ /g, ',');
+    var url = getZociaUrl(req) + '/activities/streams/' + req.auth.principal.id + '?size=' + size + '&from=' + from;
 
     // Make the AJAX call to get the result set, pagination included, with filtering tacked on the end.
     var exchange = ajax(url);
