@@ -121,8 +121,7 @@
                         filters: [
                             {title: "Image files", extensions: "jpg,gif,png"},
                             {title: "Zip files", extensions: "zip"}
-                        ],
-                        resize: {width: 320, quality: 90}
+                        ]
 
                     }, pyklConfig.imgUpload, options);
 
