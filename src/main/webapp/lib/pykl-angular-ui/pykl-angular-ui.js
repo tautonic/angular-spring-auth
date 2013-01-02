@@ -162,12 +162,16 @@
                         }, 0);
                     });
 
+                    var jcropApi;
+                    var url;
+
                     uploader.bind('FileUploaded', function (up, file, response) {
                         $log.info('FileUploaded', arguments);
                         // Update the model with the new URL
                         if (response.status == 200) {
                             response = ng.fromJson(response.response);
                             if (response.file && response.file.uri) {
+                                url = response.file.uri;
                                 container.removeClass('inprogress');
                                 scope.$apply(function() {
                                     ngModel.$setViewValue(response.file.uri);
@@ -176,6 +180,29 @@
                                 $log.info('Updating model to new image src:', response.file.uri);
                             }
                         }
+                    });
+
+                    uploader.bind('UploadComplete', function(uploader, file){
+                        //$('.jcrop-holder img').attr('src', url);
+
+                        $('#base_image img').attr('src', url);
+
+                        $('#base_image img').Jcrop({
+                            bgColor: '#fff',
+                            aspectRatio: 1
+                        }, function(){
+                            jcropApi = this;
+                            var cropDimensions = Math.min(parseInt($('#base_image img').width()), parseInt($('#base_image img').height()));
+
+                            var distanceToCropCenter = Math.floor(cropDimensions/2);
+                            var distanceToImageCenter = Math.floor($('#base_image img').width()/2);
+
+                            var shiftCropToCenter = Math.abs(distanceToCropCenter - distanceToImageCenter);
+
+                            jcropApi.setSelect([shiftCropToCenter, 0, cropDimensions, cropDimensions]);
+
+                            //scope.$apply();
+                        });
                     });
 
                     uploader.bind('UploadProgress', function (up, file) {

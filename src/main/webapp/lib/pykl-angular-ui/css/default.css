@@ -31,8 +31,8 @@
 */
 div.img-upload {
     background: url('http://subtlepatterns.com/patterns/subtle_stripes.png') #dddddd;
-    min-width: 200px;
-    min-height: 200px;
+    min-width: 100%;
+    min-height: 300px;
     overflow: hidden;
     position: relative;
     text-align: center;
