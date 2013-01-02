@@ -39,17 +39,30 @@
      *
      */
     ng.module('pykl-ui.directives').directive('imgUpload',
-        ['pykl-ui.config', '$log', function (pyklConfig, $log) {
+        ['pykl-ui.config', '$log', '$http', function (pyklConfig, $log, $http) {
             var container;
 
             var uid = Math.round(13 * Math.random() * Math.random() * 100000) + '';
             var idBrowseButton = 'browse_' + uid;
             var idDropTarget = 'drop_' + uid;
+            var baseImageWidth, baseImageHeight;
+
+            var cancelCropBtn;
+            var saveCropBtn;
+
+            var jcropApi;
+            var url;
+            var assetKey;
+
+            cancelCropBtn = angular.element('#cancel-crop');
+            saveCropBtn = angular.element('#save-crop');
 
             function applyImageHandlers(img) {
                 // Once the image loads, we will know its positioning and size, and then we will
                 // adjust the size of the parent container.
                 img.load(function (e) {
+                    baseImageWidth = e.target.width;
+                    baseImageHeight = e.target.height;
                     var $this = $(this);
                     container.css({
                         width: $this.width(),
@@ -109,7 +122,7 @@
                             {title: "Image files", extensions: "jpg,gif,png"},
                             {title: "Zip files", extensions: "zip"}
                         ],
-                        resize: {width: 320, height: 240, quality: 90}
+                        resize: {width: 320, quality: 90}
 
                     }, pyklConfig.imgUpload, options);
 
@@ -162,9 +175,6 @@
                         }, 0);
                     });
 
-                    var jcropApi;
-                    var url;
-
                     uploader.bind('FileUploaded', function (up, file, response) {
                         $log.info('FileUploaded', arguments);
                         // Update the model with the new URL
@@ -177,6 +187,28 @@
                                     ngModel.$setViewValue(response.file.uri);
                                     img.attr('src', ngModel.$viewValue || '');
                                 });
+
+                                // file has been uploaded, let's create a resource and send that to zocia
+                                var resource = {
+                                    "name": response.file.name,
+                                    "locale": "en" ,
+                                    "author": "",
+                                    "dataType": "resources",
+                                    "category": "",
+                                    "taggable": [] ,
+                                    "title": "",
+                                    "description": "",
+                                    "likes": 0,
+                                    "comments": 0,
+                                    "uri": url,
+                                    "mimetype": response.file.contentType
+                                };
+
+                                $http.post('api/profiles/image/resource', resource)
+                                    .success(function(data, status){
+                                        assetKey = data.content.key;
+                                    });
+
                                 $log.info('Updating model to new image src:', response.file.uri);
                             }
                         }
@@ -187,9 +219,11 @@
 
                         $('#base_image img').attr('src', url);
 
+                        // use the proportions and dimensions of the image being replaced to calculate aspect ratio
+
                         $('#base_image img').Jcrop({
                             bgColor: '#fff',
-                            aspectRatio: 1
+                            aspectRatio: baseImageWidth / baseImageHeight
                         }, function(){
                             jcropApi = this;
                             var cropDimensions = Math.min(parseInt($('#base_image img').width()), parseInt($('#base_image img').height()));
@@ -199,10 +233,65 @@
 
                             var shiftCropToCenter = Math.abs(distanceToCropCenter - distanceToImageCenter);
 
-                            jcropApi.setSelect([shiftCropToCenter, 0, cropDimensions, cropDimensions]);
+                            jcropApi.setSelect([shiftCropToCenter, 0, baseImageWidth, baseImageHeight]);
 
                             //scope.$apply();
+
+                            var coords = jcropApi.tellSelect();
+
+                            var data = {
+                                'x1':       coords.x,
+                                'x2':       coords.x2,
+                                'y1':       coords.y,
+                                'y2':       coords.y2,
+                                'w':        coords.w,
+                                'h':        coords.h,
+                                'assetKey': assetKey
+                            };
+
+                            window.setTimeout(function(){
+                                $http.post('api/profiles/images/crop/', data).success(
+                                    function(data, status, headers, config){
+                                        var uri = data.content.uri;
+                                        // set the uri to the new cropped image
+                                        ngModel.$setViewValue(data.content.uri);
+                                        img.attr('src', ngModel.$viewValue || '');
+                                    }).error(
+                                    function(){
+                                        $log.info('Image crop error!');
+                                    }
+                                );
+                            }, 1500);
                         });
+                    });
+
+                    // create a crop button and append it to the cms window below the upload image container
+                    saveCropBtn.bind('click', function(){
+                        var coords = jcropApi.tellSelect();
+
+                        var data = {
+                            'x1':       coords.x,
+                            'x2':       coords.x2,
+                            'y1':       coords.y,
+                            'y2':       coords.y2,
+                            'w':        coords.w,
+                            'h':        coords.h,
+                            'assetKey': assetKey
+                        };
+
+                        $http.post('api/profiles/images/crop/', data).success(
+                            function(data, status, headers, config){
+                                var uri = data.content.uri;
+                                // set the uri to the new cropped image
+                                scope.$apply(function() {
+                                    ngModel.$setViewValue(data.content.uri);
+                                    img.attr('src', ngModel.$viewValue || '');
+                                });
+                            }).error(
+                            function(){
+                                $log.info('Image crop error!');
+                            }
+                        );
                     });
 
                     uploader.bind('UploadProgress', function (up, file) {
