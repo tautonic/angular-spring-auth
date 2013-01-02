@@ -222,7 +222,8 @@
 
                         $('#base_image img').Jcrop({
                             bgColor: '#fff',
-                            aspectRatio: baseImageWidth / baseImageHeight
+                            aspectRatio: baseImageWidth / baseImageHeight,
+                            trueSize: [baseImageWidth, baseImageHeight]
                         }, function(){
                             jcropApi = this;
                             var cropDimensions = Math.min(parseInt($('#base_image img').width()), parseInt($('#base_image img').height()));
