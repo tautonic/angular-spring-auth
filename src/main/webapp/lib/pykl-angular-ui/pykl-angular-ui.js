@@ -121,7 +121,8 @@
                         filters: [
                             {title: "Image files", extensions: "jpg,gif,png"},
                             {title: "Zip files", extensions: "zip"}
-                        ]
+                        ],
+                        resize: {"width": baseImageWidth, "quality": 100}
 
                     }, pyklConfig.imgUpload, options);
 
@@ -214,54 +215,62 @@
                     });
 
                     uploader.bind('UploadComplete', function(uploader, file){
-                        //$('.jcrop-holder img').attr('src', url);
-
-                        $('#base_image img').attr('src', url);
-
                         // use the proportions and dimensions of the image being replaced to calculate aspect ratio
 
                         $('#base_image img').Jcrop({
                             bgColor: '#fff',
-                            aspectRatio: baseImageWidth / baseImageHeight,
-                            trueSize: [baseImageWidth, baseImageHeight]
+                            aspectRatio: baseImageWidth / baseImageHeight//,
+                            //trueSize: [uploadedImageWidth, uploadedImageHeight]
                         }, function(){
+                            var uploadedImageWidth, uploadedImageHeight;
                             jcropApi = this;
-                            var cropDimensions = Math.min(parseInt($('#base_image img').width()), parseInt($('#base_image img').height()));
 
-                            var distanceToCropCenter = Math.floor(cropDimensions/2);
-                            var distanceToImageCenter = Math.floor($('#base_image img').width()/2);
+                            $('.jcrop-holder img').load(function(e){
+                                uploadedImageWidth = e.target.naturalWidth;
+                                uploadedImageHeight = e.target.naturalHeight;
 
-                            var shiftCropToCenter = Math.abs(distanceToCropCenter - distanceToImageCenter);
+                                $('#base_image img').attr('src', url);
 
-                            jcropApi.setSelect([shiftCropToCenter, 0, baseImageWidth, baseImageHeight]);
+                                var cropDimensions = Math.min(parseInt($('#base_image img').width()), parseInt($('#base_image img').height()));
 
-                            //scope.$apply();
+                                var distanceToCropCenter = Math.floor(cropDimensions/2);
+                                var distanceToImageCenter = Math.floor($('#base_image img').width()/2);
 
-                            var coords = jcropApi.tellSelect();
+                                var shiftCropToCenter = Math.abs(distanceToCropCenter - distanceToImageCenter);
 
-                            var data = {
-                                'x1':       coords.x,
-                                'x2':       coords.x2,
-                                'y1':       coords.y,
-                                'y2':       coords.y2,
-                                'w':        coords.w,
-                                'h':        coords.h,
-                                'assetKey': assetKey
-                            };
+                                jcropApi.setSelect([0, 0, uploadedImageWidth, uploadedImageWidth]);
+                                jcropApi.setOptions({trueSize: [uploadedImageWidth, uploadedImageHeight]});
 
-                            window.setTimeout(function(){
-                                $http.post('api/profiles/images/crop/', data).success(
-                                    function(data, status, headers, config){
-                                        var uri = data.content.uri;
-                                        // set the uri to the new cropped image
-                                        ngModel.$setViewValue(data.content.uri);
-                                        img.attr('src', ngModel.$viewValue || '');
-                                    }).error(
-                                    function(){
-                                        $log.info('Image crop error!');
-                                    }
-                                );
-                            }, 1500);
+                                //scope.$apply();
+
+                                var coords = jcropApi.tellSelect();
+
+                                var data = {
+                                    'x1':       coords.x,
+                                    'x2':       coords.x2,
+                                    'y1':       coords.y,
+                                    'y2':       coords.y2,
+                                    'w':        coords.w,
+                                    'h':        coords.h,
+                                    'assetKey': assetKey
+                                };
+
+                                window.setTimeout(function(){
+                                    $http.post('api/profiles/images/crop/', data).success(
+                                        function(data, status, headers, config){
+                                            var uri = data.content.uri;
+                                            // set the uri to the new cropped image
+                                            ngModel.$setViewValue(data.content.uri);
+                                            img.attr('src', ngModel.$viewValue || '');
+
+                                            //$('.transparent-pill-shapes p p').contents().unwrap();
+                                        }).error(
+                                        function(){
+                                            $log.info('Image crop error!');
+                                        }
+                                    );
+                                }, 1500);
+                            });
                         });
                     });
 

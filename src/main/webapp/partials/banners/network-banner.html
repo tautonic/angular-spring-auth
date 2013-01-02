@@ -1,7 +1,7 @@
 <div class="row banner-full">
     <div class="span12">
         <div class="image-container no-bottom-border" x-cms="network_banner">
-            <img class="header-banner-image" src="{{cms.thumbnail}}" alt="{{cms.title}}">
+            <img class="header-banner-image" ng-src="{{cms.thumbnail}}" alt="{{cms.title}}">
             <div class="transparent-pill-shapes">
                 <h2>{{cms.title}}</h2>
                 <p ng-bind-html-unsafe="cms.content"></p>

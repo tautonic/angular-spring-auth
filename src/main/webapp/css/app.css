@@ -2569,6 +2569,18 @@ a.category{
     margin-top: 3em;
 }
 
+img.header-banner-image{
+    width: 924px;
+}
+
+.new-picture-frame.banner-3-col img{
+    width: 276px;
+}
+
+.transparent-pill-shapes p p{
+    margin-left: 0;
+}
+
 @media only screen and (max-width: 1279px) {
     #outside-logo{
         display: none;
