@@ -47,16 +47,6 @@
             var idDropTarget = 'drop_' + uid;
             var baseImageWidth, baseImageHeight;
 
-            var cancelCropBtn;
-            var saveCropBtn;
-
-            var jcropApi;
-            var url;
-            var assetKey;
-
-            cancelCropBtn = angular.element('#cancel-crop');
-            saveCropBtn = angular.element('#save-crop');
-
             function applyImageHandlers(img) {
                 // Once the image loads, we will know its positioning and size, and then we will
                 // adjust the size of the parent container.
@@ -110,6 +100,16 @@
                 restrict: 'EA',
                 require: '?ngModel',
                 link: function (scope, elm, attrs, ngModel) {
+                    var cancelCropBtn;
+                    var saveCropBtn;
+
+                    var jcropApi;
+                    var url;
+                    var assetKey;
+
+                    cancelCropBtn = angular.element('#cancel-crop');
+                    saveCropBtn = angular.element('#save-crop');
+
                     // Initialize options
                     var options = attrs.imgUpload ? scope.$eval(attrs.imgUpload) : {};
                     options = ng.extend({
@@ -220,7 +220,6 @@
                         $('#base_image img').Jcrop({
                             bgColor: '#fff',
                             aspectRatio: baseImageWidth / baseImageHeight//,
-                            //trueSize: [uploadedImageWidth, uploadedImageHeight]
                         }, function(){
                             var uploadedImageWidth, uploadedImageHeight;
                             jcropApi = this;
@@ -238,44 +237,15 @@
 
                                 var shiftCropToCenter = Math.abs(distanceToCropCenter - distanceToImageCenter);
 
-                                jcropApi.setSelect([0, 0, uploadedImageWidth, uploadedImageWidth]);
+                                jcropApi.setSelect([0, 0, baseImageWidth, baseImageHeight]);
                                 jcropApi.setOptions({trueSize: [uploadedImageWidth, uploadedImageHeight]});
-
-                                //scope.$apply();
-
-                                var coords = jcropApi.tellSelect();
-
-                                var data = {
-                                    'x1':       coords.x,
-                                    'x2':       coords.x2,
-                                    'y1':       coords.y,
-                                    'y2':       coords.y2,
-                                    'w':        coords.w,
-                                    'h':        coords.h,
-                                    'assetKey': assetKey
-                                };
-
-                                window.setTimeout(function(){
-                                    $http.post('api/profiles/images/crop/', data).success(
-                                        function(data, status, headers, config){
-                                            var uri = data.content.uri;
-                                            // set the uri to the new cropped image
-                                            ngModel.$setViewValue(data.content.uri);
-                                            img.attr('src', ngModel.$viewValue || '');
-
-                                            //$('.transparent-pill-shapes p p').contents().unwrap();
-                                        }).error(
-                                        function(){
-                                            $log.info('Image crop error!');
-                                        }
-                                    );
-                                }, 1500);
                             });
                         });
                     });
 
                     // create a crop button and append it to the cms window below the upload image container
                     saveCropBtn.bind('click', function(){
+                        //alert('Crop button was clicked!');
                         var coords = jcropApi.tellSelect();
 
                         var data = {
@@ -292,10 +262,8 @@
                             function(data, status, headers, config){
                                 var uri = data.content.uri;
                                 // set the uri to the new cropped image
-                                scope.$apply(function() {
-                                    ngModel.$setViewValue(data.content.uri);
-                                    img.attr('src', ngModel.$viewValue || '');
-                                });
+                                ngModel.$setViewValue(data.content.uri);
+                                img.attr('src', ngModel.$viewValue || '');
                             }).error(
                             function(){
                                 $log.info('Image crop error!');
