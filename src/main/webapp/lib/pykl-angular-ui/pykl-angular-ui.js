@@ -119,10 +119,11 @@
                     var options = attrs.imgUpload ? scope.$eval(attrs.imgUpload) : {};
                     options = ng.extend({
                         url: './api/cms/upload/image',
-                        runtimes: 'html5',
+                        runtimes: 'html5, silverlight, flash, html4, browserplus',
                         browse_button: idBrowseButton,
                         drop_element: idDropTarget,
                         max_file_size: '10mb',
+                        //container: 'browse-images',
                         filters: [
                             {title: "Image files", extensions: "jpg,gif,png"},
                             {title: "Zip files", extensions: "zip"}
@@ -220,7 +221,6 @@
 
                     uploader.bind('UploadComplete', function(uploader, file){
                         // use the proportions and dimensions of the image being replaced to calculate aspect ratio
-                        scope.$parent.cropOptions = true;
 
                         $('#base_image img').Jcrop({
                             bgColor: '#fff',

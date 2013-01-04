@@ -321,7 +321,7 @@ angular.module('bgc.directives')
             // by adding it as a property to this config object
             var config = {
                 scope: scope,
-                runtimes: 'html5, flash, silverlight, html4, browserplus',
+                runtimes: 'html5, silverlight, flash, html4, browserplus',
                 browse_button: 'choose-files',
                 container: 'profile-image-upload',
                 url: 'api/cms/upload/image',
