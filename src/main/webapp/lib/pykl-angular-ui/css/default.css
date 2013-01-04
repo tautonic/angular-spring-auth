@@ -164,6 +164,12 @@ div.img-upload .working div {
     width: 50px;
 }
 
+div.img-upload .working div.progress .bar {
+    margin: 0;
+    height: 24px;
+    float: left;
+}
+
 /* The filename is the only sib,ing element not
    floated, so it gives the parent block its
    content height. Half of the width is devoted
