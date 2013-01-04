@@ -9,9 +9,13 @@ angular.module('bgc.filters').filter('asDate', function(){
 
         var date = new Date(dateInput);
         if(isNaN(date.getMonth()) && dateInput !== undefined) {
-            //IE8 does not support the '-' character in the Date() argument
-            dateInput = dateInput.replace('-', '/').replace('.000Z', '');
-            date = new Date(dateInput);
+            //IE8 does not support the '-' character in the Date() argument, and occasionally other browsers have problems with Date parsing
+            //the best alternate solution seems to be splitting on regex and using the individual parts to create a date
+            var arr = dateInput.toString().split(/[- :T]/);
+            date = new Date(Date.UTC(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]));
+        }
+        if(date == undefined) {
+            return;
         }
         return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
     }
@@ -20,11 +24,17 @@ angular.module('bgc.filters').filter('asDate', function(){
 angular.module('bgc.filters').filter('timeago', function(){
     return function (dateInput) {
 
+        console.log("DATE: "+dateInput);
         var date = new Date(dateInput);
         if(isNaN(date.getMonth()) && dateInput !== undefined) {
-            //IE8 does not support the '-' character in the Date() argument
-            dateInput = dateInput.replace('-', '/').replace('.000Z', '');
-            date = new Date(dateInput);
+            //IE8 does not support the '-' character in the Date() argument, and occasionally other browsers have problems with Date parsing
+            //the best alternate solution seems to be splitting on regex and using the individual parts to create a date
+            var arr = dateInput.split(/[- :T]/);
+            date = new Date(Date.UTC(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]));
+        }
+
+        if(date == undefined) {
+            return;
         }
 
         return jQuery.timeago(date);
@@ -64,7 +74,7 @@ angular.module('bgc.filters').filter('category', function(){
     }
 });
 
-//strips the <p> tags from cms content
+//strips the <p> tags from cms content -- likely unused
 angular.module('bgc.filters').filter('notags', function(){
     return function(text) {
         if(text) {
