@@ -24,7 +24,6 @@ angular.module('bgc.filters').filter('asDate', function(){
 angular.module('bgc.filters').filter('timeago', function(){
     return function (dateInput) {
 
-        console.log("DATE: "+dateInput);
         var date = new Date(dateInput);
         if(isNaN(date.getMonth()) && dateInput !== undefined) {
             //IE8 does not support the '-' character in the Date() argument, and occasionally other browsers have problems with Date parsing
