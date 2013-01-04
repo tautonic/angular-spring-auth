@@ -46,13 +46,18 @@
             var idBrowseButton = 'browse_' + uid;
             var idDropTarget = 'drop_' + uid;
             var baseImageWidth, baseImageHeight;
+            var oldThumbnail;
 
             function applyImageHandlers(img) {
                 // Once the image loads, we will know its positioning and size, and then we will
                 // adjust the size of the parent container.
-                img.load(function (e) {
+                img.one('load', function (e) {
                     baseImageWidth = e.target.width;
                     baseImageHeight = e.target.height;
+                    oldThumbnail = e.target.src;
+                });
+
+                img.load(function (e) {
                     var $this = $(this);
                     container.css({
                         width: $this.width(),
@@ -107,8 +112,8 @@
                     var url;
                     var assetKey;
 
-                    cancelCropBtn = angular.element('#cancel-crop');
-                    saveCropBtn = angular.element('#save-crop');
+                    cancelCropBtn = angular.element('#cancel-crop-cms');
+                    saveCropBtn = angular.element('#save-crop-cms');
 
                     // Initialize options
                     var options = attrs.imgUpload ? scope.$eval(attrs.imgUpload) : {};
@@ -121,8 +126,7 @@
                         filters: [
                             {title: "Image files", extensions: "jpg,gif,png"},
                             {title: "Zip files", extensions: "zip"}
-                        ],
-                        resize: {"width": baseImageWidth, "quality": 100}
+                        ]
 
                     }, pyklConfig.imgUpload, options);
 
@@ -216,10 +220,12 @@
 
                     uploader.bind('UploadComplete', function(uploader, file){
                         // use the proportions and dimensions of the image being replaced to calculate aspect ratio
+                        scope.$parent.cropOptions = true;
 
                         $('#base_image img').Jcrop({
                             bgColor: '#fff',
-                            aspectRatio: baseImageWidth / baseImageHeight//,
+                            aspectRatio: baseImageWidth / baseImageHeight,
+                            onChange: showPreview
                         }, function(){
                             var uploadedImageWidth, uploadedImageHeight;
                             jcropApi = this;
@@ -239,11 +245,24 @@
 
                                 jcropApi.setSelect([0, 0, baseImageWidth, baseImageHeight]);
                                 jcropApi.setOptions({trueSize: [uploadedImageWidth, uploadedImageHeight]});
+
+                                scope.$parent.cropDisabled = false;
+                                scope.$parent.cancelDisabled = false;
+                                scope.$apply();
                             });
                         });
+
+                        function showPreview(coords){
+                            if(coords.w > 50){
+                                scope.$parent.cropDisabled = false;
+                                scope.$apply();
+                            }else{
+                                scope.$parent.cropDisabled = true;
+                                scope.$apply();
+                            }
+                        }
                     });
 
-                    // create a crop button and append it to the cms window below the upload image container
                     saveCropBtn.bind('click', function(){
                         //alert('Crop button was clicked!');
                         var coords = jcropApi.tellSelect();
@@ -253,8 +272,8 @@
                             'x2':       coords.x2,
                             'y1':       coords.y,
                             'y2':       coords.y2,
-                            'w':        coords.w,
-                            'h':        coords.h,
+                            'w':        baseImageWidth,
+                            'h':        baseImageHeight,
                             'assetKey': assetKey
                         };
 
@@ -264,11 +283,40 @@
                                 // set the uri to the new cropped image
                                 ngModel.$setViewValue(data.content.uri);
                                 img.attr('src', ngModel.$viewValue || '');
+
+                                scope.$parent.cropDisabled = true;
+
+                                $('#base_image img').attr('src', data.content.uri)
+                                    .css({
+                                        'display': 'inline',
+                                        'visibility': 'visible',
+                                        'width': 'auto',
+                                        'height': 'auto'
+                                    });
+
+                                jcropApi.destroy();
                             }).error(
                             function(){
                                 $log.info('Image crop error!');
                             }
                         );
+                    });
+
+                    cancelCropBtn.bind('click', function(){
+                        jcropApi.destroy();
+
+                        $('#base_image img').attr('src', oldThumbnail)
+                            .css({
+                                'display': 'inline',
+                                'visibility': 'visible',
+                                'width': 'auto',
+                                'height': 'auto'
+                            });
+
+                        scope.$parent.cropDisabled = true;
+                        scope.$parent.cancelDisabled = true;
+
+                        scope.$apply();
                     });
 
                     uploader.bind('UploadProgress', function (up, file) {

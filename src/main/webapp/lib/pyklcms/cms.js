@@ -123,6 +123,10 @@
         // Controls whether the error dialog is visible or not.
         $scope.showError = false;
 
+        $scope.cropOptions = false;
+        $scope.cropDisabled = true;
+        $scope.cancelDisabled = true;
+
         /**
          * The user has submitted the
          */
