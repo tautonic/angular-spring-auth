@@ -45,28 +45,11 @@ app.get('/:basename', function (req, basename) {
     // will send content to Zocia).
     scanForBundles(basename).forEach(function(bundle) {
         var props = readProps(bundle);
-        writeProps(props, bundle.locale, false);
+        writeProps(props, bundle.locale);
     });
 
     return json({status: 'ok'});
 });
-
-/**
- * GET /api/seedcms/:bundle
- * This will force a CMS reload
- */
-app.get('/:basename/force', function (req, basename) {
-    // Get the names/locales of all resource bundles with the given basename on the
-    // classpath. For each bundle, read the properties and put into our CMS map (which
-    // will send content to Zocia).
-    scanForBundles(basename).forEach(function(bundle) {
-        var props = readProps(bundle);
-        writeProps(props, bundle.locale, true);
-    });
-
-    return json({status: 'ok'});
-});
-
 
 function readProps(bundle) {
     log.debug('Reading bundle {}', JSON.stringify(bundle, null, 4));
@@ -97,11 +80,11 @@ function readProps(bundle) {
     }
     return result;
 }
-function writeProps(props, locale, force) {
+function writeProps(props, locale) {
     log.debug('Writing props: {}, locale: {}', JSON.stringify(props, null, 4), locale);
 
     Object.keys(props).forEach(function(name) {
-        if (!propExists(name, locale) || force) {
+        if (!propExists(name, locale)) {
             var record = props[name];
             log.debug('Property does not exist: {}@{}, value: {}', name, locale, JSON.stringify(record));
             var key = name + '@' + locale;

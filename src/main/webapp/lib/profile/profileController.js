@@ -265,7 +265,10 @@ function viewProfile($rootScope, $scope, $routeParams, $location, $timeout, $htt
     $scope.updateThumbnailUri = function(profile){
         Profile.update({profileId: profile._id}, profile, function(response){
             //$scope.profile = response;
-            $rootScope.auth.principal.thumbnail = profile.thumbnail;
+            if($rootScope.auth.id === profile._id)
+            {
+                $rootScope.auth.principal.thumbnail = profile.thumbnail;
+            }
             $scope.responseContent = response;
             $scope.master = angular.copy($scope.profile);
         }, function(response){
