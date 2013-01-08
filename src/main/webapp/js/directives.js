@@ -1062,7 +1062,7 @@ angular.module('bgc.directives').directive('pyklFileAttachment', ['$http', '$log
                 flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
                 silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
                 filters:[
-                    {title : "Attachment files", extensions : "pdf,doc,ppt,txt,jpg,jpeg,xls,docx,pptx,xlsx"}
+                    {title : "Attachment files", extensions : "pdf,doc,ppt,txt,jpg,jpeg,png,gif,xls,docx,pptx,xlsx,rtf"}
                 ]
             };
 

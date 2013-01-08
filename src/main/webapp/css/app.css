@@ -2594,6 +2594,10 @@ img.header-banner-image{
     font-size: 0.75em;
 }
 
+.browse p i{
+    font-size: 0.6em;
+}
+
 @media only screen and (max-width: 1279px) {
     #outside-logo{
         display: none;

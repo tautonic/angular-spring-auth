@@ -52,8 +52,6 @@
                 // Once the image loads, we will know its positioning and size, and then we will
                 // adjust the size of the parent container.
                 img.one('load', function (e) {
-                    baseImageWidth = e.target.width;
-                    baseImageHeight = e.target.height;
                     oldThumbnail = e.target.src;
                 });
 
@@ -83,6 +81,31 @@
                 }
             }
 
+            function getBaseImageWidthHeight(key){
+                // 'home_banner_col1', 'homepage_about', 'annual_summit_banner'
+                // if the key has a substring _col height and width are 276 x 207
+                // if the key == 'homepage_about' height and width are 440 x 250
+                // else height and width are 924 x 288
+                if(key == 'homepage_about'){
+                    baseImageWidth = 440;
+                    baseImageHeight = 250;
+
+                    return;
+                }
+
+                if(key.match(/_col/) !== null){
+                    baseImageWidth = 276;
+                    baseImageHeight = 207;
+
+                    return;
+                }else{ // it's a wide banner image
+                    baseImageWidth = 924;
+                    baseImageHeight = 288;
+
+                    return;
+                }
+            }
+
             return {
                 template: '\
                     <div class="img-upload"> \
@@ -90,7 +113,10 @@
                             <div class="drop"><p>Drop files here</p></div> \
                         </div> \
                         <div class="browse"> \
-                            <p><button class="btn btn-success">Browse</button></p> \
+                            <p>\
+                                <button class="btn btn-success">Browse</button>\
+                                <br><i>cms images should be no more than 10mb in size and must be in jpeg/jpg, png, or gif formats</i>\
+                            </p> \
                         </div> \
                         <div class="working"> \
                             <div>[x]</div> \
@@ -112,6 +138,8 @@
                     var url;
                     var assetKey;
 
+                    getBaseImageWidthHeight(scope.resource.key);
+
                     cancelCropBtn = angular.element('#cancel-crop-cms');
                     saveCropBtn = angular.element('#save-crop-cms');
 
@@ -123,7 +151,6 @@
                         browse_button: idBrowseButton,
                         drop_element: idDropTarget,
                         max_file_size: '10mb',
-                        //container: 'browse-images',
                         filters: [
                             {title: "Image files", extensions: "jpg,jpeg,gif,png"}
                         ]
