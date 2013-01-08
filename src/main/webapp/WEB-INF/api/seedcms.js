@@ -51,7 +51,6 @@ app.get('/:basename', function (req, basename) {
     return json({status: 'ok'});
 });
 
-
 function readProps(bundle) {
     log.debug('Reading bundle {}', JSON.stringify(bundle, null, 4));
     var result = {};
