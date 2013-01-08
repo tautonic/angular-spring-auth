@@ -125,8 +125,7 @@
                         max_file_size: '10mb',
                         //container: 'browse-images',
                         filters: [
-                            {title: "Image files", extensions: "jpg,gif,png"},
-                            {title: "Zip files", extensions: "zip"}
+                            {title: "Image files", extensions: "jpg,jpeg,gif,png"}
                         ]
 
                     }, pyklConfig.imgUpload, options);
