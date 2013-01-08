@@ -325,14 +325,13 @@ angular.module('bgc.directives')
                 browse_button: 'choose-files',
                 container: 'profile-image-upload',
                 url: 'api/cms/upload/image',
-                max_file_size:'3mb',
+                max_file_size:'5mb',
                 multi_selection:false,
                 resize:{"width":650, "quality":90},
                 flash_swf_url:'lib/pykl-angular-ui/plupload/js/plupload.flash.swf',
                 silverlight_xap_url:'lib/pykl-angular-ui/plupload/js/plupload.silverlight.xap',
                 filters:[
-                    {title:"Image files", extensions:"jpg,gif,png,jpeg"},
-                    {title:"Zip files", extensions:"zip"}
+                    {title:"Image files", extensions:"jpg,gif,png,jpeg"}
                 ]
             };
 

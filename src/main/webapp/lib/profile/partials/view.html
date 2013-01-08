@@ -337,27 +337,31 @@
             </div>
 
             <div class="clearfix">
-                <div class="edit-profile-thumb" thumbnail thumb=profile size="large" rotation="none" type="profile" />
+                <div class="left">
+                    <div class="edit-profile-thumb" thumbnail thumb=profile size="large" rotation="none" type="profile" />
+                </div>
 
-                <div class="image-upload">
-                    <div class="clearfix" id="update" pykl-profile-image-upload="{dropTarget:'profile-thumb-drop-target'}" style="position: relative; overflow: hidden;">
-                        <!--<img src="{{profile.thumbnail}}" id="drop-target" />-->
-                        <div id="profile-thumb-drop-target">
-                            <h2>Drag and drop an image file here</h2>
-                        </div>
+                <div class="right">
+                    <div class="image-upload">
+                        <div class="clearfix" id="update" pykl-profile-image-upload="{dropTarget:'profile-thumb-drop-target'}" style="position: relative; overflow: hidden;">
+                            <!--<img src="{{profile.thumbnail}}" id="drop-target" />-->
+                            <div id="profile-thumb-drop-target">
+                                <h2>Drag and drop an image file here</h2>
+                            </div>
 
-                        <div id="profile-image-upload">
-                            <div class="btn-group-border">
-                                <div class="btn-group bgc">
-                                    <button ng-click="cancelEditing('image')" class="btn btn-success">Cancel</button>
-                                    <button id="choose-files" class="btn btn-success"><i class="icon-folder-open icon-white"></i> Browse</button>
+                            <div id="profile-image-upload">
+                                <div class="btn-group-border">
+                                    <div class="btn-group bgc">
+                                        <button ng-click="cancelEditing('image')" class="btn btn-success">Cancel</button>
+                                        <button id="choose-files" class="btn btn-success"><i class="icon-folder-open icon-white"></i> Browse *</button>
+                                    </div>
                                 </div>
+                                <p><i>* profile images should be no more than 5mb in size and must be in .jpeg/.jpg, .png, or .gif formats</i></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

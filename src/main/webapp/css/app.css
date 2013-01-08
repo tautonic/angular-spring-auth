@@ -2581,6 +2581,19 @@ img.header-banner-image{
     margin-left: 0;
 }
 
+.info.image .left{
+    float: left;
+}
+
+.info.image .right{
+    float: right;
+    width: 70%;
+}
+
+#profile-image-upload p{
+    font-size: 0.75em;
+}
+
 @media only screen and (max-width: 1279px) {
     #outside-logo{
         display: none;
